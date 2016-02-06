@@ -1,0 +1,109 @@
+@startuml
+
+class Product {
+' Zum Beispiel ein Ticket-Typ
+price
+tax_rate
+name
+}
+
+class Item {
+' Ein Ding, z.B. ein Bändchen oder Turnhallenticket
+name
+description
+initial_stock
+}
+
+class Transaction {
+' Ein Kassenvorgang
+id
+datetime
+cash_given : optional
+}
+
+class TransactionPosition {
+' Ein Teil eines Vorgangs
+type : redeem, reverse, sell, ...
+value
+tax_rate
+tax_value : calculated
+}
+
+class Quota {
+name
+size
+}
+
+class TimeConstraint {
+name
+start
+end
+}
+
+class PreorderPosition {
+secret
+is_redeemed()
+}
+
+class Preorder {
+order_code
+is_paid
+warning_text
+}
+
+class ListConstraint {
+name
+}
+
+class ListConstraintEntry {
+name
+number
+is_redeemed()
+}
+
+class Cashdesk {
+name
+ip_address
+printer_address
+display_address
+}
+
+class User {
+' Troubleshooter: Dashboards, Statistiken, Override, ...
+username
+password
+is_troubleshooter
+is_superuser
+auth_token
+}
+
+class CashdeskSession {
+start
+end
+cash_before
+cash_after
+backoffice_user_before
+backoffice_user_after
+comment
+api_token
+}
+
+Transaction "1" -- "n" TransactionPosition
+Product "n" -- "m" Item : including multiples
+Product "1" -- "n" TransactionPosition
+Quota "n" -- "m" Product
+TimeConstraint "n" -- "m" Product
+ListConstraint "n" -- "m" Product
+PreorderPosition "0,1" -- "n" TransactionPosition
+PreorderPosition "n" -- "1" Product
+TransactionPosition "1" -- "n" TransactionPosition : reverses
+Preorder "1" -- "n" PreorderPosition
+ListConstraintEntry "n" -- "1" ListConstraint
+TransactionPosition "1" -- "n" ListConstraintEntry
+TransactionPosition "n" -- "1" User : authorized_by
+Cashdesk "1" -- "n" CashdeskSession
+User "1" -- "n" CashdeskSession
+CashdeskSession "n" -- "m" Item : before, after
+CashdeskSession "n" -- "m" Transaction
+
+@enduml

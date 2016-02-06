@@ -1,0 +1,38 @@
+* Dinge aus dem Preorder-System importieren
+* Scannen von Vorverkauftickets
+* Verkauf von Produkten gegen Bargeld
+* Tickets beschränkbar auf Menschen aus Listen(!)
+* Abbrechen aus allen Dialogen etc.
+* Unkompliziertes Storno
+* Korrekte Stornobehandlung bei der Validierung von Tickets
+* Troubleshooter-Override für Listenbeschränkung
+* Kontingente für Tickets
+* Troubleshooter-Override für Kontingente
+* Kassiererlogin
+* Integration des grünen Pfeils
+* API für die Handheld-Geräte
+* Schneller Checkout von Presale-Tickets, am besten ohne Tastendruck
+* Kassenreports mit Umsatzsteuer
+* Verknüpfung von "auszugebenden Dingen" mit Ticket-Typen
+* Scannen immer möglich
+* Alarmierung des Troubleshooters/Hinterzimmers bei zu wenig Bändchen oder zu viel Bargeld
+* Dashboard und Statistiken
+* Suchmaske für Trouble-Ticket-Bearbeitung
+* Suchmaske für Sales, Nachträgliches Reversen
+* Eine Transaktion pro Presale-Scan
+  (elektronische und Bar-Tickets trennen)
+* Belege drucken
+* Belege später nachdrucken
+* Autocomplete für Presale-IDs
+* Wechselgeldrechner
+* Rechnungsdruck(?)
+* Hinterzimmerfunktionen:
+    * Kassiererverwaltung
+    * Verwaltung der Kassen
+    * Anlegen von Schichten
+    * Abschließen von Schichten (Eingabe gezählter Gegenstände, keine sinnlosen Eingaben)
+      inklusive Berichtsdruck
+* Backend für
+    * Ticket-Typen
+    * Kontingent-Verwaltung
+* TESTS
