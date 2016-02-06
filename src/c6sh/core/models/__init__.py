@@ -10,8 +10,10 @@ from .cashdesk import (
     Cashdesk,
     CashdeskSession,
     CashdeskSessionItem,
-    User,
     generate_key,
+)
+from .auth import (
+    User
 )
 from .constraints import (
     AbstractConstraint,
