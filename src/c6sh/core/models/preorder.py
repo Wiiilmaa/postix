@@ -13,6 +13,10 @@ class Preorder(models.Model):
 class PreorderPosition(models.Model):
     preorder = models.ForeignKey(Preorder, related_name='positions')
     secret = models.CharField(max_length=254, db_index=True)
+    product = models.ForeignKey('Product', related_name='preorder_positions')
+
+    def __str__(self):
+        return "{}-{}".format(self.preorder.order_code, self.secret[:10])
 
     def is_redeemed(self):
         raise NotImplementedError()
