@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>c6sh</title>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-theme.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "fonts/fonts.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/c6sh.css" %}">
+</head>
+<body class="">
+
+<div id="main-container">
+    <div id="left-side">
+        <div id="product-view">
+            <div class="product">
+                <button class="btn btn-default btn-block">
+                    Product<br/>
+                    133.70 EUR
+                </button>
+            </div>
+            <div class="product">
+                <button class="btn btn-default btn-block">
+                    Product<br/>
+                    133.70 EUR
+                </button>
+            </div>
+            <div class="product">
+                <button class="btn btn-default btn-block">
+                    Product<br/>
+                    133.70 EUR
+                </button>
+            </div>
+            <div class="product">
+                <button class="btn btn-default btn-block">
+                    Product<br/>
+                    133.70 EUR
+                </button>
+            </div>
+            <div class="product">
+                <button class="btn btn-default btn-block">
+                    Product<br/>
+                    133.70 EUR
+                </button>
+            </div>
+        </div>
+        <div id="button-row">
+            <button class="btn btn-danger" id="btn-supply">
+                <span class="glyphicon glyphicon-log-out"></span>
+                End session
+            </button>
+            <button class="btn btn-default" id="btn-supply">
+                <span class="glyphicon glyphicon-pause"></span>
+                Take a break
+            </button>
+            <button class="btn btn-default" id="btn-supply">
+                <span class="glyphicon glyphicon-inbox"></span>
+                Open drawer
+            </button>
+            <button class="btn btn-info" id="btn-supply">
+                <span class="glyphicon glyphicon-bell"></span>
+                Request supply
+            </button>
+        </div>
+    </div>
+    <div id="right-side">
+        <div id="redeem-presale">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Redeem preordered ticket
+                </div>
+                <div class="panel-body">
+                    <input type="text" id="preorder-input" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div id="lower-right">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Sell ticket
+                </div>
+                <div class="panel-body">
+                    <div id="cart">
+                        <div class="cart-line">
+                            <span class="cart-product">Product 1</span>
+                            <span class="cart-price">133.70</span>
+                            <span class="cart-delete">
+                                <button class="btn-delete btn btn-sm btn-danger">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="cart-line">
+                            <span class="cart-product">Product 1</span>
+                            <span class="cart-price">133.70</span>
+                            <span class="cart-delete">
+                                <button class="btn-delete btn btn-sm btn-danger">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="checkout">
+                        <div id="checkout-total">
+                            <span>267.40</span>
+                        </div>
+                        <button class="btn btn-block btn-success" id="btn-checkout">
+                            <span class="glyphicon glyphicon-shopping-cart"></span>
+                            CHECKOUT
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-container">
+    <div id="modal">
+        <div class="panel panel-danger">
+            <div class="panel-heading" id="model-title">
+                Redeem preordered ticket
+            </div>
+            <div class="panel-body">
+                <p id="model-text">
+                    This ticket can only redeemed by a member of the list "CCC-Mitglieder".
+                </p>
+                <input type="text" id="model-input" class="form-control">
+                <div id="modal-buttons">
+                    <button class="btn btn-lg btn-danger">
+                        Cancel
+                    </button>
+                    <button class="btn btn-lg btn-success">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/login.js" %}"></script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 body {
-    background: #eee;
     font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+body.login, body.error {
+    background: #eee;
 }
 
 .panel-login {
@@ -18,4 +20,144 @@ body {
 }
 .error-page .glyphicon {
     font-size: 200px;
+}
+
+#main-container {
+    display: flex;
+    height: 100vh;
+}
+#left-side {
+    flex: 1;
+    min-width: 450px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+#button-row {
+}
+#product-view {
+    flex: 1;
+    flex-wrap: wrap;
+    height: 100%;
+}
+#product-view .product {
+    width: 24%;
+    margin: 0 1% 1% 0;
+    float: left;
+    height: 100px;
+}
+#product-view .product button {
+    height: 100%;
+}
+#button-row {
+    display: flex;
+    flex-flow: row;
+    height: 50px;
+}
+#button-row button {
+    flex: 1;
+    margin-right: 10px;
+}
+#button-row button:last-child {
+    margin-right: 0;
+}
+#right-side {
+    flex: initial;
+    width: 300px;
+    min-width: 200px;
+    display: flex;
+    flex-flow: column;
+}
+#redeem-presale {
+    padding: 10px;
+}
+#redeem-presale .panel {
+    margin: 0;
+}
+#lower-right {
+    padding: 10px;
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+}
+#lower-right .panel {
+    flex-flow: column;
+    flex: 1;
+    display: flex;
+    margin: 0;
+}
+#lower-right .panel-body {
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+}
+#cart {
+    flex: 1;
+}
+#cart .cart-line {
+    display: flex;
+    padding: 5px 0;
+    border-bottom: 1px solid #ccc;
+}
+#cart .cart-line .cart-product {
+    flex: 1;
+    line-height: 30px;
+}
+#cart .cart-line .cart-price {
+    width: 60px;
+    text-align: right;
+    padding: 0 3px;
+    line-height: 30px;
+}
+#cart .cart-line .cart-product {
+    flex: 2;
+}
+#checkout-total {
+    display: block;
+    font-size: 35px;
+    text-align: right;
+    margin: 5px 0;
+}
+#btn-checkout {
+    height: 80px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+body.has-modal #main-container {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -ms-filter: blur(2px);
+    -o-filter: blur(2px);
+    filter: blur(2px);
+}
+#modal-container {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    align-items: center;
+    justify-content: center;
+}
+.has-modal #modal-container {
+    display: flex;
+}
+#modal .panel {
+    margin: 0;
+    width: 500px;
+}
+#modal-buttons {
+    display: flex;
+}
+#modal-buttons button {
+    flex: 1;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+#modal-buttons button:last-child {
+    margin-right: 0px;
 }

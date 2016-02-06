@@ -1,4 +1,3 @@
-from c6sh.core.models import Cashdesk
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -6,6 +5,8 @@ from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.views.generic import TemplateView
+
+from ..core.models import Cashdesk
 
 
 def get_ip_address(request):
@@ -84,3 +85,5 @@ def main_view(request):
     if not session.start:
         session.start = now()
         session.save()
+
+    return render(request, 'desk/main.html')
