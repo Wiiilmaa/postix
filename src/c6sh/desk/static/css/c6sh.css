@@ -7,3 +7,15 @@ body {
     width: 400px;
     margin: 60px auto 0 auto;
 }
+
+.error-page {
+    width: 400px;
+    margin: 60px auto 0 auto;
+    text-align: center;
+}
+.error-page h2 {
+    font-size: 30px;
+}
+.error-page .glyphicon {
+    font-size: 200px;
+}

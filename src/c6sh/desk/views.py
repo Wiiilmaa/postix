@@ -1,14 +1,37 @@
+from c6sh.core.models import Cashdesk
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.utils.functional import cached_property
 from django.views.generic import TemplateView
+
+
+def get_ip_address(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0]
+    else:
+        return request.META.get('REMOTE_ADDR')
+
+
+
+def detect_cashdesk(request):
+    try:
+        return Cashdesk.objects.get(ip_address=get_ip_address(request))
+    except Cashdesk.DoesNotExist:
+        return None
 
 
 class LoginView(TemplateView):
     template_name = 'desk/login.html'
 
     def dispatch(self, request, *args, **kwargs):
+        if not self.cashdesk:
+            return render(request, 'desk/fail.html', {
+                'message': 'This is not a registered cashdesk.',
+                'detail': 'Your IP address is {0}'.format(get_ip_address(request))
+            })
         if request.user.is_authenticated():
             return redirect('/')
         return super().dispatch(request, *args, **kwargs)
@@ -18,13 +41,28 @@ class LoginView(TemplateView):
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
-            if user.is_active:
-                login(request, user)
-            else:
+            if not user.is_active:
                 messages.error(request, 'User account is deactivated.')
+                return redirect('desk:login')
+
+            session = user.get_current_session()
+            if session is None:
+                messages.error(request, 'You do not have an active session.')
+                return redirect('desk:login')
+
+            if session.cashdesk != self.cashdesk:
+                messages.error(request, 'Your session is scheduled for a different cashdesk.')
+                return redirect('desk:login')
+
+            login(request, user)
+            return redirect('desk:main')
         else:
             messages.error(request, 'No user account matches the entered credentials.')
-            return redirect('desk:login')
+        return redirect('desk:login')
+
+    @cached_property
+    def cashdesk(self):
+        return detect_cashdesk(self.request)
 
 
 @login_required(login_url='/login/')

@@ -11,7 +11,7 @@ def generate_key():
 
 class Cashdesk(models.Model):
     name = models.CharField(max_length=254)
-    ip_address = models.GenericIPAddressField()
+    ip_address = models.GenericIPAddressField(unique=True)
     printer_queue_name = models.CharField(max_length=254, null=True, blank=True)
     display_address = models.GenericIPAddressField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
