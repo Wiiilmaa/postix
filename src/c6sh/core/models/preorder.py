@@ -6,6 +6,9 @@ class Preorder(models.Model):
     is_paid = models.BooleanField(default=False)
     warning_text = models.TextField()
 
+    def __str__(self):
+        return self.order_code
+
 
 class PreorderPosition(models.Model):
     preorder = models.ForeignKey(Preorder, related_name='positions')

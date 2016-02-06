@@ -29,7 +29,8 @@ class TransactionPosition(models.Model):
                                   on_delete=models.PROTECT, null=True, blank=True)
     preorder_position = models.ForeignKey('PreorderPosition', related_name='transaction_positions',
                                           on_delete=models.PROTECT, null=True, blank=True)
-    items = models.ManyToManyField('TransactionPosition', through='TransactionPositionItem')
+    items = models.ManyToManyField('Item', through='TransactionPositionItem',
+                                   blank=True)
     authorized_by = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT,
                                       related_name='authorized')
 
@@ -37,19 +38,27 @@ class TransactionPosition(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=254)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    tax_rate = models.DecimalField(max_digits=4, decimal_places=2)
+    tax_rate = models.DecimalField(max_digits=4, decimal_places=2,
+                                   verbose_name='Tax rate',
+                                   help_text='in percent')
     is_visible = models.BooleanField(default=True)
     requires_authorization = models.BooleanField(default=False)
-    items = models.ManyToManyField('Item', through='ProductItem')
+    items = models.ManyToManyField('Item', through='ProductItem', blank=True)
 
     def is_available(self):
         raise NotImplementedError()
+
+    def __str__(self):
+        return self.name
 
 
 class Item(models.Model):
     name = models.CharField(max_length=254)
     description = models.TextField(blank=True)
     initial_stock = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.name
 
 
 class ProductItem(models.Model):

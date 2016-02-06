@@ -57,3 +57,6 @@ class User(AbstractBaseUser):
 
         return CashdeskSession.objects.filter(user=self, end__isnull=True) \
             .order_by('-start').first()
+
+    def __str__(self):
+        return self.username
