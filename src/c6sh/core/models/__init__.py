@@ -30,5 +30,5 @@ __all__ = [
     'Item', 'Product', 'ProductItem', 'Transaction', 'TransactionPosition',
     'TransactionPositionItem', 'Cashdesk', 'CashdeskSession', 'CashdeskSessionItem',
     'User', 'AbstractConstraint', 'ListConstraint', 'ListConstraintEntry',
-    'Quota', 'TimeConstraint', 'Preorder', 'PreorderPosition',
+    'Quota', 'TimeConstraint', 'Preorder', 'PreorderPosition', 'generate_key',
 ]

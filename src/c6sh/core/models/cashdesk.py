@@ -55,6 +55,10 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'username'
 
+    def get_current_session(self):
+        return CashdeskSession.objects.filter(user=self, end__isnull=True)\
+                                      .order_by('-start').first()
+
     def has_perm(self, perm, obj=None):
         return self.is_superuser
 
