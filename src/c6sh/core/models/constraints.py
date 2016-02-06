@@ -27,6 +27,3 @@ class ListConstraintEntry(models.Model):
                              on_delete=models.PROTECT)
     name = models.CharField(max_length=254)
     identifier = models.CharField(max_length=254)
-
-    def is_redeemed(self):
-        raise NotImplementedError()
