@@ -4,12 +4,13 @@ from .models import (
     TransactionPosition,
 )
 
+
 def is_redeemed(obj):
 
     if isinstance(obj, ListConstraintEntry):
-        positions = TransactionPosition.objects.filter(listentry=self)
+        positions = TransactionPosition.objects.filter(listentry=obj)
     elif isinstance(obj, PreorderPosition):
-        positions = TransactionPosition.objects.filter(preorder_position=self)
+        positions = TransactionPosition.objects.filter(preorder_position=obj)
     else:
         raise TypeError('Expected ListConstraintEntry or PreorderPosition object.')
 
