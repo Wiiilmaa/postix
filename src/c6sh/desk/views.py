@@ -15,7 +15,6 @@ def get_ip_address(request):
         return request.META.get('REMOTE_ADDR')
 
 
-
 def detect_cashdesk(request):
     try:
         return Cashdesk.objects.get(ip_address=get_ip_address(request))
@@ -67,4 +66,6 @@ class LoginView(TemplateView):
 
 @login_required(login_url='/login/')
 def main_view(request):
-    pass
+    cashdesk = detect_cashdesk(request)
+    if not cashdesk:
+        return redirect('desk:login')

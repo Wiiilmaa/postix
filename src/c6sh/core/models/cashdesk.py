@@ -1,7 +1,7 @@
 import random
 import string
 
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 
@@ -44,16 +44,34 @@ class CashdeskSessionItem(models.Model):
     amount_after = models.PositiveIntegerField(null=True)
 
 
+class UserManager(BaseUserManager):
+    def create_user(self, username: str, password: str=None, **kwargs):
+        user = self.model(username=username, **kwargs)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, username: str, password: str=None):  # NOQA
+        if password is None:
+            raise Exception("You must provide a password")
+        user = self.model(username=username)
+        user.is_superuser = True
+        user.set_password(password)
+        user.save()
+        return user
+
+
 class User(AbstractBaseUser):
     username = models.CharField(max_length=254, unique=True)
-    firstname = models.CharField(max_length=254)
-    lastname = models.CharField(max_length=254)
+    firstname = models.CharField(max_length=254, blank=True)
+    lastname = models.CharField(max_length=254, blank=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_troubleshooter = models.BooleanField(default=False)
     auth_token = models.CharField(max_length=254, null=True, blank=True)
 
     USERNAME_FIELD = 'username'
+    objects = UserManager()
 
     def get_current_session(self):
         return CashdeskSession.objects.filter(user=self, end__isnull=True)\
