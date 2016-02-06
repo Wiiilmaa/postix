@@ -1,8 +1,7 @@
 from django.contrib import admin
-from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-from .models import User, Product, Item, ProductItem, Transaction, Cashdesk, CashdeskSession, CashdeskSessionItem, Quota, \
+from .models import User, Product, Item, ProductItem, Cashdesk, CashdeskSession, CashdeskSessionItem, Quota, \
     TimeConstraint, ListConstraint, ListConstraintEntry, Preorder, PreorderPosition
 
 
@@ -80,7 +79,7 @@ class ListConstriantAdmin(admin.ModelAdmin):
 
 
 @admin.register(ListConstraintEntry)
-class ListConstriantAdmin(admin.ModelAdmin):
+class ListConstraintAdmin(admin.ModelAdmin):
     list_display = ('name', 'identifier', 'list')
     list_filter = ('list',)
     search_fields = ('name', 'identifier')
