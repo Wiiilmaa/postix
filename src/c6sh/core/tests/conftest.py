@@ -7,7 +7,7 @@ import pytest
 
 @pytest.fixture
 def user():
-    from .models import User
+    from c6sh.core.models import User
     fake = Factory.create('en-US')
     return User(username=fake.user_name(),
                 password=fake.password(),
@@ -32,46 +32,47 @@ def superuser(user):
 
 @pytest.fixture
 def item():
-    from .models import Item
+    from c6sh.core.models import Item
     fake = Factory.create('en-US')
     return Item(name=fake.state(),
                 description=fake.bs(),
-                inital_stock=random.randint(50, 1000))
+                initial_stock=random.randint(50, 1000))
 
 
 @pytest.fixture
 def cashdesk():
-    from .models import Cashdesk
+    from c6sh.core.models import Cashdesk
     fake = Factory.create('en-US')
     return Cashdesk(name='Cashdesk {}'.format(random.randint(0, 10)),
-                    ip_adress=fake.ipv4(),
+                    ip_address=fake.ipv4(),
                     is_active=True)
 
 
 @pytest.fixture
 def cashdesk_session_before(cashdesk, user, superuser):
-    from .models import CashdeskSession
+    from c6sh.core.models import CashdeskSession, CashdeskSessionItem
     fake = Factory.create('en-US')
     cd = CashdeskSession(cashdesk=cashdesk,
                          user=user,
                          start=fake.date_time_this_month(),
-                         cash_before=random.choice(50*i for i in range(6)),
+                         cash_before=random.choice([50*i for i in range(6)]),
                          backoffice_user_before=superuser)
-    cd.items_before.add(item())
-    cd.items_before.add(item())
+
+    items = [item() for _ in range(3)]
+    c = [CashdeskSessionItem(session=cd, item=i, amount_before=random.randint(1, i.initial_stock)) for i in items]
     return cd
 
 
 @pytest.fixture
 def quota():
-    from .models import Quota
+    from c6sh.core.models import Quota
     return Quota(name='Day {} Quota'.format(random.randint(0, 4)),
                  size=random.randint(50, 300))
 
 
 @pytest.fixture
 def time_constraint_active():
-    from .models import TimeConstraint
+    from c6sh.core.models import TimeConstraint
     fake = Factory.create('en-US')
     start = fake.date_time_between(start='-23h', end='-1h')
     end = start + datetime.timedelta(hours=1)
@@ -80,7 +81,7 @@ def time_constraint_active():
 
 @pytest.fixture
 def time_constraint_passed():
-    from .models import TimeConstraint
+    from c6sh.core.models import TimeConstraint
     fake = Factory.create('en-US')
     start = fake.date_time_between(start='-23h', end='-10h')
     end = fake.date_time_between(start='-9h', end='-2h')
