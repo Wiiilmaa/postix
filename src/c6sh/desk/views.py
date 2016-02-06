@@ -1,9 +1,10 @@
 from c6sh.core.models import Cashdesk
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.views.generic import TemplateView
 
 
@@ -64,8 +65,22 @@ class LoginView(TemplateView):
         return detect_cashdesk(self.request)
 
 
+def logout_view(request):
+    logout(request)
+    return redirect('desk:login')
+
+
 @login_required(login_url='/login/')
 def main_view(request):
     cashdesk = detect_cashdesk(request)
-    if not cashdesk:
-        return redirect('desk:login')
+    session = request.user.get_current_session()
+    if not cashdesk or session is None or session.cashdesk != cashdesk:
+        return render(request, 'desk/fail.html', {
+            'message': 'You do not have an active session at this cashdesk.',
+            'detail': 'You are logged in as {}.'.format(request.user),
+            'offer_logout': True
+        })
+
+    if not session.start:
+        session.start = now()
+        session.save()
