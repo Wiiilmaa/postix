@@ -1,0 +1,9 @@
+body {
+    background: #eee;
+    font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.panel-login {
+    width: 400px;
+    margin: 60px auto 0 auto;
+}

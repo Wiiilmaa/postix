@@ -1,5 +1,7 @@
 import os
 
+from django.contrib import messages
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 SECRET_KEY = '*5n9)_c*f@pk%h9be^1(0gkj7w^x%7^2rj_@9*+4gp4-ccafqb'
@@ -15,7 +17,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'c6sh.core'
+    'c6sh.core',
+    'c6sh.desk'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -64,3 +67,10 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+MESSAGE_TAGS = {
+    messages.INFO: 'info',
+    messages.ERROR: 'danger',
+    messages.WARNING: 'warning',
+    50: 'critical',
+}
