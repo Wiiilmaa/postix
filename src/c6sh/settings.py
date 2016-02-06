@@ -68,6 +68,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+AUTH_USER_MODEL = 'core.User'
+
 MESSAGE_TAGS = {
     messages.INFO: 'info',
     messages.ERROR: 'danger',
