@@ -14,8 +14,9 @@ $(function () {
     var preSaleTickets = new Bloodhound({
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
       queryTokenizer: Bloodhound.tokenizers.whitespace,
+      limit: 4,
       remote: {
-        url: '/api/presaleAutoComplete/%QUERY',
+        url: '/api/preorderpositions/?search=%QUERY',
         wildcard: '%QUERY'
       }
     });
@@ -23,6 +24,7 @@ $(function () {
     $('#preorder-input').typeahead(null, {
       name: 'preSaleTickets',
       display: 'value',
+      minLength: 5,
       source: preSaleTickets
     });
 });
