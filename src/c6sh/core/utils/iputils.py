@@ -1,4 +1,4 @@
-from .models import Cashdesk
+from c6sh.core.models import Cashdesk
 
 
 def get_ip_address(request):

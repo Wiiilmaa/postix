@@ -1,4 +1,3 @@
-from c6sh.core.iputils import get_ip_address, detect_cashdesk
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -6,6 +5,7 @@ from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.views.generic import TemplateView
+from ..core.utils.iputils import get_ip_address, detect_cashdesk
 
 
 class LoginView(TemplateView):

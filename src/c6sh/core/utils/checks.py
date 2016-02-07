@@ -1,4 +1,4 @@
-from .models import (
+from c6sh.core.models import (
     ListConstraintEntry,
     PreorderPosition,
     TransactionPosition,

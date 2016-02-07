@@ -37,7 +37,7 @@ class TransactionPositionSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    positions = TransactionPositionSerializer(many=True)
+    positions = TransactionPositionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Transaction
