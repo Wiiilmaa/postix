@@ -38,7 +38,7 @@ class TransactionPosition(models.Model):
     authorized_by = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT,
                                       related_name='authorized')
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.items:
             for item in self.product.items:
                 self.items.add(items)
@@ -49,7 +49,7 @@ class TransactionPosition(models.Model):
         if not self.tax_value:
             net_value = self.value * 100 / (100 + self.tax_rate)
             self.tax_value = round_decimal(self.value - net_value)
-        super(TransactionPosition, self).save()
+        super(TransactionPosition, self).save(*args, **kwargs)
 
     def was_reversed(self):
         if self.type == 'reverse':
