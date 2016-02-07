@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .serializers import PreorderSerializer, PreorderPositionSerializer
@@ -10,6 +11,7 @@ class PreorderViewSet(ReadOnlyModelViewSet):
     """
     queryset = Preorder.objects.all()
     serializer_class = PreorderSerializer
+    permission_classes = (IsAdminUser,)
 
 
 class PreorderPositionViewSet(ReadOnlyModelViewSet):

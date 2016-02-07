@@ -1,3 +1,4 @@
+from c6sh.core.iputils import get_ip_address, detect_cashdesk
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -5,23 +6,6 @@ from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.views.generic import TemplateView
-
-from ..core.models import Cashdesk
-
-
-def get_ip_address(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        return x_forwarded_for.split(',')[0]
-    else:
-        return request.META.get('REMOTE_ADDR')
-
-
-def detect_cashdesk(request):
-    try:
-        return Cashdesk.objects.get(ip_address=get_ip_address(request))
-    except Cashdesk.DoesNotExist:
-        return None
 
 
 class LoginView(TemplateView):
