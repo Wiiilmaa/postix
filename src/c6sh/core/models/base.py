@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 
 
@@ -35,6 +36,12 @@ class TransactionPosition(models.Model):
     authorized_by = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT,
                                       related_name='authorized')
 
+    def was_reversed(self):
+        if self.type == 'reverse':
+            return False
+
+        return TransactionPosition.objects.filter(reverses=self, type='reverse').exists()
+
 
 class Product(models.Model):
     name = models.CharField(max_length=254)
@@ -57,14 +64,16 @@ class Product(models.Model):
 
         quotas = Quota.objects.filter(products=self)
         if quotas.exists():
-            all_quotas_available = all([quota.is_available() for quota in quota])
+            all_quotas_available = all([quota.is_available() for quota in quotas])
             if not all_quotas_available:
                 return False
 
         return True
 
     def amount_sold(self):
-        raise NotImplementedError
+        positions = self.transactionposition_set.filter(Q(type='redeem') | Q(type='sell'))
+        valid_positions = [position for position in positions if not position.was_reversed]
+        return len(valid_positions)
 
     def __str__(self):
         return self.name
