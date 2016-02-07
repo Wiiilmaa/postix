@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Transaction(models.Model):
@@ -46,7 +47,24 @@ class Product(models.Model):
     items = models.ManyToManyField('Item', through='ProductItem', blank=True)
 
     def is_available(self):
-        raise NotImplementedError()
+        from .models import Quota, TimeConstraint
+        timeframes = TimeConstraint.objects.filter(products=self)
+        if timeframes.exists():
+            now = timezone.now()
+            current_timeframes = timeframes.filter(start__lte=now, end__gte=now)
+            if not current_timeframes.exists():
+                return False
+
+        quotas = Quota.objects.filter(products=self)
+        if quotas.exists():
+            all_quotas_available = all([quota.is_available() for quota in quota])
+            if not all_quotas_available:
+                return False
+
+        return True
+
+    def amount_sold(self):
+        raise NotImplementedError
 
     def __str__(self):
         return self.name

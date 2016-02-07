@@ -13,6 +13,10 @@ class Quota(AbstractConstraint):
     products = models.ManyToManyField('Product', verbose_name='Affected products',
                                       blank=True)
 
+    def is_available(self):
+        total = sum([product.amount_sold() for product in self.products])
+        return total < self.size
+
     def __str__(self):
         return "{} ({})".format(self.name, self.size)
 
