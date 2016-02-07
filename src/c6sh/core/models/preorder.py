@@ -4,7 +4,7 @@ from django.db import models
 class Preorder(models.Model):
     order_code = models.CharField(max_length=254, db_index=True)
     is_paid = models.BooleanField(default=False)
-    warning_text = models.TextField()
+    warning_text = models.TextField(blank=True)
 
     def __str__(self):
         return self.order_code
