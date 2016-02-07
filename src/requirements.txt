@@ -1,3 +1,9 @@
+# Basic and production requirements
 Django==1.9.*
+djangorestframework==3.3.*
+django-filter==0.12.*
+
+
+# Testing and development requirements
 pytest-django==2.9.*
 fake-factory==0.5.*
