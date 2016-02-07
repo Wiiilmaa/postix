@@ -1,50 +1,49 @@
 import json
+
 import pytest
 
 
-@pytest.mark.django_db
-def test_preorder_redeem_invalid(api_with_session, cashdesk_session_before):
-    response = api_with_session.post('/api/transactions/', {
+def help_test_for_error(api, secret):
+    response = api.post('/api/transactions/', {
         'positions': [
             {
                 'type': 'redeem',
-                'secret': 'ABCDE'
+                'secret': secret
             }
         ]
     }, format='json')
     assert response.status_code == 400
-    assert json.loads(response.content.decode()) == {
+    j = json.loads(response.content.decode())
+    assert not j['success']
+    assert not j['positions'][0]['success']
+    return j['positions'][0]
+
+
+@pytest.mark.django_db
+def test_invalid(api_with_session, cashdesk_session_before):
+    assert help_test_for_error(api_with_session, 'abcde') == {
         'success': False,
-        'positions': [
-            {
-                'success': False,
-                'message': 'No ticket found with the given secret.',
-                'type': 'error',
-                'missing_field': None,
-            }
-        ]
+        'message': 'No ticket found with the given secret.',
+        'type': 'error',
+        'missing_field': None,
     }
 
 
 @pytest.mark.django_db
-def test_preorder_redeem_unpaid(api_with_session, preorder_position_unpaid):
-    response = api_with_session.post('/api/transactions/', {
-        'positions': [
-            {
-                'type': 'redeem',
-                'secret': preorder_position_unpaid.secret
-            }
-        ]
-    }, format='json')
-    assert response.status_code == 400
-    assert json.loads(response.content.decode()) == {
+def test_unpaid(api_with_session, preorder_position_unpaid):
+    assert help_test_for_error(api_with_session, preorder_position_unpaid.secret) == {
         'success': False,
-        'positions': [
-            {
-                'success': False,
-                'message': 'Ticket has not been paid for.',
-                'type': 'error',
-                'missing_field': None,
-            }
-        ]
+        'message': 'Ticket has not been paid for.',
+        'type': 'error',
+        'missing_field': None,
+    }
+
+
+@pytest.mark.django_db
+def test_already_redeemed(api_with_session, preorder_position_redeemed):
+    assert help_test_for_error(api_with_session, preorder_position_redeemed.secret) == {
+        'success': False,
+        'message': 'Ticket has already been redeemed.',
+        'type': 'error',
+        'missing_field': None,
     }

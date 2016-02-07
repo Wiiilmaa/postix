@@ -2,6 +2,8 @@ import datetime
 import random
 import string
 
+from decimal import Decimal
+
 from faker import Factory
 import pytest
 
@@ -143,6 +145,7 @@ def preorder_unpaid():
 @pytest.fixture
 def preorder_paid(preorder_unpaid):
     preorder_unpaid.is_paid = True
+    preorder_unpaid.save()
     return preorder_unpaid
 
 
@@ -160,3 +163,20 @@ def preorder_position_unpaid(preorder_unpaid, product):
     return PreorderPosition.objects.create(preorder=preorder_unpaid,
                                            secret=''.join(random.choice(string.ascii_letters) for _ in range(24)),
                                            product=product)
+
+
+@pytest.fixture
+def transaction(cashdesk_session_before):
+    from c6sh.core.models import Transaction
+    return Transaction.objects.create(session=cashdesk_session_before)
+
+
+@pytest.fixture
+def preorder_position_redeemed(preorder_position_paid, transaction, product_without_items):
+    from c6sh.core.models import TransactionPosition
+    TransactionPosition.objects.create(
+        type='redeem', preorder_position=preorder_position_paid,
+        value=Decimal('0.00'), tax_rate=Decimal('0.00'), tax_value=Decimal('0.00'),
+        product=product_without_items, transaction=transaction
+    )
+    return preorder_position_paid
