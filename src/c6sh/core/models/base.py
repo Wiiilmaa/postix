@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 
+from .utils import round_decimal
+
 
 class Transaction(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
@@ -35,6 +37,19 @@ class TransactionPosition(models.Model):
                                    blank=True)
     authorized_by = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT,
                                       related_name='authorized')
+
+    def save(self):
+        if not self.items:
+            for item in self.product.items:
+                self.items.add(items)
+        if not self.value:
+            self.value = self.product.price
+        if not self.tax_rate:
+            self.tax_rate = self.product.tax_rate
+        if not self.tax_value:
+            net_value = self.value * 100 / (100 + self.tax_rate)
+            self.tax_value = round_decimal(self.value - net_value)
+        super(TransactionPosition, self).save()
 
     def was_reversed(self):
         if self.type == 'reverse':
