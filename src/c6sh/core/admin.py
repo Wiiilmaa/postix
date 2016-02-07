@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from .models import User, Product, Item, ProductItem, Cashdesk, CashdeskSession, CashdeskSessionItem, Quota, \
-    TimeConstraint, ListConstraint, ListConstraintEntry, Preorder, PreorderPosition
+    TimeConstraint, ListConstraint, ListConstraintEntry, Preorder, PreorderPosition, ListConstraintProduct, \
+    WarningConstraintProduct, WarningConstraint
 
 
 @admin.register(User)
@@ -29,6 +30,7 @@ class AuthorAdmin(BaseUserAdmin):
 
 class ProductItemInline(admin.TabularInline):
     model = ProductItem
+    extra = 1
 
 
 @admin.register(Product)
@@ -54,6 +56,7 @@ class CashdeskAdmin(admin.ModelAdmin):
 
 class CashdeskSessionItemInline(admin.TabularInline):
     model = CashdeskSessionItem
+    extra = 1
 
 
 @admin.register(CashdeskSession)
@@ -73,9 +76,16 @@ class TimeConstriantAdmin(admin.ModelAdmin):
     list_display = ('name', 'start', 'end')
 
 
+class ListConstraintProductInline(admin.TabularInline):
+    model = ListConstraintProduct
+    extra = 1
+
+
 @admin.register(ListConstraint)
 class ListConstriantAdmin(admin.ModelAdmin):
     list_display = ('name',)
+    exclude = ('products',)
+    inlines = (ListConstraintProductInline,)
 
 
 @admin.register(ListConstraintEntry)
@@ -87,6 +97,7 @@ class ListConstraintAdmin(admin.ModelAdmin):
 
 class PreorderPositionInline(admin.TabularInline):
     model = PreorderPosition
+    extra = 1
 
 
 @admin.register(Preorder)
@@ -95,6 +106,18 @@ class PreorderAdmin(admin.ModelAdmin):
     list_display = ('order_code', 'is_paid')
     search_fields = ('order_code',)
     inlines = (PreorderPositionInline,)
+
+
+class WarningConstraintProductInline(admin.TabularInline):
+    model = WarningConstraintProduct
+    extra = 1
+
+
+@admin.register(WarningConstraint)
+class WarningConstriantAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    exclude = ('products',)
+    inlines = (WarningConstraintProductInline,)
 
 
 admin.site.unregister(Group)
