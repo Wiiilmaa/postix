@@ -12,7 +12,7 @@ class Preorder(models.Model):
 
 class PreorderPosition(models.Model):
     preorder = models.ForeignKey(Preorder, related_name='positions')
-    secret = models.CharField(max_length=254, db_index=True)
+    secret = models.CharField(max_length=254, db_index=True, unique=True)
     product = models.ForeignKey('Product', related_name='preorder_positions')
 
     def __str__(self):
