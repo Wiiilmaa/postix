@@ -94,6 +94,7 @@ body.login, body.error {
     display: flex;
     flex-flow: column;
 }
+
 #cart {
     flex: 1;
 }

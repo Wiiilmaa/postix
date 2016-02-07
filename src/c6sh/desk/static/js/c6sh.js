@@ -11,4 +11,18 @@ $(function () {
     $('#btn-cancel').mousedown(function() {
         $('body').removeClass('has-modal');
     });
+    var preSaleTickets = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '/api/presaleAutoComplete/%QUERY',
+        wildcard: '%QUERY'
+      }
+    });
+
+    $('#preorder-input').typeahead(null, {
+      name: 'preSaleTickets',
+      display: 'value',
+      source: preSaleTickets
+    });
 });

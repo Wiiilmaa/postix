@@ -6,6 +6,7 @@
     <title>c6sh</title>
     <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-theme.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/typeaheadjs.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "fonts/fonts.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/c6sh.css" %}">
 </head>
@@ -71,7 +72,7 @@
                     Redeem preordered ticket
                 </div>
                 <div class="panel-body">
-                    <input type="text" id="preorder-input" class="form-control">
+                    <input type="text" id="preorder-input" class="typeahead form-control">
                 </div>
             </div>
         </div>
@@ -166,6 +167,7 @@
 </div>
 
 <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/typeahead.bundle.min.js" %}"></script>
 <script type="text/javascript" src="{% static "js/c6sh.js" %}"></script>
 </body>
 </html>
