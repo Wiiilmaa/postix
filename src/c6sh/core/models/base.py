@@ -39,9 +39,6 @@ class TransactionPosition(models.Model):
                                       related_name='authorized')
 
     def save(self, *args, **kwargs):
-        if not self.items:
-            for item in self.product.items:
-                self.items.add(items)
         if not self.value:
             self.value = self.product.price
         if not self.tax_rate:
@@ -50,6 +47,9 @@ class TransactionPosition(models.Model):
             net_value = self.value * 100 / (100 + self.tax_rate)
             self.tax_value = round_decimal(self.value - net_value)
         super(TransactionPosition, self).save(*args, **kwargs)
+        if not self.items.exists():
+            for item in self.product.items.all():
+                self.items.add(item)
 
     def was_reversed(self):
         if self.type == 'reverse':
