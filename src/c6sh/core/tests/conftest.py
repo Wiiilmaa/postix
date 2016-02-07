@@ -32,12 +32,15 @@ def superuser(user):
 
 
 @pytest.fixture
-def item():
+def item_factory():
     from c6sh.core.models import Item
-    fake = Factory.create('en-US')
-    return Item.objects.create(name=fake.state(),
-                               description=fake.bs(),
-                               initial_stock=random.randint(50, 1000))
+
+    def inner():
+        fake = Factory.create('en-US')
+        return Item.objects.create(name=fake.state(),
+                                   description=fake.bs(),
+                                   initial_stock=random.randint(50, 1000))
+    return inner
 
 
 @pytest.fixture
@@ -50,7 +53,7 @@ def cashdesk():
 
 
 @pytest.fixture
-def cashdesk_session_before(cashdesk, user, superuser):
+def cashdesk_session_before(cashdesk, user, superuser, item_factory):
     from c6sh.core.models import CashdeskSession, CashdeskSessionItem
     fake = Factory.create('en-US')
     cd = CashdeskSession.objects.create(cashdesk=cashdesk,
@@ -59,7 +62,7 @@ def cashdesk_session_before(cashdesk, user, superuser):
                                         cash_before=random.choice([50*i for i in range(6)]),
                                         backoffice_user_before=superuser)
 
-    items = [item() for _ in range(3)]
+    items = [item_factory() for _ in range(3)]
     for item in items:
         CashdeskSessionItem.objects.create(session=cd,
                                            item=item,
@@ -124,8 +127,8 @@ def product_without_items():
 
 
 @pytest.fixture
-def product(product_without_items):
-    product_without_items.items.add(item())
+def product(product_without_items, item_factory):
+    product_without_items.items.add(item_factory())
     return product_without_items
 
 

@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 
-from .utils import round_decimal
+from ..utils import round_decimal
 
 
 class Transaction(models.Model):
