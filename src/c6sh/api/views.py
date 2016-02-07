@@ -1,16 +1,10 @@
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-<<<<<<< 5f6d4a708dd3c9372662fdec0be3a0e5dc3f442d
-from .serializers import PreorderSerializer, PreorderPositionSerializer, TransactionSerializer
-from ..core.models import Preorder, PreorderPosition, Transaction
-=======
 from django.db.models import Q
 
-from .serializers import PreorderSerializer, PreorderPositionSerializer, ListConstraintSerializer, ListConstraintEntrySerializer
-from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry
->>>>>>> add support for lists and fix secret autocompletion
-
+from .serializers import PreorderSerializer, PreorderPositionSerializer, ListConstraintSerializer, ListConstraintEntrySerializer, TransactionSerializer
+from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction
 
 class PreorderViewSet(ReadOnlyModelViewSet):
     """
