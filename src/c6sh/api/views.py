@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.db.models import Q
 from rest_framework import status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -82,16 +83,21 @@ class TransactionViewSet(ReadOnlyModelViewSet):
 
     def create(self, request, *args, **kwargs):
         try:
-            response = self.perform_create(request.data)
+            response = self.perform_create(request)
             return Response(response, status=status.HTTP_201_CREATED)
         except ProcessException as e:
             return Response(e.data, status=status.HTTP_400_BAD_REQUEST)
 
     @transaction.atomic
-    def perform_create(self, data):
+    def perform_create(self, request):
+        data = request.data
         trans = Transaction()
         if 'cash_given' in data:
             trans.cash_given = round_decimal(data.get('cash_given', '0.00'))
+        session = self.request.user.get_current_session()
+        if not session:
+            raise PermissionDenied('You do not have an active session.')
+        trans.session = session
         trans.save()
 
         position_feedback = []

@@ -122,13 +122,15 @@ def product_without_items():
     from c6sh.core.models import Product
     fake = Factory.create('en-US')
     return Product.objects.create(name=fake.catch_phrase(),
-                                  price=random.choice(50*i for i in range(5)),
+                                  price=random.choice([50*i for i in range(5)]),
                                   tax_rate=19)
 
 
 @pytest.fixture
 def product(product_without_items, item_factory):
-    product_without_items.items.add(item_factory())
+    from c6sh.core.models import ProductItem
+    ProductItem.objects.create(item=item_factory(), product=product_without_items,
+                               amount=1)
     return product_without_items
 
 
@@ -153,7 +155,7 @@ def preorder_position_paid(preorder_paid, product):
 
 
 @pytest.fixture
-def preorder_position_unpaid(preorder_unpaid):
+def preorder_position_unpaid(preorder_unpaid, product):
     from c6sh.core.models import PreorderPosition
     return PreorderPosition.objects.create(preorder=preorder_unpaid,
                                            secret=''.join(random.choice(string.ascii_letters) for _ in range(24)),
