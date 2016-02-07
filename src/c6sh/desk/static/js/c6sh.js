@@ -17,7 +17,19 @@ $(function () {
       limit: 4,
       remote: {
         url: '/api/preorderpositions/?search=%QUERY',
-        wildcard: '%QUERY'
+        wildcard: '%QUERY',
+        transform: function(object) {
+            results = object.results;
+            secrets = [];
+            for(var preorder in results){
+                secrets.push(
+                    {   
+                        value: results[preorder].secret,
+                        count: 1 
+                    });
+            }
+            return secrets;
+        }
       }
     });
 
