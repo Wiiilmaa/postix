@@ -48,8 +48,10 @@ class TransactionPosition(models.Model):
             self.tax_value = round_decimal(self.value - net_value)
         super(TransactionPosition, self).save(*args, **kwargs)
         if not self.items.exists():
-            for item in self.product.items.all():
-                self.items.add(item)
+            for pi in self.product.product_items.all().select_related('item'):
+                TransactionPositionItem.objects.create(
+                    position=self, item=pi.item, amount=pi.amount
+                )
 
     def was_reversed(self):
         if self.type == 'reverse':
@@ -112,8 +114,8 @@ class ProductItem(models.Model):
 
 
 class TransactionPositionItem(models.Model):
-    product = models.ForeignKey('TransactionPosition', on_delete=models.PROTECT,
-                                related_name='transaction_position_items')
+    position = models.ForeignKey('TransactionPosition', on_delete=models.PROTECT,
+                                 related_name='transaction_position_items')
     item = models.ForeignKey('Item', on_delete=models.PROTECT,
                              related_name='transaction_position_items')
     amount = models.PositiveIntegerField()
