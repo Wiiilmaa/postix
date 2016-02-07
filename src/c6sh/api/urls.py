@@ -5,6 +5,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'preorders', views.PreorderViewSet)
 router.register(r'preorderpositions', views.PreorderPositionViewSet)
+router.register(r'transactions', views.TransactionViewSet)
 
 urlpatterns = [
     url(r'', include(router.urls, namespace='api'))

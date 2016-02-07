@@ -1,8 +1,8 @@
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .serializers import PreorderSerializer, PreorderPositionSerializer
-from ..core.models import Preorder, PreorderPosition
+from .serializers import PreorderSerializer, PreorderPositionSerializer, TransactionSerializer
+from ..core.models import Preorder, PreorderPosition, Transaction
 
 
 class PreorderViewSet(ReadOnlyModelViewSet):
@@ -33,3 +33,11 @@ class PreorderPositionViewSet(ReadOnlyModelViewSet):
         if search_param is not None and len(search_param) >= 6:
             queryset = queryset.filter(secret__startswith=search_param)
         return queryset
+
+
+class TransactionViewSet(ReadOnlyModelViewSet):
+    """
+    This is a list of all transactions.
+    """
+    queryset = Transaction.objects.all().prefetch_related('positions')
+    serializer_class = TransactionSerializer
