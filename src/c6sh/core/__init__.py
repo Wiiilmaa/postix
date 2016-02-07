@@ -9,7 +9,3 @@ class CoreConfig(AppConfig):
 
     def ready(self):
         from . import admin
-
-
-DECIMAL_CONTEXT = decimal.Context(prec=10, rounding=decimal.ROUND_HALF_UP)
-DECIMAL_QUANTIZE = decimal.Decimal('0.01')

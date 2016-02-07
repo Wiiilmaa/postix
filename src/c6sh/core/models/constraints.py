@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 
 
@@ -34,12 +36,12 @@ class TimeConstraint(AbstractConstraint):
 
 
 class ListConstraintProduct(models.Model):
-    product = models.ForeignKey('Product', on_delete=models.PROTECT,
-                                related_name='product_list_constraints')
+    product = models.OneToOneField('Product', on_delete=models.PROTECT,
+                                   related_name='product_list_constraint')
     constraint = models.ForeignKey('ListConstraint', on_delete=models.PROTECT,
                                    related_name='product_constraints')
-    upgrade_products = models.ManyToManyField('Product', verbose_name='Bypass possible with upgrade',
-                                              blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"))
 
 
 class ListConstraint(AbstractConstraint):
@@ -65,8 +67,8 @@ class WarningConstraintProduct(models.Model):
                                 related_name='product_warning_constraints')
     constraint = models.ForeignKey('WarningConstraint', on_delete=models.PROTECT,
                                    related_name='product_constraints')
-    upgrade_products = models.ManyToManyField('Product', verbose_name='Bypass possible with upgrade',
-                                              blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("0.00"))
 
 
 class WarningConstraint(AbstractConstraint):

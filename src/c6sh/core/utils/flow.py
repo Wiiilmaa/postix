@@ -1,5 +1,7 @@
+from decimal import Decimal
+
 from .checks import is_redeemed
-from ..models import PreorderPosition, ListConstraintEntry
+from ..models import PreorderPosition, ListConstraintEntry, TransactionPosition, User, ListConstraintProduct
 
 
 class FlowError(Exception):
@@ -13,6 +15,8 @@ class FlowError(Exception):
 
 
 def redeem_preorder_ticket(**kwargs):
+    pos = TransactionPosition()
+
     if 'secret' not in kwargs:
         raise FlowError('No secret has been given.')
 
@@ -36,7 +40,8 @@ def redeem_preorder_ticket(**kwargs):
             raise FlowError(c.constraint.message, type='confirmation',
                             missing_field='warning_{}_acknowledged'.format(c.pk))
 
-    if c in pp.product.product_list_constraints.all():
+    try:
+        c = pp.product.product_list_constraint
         entryid = kwargs.get('list_{}'.format(c.constraint.pk), None)
         if not entryid:
             raise FlowError('This ticket can only redeemed by persons on the list "{}".'.format(
@@ -46,6 +51,18 @@ def redeem_preorder_ticket(**kwargs):
             if is_redeemed(entry):
                 raise FlowError('This list entry has already been used.'.format(c.constraint.name),
                                 type='input', missing_field='name_{}'.format(c.constraint.pk))
+            else:
+                pos.listentry = entry
         except ListConstraintEntry.DoesNotExist:
-            raise FlowError('Entry not found on list "{}".'.format(c.constraint.name),
-                            type='input', missing_field='name_{}'.format(c.constraint.pk))
+            try:
+                pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
+            except User.DoesNotExist:
+                raise FlowError('Entry not found on list "{}".'.format(c.constraint.name),
+                                type='input', missing_field='name_{}'.format(c.constraint.pk))
+    except ListConstraintProduct.DoesNotExist:
+        pass
+
+    # TODO: Handle upgrades
+    pos.product = pp.product
+    pos.value = pos.tax_rate = pos.tax_value = Decimal('0.00')
+    return pos

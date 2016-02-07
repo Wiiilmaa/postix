@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from django.db import transaction
 from django.db.models import Q
 from rest_framework import status
@@ -7,11 +5,19 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .serializers import PreorderSerializer, PreorderPositionSerializer, ListConstraintSerializer, ListConstraintEntrySerializer, TransactionSerializer
-from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction, \
-    TransactionPosition
+from .serializers import (
+    PreorderSerializer, PreorderPositionSerializer, ListConstraintSerializer,
+    ListConstraintEntrySerializer, TransactionSerializer
+)
+from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction
 from ..core.utils.flow import FlowError, redeem_preorder_ticket
-from ..core import DECIMAL_CONTEXT, DECIMAL_QUANTIZE
+from ..core.utils import round_decimal
+
+
+class ProcessException(Exception):
+    def __init__(self, data):
+        self.data = data
+
 
 class PreorderViewSet(ReadOnlyModelViewSet):
     """
@@ -78,28 +84,26 @@ class TransactionViewSet(ReadOnlyModelViewSet):
         try:
             response = self.perform_create(request.data)
             return Response(response, status=status.HTTP_201_CREATED)
-        except:
-            return Response(response, status=status.HTTP_201_CREATED)
+        except ProcessException as e:
+            return Response(e.data, status=status.HTTP_400_BAD_REQUEST)
 
     @transaction.atomic
     def perform_create(self, data):
         trans = Transaction()
         if 'cash_given' in data:
-            trans.cash_given = Decimal(data.get('cash_given', '0.00')).quantize(DECIMAL_QUANTIZE, DECIMAL_CONTEXT)
+            trans.cash_given = round_decimal(data.get('cash_given', '0.00'))
+        trans.save()
 
         position_feedback = []
-        position_objects = []
         success = True
 
         for inppos in data.get('positions', []):
-            pos = TransactionPosition()
-            pos.type = pos.get('type', '')
-            pos.transaction = trans
+            postype = inppos.get('type', '')
             try:
-                if pos.type == "redeem":
-                    redeem_preorder_ticket(**inppos)
+                if postype == "redeem":
+                    pos = redeem_preorder_ticket(**inppos)
                 else:
-                    raise FlowError('Type {} is not yet implemented'.format(pos.type))
+                    raise FlowError('Type {} is not yet implemented'.format(postype))
             except FlowError as e:
                 position_feedback.append({
                     'success': False,
@@ -112,17 +116,19 @@ class TransactionViewSet(ReadOnlyModelViewSet):
                 position_feedback.append({
                     'success': True,
                 })
-                position_objects.append(pos)
+                pos.transaction = trans
+                pos.save()
 
-        if success:
-            trans.save()
-            TransactionPosition.objects.bulk_create(position_objects)
-
-        return {
+        response = {
             'success': success,
             'positions': position_feedback
         }
 
+        if success:
+            return response
+        else:
+            # Break out of atomic transaction so everything gets rolled back!
+            raise ProcessException(response)
 
 
 class ListConstraintViewSet(ReadOnlyModelViewSet):
