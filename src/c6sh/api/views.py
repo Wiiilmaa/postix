@@ -1,8 +1,15 @@
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+<<<<<<< 5f6d4a708dd3c9372662fdec0be3a0e5dc3f442d
 from .serializers import PreorderSerializer, PreorderPositionSerializer, TransactionSerializer
 from ..core.models import Preorder, PreorderPosition, Transaction
+=======
+from django.db.models import Q
+
+from .serializers import PreorderSerializer, PreorderPositionSerializer, ListConstraintSerializer, ListConstraintEntrySerializer
+from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry
+>>>>>>> add support for lists and fix secret autocompletion
 
 
 class PreorderViewSet(ReadOnlyModelViewSet):
@@ -32,8 +39,9 @@ class PreorderPositionViewSet(ReadOnlyModelViewSet):
         search_param = self.request.query_params.get('search', None)
         if search_param is not None and len(search_param) >= 6:
             queryset = queryset.filter(secret__startswith=search_param)
+        else:
+            queryset = queryset.none()
         return queryset
-
 
 class TransactionViewSet(ReadOnlyModelViewSet):
     """
@@ -41,3 +49,26 @@ class TransactionViewSet(ReadOnlyModelViewSet):
     """
     queryset = Transaction.objects.all().prefetch_related('positions')
     serializer_class = TransactionSerializer
+
+
+class ListConstraintViewSet(ReadOnlyModelViewSet):
+
+    queryset = ListConstraint.objects.all()
+    serializer_class = ListConstraintSerializer
+
+class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
+
+    queryset = ListConstraintEntry.objects.all()
+    serializer_class = ListConstraintEntrySerializer
+
+    def get_queryset(self):
+        queryset = ListConstraintEntry.objects.all()
+        listid_param = self.request.query_params.get('listid', None)
+        if listid_param is not None:
+            queryset = queryset.filter(list_id=listid_param)
+            search_param = self.request.query_params.get('search', None)
+            if search_param is not None and len(search_param) >= 3:
+                queryset = queryset.filter(Q(name__contains=search_param)|Q(identifier__contains=search_param))
+            else:
+                queryset = queryset.none()
+        return queryset
