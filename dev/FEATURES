@@ -8,7 +8,6 @@
 * Troubleshooter-Override für Listenbeschränkung
 * Kontingente für Tickets
 * Troubleshooter-Override für Kontingente
-* Kassiererlogin
 * Integration des grünen Pfeils
 * API für die Handheld-Geräte
 * Schneller Checkout von Presale-Tickets, am besten ohne Tastendruck
@@ -24,7 +23,10 @@
 * Belege drucken
 * Belege später nachdrucken
 * Autocomplete für Presale-IDs
+* Upgrade-Ticket als Alternative zum Erfüllen von (List|Warning)Constraint
+* WarningConstraint das Warnung anzeigt
 * Wechselgeldrechner
+* Gute Tastenbelegung
 * Rechnungsdruck(?)
 * Hinterzimmerfunktionen:
     * Kassiererverwaltung
@@ -36,3 +38,7 @@
     * Ticket-Typen
     * Kontingent-Verwaltung
 * TESTS
+
+
+DONE
+* Kassiererlogin

@@ -48,6 +48,9 @@ body.login, body.error {
 }
 #product-view .product button {
     height: 100%;
+    font-size: 18px;
+    white-space: normal;
+    word-wrap: break-word;
 }
 #button-row {
     display: flex;
@@ -112,11 +115,17 @@ body.login, body.error {
 #cart .cart-line .cart-product {
     flex: 2;
 }
-#checkout-total {
+.total {
     display: block;
-    font-size: 35px;
+    font-size: 15px;
     text-align: right;
     margin: 5px 0;
+}
+.total span {
+    display: inline-block;
+    text-align: right;
+    width: 150px;
+    font-size: 35px;
 }
 #btn-checkout {
     height: 80px;
@@ -148,7 +157,8 @@ body.has-modal #main-container {
 }
 #modal .panel {
     margin: 0;
-    width: 500px;
+    width: 640px;
+    font-size: 22px;
 }
 #modal-buttons {
     display: flex;
@@ -157,7 +167,35 @@ body.has-modal #main-container {
     flex: 1;
     margin-right: 10px;
     margin-top: 10px;
+    height: 64px;
+    font-size: 22px;
 }
 #modal-buttons button:last-child {
     margin-right: 0px;
+}
+.panel-sale .panel-heading {
+    line-height: 30px;
+}
+#post-sale {
+    display: none;
+}
+.post-sale #post-sale {
+    display: block;
+}
+
+.post-sale .btn-delete {
+    display: none;
+}
+.post-sale #checkout {
+    display: none;
+}
+#post-sale-buttons {
+    display: flex;
+}
+#post-sale-buttons button {
+    margin-top: 0;
+    margin-right: 5px;
+}
+#post-sale-buttons button:last-child {
+    margin-right: 0;
 }

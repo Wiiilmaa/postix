@@ -16,7 +16,7 @@
         <div id="product-view">
             <div class="product">
                 <button class="btn btn-default btn-block">
-                    Product<br/>
+                    <strong>Product</strong><br/>
                     133.70 EUR
                 </button>
             </div>
@@ -76,9 +76,12 @@
             </div>
         </div>
         <div id="lower-right">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary panel-sale">
                 <div class="panel-heading">
                     Sell ticket
+                    <button class="btn btn-sm btn-default pull-right" id="btn-clear">
+                        clear
+                    </button>
                 </div>
                 <div class="panel-body">
                     <div id="cart">
@@ -101,8 +104,29 @@
                             </span>
                         </div>
                     </div>
+                    <div id="post-sale">
+                        <div id="post-sale-total" class="total">
+                            Gesamt:
+                            <span>267.40</span>
+                        </div>
+                        <div id="post-sale-change" class="total">
+                            Rückgeld:
+                            <span>267.40</span>
+                        </div>
+                        <div id="post-sale-buttons">
+                            <button class="btn btn-block btn-danger" id="btn-reverse">
+                                <span class="glyphicon glyphicon-backward"></span>
+                                Reverse
+                            </button>
+                            <button class="btn btn-block btn-primary" id="btn-reprint">
+                                <span class="glyphicon glyphicon-duplicate"></span>
+                                Reprint
+                            </button>
+                        </div>
+                    </div>
                     <div id="checkout">
-                        <div id="checkout-total">
+                        <div id="checkout-total" class="total">
+                            Gesamt:
                             <span>267.40</span>
                         </div>
                         <button class="btn btn-block btn-success" id="btn-checkout">
@@ -127,11 +151,12 @@
                     This ticket can only redeemed by a member of the list "CCC-Mitglieder".
                 </p>
                 <input type="text" id="model-input" class="form-control">
+
                 <div id="modal-buttons">
-                    <button class="btn btn-lg btn-danger">
+                    <button class="btn btn-lg btn-danger" id="btn-cancel">
                         Cancel
                     </button>
-                    <button class="btn btn-lg btn-success">
+                    <button class="btn btn-lg btn-success" id="btn-continue">
                         Continue
                     </button>
                 </div>
@@ -141,6 +166,6 @@
 </div>
 
 <script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
-<script type="text/javascript" src="{% static "js/login.js" %}"></script>
+<script type="text/javascript" src="{% static "js/c6sh.js" %}"></script>
 </body>
 </html>
