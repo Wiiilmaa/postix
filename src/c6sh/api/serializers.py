@@ -5,7 +5,7 @@ from rest_framework import serializers
 class PreorderPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PreorderPosition
-        fields = ('preorder', 'secret', 'product')
+        fields = ('id', 'preorder', 'secret', 'product')
 
 
 class PreorderSerializer(serializers.ModelSerializer):
@@ -13,13 +13,13 @@ class PreorderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Preorder
-        fields = ('order_code', 'is_paid', 'warning_text', 'positions')
+        fields = ('id', 'order_code', 'is_paid', 'warning_text', 'positions')
 
 
 class TransactionPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransactionPosition
-        fields = ('type', 'value', 'tax_rate', 'tax_value', 'product',
+        fields = ('id', 'type', 'value', 'tax_rate', 'tax_value', 'product',
                   'reverses', 'listentry', 'preorder_position',
                   'items', 'authorized_by')
 
@@ -29,4 +29,4 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = ('datetime', 'session', 'cash_given', 'positions')
+        fields = ('id', 'datetime', 'session', 'cash_given', 'positions')
