@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .serializers import PreorderSerializer, PreorderPositionSerializer, ListConstraintSerializer, ListConstraintEntrySerializer, TransactionSerializer
-from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction
+from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction, \
+    TransactionPosition
 from ..core.utils.flow import FlowError, redeem_preorder_ticket
 from ..core import DECIMAL_CONTEXT, DECIMAL_QUANTIZE
 
@@ -74,8 +75,11 @@ class TransactionViewSet(ReadOnlyModelViewSet):
     serializer_class = TransactionSerializer
 
     def create(self, request, *args, **kwargs):
-        obj = self.perform_create(request.data)
-        return Response(TransactionSerializer(obj).data, status=status.HTTP_201_CREATED, headers=headers)
+        try:
+            response = self.perform_create(request.data)
+            return Response(response, status=status.HTTP_201_CREATED)
+        except:
+            return Response(response, status=status.HTTP_201_CREATED)
 
     @transaction.atomic
     def perform_create(self, data):
@@ -118,6 +122,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             'success': success,
             'positions': position_feedback
         }
+
 
 
 class ListConstraintViewSet(ReadOnlyModelViewSet):
