@@ -41,3 +41,7 @@ class ListConstraintEntry(models.Model):
 
     def __str__(self):
         return "{} ({}) – {}".format(self.name, self.identifier, self.list)
+
+
+class WarningConstraint(AbstractConstraint):
+    message = models.TextField()
