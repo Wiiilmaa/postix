@@ -35,7 +35,7 @@ def redeem_preorder_ticket(**kwargs):
         raise FlowError(pp.preorder.warning_text, type='confirmation',
                         missing_field='warning_acknowledged')
 
-    for c in pp.product.product_warning_contraints.all():
+    for c in pp.product.product_warning_constraints.all():
         if 'warning_{}_acknowledged'.format(c.constraint.pk) not in kwargs:
             raise FlowError(c.constraint.message, type='confirmation',
                             missing_field='warning_{}_acknowledged'.format(c.pk))
