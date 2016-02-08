@@ -46,7 +46,7 @@ class ListConstraintProduct(models.Model):
 
 class ListConstraint(AbstractConstraint):
     products = models.ManyToManyField('Product', verbose_name='Affected products',
-                                      blank=True)
+                                      blank=True, through='ListConstraintProduct')
 
     def __str__(self):
         return self.name
@@ -73,5 +73,5 @@ class WarningConstraintProduct(models.Model):
 
 class WarningConstraint(AbstractConstraint):
     products = models.ManyToManyField('Product', verbose_name='Affected products',
-                                      blank=True)
+                                      blank=True, through='WarningConstraintProduct')
     message = models.TextField()
