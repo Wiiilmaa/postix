@@ -88,9 +88,9 @@ class Product(models.Model):
         return True
 
     def amount_sold(self):
-        positions = self.transactionposition_set.filter(Q(type='redeem') | Q(type='sell'))
-        valid_positions = [position for position in positions if not position.was_reversed]
-        return len(valid_positions)
+        positive = self.positions.filter(Q(type='redeem') | Q(type='sell')).count()
+        negative = self.positions.filter(type='reverse').count()
+        return positive - negative
 
     def __str__(self):
         return self.name
