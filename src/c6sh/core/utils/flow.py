@@ -46,10 +46,13 @@ def redeem_preorder_ticket(**kwargs):
         if not entryid:
             raise FlowError('This ticket can only redeemed by persons on the list "{}".'.format(
                 c.constraint.name), type='input', missing_field='list_{}'.format(c.constraint.pk))
+        if not entryid.isdigit():
+            raise FlowError('Please supply a list entry ID.',
+                            type='input', missing_field='list_{}'.format(c.constraint.pk))
         try:
             entry = c.constraint.entries.get(id=entryid)
             if is_redeemed(entry):
-                raise FlowError('This list entry has already been used.'.format(c.constraint.name),
+                raise FlowError('This list entry already has been used.'.format(c.constraint.name),
                                 type='input', missing_field='list_{}'.format(c.constraint.pk))
             else:
                 pos.listentry = entry

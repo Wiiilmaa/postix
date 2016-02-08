@@ -180,3 +180,40 @@ def preorder_position_redeemed(preorder_position_paid, transaction, product_with
         product=product_without_items, transaction=transaction
     )
     return preorder_position_paid
+
+
+@pytest.fixture
+def warning_constraint():
+    from c6sh.core.models import WarningConstraint
+    return WarningConstraint.objects.create(
+        name='U18 warning',
+        message='Please check that the person is younger than 18 years old.'
+    )
+
+
+@pytest.fixture
+def list_constraint():
+    from c6sh.core.models import ListConstraint
+    return ListConstraint.objects.create(
+        name='CCC members'
+    )
+
+
+@pytest.fixture
+def list_constraint_entry(list_constraint):
+    from c6sh.core.models import ListConstraintEntry
+    fake = Factory.create('en-US')
+    return ListConstraintEntry.objects.create(
+        list=list_constraint, name=fake.name(), identifier=str(random.randint(0, 100000))
+    )
+
+
+@pytest.fixture
+def list_constraint_entry_redeemed(list_constraint_entry, product_without_items, transaction):
+    from c6sh.core.models import TransactionPosition
+    TransactionPosition.objects.create(
+        type='redeem', listentry=list_constraint_entry,
+        value=Decimal('0.00'), tax_rate=Decimal('0.00'), tax_value=Decimal('0.00'),
+        product=product_without_items, transaction=transaction
+    )
+    return list_constraint_entry
