@@ -7,6 +7,6 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/', include(apiurls, namespace='desk')),
+    url(r'^api/', include(apiurls, namespace='api')),
     url(r'', include(deskurls, namespace='desk')),
 ]
