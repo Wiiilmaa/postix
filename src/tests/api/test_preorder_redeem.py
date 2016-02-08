@@ -2,6 +2,10 @@ import json
 
 import pytest
 from c6sh.core.models import WarningConstraintProduct, ListConstraintProduct
+from ..factories import (
+    preorder_position_factory, warning_constraint_factory, list_constraint_factory,
+    list_constraint_entry_factory
+)
 
 
 def help_test_for_error(api, secret, options=None):
@@ -24,7 +28,7 @@ def help_test_for_error(api, secret, options=None):
 
 
 @pytest.mark.django_db
-def test_invalid(api_with_session, cashdesk_session_before):
+def test_invalid(api_with_session):
     assert help_test_for_error(api_with_session, 'abcde') == {
         'success': False,
         'message': 'No ticket found with the given secret.',
@@ -34,8 +38,8 @@ def test_invalid(api_with_session, cashdesk_session_before):
 
 
 @pytest.mark.django_db
-def test_unpaid(api_with_session, preorder_position_unpaid):
-    assert help_test_for_error(api_with_session, preorder_position_unpaid.secret) == {
+def test_unpaid(api_with_session):
+    assert help_test_for_error(api_with_session, preorder_position_factory().secret) == {
         'success': False,
         'message': 'Ticket has not been paid for.',
         'type': 'error',
@@ -44,8 +48,8 @@ def test_unpaid(api_with_session, preorder_position_unpaid):
 
 
 @pytest.mark.django_db
-def test_already_redeemed(api_with_session, preorder_position_redeemed):
-    assert help_test_for_error(api_with_session, preorder_position_redeemed.secret) == {
+def test_already_redeemed(api_with_session):
+    assert help_test_for_error(api_with_session, preorder_position_factory(paid=True, redeemed=True).secret) == {
         'success': False,
         'message': 'Ticket has already been redeemed.',
         'type': 'error',
@@ -54,10 +58,11 @@ def test_already_redeemed(api_with_session, preorder_position_redeemed):
 
 
 @pytest.mark.django_db
-def test_preorder_warning(api_with_session, preorder_position_paid):
-    preorder_position_paid.preorder.warning_text = "Foo"
-    preorder_position_paid.preorder.save()
-    assert help_test_for_error(api_with_session, preorder_position_paid.secret) == {
+def test_preorder_warning(api_with_session):
+    pp = preorder_position_factory(paid=True)
+    pp.preorder.warning_text = "Foo"
+    pp.preorder.save()
+    assert help_test_for_error(api_with_session, pp.secret) == {
         'success': False,
         'message': 'Foo',
         'type': 'confirmation',
@@ -66,11 +71,13 @@ def test_preorder_warning(api_with_session, preorder_position_paid):
 
 
 @pytest.mark.django_db
-def test_preorder_warning_constraint(api_with_session, preorder_position_paid, warning_constraint):
+def test_preorder_warning_constraint(api_with_session):
+    pp = preorder_position_factory(paid=True)
+    warning_constraint = warning_constraint_factory()
     WarningConstraintProduct.objects.create(
-        product=preorder_position_paid.product, constraint=warning_constraint
+        product=pp.product, constraint=warning_constraint
     )
-    assert help_test_for_error(api_with_session, preorder_position_paid.secret) == {
+    assert help_test_for_error(api_with_session, pp.secret) == {
         'success': False,
         'message': warning_constraint.message,
         'type': 'confirmation',
@@ -79,11 +86,13 @@ def test_preorder_warning_constraint(api_with_session, preorder_position_paid, w
 
 
 @pytest.mark.django_db
-def test_preorder_list_constraint(api_with_session, preorder_position_paid, list_constraint):
+def test_preorder_list_constraint(api_with_session):
+    pp = preorder_position_factory(paid=True)
+    list_constraint = list_constraint_factory()
     ListConstraintProduct.objects.create(
-        product=preorder_position_paid.product, constraint=list_constraint
+        product=pp.product, constraint=list_constraint
     )
-    assert help_test_for_error(api_with_session, preorder_position_paid.secret) == {
+    assert help_test_for_error(api_with_session, pp.secret) == {
         'success': False,
         'message': 'This ticket can only redeemed by persons on the list "{}".'.format(list_constraint.name),
         'type': 'input',
@@ -92,14 +101,16 @@ def test_preorder_list_constraint(api_with_session, preorder_position_paid, list
 
 
 @pytest.mark.django_db
-def test_preorder_list_constraint_unknown(api_with_session, preorder_position_paid, list_constraint):
+def test_preorder_list_constraint_unknown(api_with_session):
+    pp = preorder_position_factory(paid=True)
+    list_constraint = list_constraint_factory()
     ListConstraintProduct.objects.create(
-        product=preorder_position_paid.product, constraint=list_constraint,
+        product=pp.product, constraint=list_constraint,
     )
     options = {
         'list_{}'.format(list_constraint.pk): '2'
     }
-    assert help_test_for_error(api_with_session, preorder_position_paid.secret, options) == {
+    assert help_test_for_error(api_with_session, pp.secret, options) == {
         'success': False,
         'message': 'Entry not found on list "{}".'.format(list_constraint.name),
         'type': 'input',
@@ -108,16 +119,19 @@ def test_preorder_list_constraint_unknown(api_with_session, preorder_position_pa
 
 
 @pytest.mark.django_db
-def test_preorder_list_constraint_used(api_with_session, preorder_position_paid, list_constraint_entry_redeemed):
+def test_preorder_list_constraint_used(api_with_session):
+    pp = preorder_position_factory(paid=True)
+    list_constraint = list_constraint_factory()
+    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=True)
     ListConstraintProduct.objects.create(
-        product=preorder_position_paid.product, constraint=list_constraint_entry_redeemed.list,
+        product=pp.product, constraint=entry.list,
     )
     options = {
-        'list_{}'.format(list_constraint_entry_redeemed.list.pk): str(list_constraint_entry_redeemed.id)
+        'list_{}'.format(entry.list.pk): str(entry.id)
     }
-    assert help_test_for_error(api_with_session, preorder_position_paid.secret, options) == {
+    assert help_test_for_error(api_with_session, pp.secret, options) == {
         'success': False,
-        'message': 'This list entry already has been used.'.format(list_constraint_entry_redeemed.list.name),
+        'message': 'This list entry already has been used.'.format(entry.list.name),
         'type': 'input',
-        'missing_field': 'list_{}'.format(list_constraint_entry_redeemed.list.pk),
+        'missing_field': 'list_{}'.format(entry.list.pk),
     }
