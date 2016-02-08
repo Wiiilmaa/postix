@@ -7,5 +7,5 @@ class CoreConfig(AppConfig):
     name = 'core'
     verbose_name = "Core"
 
-    def ready(self):
+    def ready(self):  # noqa
         from . import admin

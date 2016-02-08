@@ -11,7 +11,7 @@ def is_redeemed(obj):
         positions = TransactionPosition.objects.filter(listentry=obj)
     elif isinstance(obj, PreorderPosition):
         positions = TransactionPosition.objects.filter(preorder_position=obj)
-    else:
+    else:  # noqa
         raise TypeError('Expected ListConstraintEntry or PreorderPosition object.')
 
     positives = positions.filter(type='redeem')

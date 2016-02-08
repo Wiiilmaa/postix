@@ -1,5 +1,6 @@
 import random
 import string
+from datetime import timedelta
 from decimal import Decimal
 
 from c6sh.core.models import (
@@ -7,6 +8,7 @@ from c6sh.core.models import (
     Preorder, Item, PreorderPosition, Transaction, Quota, Product, ProductItem,
     User, Cashdesk, CashdeskSession, CashdeskSessionItem, WarningConstraint
 )
+from django.utils.timezone import now
 from faker import Factory
 
 
@@ -39,7 +41,7 @@ def cashdesk_session_before_factory():
     fake = Factory.create('en-US')
     cd = CashdeskSession.objects.create(cashdesk=cashdesk_factory(),
                                         user=user_factory(),
-                                        start=fake.date_time_this_month(),
+                                        start=now() - timedelta(hours=2),
                                         cash_before=random.choice([50 * i for i in range(6)]),
                                         backoffice_user_before=user_factory(superuser=True))
 
@@ -51,9 +53,9 @@ def cashdesk_session_before_factory():
     return cd
 
 
-def quota_factory():
+def quota_factory(size=None):
     return Quota.objects.create(name='Day {} Quota'.format(random.randint(0, 4)),
-                                size=random.randint(50, 300))
+                                size=random.randint(50, 300) if size is None else size)
 
 
 def time_constraint_factory(active=True):
@@ -100,6 +102,15 @@ def preorder_position_factory(paid=False, redeemed=False):
 
 def transaction_factory():
     return Transaction.objects.create(session=cashdesk_session_before_factory())
+
+
+def transaction_position_factory(transaction=None, product=None):
+    transaction = transaction or transaction_factory()
+    product = product or product_factory(items=True)
+    TransactionPosition.objects.create(
+        type='sell', value=product.price, tax_rate=product.tax_rate,
+        product=product, transaction=transaction
+    )
 
 
 def warning_constraint_factory():

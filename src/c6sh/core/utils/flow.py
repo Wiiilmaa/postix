@@ -17,7 +17,7 @@ class FlowError(Exception):
 def redeem_preorder_ticket(**kwargs):
     pos = TransactionPosition()
 
-    if 'secret' not in kwargs:
+    if 'secret' not in kwargs:  # noqa
         raise FlowError('No secret has been given.')
 
     try:
@@ -46,7 +46,7 @@ def redeem_preorder_ticket(**kwargs):
         if not entryid:
             raise FlowError('This ticket can only redeemed by persons on the list "{}".'.format(
                 c.constraint.name), type='input', missing_field='list_{}'.format(c.constraint.pk))
-        if not entryid.isdigit():
+        if not entryid.isdigit():  # noqa
             raise FlowError('Please supply a list entry ID.',
                             type='input', missing_field='list_{}'.format(c.constraint.pk))
         try:

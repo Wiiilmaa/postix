@@ -8,3 +8,4 @@ markdown
 # Testing and development requirements
 pytest-django==2.9.*
 fake-factory==0.5.*
+pytest-cov==2.*
