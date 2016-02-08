@@ -11,6 +11,6 @@ def get_ip_address(request):
 
 def detect_cashdesk(request):
     try:
-        return Cashdesk.objects.get(ip_address=get_ip_address(request))
+        return Cashdesk.objects.get(ip_address=get_ip_address(request), is_active=True)
     except Cashdesk.DoesNotExist:
         return None
