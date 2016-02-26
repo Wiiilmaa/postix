@@ -14,7 +14,6 @@ def test_session_active():
 
 @pytest.mark.django_db
 def test_session_active():
-    fake = Factory.create('en-US')
     session = cashdesk_session_before_factory()
     session.end = now() - timedelta(hours=1)
     assert not session.is_active()

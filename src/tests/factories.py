@@ -61,11 +61,11 @@ def quota_factory(size=None):
 def time_constraint_factory(active=True):
     fake = Factory.create('en-US')
     if active:
-        start = fake.date_time_between(start='-23h', end='-1h')
-        end = fake.date_time_between(start='+1h', end='+23h')
+        start = fake.date_time_between(start_date='-23h', end_date='-1h')
+        end = fake.date_time_between(start_date='+1h', end_date='+23h')
     else:
-        start = fake.date_time_between(start='-23h', end='-10h')
-        end = fake.date_time_between(start='-9h', end='-2h')
+        start = fake.date_time_between(start_date='-23h', end_date='-10h')
+        end = fake.date_time_between(start_date='-9h', end_date='-2h')
     return TimeConstraint.objects.create(name='Time Constraint',
                                          start=start,
                                          end=end)
@@ -107,7 +107,7 @@ def transaction_factory():
 def transaction_position_factory(transaction=None, product=None):
     transaction = transaction or transaction_factory()
     product = product or product_factory(items=True)
-    TransactionPosition.objects.create(
+    return TransactionPosition.objects.create(
         type='sell', value=product.price, tax_rate=product.tax_rate,
         product=product, transaction=transaction
     )

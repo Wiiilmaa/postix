@@ -9,11 +9,12 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, username: str, password: str=None):  # NOQA
-        if password is None:
+    def create_superuser(self, username: str, password: str=None):
+        if password is None:  # noqa
             raise Exception("You must provide a password")
         user = self.model(username=username)
         user.is_superuser = True
+        user.is_troubleshooter = True
         user.set_password(password)
         user.save()
         return user
@@ -32,16 +33,18 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'username'
     objects = UserManager()
 
-    def has_perm(self, perm, obj=None):
+    def has_perm(self, perm, obj=None):  # noqa
+        # Only for django.contrib.admin
         return self.is_superuser
 
-    def has_module_perms(self, app_label):
+    def has_module_perms(self, app_label):  # noqa
+        # Only for django.contrib.admin
         return self.is_superuser
 
-    def get_short_name(self):
+    def get_short_name(self):  # noqa
         return self.username
 
-    def get_full_name(self):
+    def get_full_name(self):  # noqa
         if self.firstname and self.lastname:
             return '{} {}'.format(self.firstname, self.lastname)
         elif self.firstname:

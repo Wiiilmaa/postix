@@ -38,15 +38,20 @@ class TransactionPosition(models.Model):
     authorized_by = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT,
                                       related_name='authorized')
 
+    def calculate_tax(self):
+        net_value = self.value * 100 / (100 + self.tax_rate)
+        self.tax_value = round_decimal(self.value - net_value)
+
     def save(self, *args, **kwargs):
-        if not self.value:
+        if self.value is None:
             self.value = self.product.price
-        if not self.tax_rate:
+        if self.tax_rate is None:
             self.tax_rate = self.product.tax_rate
-        if not self.tax_value:
-            net_value = self.value * 100 / (100 + self.tax_rate)
-            self.tax_value = round_decimal(self.value - net_value)
+
+        self.calculate_tax()
+
         super(TransactionPosition, self).save(*args, **kwargs)
+
         if not self.items.exists():
             for pi in self.product.product_items.all().select_related('item'):
                 TransactionPositionItem.objects.create(
@@ -71,7 +76,7 @@ class Product(models.Model):
     items = models.ManyToManyField('Item', through='ProductItem', blank=True)
 
     def is_available(self):
-        from .models import Quota, TimeConstraint
+        from . import Quota, TimeConstraint
         timeframes = TimeConstraint.objects.filter(products=self)
         if timeframes.exists():
             now = timezone.now()
