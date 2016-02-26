@@ -17,6 +17,3 @@ class PreorderPosition(models.Model):
 
     def __str__(self):
         return "{}-{}".format(self.preorder.order_code, self.secret[:10])
-
-    def is_redeemed(self):
-        raise NotImplementedError()
