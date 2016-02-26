@@ -30,11 +30,11 @@ def item_factory():
                                initial_stock=random.randint(50, 1000))
 
 
-def cashdesk_factory():
+def cashdesk_factory(ip=None, active=None):
     fake = Factory.create('en-US')
     return Cashdesk.objects.create(name='Cashdesk {}'.format(random.randint(0, 10)),
-                                   ip_address=fake.ipv4(),
-                                   is_active=True)
+                                   ip_address=ip or fake.ipv4(),
+                                   is_active=active if active is not None else True)
 
 
 def cashdesk_session_before_factory():
