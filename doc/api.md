@@ -61,7 +61,7 @@ You will receive an answer could look like this:
             {
                 "success": false,
                 "message": "This ticket can only be redeemed by persons on the \"CCC Members\" list",
-                "type": "input"
+                "type": "input",
                 "missing_field": "list_3"
             },
             {
