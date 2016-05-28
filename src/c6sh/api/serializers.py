@@ -21,7 +21,7 @@ class PreorderSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('name', 'price', 'tax_rate', 'requires_authorization', 'is_available')
+        fields = ('id', 'name', 'price', 'tax_rate', 'requires_authorization', 'is_available')
 
 
 class ListConstraintSerializer(serializers.ModelSerializer):

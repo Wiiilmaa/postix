@@ -100,6 +100,7 @@ receive a 200 status code on success and a 400 status code (with an error in the
 Sample result object (embedded in pagination as described above):
 
     {
+        "id": 3,
         "name": "Dauerticket",
         "price": "80.00",
         "tax_rate": "19.00",
