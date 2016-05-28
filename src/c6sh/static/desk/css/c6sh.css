@@ -105,6 +105,8 @@ body.login, body.error {
 
 #cart {
     flex: 1;
+    overflow: auto;
+    /* TODO: Some kind of touchscreen-friendly scrolling. Also, this currently still destroys the design */
 }
 #cart .cart-line {
     display: flex;
