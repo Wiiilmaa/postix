@@ -37,9 +37,9 @@ def cashdesk_factory(ip=None, active=None):
                                    is_active=active if active is not None else True)
 
 
-def cashdesk_session_before_factory():
+def cashdesk_session_before_factory(ip=None):
     fake = Factory.create('en-US')
-    cd = CashdeskSession.objects.create(cashdesk=cashdesk_factory(),
+    cd = CashdeskSession.objects.create(cashdesk=cashdesk_factory(ip=ip),
                                         user=user_factory(),
                                         start=now() - timedelta(hours=2),
                                         cash_before=random.choice([50 * i for i in range(6)]),
