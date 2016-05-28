@@ -114,6 +114,14 @@ def sell_ticket(**kwargs):
     if not product.is_available():
         raise FlowError('Product currently unavailable or sold out.')
 
+    if product.requires_authorization:
+        auth = kwargs.get('auth', '!invalid')
+        try:
+            pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=auth)
+        except User.DoesNotExist:  # noqa
+            raise FlowError('This sale requires authorization by a troubleshooter.',
+                            type='input', missing_field='auth')
+
     for c in product.product_warning_constraints.all():
         if 'warning_{}_acknowledged'.format(c.constraint.pk) not in kwargs:
             raise FlowError(c.constraint.message, type='confirmation',
