@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.db.models import Q
 from rest_framework import status
+from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -10,7 +11,7 @@ from .serializers import (
     ListConstraintEntrySerializer, TransactionSerializer
 )
 from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction
-from ..core.utils.flow import FlowError, redeem_preorder_ticket, sell_ticket
+from ..core.utils.flow import FlowError, redeem_preorder_ticket, sell_ticket, reverse_transaction
 from ..core.utils import round_decimal
 
 
@@ -136,6 +137,20 @@ class TransactionViewSet(ReadOnlyModelViewSet):
         else:
             # Break out of atomic transaction so everything gets rolled back!
             raise ProcessException(response)
+
+    @detail_route(methods=["POST"])
+    def reverse(self, pk=None):
+        session = self.request.user.get_current_session()
+        if not session:  # noqa
+            raise RuntimeError('This should never happen because the auth layer should handle this.')
+        try:
+            reverse_transaction(pk, session)
+            return Response({'success': True}, status=status.HTTP_201_CREATED)
+        except FlowError as e:
+            return Response({
+                'success': False,
+                'message': e.message
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListConstraintViewSet(ReadOnlyModelViewSet):

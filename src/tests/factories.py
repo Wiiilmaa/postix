@@ -37,10 +37,10 @@ def cashdesk_factory(ip=None, active=None):
                                    is_active=active if active is not None else True)
 
 
-def cashdesk_session_before_factory(ip=None):
+def cashdesk_session_before_factory(ip=None, user=None):
     fake = Factory.create('en-US')
     cd = CashdeskSession.objects.create(cashdesk=cashdesk_factory(ip=ip),
-                                        user=user_factory(),
+                                        user=user or user_factory(),
                                         start=now() - timedelta(hours=2),
                                         cash_before=random.choice([50 * i for i in range(6)]),
                                         backoffice_user_before=user_factory(superuser=True))
@@ -100,8 +100,8 @@ def preorder_position_factory(paid=False, redeemed=False):
     return pp
 
 
-def transaction_factory():
-    return Transaction.objects.create(session=cashdesk_session_before_factory())
+def transaction_factory(session=None):
+    return Transaction.objects.create(session=session or cashdesk_session_before_factory())
 
 
 def transaction_position_factory(transaction=None, product=None):

@@ -1,13 +1,19 @@
 from decimal import Decimal
 
 import pytest
-from c6sh.core.models import WarningConstraintProduct, ListConstraintProduct, PreorderPosition, TransactionPosition
+from c6sh.core.models import (
+    WarningConstraintProduct, ListConstraintProduct, TransactionPosition,
+    TransactionPositionItem
+)
 from c6sh.core.utils.checks import is_redeemed
-from c6sh.core.utils.flow import redeem_preorder_ticket, FlowError, sell_ticket
+from c6sh.core.utils.flow import redeem_preorder_ticket, FlowError, sell_ticket, reverse_transaction
+from django.db.models import Sum
 from tests.factories import (
     preorder_position_factory, warning_constraint_factory, list_constraint_factory,
-    list_constraint_entry_factory, user_factory,
-    transaction_factory, product_factory, time_constraint_factory)
+    list_constraint_entry_factory, user_factory, cashdesk_session_before_factory,
+    transaction_factory, product_factory, time_constraint_factory,
+    transaction_position_factory
+)
 
 
 @pytest.mark.django_db
@@ -15,6 +21,7 @@ def test_invalid():
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret='abcde')
     assert excinfo.value.message == 'No ticket found with the given secret.'
+
 
 @pytest.mark.django_db
 def test_unpaid():
@@ -291,3 +298,66 @@ def test_sell_list_constraint_troubleshooter_bypass():
     pos = sell_ticket(product=p.id, **options)
     assert pos.listentry is None
     assert pos.authorized_by == user
+
+
+@pytest.mark.django_db
+def test_reverse_unknown():
+    session = cashdesk_session_before_factory()
+    with pytest.raises(FlowError) as excinfo:
+        reverse_transaction(trans_id=1234678, current_session=session)
+    assert excinfo.value.message == 'Transaction ID not known.'
+
+
+@pytest.mark.django_db
+def test_reverse_wrong_session():
+    session1 = cashdesk_session_before_factory()
+    session2 = cashdesk_session_before_factory()
+    trans = transaction_factory(session1)
+    transaction_position_factory(transaction=trans)
+    with pytest.raises(FlowError) as excinfo:
+        reverse_transaction(trans_id=trans.pk, current_session=session2)
+    assert excinfo.value.message == 'Only troubleshooters can reverse sales from other sessions.'
+
+
+@pytest.mark.django_db
+def test_reverse_wrong_session():
+    session1 = cashdesk_session_before_factory()
+    session2 = cashdesk_session_before_factory()
+    trans = transaction_factory(session1)
+    transaction_position_factory(transaction=trans)
+    with pytest.raises(FlowError) as excinfo:
+        reverse_transaction(trans_id=trans.pk, current_session=session2)
+    assert excinfo.value.message == 'Only troubleshooters can reverse sales from other sessions.'
+
+
+@pytest.mark.django_db
+def test_reverse_wrong_session_troubleshooter():
+    session1 = cashdesk_session_before_factory()
+    session2 = cashdesk_session_before_factory(user=user_factory(troubleshooter=True))
+    trans = transaction_factory(session1)
+    transaction_position_factory(transaction=trans)
+    reverse_transaction(trans_id=trans.pk, current_session=session2)
+
+
+@pytest.mark.django_db
+def test_reverse_success():
+    session = cashdesk_session_before_factory()
+    trans = transaction_factory(session)
+    pos = [transaction_position_factory(transaction=trans, product=product_factory(items=True)),
+           transaction_position_factory(transaction=trans)]
+    revtrans = reverse_transaction(trans_id=trans.pk, current_session=session)
+    assert revtrans.session == session
+    revpos = revtrans.positions.all()
+    assert len(revpos) == len(pos)
+    for lp, rp in zip(pos, revpos):
+        assert rp.reverses == lp
+        assert rp.type == 'reverse'
+        assert rp.value == -1 * lp.value
+        assert rp.tax_value == -1 * lp.tax_value
+        assert rp.product == lp.product
+        assert {i.id for i in pos[0].items.all()} == {i.id for i in revpos[0].items.all()}
+
+        ls = TransactionPositionItem.objects.filter(position=lp).aggregate(s=Sum('amount'))['s']
+        if ls:
+            rs = TransactionPositionItem.objects.filter(position=rp).aggregate(s=Sum('amount'))['s']
+            assert rs == ls * -1

@@ -1,8 +1,12 @@
+import copy
 from decimal import Decimal
 
 from c6sh.core.models import Product
 from .checks import is_redeemed
-from ..models import PreorderPosition, ListConstraintEntry, TransactionPosition, User, ListConstraintProduct
+from ..models import (
+    PreorderPosition, ListConstraintEntry, TransactionPosition, User, ListConstraintProduct, Transaction,
+    CashdeskSession, TransactionPositionItem
+)
 
 
 class FlowError(Exception):
@@ -125,3 +129,34 @@ def sell_ticket(**kwargs):
 
     pos.product = product  # value, tax_* and items will be set automatically on save()
     return pos
+
+
+def reverse_transaction(trans_id, current_session: CashdeskSession):
+    try:
+        old_transaction = Transaction.objects.get(id=trans_id)
+    except Transaction.DoesNotExist:
+        raise FlowError('Transaction ID not known.')
+
+    if not current_session.is_active():  # noqa (catched by auth layer)
+        raise FlowError('You need to provide an active session.')
+
+    if old_transaction.session != current_session:
+        if not current_session.user.is_troubleshooter:
+            raise FlowError('Only troubleshooters can reverse sales from other sessions.')
+
+    new_transaction = Transaction.objects.create(session=current_session)
+    for old_pos in old_transaction.positions.all():
+        new_pos = copy.copy(old_pos)
+        new_pos.transaction = new_transaction
+        new_pos.pk = None
+        new_pos.type = 'reverse'
+        new_pos.value *= -1
+        new_pos.tax_value *= -1
+        new_pos.reverses = old_pos
+        new_pos.authorized_by = None
+        new_pos.save()
+        for ip in TransactionPositionItem.objects.filter(position=new_pos):
+            ip.amount *= -1
+            ip.save()
+
+    return new_transaction
