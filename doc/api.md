@@ -93,13 +93,27 @@ type. Currently, the following types can be returned:
 To reverse a whole transaction, just issue a POST request to ``/api/transactions/12345/reverse/``. You will
 receive a 200 status code on success and a 400 status code (with an error in the response body) otherwise.
 
+### Products
+
+``/api/products/``
+
+Sample result object (embedded in pagination as described above):
+
+    {
+        "name": "Dauerticket",
+        "price": "80.00",
+        "tax_rate": "19.00",
+        "requires_authorization": false,
+        "is_available": true
+    }
+
 ### Preorders
 
 ``/api/preorders/``
 
 Only available to admin users. 
 
-Sample result object (embedded in pagination as described abobe):
+Sample result object (embedded in pagination as described above):
 
     {
         "order_code": "12346",
@@ -130,7 +144,7 @@ This list view *requires* that you specify the query parameter ``secret``
 to search for a specific positions. If you do not specify this parameter,
 an empty result will be returned.
 
-Sample result object (embedded in pagination as described abobe):
+Sample result object (embedded in pagination as described above):
 
     {
         "id": 1,
@@ -145,7 +159,7 @@ Sample result object (embedded in pagination as described abobe):
 
 Lists all possible lists that are used for list constraints.
 
-Sample result object (embedded in pagination as described abobe):
+Sample result object (embedded in pagination as described above):
 
     {
         "id": 1,
@@ -164,7 +178,7 @@ with at least three characters of a search query that will be used to look
 up a specific entry.
 If you do not specify these two parameters, an empty result will be returned.
 
-Sample result object (embedded in pagination as described abobe):
+Sample result object (embedded in pagination as described above):
 
     {
         "id": 1,

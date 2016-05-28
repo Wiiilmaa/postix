@@ -8,6 +8,7 @@ router.register(r'preorderpositions', views.PreorderPositionViewSet)
 router.register(r'transactions', views.TransactionViewSet)
 router.register(r'listconstraints', views.ListConstraintViewSet)
 router.register(r'listconstraintentries', views.ListConstraintEntryViewSet)
+router.register(r'products', views.ProductViewSet)
 
 urlpatterns = [
     url(r'', include(router.urls, namespace='api'))

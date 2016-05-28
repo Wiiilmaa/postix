@@ -8,9 +8,9 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .serializers import (
     PreorderSerializer, PreorderPositionSerializer, ListConstraintSerializer,
-    ListConstraintEntrySerializer, TransactionSerializer
+    ListConstraintEntrySerializer, TransactionSerializer, ProductSerializer
 )
-from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction
+from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction, Product
 from ..core.utils.flow import FlowError, redeem_preorder_ticket, sell_ticket, reverse_transaction
 from ..core.utils import round_decimal
 
@@ -151,6 +151,12 @@ class TransactionViewSet(ReadOnlyModelViewSet):
                 'success': False,
                 'message': e.message
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProductViewSet(ReadOnlyModelViewSet):
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
 
 class ListConstraintViewSet(ReadOnlyModelViewSet):
