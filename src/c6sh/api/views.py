@@ -174,4 +174,6 @@ class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
                 queryset = queryset.filter(Q(name__contains=search_param)|Q(identifier__contains=search_param))
             else:
                 queryset = queryset.none()
+        else:
+            queryset = queryset.none()
         return queryset

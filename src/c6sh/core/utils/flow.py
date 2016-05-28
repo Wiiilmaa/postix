@@ -20,6 +20,16 @@ class FlowError(Exception):
 
 
 def redeem_preorder_ticket(**kwargs):
+    """
+    Creates a TransactionPosition object that validates a given preorder position.
+    This checks the various constraints placed on the given position and item and
+    raises a FlowError if one of the conditions can't be met. This FlowError will
+    contain information which additional keyword arguments you need to provide to
+    fulfull the conditions (if possible).
+
+    :param secret: The secret of the preorder position (i.e. the scanned barcode)
+    :returns: The TransactionPosition object
+    """
     pos = TransactionPosition(type='redeem')
 
     if 'secret' not in kwargs:  # noqa
@@ -81,6 +91,16 @@ def redeem_preorder_ticket(**kwargs):
 
 
 def sell_ticket(**kwargs):
+    """
+    Creates a TransactionPosition object that sells a given product.
+    This checks the various constraints placed on the given product and item and
+    raises a FlowError if one of the conditions can't be met. This FlowError will
+    contain information which additional keyword arguments you need to provide to
+    fulfull the conditions (if possible).
+
+    :param product: The ID of the product to sell.
+    :returns: The TransactionPosition object
+    """
     pos = TransactionPosition(type='sell')
 
     if 'product' not in kwargs:  # noqa
@@ -131,7 +151,13 @@ def sell_ticket(**kwargs):
     return pos
 
 
-def reverse_transaction(trans_id, current_session: CashdeskSession):
+def reverse_transaction(trans_id: int, current_session: CashdeskSession):
+    """
+    Creates a Transaction that reverses an earlier transaction as a whole.
+
+    :param trans_id: The ID of the transaction to reverse
+    :returns: The new Transaction object
+    """
     try:
         old_transaction = Transaction.objects.get(id=trans_id)
     except Transaction.DoesNotExist:
@@ -165,6 +191,12 @@ def reverse_transaction(trans_id, current_session: CashdeskSession):
 
 
 def reverse_transaction_position(trans_pos_id, current_session: CashdeskSession):
+    """
+    Creates a Transaction that reverses a single transaction position.
+
+    :param trans_pos_id: The ID of the transaction position to reverse
+    :returns: The new Transaction object
+    """
     try:
         old_pos = TransactionPosition.objects.get(id=trans_pos_id)
     except TransactionPosition.DoesNotExist:
