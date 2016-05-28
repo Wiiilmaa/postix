@@ -1,7 +1,6 @@
 from django.db import transaction
 from django.db.models import Q
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -95,8 +94,8 @@ class TransactionViewSet(ReadOnlyModelViewSet):
         if 'cash_given' in data:
             trans.cash_given = round_decimal(data.get('cash_given', '0.00'))
         session = self.request.user.get_current_session()
-        if not session:
-            raise PermissionDenied('You do not have an active session.')
+        if not session:  # noqa
+            raise RuntimeError('This should never happen because the auth layer should handle this.')
         trans.session = session
         trans.save()
 
@@ -108,7 +107,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             try:
                 if postype == "redeem":
                     pos = redeem_preorder_ticket(**inppos)
-                else:
+                else:  # noqa
                     raise FlowError('Type {} is not yet implemented'.format(postype))
             except FlowError as e:
                 position_feedback.append({

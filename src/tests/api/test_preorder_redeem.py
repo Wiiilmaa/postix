@@ -135,3 +135,21 @@ def test_preorder_list_constraint_used(api_with_session):
         'type': 'input',
         'missing_field': 'list_{}'.format(entry.list.pk),
     }
+
+
+@pytest.mark.django_db
+def test_success(api_with_session):
+    secret = preorder_position_factory(paid=True).secret
+    req = {
+        'positions': [
+            {
+                'type': 'redeem',
+                'secret': secret
+            }
+        ]
+    }
+    response = api_with_session.post('/api/transactions/', req, format='json')
+    assert response.status_code == 201
+    j = json.loads(response.content.decode())
+    assert j['success']
+    assert j['positions'][0]['success']
