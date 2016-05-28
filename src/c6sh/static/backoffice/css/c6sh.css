@@ -1,0 +1,24 @@
+body {
+    font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+body.login, body.error {
+    background: #eee;
+}
+
+.panel-login {
+    width: 400px;
+    margin: 60px auto 0 auto;
+}
+
+.error-page {
+    width: 400px;
+    margin: 60px auto 0 auto;
+    text-align: center;
+}
+.error-page h2 {
+    font-size: 30px;
+}
+.error-page .glyphicon {
+    font-size: 200px;
+}
+

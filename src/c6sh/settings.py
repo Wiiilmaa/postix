@@ -21,6 +21,7 @@ INSTALLED_APPS = (
     'c6sh.core',
     'c6sh.desk',
     'c6sh.api',
+    'c6sh.backoffice',
 )
 
 MIDDLEWARE_CLASSES = (
