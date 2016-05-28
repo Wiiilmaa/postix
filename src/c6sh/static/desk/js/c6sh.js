@@ -78,7 +78,44 @@ var transaction = {
         transaction._render();
     },
     perform: function () {
-        // TODO
+        // TODO: Block interface while loading
+        $.ajax({
+            url: '/api/transactions/',
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({
+                positions: transaction.positions
+            }),
+            success: function (data, status, jqXHR) {
+                // TODO: Render successful message
+                transaction.clear();
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            error: function (jqXHR, status, error) {
+                if (jqXHR.status == 400) {
+                    var data = JSON.parse(jqXHR.responseText);
+                    var i = 0, pos;
+                    for (i = 0; i < data.positions.length; i++) {
+                        pos = data.positions[i];
+                        if (!pos.success) {
+                            if (pos.type == 'confirmation') {
+                                dialog.show_confirmation(i, pos.message, pos.missing_field);
+                            } else if (pos.type == 'input') {
+                                dialog.show_list_input(i, pos.message, pos.missing_field);
+                            } else {
+                                dialog.show_error(pos.message);
+                            }
+                            break;
+                        }
+                    }
+                } else {
+                    console.log(jqXHR.statusText);
+                    dialog.show_error(jqXHR.statusText);
+                }
+            }
+        })
     },
     remove: function (pos_nr) {
         $("#cart .cart-line").get(pos_nr).remove();
@@ -98,12 +135,12 @@ var transaction = {
         $("#checkout-total span").text(total.toFixed(2));
     },
     init: function () {
-        $("#product-view").on("click", ".product button", function () {
+        $("#product-view").on("mousedown", ".product button", function () {
             transaction.add_product($(this).attr("data-id"));
         });
-        $("#btn-clear").click(transaction.clear);
-        $("#btn-checkout").click(transaction.perform);
-        $("#cart").html("").on("click", ".cart-delete button", function () {
+        $("#btn-clear").mousedown(transaction.clear);
+        $("#btn-checkout").mousedown(transaction.perform);
+        $("#cart").html("").on("mousedown", ".cart-delete button", function () {
             var $row = $(this).parent().parent();
             transaction.remove($row.index());
         });
@@ -111,40 +148,81 @@ var transaction = {
     }
 };
 
-var confirm_dialog = {
+var dialog = {
+    _field_name: null,
+    _pos_id: null,
+    _type: null,
+    
     show_list_input: function (pos_id, message, listid, field_name) {
-        // TODO
+        dialog._pos_id = pos_id;
+        dialog._field_name = field_name;
+        dialog._type = 'input';
+        
+        var pos = transaction.positions[pos_id];
+        var product = productlist.products[pos.product];
+        $("#modal-title").text(product.name);
+        $("#modal-text").text(message);
+        $("#modal-input").show();
+        $("#btn-continue").show();
+        $("body").addClass("has-modal");
     },
-    show_error: function (message) {
-        // TODO
+    show_error: function (message, pos_id) {
+        dialog._type = 'error';
+        
+        if (pos_id) {
+            var pos = transaction.positions[pos_id];
+            var product = productlist.products[pos.product];
+            $("#modal-title").text(product.name);
+        } else {
+            $("#modal-title").text("Error");
+        }
+        $("#modal-text").text(message);
+        $("#modal-input").hide();
+        $("#btn-continue").hide();
+        $("body").addClass("has-modal");
     },
     show_confirmation: function (pos_id, message, field_name) {
-        // TODO
+        dialog._type = 'confirmation';
+        dialog._pos_id = pos_id;
+        dialog._field_name = field_name;
+        var pos = transaction.positions[pos_id];
+        var product = productlist.products[pos.product];
+        $("#modal-title").text(product.name);
+        $("#modal-text").text(message);
+        $("#modal-input").hide();
+        $("#btn-continue").show();
+        $("body").addClass("has-modal");
+    },
+    _continue: function () {
+        if (dialog._type === 'confirmation') {
+            transaction.positions[dialog._pos_id][dialog._field_name] = true;
+            transaction.perform();
+            dialog.reset();
+        } else if (dialog._type === 'input') {
+            transaction.positions[dialog._pos_id][dialog._field_name] = $("#modal-input").val();
+            transaction.perform();
+            dialog.reset();
+        }
+    },
+    reset: function () {
+        $('body').removeClass('has-modal');
+        dialog._pos_id = null;
+        dialog._field_name = null;
+        dialog._type = null;
     },
     init: function () {
-        
+        $('#btn-cancel').mousedown(dialog.reset);
+        $("#btn-continue").mousedown(dialog._continue);
     }
 };
 
 
 $(function () {
     productlist.init();
-    confirm_dialog.init();
+    dialog.init();
     transaction.init();
     preorder.init();
     /*
-    $('#btn-checkout').mousedown(function() {
-        $('#lower-right').addClass('post-sale');
-    });
-    $('#btn-clear').mousedown(function() {
-        $('#lower-right').removeClass('post-sale');
-    });
-    $('.product button').mousedown(function() {
-        $('body').addClass('has-modal');
-    });
-    $('#btn-cancel').mousedown(function() {
-        $('body').removeClass('has-modal');
-    });
     var preSaleTickets = new Bloodhound({
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
       queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -174,4 +252,34 @@ $(function () {
       source: preSaleTickets
     });
     */
+});
+
+// Django CSRF token
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
 });

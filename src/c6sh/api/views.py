@@ -102,8 +102,12 @@ class TransactionViewSet(ReadOnlyModelViewSet):
 
         position_feedback = []
         success = True
+        pos = data.get('positions', [])
 
-        for inppos in data.get('positions', []):
+        if not pos:
+            raise ProcessException('Empty transaction')
+
+        for inppos in pos:
             postype = inppos.get('type', '')
             try:
                 if postype == "redeem":
