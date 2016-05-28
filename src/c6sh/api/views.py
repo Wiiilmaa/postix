@@ -10,7 +10,7 @@ from .serializers import (
     ListConstraintEntrySerializer, TransactionSerializer
 )
 from ..core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction
-from ..core.utils.flow import FlowError, redeem_preorder_ticket
+from ..core.utils.flow import FlowError, redeem_preorder_ticket, sell_ticket
 from ..core.utils import round_decimal
 
 
@@ -107,6 +107,8 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             try:
                 if postype == "redeem":
                     pos = redeem_preorder_ticket(**inppos)
+                elif postype == "sell":
+                    pos = sell_ticket(**inppos)
                 else:  # noqa
                     raise FlowError('Type {} is not yet implemented'.format(postype))
             except FlowError as e:

@@ -3,11 +3,11 @@ from decimal import Decimal
 import pytest
 from c6sh.core.models import WarningConstraintProduct, ListConstraintProduct, PreorderPosition, TransactionPosition
 from c6sh.core.utils.checks import is_redeemed
-from c6sh.core.utils.flow import redeem_preorder_ticket, FlowError
+from c6sh.core.utils.flow import redeem_preorder_ticket, FlowError, sell_ticket
 from tests.factories import (
     preorder_position_factory, warning_constraint_factory, list_constraint_factory,
     list_constraint_entry_factory, user_factory,
-    transaction_factory)
+    transaction_factory, product_factory, time_constraint_factory)
 
 
 @pytest.mark.django_db
@@ -161,5 +161,133 @@ def test_preorder_list_constraint_troubleshooter_bypass():
         'list_{}'.format(list_constraint.pk): str(user.auth_token)
     }
     pos = redeem_preorder_ticket(secret=pp.secret, **options)
+    assert pos.listentry is None
+    assert pos.authorized_by == user
+
+
+@pytest.mark.django_db
+def test_sell_unknown_product():
+    with pytest.raises(FlowError) as excinfo:
+        sell_ticket(product=1234678)
+    assert excinfo.value.message == 'Product ID not known.'
+
+
+@pytest.mark.django_db
+def test_sell_unavailable_product():
+    p = product_factory()
+    t = time_constraint_factory(active=False)
+    t.products.add(p)
+    with pytest.raises(FlowError) as excinfo:
+        sell_ticket(product=p.pk)
+    assert excinfo.value.message == 'Product currently unavailable or sold out.'
+
+
+@pytest.mark.django_db
+def test_sell_warning_constraint():
+    p = product_factory()
+    warning_constraint = warning_constraint_factory()
+    WarningConstraintProduct.objects.create(
+        product=p, constraint=warning_constraint
+    )
+    with pytest.raises(FlowError) as excinfo:
+        sell_ticket(product=p.pk)
+    assert excinfo.value.message == warning_constraint.message
+    assert excinfo.value.type == 'confirmation'
+    assert excinfo.value.missing_field == 'warning_{}_acknowledged'.format(warning_constraint.pk)
+
+
+@pytest.mark.django_db
+def test_sell_warning_constraint_passed():
+    p = product_factory()
+    warning_constraint = warning_constraint_factory()
+    WarningConstraintProduct.objects.create(
+        product=p, constraint=warning_constraint
+    )
+    options = {
+        'warning_{}_acknowledged'.format(warning_constraint.pk): 'ok'
+    }
+    sell_ticket(product=p.id, **options)
+
+
+@pytest.mark.django_db
+def test_sell_list_constraint():
+    p = product_factory()
+    list_constraint = list_constraint_factory()
+    ListConstraintProduct.objects.create(
+        product=p, constraint=list_constraint
+    )
+    with pytest.raises(FlowError) as excinfo:
+        sell_ticket(product=p.id)
+    assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
+        list_constraint.name)
+    assert excinfo.value.type == 'input'
+    assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
+
+
+@pytest.mark.django_db
+def test_sell_list_constraint_unknown():
+    p = product_factory()
+    list_constraint = list_constraint_factory()
+    ListConstraintProduct.objects.create(
+        product=p, constraint=list_constraint,
+    )
+    options = {
+        'list_{}'.format(list_constraint.pk): '2'
+    }
+    with pytest.raises(FlowError) as excinfo:
+        sell_ticket(product=p.id, **options)
+    assert excinfo.value.message == 'Entry not found on list "{}".'.format(
+        list_constraint.name)
+    assert excinfo.value.type == 'input'
+    assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
+
+
+@pytest.mark.django_db
+def test_sell_list_constraint_used():
+    p = product_factory()
+    list_constraint = list_constraint_factory()
+    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=True)
+    ListConstraintProduct.objects.create(
+        product=p, constraint=entry.list,
+    )
+    options = {
+        'list_{}'.format(entry.list.pk): str(entry.id)
+    }
+    with pytest.raises(FlowError) as excinfo:
+        sell_ticket(product=p.id, **options)
+    assert excinfo.value.message == 'This list entry already has been used.'
+    assert excinfo.value.type == 'input'
+    assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
+
+
+@pytest.mark.django_db
+def test_sell_list_constraint_success():
+    p = product_factory()
+    list_constraint = list_constraint_factory()
+    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=False)
+    ListConstraintProduct.objects.create(
+        product=p, constraint=entry.list,
+    )
+    options = {
+        'list_{}'.format(entry.list.pk): str(entry.id)
+    }
+    pos = sell_ticket(product=p.id, **options)
+    assert pos.listentry == entry
+
+
+@pytest.mark.django_db
+def test_sell_list_constraint_troubleshooter_bypass():
+    p = product_factory()
+    list_constraint = list_constraint_factory()
+    ListConstraintProduct.objects.create(
+        product=p, constraint=list_constraint,
+    )
+    user = user_factory(troubleshooter=True)
+    user.auth_token = 'abcdefg'
+    user.save()
+    options = {
+        'list_{}'.format(list_constraint.pk): str(user.auth_token)
+    }
+    pos = sell_ticket(product=p.id, **options)
     assert pos.listentry is None
     assert pos.authorized_by == user
