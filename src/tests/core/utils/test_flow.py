@@ -6,7 +6,9 @@ from c6sh.core.models import (
     TransactionPositionItem
 )
 from c6sh.core.utils.checks import is_redeemed
-from c6sh.core.utils.flow import redeem_preorder_ticket, FlowError, sell_ticket, reverse_transaction
+from c6sh.core.utils.flow import (
+    redeem_preorder_ticket, FlowError, sell_ticket, reverse_transaction, reverse_transaction_position
+)
 from django.db.models import Sum
 from tests.factories import (
     preorder_position_factory, warning_constraint_factory, list_constraint_factory,
@@ -320,17 +322,6 @@ def test_reverse_wrong_session():
 
 
 @pytest.mark.django_db
-def test_reverse_wrong_session():
-    session1 = cashdesk_session_before_factory()
-    session2 = cashdesk_session_before_factory()
-    trans = transaction_factory(session1)
-    transaction_position_factory(transaction=trans)
-    with pytest.raises(FlowError) as excinfo:
-        reverse_transaction(trans_id=trans.pk, current_session=session2)
-    assert excinfo.value.message == 'Only troubleshooters can reverse sales from other sessions.'
-
-
-@pytest.mark.django_db
 def test_reverse_wrong_session_troubleshooter():
     session1 = cashdesk_session_before_factory()
     session2 = cashdesk_session_before_factory(user=user_factory(troubleshooter=True))
@@ -355,9 +346,84 @@ def test_reverse_success():
         assert rp.value == -1 * lp.value
         assert rp.tax_value == -1 * lp.tax_value
         assert rp.product == lp.product
-        assert {i.id for i in pos[0].items.all()} == {i.id for i in revpos[0].items.all()}
+        assert {i.id for i in lp.items.all()} == {i.id for i in rp.items.all()}
 
         ls = TransactionPositionItem.objects.filter(position=lp).aggregate(s=Sum('amount'))['s']
         if ls:
             rs = TransactionPositionItem.objects.filter(position=rp).aggregate(s=Sum('amount'))['s']
             assert rs == ls * -1
+
+
+@pytest.mark.django_db
+def test_reverse_double():
+    session = cashdesk_session_before_factory()
+    trans = transaction_factory(session)
+    transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    transaction_position_factory(transaction=trans)
+    reverse_transaction(trans_id=trans.pk, current_session=session)
+    with pytest.raises(FlowError) as excinfo:
+        reverse_transaction(trans_id=trans.pk, current_session=session)
+    assert excinfo.value.message == 'At least one position of this transaction already has been reversed.'
+
+
+@pytest.mark.django_db
+def test_reverse_position_unknown():
+    session = cashdesk_session_before_factory()
+    with pytest.raises(FlowError) as excinfo:
+        reverse_transaction_position(1234678, current_session=session)
+    assert excinfo.value.message == 'TransactionPosition ID not known.'
+
+
+@pytest.mark.django_db
+def test_reverse_position_wrong_session():
+    session1 = cashdesk_session_before_factory()
+    session2 = cashdesk_session_before_factory()
+    trans = transaction_factory(session1)
+    tpos = transaction_position_factory(transaction=trans)
+    with pytest.raises(FlowError) as excinfo:
+        reverse_transaction_position(tpos.pk, current_session=session2)
+    assert excinfo.value.message == 'Only troubleshooters can reverse sales from other sessions.'
+
+
+@pytest.mark.django_db
+def test_reverse_position_wrong_session_troubleshooter():
+    session1 = cashdesk_session_before_factory()
+    session2 = cashdesk_session_before_factory(user=user_factory(troubleshooter=True))
+    trans = transaction_factory(session1)
+    tpos = transaction_position_factory(transaction=trans)
+    reverse_transaction_position(tpos.pk, current_session=session2)
+
+
+@pytest.mark.django_db
+def test_reverse_success():
+    session = cashdesk_session_before_factory()
+    trans = transaction_factory(session)
+    lp = transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    revtrans = reverse_transaction_position(trans_pos_id=lp.pk, current_session=session)
+    assert revtrans.session == session
+    revpos = revtrans.positions.all()
+    assert len(revpos) == 1
+    rp = revpos[0]
+
+    assert rp.reverses == lp
+    assert rp.type == 'reverse'
+    assert rp.value == -1 * lp.value
+    assert rp.tax_value == -1 * lp.tax_value
+    assert rp.product == lp.product
+    assert {i.id for i in lp.items.all()} == {i.id for i in rp.items.all()}
+
+    ls = TransactionPositionItem.objects.filter(position=lp).aggregate(s=Sum('amount'))['s']
+    if ls:
+        rs = TransactionPositionItem.objects.filter(position=rp).aggregate(s=Sum('amount'))['s']
+        assert rs == ls * -1
+
+
+@pytest.mark.django_db
+def test_reverse_position_double():
+    session = cashdesk_session_before_factory()
+    trans = transaction_factory(session)
+    tpos = transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    reverse_transaction_position(tpos.pk, current_session=session)
+    with pytest.raises(FlowError) as excinfo:
+        reverse_transaction_position(tpos.pk, current_session=session)
+    assert excinfo.value.message == 'This position already has been reversed.'

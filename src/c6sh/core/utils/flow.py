@@ -146,6 +146,8 @@ def reverse_transaction(trans_id, current_session: CashdeskSession):
 
     new_transaction = Transaction.objects.create(session=current_session)
     for old_pos in old_transaction.positions.all():
+        if old_pos.reversed_by.exists():
+            raise FlowError('At least one position of this transaction already has been reversed.')
         new_pos = copy.copy(old_pos)
         new_pos.transaction = new_transaction
         new_pos.pk = None
@@ -158,5 +160,39 @@ def reverse_transaction(trans_id, current_session: CashdeskSession):
         for ip in TransactionPositionItem.objects.filter(position=new_pos):
             ip.amount *= -1
             ip.save()
+
+    return new_transaction
+
+
+def reverse_transaction_position(trans_pos_id, current_session: CashdeskSession):
+    try:
+        old_pos = TransactionPosition.objects.get(id=trans_pos_id)
+    except TransactionPosition.DoesNotExist:
+        raise FlowError('TransactionPosition ID not known.')
+
+    if not current_session.is_active():  # noqa (catched by auth layer)
+        raise FlowError('You need to provide an active session.')
+
+    if old_pos.transaction.session != current_session:
+        if not current_session.user.is_troubleshooter:
+            raise FlowError('Only troubleshooters can reverse sales from other sessions.')
+
+    if old_pos.reversed_by.exists():
+        raise FlowError('This position already has been reversed.')
+
+    new_transaction = Transaction(session=current_session)
+    new_transaction.save()
+    new_pos = copy.copy(old_pos)
+    new_pos.transaction = new_transaction
+    new_pos.pk = None
+    new_pos.type = 'reverse'
+    new_pos.value *= -1
+    new_pos.tax_value *= -1
+    new_pos.reverses = old_pos
+    new_pos.authorized_by = None
+    new_pos.save()
+    for ip in TransactionPositionItem.objects.filter(position=new_pos):
+        ip.amount *= -1
+        ip.save()
 
     return new_transaction
