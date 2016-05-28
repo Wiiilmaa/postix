@@ -53,7 +53,7 @@ contains a list of transaction positions that you want to create. Example:
         ]
     }
     
-You will receive an answer could look like this:
+You will receive an answer that could look like this:
 
     {
         "success": false,
