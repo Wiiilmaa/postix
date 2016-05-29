@@ -395,7 +395,7 @@ def test_reverse_position_wrong_session_troubleshooter():
 
 
 @pytest.mark.django_db
-def test_reverse_success():
+def test_reverse_success_single():
     session = cashdesk_session_before_factory()
     trans = transaction_factory(session)
     lp = transaction_position_factory(transaction=trans, product=product_factory(items=True))

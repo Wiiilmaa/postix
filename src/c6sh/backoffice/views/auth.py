@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
+from .utils import backoffice_user
+
 
 class LoginView(TemplateView):
     template_name = 'backoffice/login.html'

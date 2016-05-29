@@ -22,9 +22,9 @@ def create_user_view(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             if form.cleaned_data.pop('is_backoffice_user'):
-                new_user = User.objects.create_superuser(**form.cleaned_data)
+                User.objects.create_superuser(**form.cleaned_data)
             else:
-                new_user = User.objects.create_user(**form.cleaned_data)
+                User.objects.create_user(**form.cleaned_data)
             return redirect('backoffice:main')
     else:
         form = CreateUserForm()

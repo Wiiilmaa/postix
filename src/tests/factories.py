@@ -38,7 +38,6 @@ def cashdesk_factory(ip=None, active=None):
 
 
 def cashdesk_session_before_factory(ip=None, user=None):
-    fake = Factory.create('en-US')
     cd = CashdeskSession.objects.create(cashdesk=cashdesk_factory(ip=ip),
                                         user=user or user_factory(),
                                         start=now() - timedelta(hours=2),

@@ -2,7 +2,7 @@ from datetime import timedelta
 
 import pytest
 from django.utils.timezone import now
-from faker import Factory
+
 from tests.factories import cashdesk_session_before_factory
 
 
