@@ -9,10 +9,10 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, username: str, password: str=None):
+    def create_superuser(self, username: str, password: str=None, **kwargs):
         if password is None:  # noqa
             raise Exception("You must provide a password")
-        user = self.model(username=username)
+        user = self.model(username=username, **kwargs)
         user.is_superuser = True
         user.is_troubleshooter = True
         user.set_password(password)

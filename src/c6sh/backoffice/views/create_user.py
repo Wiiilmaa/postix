@@ -15,8 +15,10 @@ def main_view(request):
 
 
 class CreateUserForm(forms.Form):
-    username = forms.CharField(label='Name', max_length=254)
+    username = forms.CharField(label='Username', max_length=254)
     password = forms.CharField(widget=forms.PasswordInput(), label='Passwort')
+    firstname = forms.CharField(label='Vorname', max_length=254)
+    lastname = forms.CharField(label='Nachname', max_length=254)
     is_backoffice_user = forms.BooleanField(label='Hinterzimmer-Rechte', required=False)
 
     def __init__(self, *args, **kwargs):
@@ -32,6 +34,8 @@ class CreateUserForm(forms.Form):
         self.helper.layout = Layout(
             'username',
             'password',
+            'firstname',
+            'lastname',
             'is_backoffice_user',
         )
 
