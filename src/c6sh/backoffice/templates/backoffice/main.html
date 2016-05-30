@@ -1,22 +1,12 @@
+{% extends 'backoffice/base.html' %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>c6sh</title>
-    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap-theme.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
-</head>
-<body class="">
 
+{% block headline %} Übersicht {% endblock %}
+
+{% block content %}
     <ul>
         <li><a href="/backoffice/create_user">Neuen User anlegen</a></li>
         <li><a href="/backoffice/session/new/">Kasse einzählen</a></li>
         <li><a href="/backoffice/session/">Liste von Sessions/Reports</a></li>
     </ul>
-
-<script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
-</body>
-</html>
+{% endblock %}

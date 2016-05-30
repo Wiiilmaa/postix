@@ -1,0 +1,57 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>c6sh {% block title %}{% endblock %}</title>
+
+    {% block stylesheets %}
+    {% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap-theme.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "backoffice/css/c6sh.css" %}">
+
+</head>
+<body class="">
+
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/backoffice/">Hinterzimmer</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/backoffice/session/new/">Kasse einzählen</a></li>
+            <li><a href="/backoffice/session/">Sessions</a></li>
+            <li><a href="/backoffice/session/">Reports</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/backoffice/create_user/">Neuer User</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="backoffice-main">
+        <h1>{% block headline %}{% endblock %}</h1>
+    	<div class="backoffice-content">
+			<p>
+			{% block content %}
+    		{% endblock %}
+			</p>
+		</div>
+      </div>
+
+    </div>
+
+
+    {% block scripts %}
+    {% endblock %}
+    <script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
+    
+</body>
+</html>
