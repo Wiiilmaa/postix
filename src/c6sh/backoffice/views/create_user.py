@@ -1,6 +1,10 @@
 from django import forms
 from django.shortcuts import redirect, render
 
+from crispy_forms.bootstrap import StrictButton
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit
+
 from ...core.models import User
 from .utils import backoffice_user_required
 
@@ -14,6 +18,22 @@ class CreateUserForm(forms.Form):
     username = forms.CharField(label='Name', max_length=254)
     password = forms.CharField(widget=forms.PasswordInput(), label='Passwort')
     is_backoffice_user = forms.BooleanField(label='Hinterzimmer-Rechte', required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_id = 'create_user_form'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'create_user'
+        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+            'username',
+            'password',
+            'is_backoffice_user',
+        )
 
 
 @backoffice_user_required

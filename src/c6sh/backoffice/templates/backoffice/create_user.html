@@ -1,7 +1,11 @@
-<html>
-<form method="post" action="">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Create new user account" />
-</form>
-</html>
+{% extends 'backoffice/base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block headline %} User anlegen {% endblock %}
+
+{% block content %}
+
+   		{% crispy form %}
+
+{% endblock %}

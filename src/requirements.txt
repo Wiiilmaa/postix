@@ -1,6 +1,7 @@
 # Basic and production requirements
 Django==1.9.*
 djangorestframework==3.3.*
+django-crispy-forms==1.6.*
 django-filter==0.12.*
 markdown
 
