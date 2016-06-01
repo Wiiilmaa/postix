@@ -5,7 +5,8 @@ from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.views.generic import TemplateView
-from ..core.utils.iputils import get_ip_address, detect_cashdesk
+
+from ..core.utils.iputils import detect_cashdesk, get_ip_address
 
 
 class LoginView(TemplateView):

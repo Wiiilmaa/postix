@@ -1,7 +1,5 @@
 from c6sh.core.models import (
-    ListConstraintEntry,
-    PreorderPosition,
-    TransactionPosition,
+    ListConstraintEntry, PreorderPosition, TransactionPosition,
 )
 
 

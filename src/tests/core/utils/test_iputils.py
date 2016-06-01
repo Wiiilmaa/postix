@@ -1,6 +1,8 @@
-from c6sh.core.utils.iputils import get_ip_address, detect_cashdesk
 import pytest
 from django.test import RequestFactory
+
+from c6sh.core.utils.iputils import detect_cashdesk, get_ip_address
+
 from ...factories import cashdesk_factory
 
 

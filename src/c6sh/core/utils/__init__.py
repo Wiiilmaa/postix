@@ -1,6 +1,5 @@
 import decimal
 
-
 DECIMAL_QUANTIZE = decimal.Decimal('0.01')
 
 

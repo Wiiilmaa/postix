@@ -3,13 +3,15 @@ import string
 from datetime import timedelta
 from decimal import Decimal
 
-from c6sh.core.models import (
-    ListConstraint, TimeConstraint, ListConstraintEntry, TransactionPosition,
-    Preorder, Item, PreorderPosition, Transaction, Quota, Product, ProductItem,
-    User, Cashdesk, CashdeskSession, ItemMovement, WarningConstraint
-)
 from django.utils.timezone import now
 from faker import Factory
+
+from c6sh.core.models import (
+    Cashdesk, CashdeskSession, Item, ItemMovement, ListConstraint,
+    ListConstraintEntry, Preorder, PreorderPosition, Product, ProductItem,
+    Quota, TimeConstraint, Transaction, TransactionPosition, User,
+    WarningConstraint,
+)
 
 
 def user_factory(troubleshooter=False, superuser=False):

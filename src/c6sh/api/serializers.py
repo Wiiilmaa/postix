@@ -1,7 +1,9 @@
-from c6sh.core.models import Preorder, PreorderPosition, ListConstraint, ListConstraintEntry, Transaction, \
-    TransactionPosition, Product
-
 from rest_framework import serializers
+
+from c6sh.core.models import (
+    ListConstraint, ListConstraintEntry, Preorder, PreorderPosition, Product,
+    Transaction, TransactionPosition,
+)
 
 
 class PreorderPositionSerializer(serializers.ModelSerializer):

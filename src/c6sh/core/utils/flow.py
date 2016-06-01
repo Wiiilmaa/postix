@@ -2,11 +2,13 @@ import copy
 from decimal import Decimal
 
 from c6sh.core.models import Product
-from .checks import is_redeemed
+
 from ..models import (
-    PreorderPosition, ListConstraintEntry, TransactionPosition, User, ListConstraintProduct, Transaction,
-    CashdeskSession, TransactionPositionItem
+    CashdeskSession, ListConstraintEntry, ListConstraintProduct,
+    PreorderPosition, Transaction, TransactionPosition,
+    TransactionPositionItem, User,
 )
+from .checks import is_redeemed
 
 
 class FlowError(Exception):

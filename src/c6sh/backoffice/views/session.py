@@ -1,12 +1,11 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
 from django import forms
 from django.contrib import messages
 from django.shortcuts import render
 from django.utils.timezone import now
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout
-
-from ...core.models import Cashdesk, CashdeskSession, ItemMovement, Item, User
+from ...core.models import Cashdesk, CashdeskSession, Item, ItemMovement, User
 
 
 class NewSessionItemForm(forms.Form):

@@ -1,8 +1,7 @@
-from django import forms
-from django.shortcuts import redirect, render
-
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
+from django import forms
+from django.shortcuts import redirect, render
 
 from ...core.models import User
 from .utils import backoffice_user_required

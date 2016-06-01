@@ -1,20 +1,22 @@
 from decimal import Decimal
 
 import pytest
+from django.db.models import Sum
+from tests.factories import (
+    cashdesk_session_before_factory, list_constraint_entry_factory,
+    list_constraint_factory, preorder_position_factory, product_factory,
+    time_constraint_factory, transaction_factory, transaction_position_factory,
+    user_factory, warning_constraint_factory,
+)
+
 from c6sh.core.models import (
-    WarningConstraintProduct, ListConstraintProduct, TransactionPosition,
-    TransactionPositionItem
+    ListConstraintProduct, TransactionPosition, TransactionPositionItem,
+    WarningConstraintProduct,
 )
 from c6sh.core.utils.checks import is_redeemed
 from c6sh.core.utils.flow import (
-    redeem_preorder_ticket, FlowError, sell_ticket, reverse_transaction, reverse_transaction_position
-)
-from django.db.models import Sum
-from tests.factories import (
-    preorder_position_factory, warning_constraint_factory, list_constraint_factory,
-    list_constraint_entry_factory, user_factory, cashdesk_session_before_factory,
-    transaction_factory, product_factory, time_constraint_factory,
-    transaction_position_factory
+    FlowError, redeem_preorder_ticket, reverse_transaction,
+    reverse_transaction_position, sell_ticket,
 )
 
 

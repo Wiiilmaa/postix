@@ -1,5 +1,6 @@
 import pytest
 from rest_framework.test import APIClient
+
 from ..factories import cashdesk_session_before_factory
 
 

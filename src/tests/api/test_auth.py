@@ -2,6 +2,7 @@ from datetime import timedelta
 
 import pytest
 from django.utils.timezone import now
+
 from ..factories import cashdesk_session_before_factory
 
 

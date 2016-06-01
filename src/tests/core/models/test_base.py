@@ -1,10 +1,12 @@
 from decimal import Decimal
 
 import pytest
+
 from c6sh.core.models import TransactionPosition
+
 from ...factories import (
-    transaction_position_factory, product_factory, time_constraint_factory,
-    quota_factory, transaction_factory
+    product_factory, quota_factory, time_constraint_factory,
+    transaction_factory, transaction_position_factory,
 )
 
 

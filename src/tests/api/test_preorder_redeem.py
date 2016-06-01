@@ -1,10 +1,12 @@
 import json
 
 import pytest
-from c6sh.core.models import WarningConstraintProduct, ListConstraintProduct
+
+from c6sh.core.models import ListConstraintProduct, WarningConstraintProduct
+
 from ..factories import (
-    preorder_position_factory, warning_constraint_factory, list_constraint_factory,
-    list_constraint_entry_factory
+    list_constraint_entry_factory, list_constraint_factory,
+    preorder_position_factory, warning_constraint_factory,
 )
 
 

@@ -1,4 +1,5 @@
 from rest_framework import authentication, exceptions
+
 from ..core.models import CashdeskSession
 from ..core.utils.iputils import detect_cashdesk, get_ip_address
 

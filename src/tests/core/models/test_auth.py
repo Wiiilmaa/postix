@@ -1,8 +1,8 @@
 import pytest
+
 from c6sh.core.models import User
-from ...factories import (
-    user_factory
-)
+
+from ...factories import user_factory
 
 
 @pytest.mark.django_db

@@ -1,9 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-from .models import User, Product, Item, ProductItem, Cashdesk, CashdeskSession, ItemMovement, Quota, \
-    TimeConstraint, ListConstraint, ListConstraintEntry, Preorder, PreorderPosition, ListConstraintProduct, \
-    WarningConstraintProduct, WarningConstraint
+
+from .models import (
+    Cashdesk, CashdeskSession, Item, ItemMovement, ListConstraint,
+    ListConstraintEntry, ListConstraintProduct, Preorder, PreorderPosition,
+    Product, ProductItem, Quota, TimeConstraint, User, WarningConstraint,
+    WarningConstraintProduct,
+)
 
 
 @admin.register(User)

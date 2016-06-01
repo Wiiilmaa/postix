@@ -1,10 +1,14 @@
 from decimal import Decimal
 
 import pytest
+
 from c6sh.core.models import TransactionPosition
 from c6sh.core.utils.checks import is_redeemed
-from ...factories import list_constraint_entry_factory, list_constraint_factory, transaction_factory, product_factory, \
-    preorder_position_factory
+
+from ...factories import (
+    list_constraint_entry_factory, list_constraint_factory,
+    preorder_position_factory, product_factory, transaction_factory,
+)
 
 
 @pytest.mark.django_db
