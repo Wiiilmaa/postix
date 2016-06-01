@@ -9,7 +9,7 @@ from .base import (
 from .cashdesk import (
     Cashdesk,
     CashdeskSession,
-    CashdeskSessionItem,
+    ItemMovement,
     generate_key,
 )
 from .auth import (
@@ -33,7 +33,7 @@ from .preorder import (
 
 __all__ = [
     'Item', 'Product', 'ProductItem', 'Transaction', 'TransactionPosition',
-    'TransactionPositionItem', 'Cashdesk', 'CashdeskSession', 'CashdeskSessionItem',
+    'TransactionPositionItem', 'Cashdesk', 'CashdeskSession', 'ItemMovement',
     'User', 'AbstractConstraint', 'ListConstraint', 'ListConstraintEntry',
     'Quota', 'TimeConstraint', 'Preorder', 'PreorderPosition', 'generate_key',
 ]

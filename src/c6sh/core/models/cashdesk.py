@@ -47,7 +47,6 @@ class CashdeskSession(models.Model):
                                  verbose_name='API token',
                                  help_text='Used for non-browser sessions. Generated automatically.')
     comment = models.TextField(blank=True)
-    items = models.ManyToManyField('Item', through='CashdeskSessionItem', blank=True)
 
     def __str__(self):
         return '#{2} ({0} on {1})'.format(self.user, self.cashdesk, self.pk)
@@ -56,10 +55,16 @@ class CashdeskSession(models.Model):
         return (not self.start or self.start < now()) and not self.end
 
 
-class CashdeskSessionItem(models.Model):
+class ItemMovement(models.Model):
+    """ Instead of a through-table. Negative amounts indicate items moved out
+    of a session, this mostly happens when a session is closed and all remaining
+    items are removed and counted manually. """
     session = models.ForeignKey('CashdeskSession', on_delete=models.PROTECT,
-                                related_name='cashdesk_session_items')
+                                related_name='item_movements',
+                                verbose_name='Session the item was involved in')
     item = models.ForeignKey('Item', on_delete=models.PROTECT,
-                             related_name='cashdesk_session_items')
-    amount_before = models.PositiveIntegerField()
-    amount_after = models.PositiveIntegerField(null=True, blank=True)
+                             related_name='item_movements',
+                             verbose_name='Item moved to/from this session')
+    amount= models.IntegerField(help_text='Negative values indicate that items were taken out of a session. '
+                                          'Mostly used when counting items after ending a session.')
+    timestamp = models.DateTimeField(default=now(), editable=False)

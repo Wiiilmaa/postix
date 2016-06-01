@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-from .models import User, Product, Item, ProductItem, Cashdesk, CashdeskSession, CashdeskSessionItem, Quota, \
+from .models import User, Product, Item, ProductItem, Cashdesk, CashdeskSession, ItemMovement, Quota, \
     TimeConstraint, ListConstraint, ListConstraintEntry, Preorder, PreorderPosition, ListConstraintProduct, \
     WarningConstraintProduct, WarningConstraint
 
@@ -54,8 +54,8 @@ class CashdeskAdmin(admin.ModelAdmin):
     list_filter = ('is_active',)
 
 
-class CashdeskSessionItemInline(admin.TabularInline):
-    model = CashdeskSessionItem
+class ItemMovementInline(admin.TabularInline):
+    model = ItemMovement
     extra = 1
 
 
@@ -63,7 +63,7 @@ class CashdeskSessionItemInline(admin.TabularInline):
 class CashdeskSessionAdmin(admin.ModelAdmin):
     list_display = ('id', 'cashdesk', 'user', 'start', 'end')
     list_filter = ('start', 'end', 'cashdesk', 'user')
-    inlines = (CashdeskSessionItemInline,)
+    inlines = (ItemMovementInline,)
 
 
 @admin.register(Quota)

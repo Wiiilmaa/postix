@@ -9,7 +9,7 @@ from django.utils.timezone import now
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 
-from ...core.models import Cashdesk, CashdeskSession, CashdeskSessionItem, Item, User
+from ...core.models import Cashdesk, CashdeskSession, ItemMovement, Item, User
 
 
 class NewSessionItemForm(forms.Form):
@@ -72,8 +72,9 @@ def new_session(request):
             for f in formset:
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
-                if item and amount:
-                    CashdeskSessionItem.objects.create(item=item, session=session, amount_before=amount)
+                if item and amount and amount > 0:
+                    ItemMovement.objects.create(item=item, session=session, amount=amount)
+                # TODO: error handling, don't fail silently
             messages.success(request, 'Session created.')
 
         elif form.errors or formset.errors:

@@ -6,7 +6,7 @@ from decimal import Decimal
 from c6sh.core.models import (
     ListConstraint, TimeConstraint, ListConstraintEntry, TransactionPosition,
     Preorder, Item, PreorderPosition, Transaction, Quota, Product, ProductItem,
-    User, Cashdesk, CashdeskSession, CashdeskSessionItem, WarningConstraint
+    User, Cashdesk, CashdeskSession, ItemMovement, WarningConstraint
 )
 from django.utils.timezone import now
 from faker import Factory
@@ -46,9 +46,9 @@ def cashdesk_session_before_factory(ip=None, user=None):
 
     items = [item_factory() for _ in range(3)]
     for i in items:
-        CashdeskSessionItem.objects.create(session=cd,
-                                           item=i,
-                                           amount_before=random.randint(1, i.initial_stock))
+        ItemMovement.objects.create(session=cd,
+                                    item=i,
+                                    amount=random.randint(1, i.initial_stock))
     return cd
 
 
