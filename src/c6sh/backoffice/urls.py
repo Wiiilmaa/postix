@@ -7,7 +7,7 @@ urlpatterns = [
 
     url('^create_user/', views.create_user_view, name='create-user'),
 
-    url('^session/', views.session_list, name='session'),
+    # url('^session/', views.session_list, name='session'),
     url('^session/new/', views.new_session, name='new-session'),
     url('^session/<pk>/edit/', views.edit_session, name='edit-session'),
     url('^session/<pk>/resupply/', views.resupply_session, name='resupply-session'),

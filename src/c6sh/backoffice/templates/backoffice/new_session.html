@@ -1,0 +1,44 @@
+{% extends 'backoffice/base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "backoffice/css/sessionform.css" %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="col-md-2"></div>
+<div class="col-md-8">
+	<input type="submit" value="Add More" id="add_more" style="display: None">
+
+	<form method="post" action="">
+		{% csrf_token %}
+		{% crispy form %}
+		<table>
+			{% crispy formset helper %}
+		</table>
+		<div class="form-actions">
+			<input type="submit" name="submit" value="Session anlegen" class="btn btn-primary btn-block" id="submit-save">
+		</div>
+	</form>
+</div>
+<div class="col-md-2"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/html" id="item-template">
+        <tr id="item-__prefix__">
+            {% crispy formset.empty_form formset.form.helper %}
+        </tr>
+    </script>
+
+    <script type="text/javascript">
+        var user_list = {{ user_list|safe }};
+    </script>
+
+    <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "backoffice/js/sessionform.js" %}"></script>
+{% endblock %}
