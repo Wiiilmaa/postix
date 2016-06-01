@@ -65,6 +65,6 @@ class ItemMovement(models.Model):
     item = models.ForeignKey('Item', on_delete=models.PROTECT,
                              related_name='item_movements',
                              verbose_name='Item moved to/from this session')
-    amount= models.IntegerField(help_text='Negative values indicate that items were taken out of a session. '
-                                          'Mostly used when counting items after ending a session.')
+    amount = models.IntegerField(help_text='Negative values indicate that items were taken out of a session. '
+                                           'Mostly used when counting items after ending a session.')
     timestamp = models.DateTimeField(default=now(), editable=False)

@@ -1,10 +1,6 @@
-from datetime import timedelta
-
 import pytest
-from django.utils.timezone import now
-from faker import Factory
 from tests.factories import (
-    quota_factory, transaction_position_factory, cashdesk_session_before_factory,
+    quota_factory, transaction_position_factory,
     product_factory
 )
 
