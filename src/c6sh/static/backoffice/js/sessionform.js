@@ -29,3 +29,9 @@ $('#id_data-user').typeahead({
     source: users
 
 });
+
+if ($("#id_data-cashdesk").find(":selected").text() == "---------") {
+    $("#id_data-cashdesk").focus();
+} else {
+    $("#id_data-user").focus();
+}

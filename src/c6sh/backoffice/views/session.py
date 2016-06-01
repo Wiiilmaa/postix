@@ -77,6 +77,15 @@ def new_session(request):
         elif form.errors or formset.errors:
             messages.error(request, 'Invalid data.')
 
+    elif request.method == 'GET':
+        param = request.GET.get('desk')
+        if param:
+            try:
+                desk = Cashdesk.objects.get(pk=int(param))
+                form = SessionBaseForm(prefix='data', initial={'cashdesk': desk})
+            except:
+                pass
+
     return render(request, 'backoffice/new_session.html', {
         'form': form,
         'formset': formset,
