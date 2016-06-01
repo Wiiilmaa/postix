@@ -1,0 +1,28 @@
+.asteriskField {
+    display: none;
+}
+
+/* disable input number spinners */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
+.backoffice-content form {
+}
+
+/* Until crispy-forms master has merged PR #545, we need to correct this here. */
+#session-items_table tbody th {
+    font-weight: normal;
+}
+
+/*#session-items_table::after {
+    content: 'x';
+}
+#div_id_data-cash_before div::after {
+    content: '€';
+}*/
