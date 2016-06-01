@@ -4,6 +4,7 @@ from django import forms
 from django.contrib import messages
 from django.shortcuts import render
 from django.utils.timezone import now
+from django.views.generic.list import ListView
 
 from ...core.models import Cashdesk, CashdeskSession, Item, ItemMovement, User
 
@@ -84,8 +85,14 @@ def new_session(request):
     })
 
 
-def session_list(request):
-    pass
+class SessionListView(ListView):
+    """ implements only a list of active sessions for now. Ended sessions will
+    be visible in the reports view """
+    model = CashdeskSession
+    template_name = 'backoffice/session_list.html'
+
+    def get_queryset(self):
+        return Cashdesk.objects.filter(is_active=True).order_by('name')
 
 
 def end_session(request):

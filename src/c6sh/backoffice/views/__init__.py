@@ -2,7 +2,7 @@ from .auth import LoginView, logout_view
 from .create_user import create_user_view
 from .main import main_view
 from .session import (
-    edit_session, end_session, new_session, resupply_session, session_list,
+    edit_session, end_session, new_session, resupply_session, SessionListView,
 )
 from .utils import backoffice_user_required
 

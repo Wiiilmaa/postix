@@ -15,11 +15,6 @@ input[type=number] {
 .backoffice-content form {
 }
 
-/* Until crispy-forms master has merged PR #545, we need to correct this here. */
-#session-items_table tbody th {
-    font-weight: normal;
-}
-
 /*#session-items_table::after {
     content: 'x';
 }

@@ -1,0 +1,49 @@
+{% extends 'backoffice/base.html' %}
+
+{% block content %}
+
+<table class="table">
+	<thead>
+		<th></th>
+		<th>Engel</th>
+		<th>Produkte</th>
+		<th>Kasse</th>
+	</thead>
+	<tbody>
+		{% for cashdesk in object_list %}
+			{% for session in cashdesk.get_active_sessions %}
+				<tr>
+					<th class="session-action-column"></th>
+					<th> {{ session.user }} </th>
+					<th>
+                        <ul>
+                        {% for product in session.get_current_items %} 
+                            <li>{{ product.item }}: {{ product.total }} erhalten</li>
+                        {% endfor %} 
+                        </ul>
+                    </th>
+                    {% with session_count=cashdesk.get_active_sessions|length %}
+                        {% if session_count > 1 %}
+                            {% if forloop.first %}
+                                <th rowspan="{{ session_count }}">{{ session.cashdesk }}</th>
+                            {% endif %}
+                        {% else %}
+                            <th>{{ session.cashdesk }}</th>
+                        {% endif %}
+                    {% endwith %}
+
+				</tr>
+            {% empty %}
+                <tr>
+                    <th> </th>
+                    <th> </th>
+                    <th> </th>
+                    <th>Session für {{ cashdesk }} <a href="/backoffice/session/new">anlegen.</a></th>
+                    <th> </th>
+                <tr>
+			{% endfor %}
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

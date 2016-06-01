@@ -4,6 +4,8 @@ import string
 from django.db import models
 from django.utils.timezone import now
 
+from .base import Item
+
 
 def generate_key():
     return "".join(random.choice(string.ascii_letters + string.digits) for i in range(32))
@@ -21,9 +23,12 @@ class Cashdesk(models.Model):
     def __str__(self):
         return self.name
 
+    def get_active_sessions(self):
+        return [session for session in self.sessions.all() if session.is_active()]
+
 
 class CashdeskSession(models.Model):
-    cashdesk = models.ForeignKey('Cashdesk', on_delete=models.PROTECT)
+    cashdesk = models.ForeignKey('Cashdesk', related_name='sessions', on_delete=models.PROTECT)
     user = models.ForeignKey('User', on_delete=models.PROTECT)
     start = models.DateTimeField(null=True, blank=True,
                                  verbose_name='Start of session',
@@ -53,6 +58,12 @@ class CashdeskSession(models.Model):
 
     def is_active(self):
         return (not self.start or self.start < now()) and not self.end
+
+    def get_current_items(self):
+        # TODO FIXME this only gives the amount of items entered/removed via an ItemMovement
+        # we completely disregard transactions for now, because testing those is hard. will come later
+        return [{'item': Item.objects.get(pk=d['item']), 'total': d['total']} \
+                for d in self.item_movements.values('item').annotate(total=models.Sum('amount'))]
 
 
 class ItemMovement(models.Model):
