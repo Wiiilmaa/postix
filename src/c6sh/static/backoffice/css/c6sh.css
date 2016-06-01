@@ -25,4 +25,9 @@ body.login, body.error {
 tbody th {
     font-weight: normal;
 }
-
+#active-sessions-table .empty-row {
+    text-align: center;
+}
+#active-sessions-table .session-action-column .glyphicon {
+    margin-left: 1em;
+}
