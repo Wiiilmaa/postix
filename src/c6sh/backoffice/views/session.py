@@ -54,6 +54,40 @@ class SessionBaseForm(forms.Form):
 
 
 def new_session(request):
+    form = SessionBaseForm(prefix='data')
+    formset = NewSessionFormSet(prefix='items')
+
+    if request.method == 'POST':
+        form = SessionBaseForm(request.POST, prefix='data')
+        formset = NewSessionFormSet(request.POST, prefix='items')
+
+        if form.is_valid() and formset.is_valid():
+            session = CashdeskSession.objects.create(
+                cashdesk=form.cleaned_data['cashdesk'],
+                user=User.objects.get(username=form.cleaned_data['user']),
+                start=now(),
+                cash_before=form.cleaned_data['cash_before'],
+                backoffice_user_before=request.user,
+            )
+            for f in formset:
+                item = f.cleaned_data.get('item')
+                amount = f.cleaned_data.get('amount')
+                if item and amount:
+                    CashdeskSessionItem.objects.create(item=item, session=session, amount_before=amount)
+            messages.success(request, 'Session created.')
+
+        elif form.errors or formset.errors:
+            messages.error(request, 'Invalid data.')
+
+    return render(request, 'backoffice/new_session.html', {
+        'form': form,
+        'formset': formset,
+        'helper': NewSessionItemFormSetHelper(),
+        'user_list': User.objects.values_list('username', flat=True),
+    })
+
+
+def session_list(request):
     pass
 
 
