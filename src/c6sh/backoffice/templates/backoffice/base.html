@@ -36,6 +36,14 @@
 
     <div class="container">
 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
       <div class="backoffice-main">
         <h1>{% block headline %}{% endblock %}</h1>
     	<div class="backoffice-content">
@@ -49,9 +57,9 @@
     </div>
 
 
+    <script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
     {% block scripts %}
     {% endblock %}
-    <script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
     
 </body>
 </html>
