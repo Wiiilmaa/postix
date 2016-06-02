@@ -34,3 +34,9 @@ tbody th {
 #active-sessions-table .session-action-column .glyphicon {
     margin-left: 1em;
 }
+#active-sessions-table .session-action-column .glyphicon-plus {
+    color: #2a2;
+}
+#active-sessions-table .session-action-column .glyphicon-off {
+    color: #a22;
+}

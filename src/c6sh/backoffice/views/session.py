@@ -18,16 +18,9 @@ class NewSessionItemForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_class = 'form-inline'
-        self.helper.field_template = 'bootstrap/field.html'
         self.helper.form_tag = False
         self.helper.tag = 'td'
         self.helper.form_show_labels = False
-        self.helper.layout = Layout(
-            'cashdesk',
-            'user',
-            'cash_before',
-        )
 
 
 NewSessionFormSet = forms.formset_factory(NewSessionItemForm)
@@ -62,22 +55,27 @@ def new_session(request):
         formset = NewSessionFormSet(request.POST, prefix='items')
 
         if form.is_valid() and formset.is_valid():
-            session = CashdeskSession.objects.create(
-                cashdesk=form.cleaned_data['cashdesk'],
-                user=User.objects.get(username=form.cleaned_data['user']),
-                start=now(),
-                cash_before=form.cleaned_data['cash_before'],
-                backoffice_user_before=request.user,
-            )
-            for f in formset:
-                item = f.cleaned_data.get('item')
-                amount = f.cleaned_data.get('amount')
-                if item and amount and amount > 0:
-                    ItemMovement.objects.create(item=item, session=session, amount=amount)
-                # TODO: error handling, don't fail silently
-            messages.success(request, 'Session created.')
+            try:
+                user = User.objects.get(username=form.cleaned_data['user'])
+            except User.DoesNotExist:
+                form.add_error('user', 'User does not exist.')
+            else:
+                session = CashdeskSession.objects.create(
+                    cashdesk=form.cleaned_data['cashdesk'],
+                    user=user,
+                    start=now(),
+                    cash_before=form.cleaned_data['cash_before'],
+                    backoffice_user_before=request.user,
+                )
+                for f in formset:
+                    item = f.cleaned_data.get('item')
+                    amount = f.cleaned_data.get('amount')
+                    if item and amount and amount > 0:
+                        ItemMovement.objects.create(item=item, session=session, amount=amount)
+                    # TODO: error handling, don't fail silently
+                messages.success(request, 'Session created.')
 
-        elif form.errors or formset.errors:
+        if form.errors or formset.errors:
             messages.error(request, 'Invalid data.')
 
     elif request.method == 'GET':
@@ -138,8 +136,8 @@ def resupply_session(request, pk):
 
 
 @backoffice_user_required
-def end_session(request):
-    pass
+def end_session(request, pk):
+    session = get_object_or_404(CashdeskSession, pk=pk)
 
 
 @backoffice_user_required
