@@ -21,6 +21,9 @@ body.login, body.error {
 .error-page .glyphicon {
     font-size: 200px;
 }
+.glyphicon-log-out {
+    margin-right: 0.5em;
+}
 /* Until crispy-forms master has merged PR #545, we need to correct this here. */
 tbody th {
     font-weight: normal;

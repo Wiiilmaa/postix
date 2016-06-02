@@ -22,13 +22,16 @@
           <a class="navbar-brand" href="/backoffice/">Hinterzimmer</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="/backoffice/session/new/">Kasse einzählen</a></li>
-            <li><a href="/backoffice/session/">Sessions</a></li>
-            <li><a href="/backoffice/session/">Reports</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="/backoffice/create_user/">Neuer User</a></li>
+          {% if user.is_authenticated %}
+			  <ul class="nav navbar-nav">
+				<li><a href="/backoffice/session/new/">Kasse einzählen</a></li>
+				<li><a href="/backoffice/session/">Sessions</a></li>
+				<li><a href="/backoffice/session/">Reports</a></li>
+			  </ul>
+			  <ul class="nav navbar-nav navbar-right">
+				<li><a href="/backoffice/create_user/">Neuer User</a></li>
+				<li><a href="/backoffice/logout/"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a></li>
+          {% endif %}
           </ul>
         </div>
       </div>

@@ -7,6 +7,7 @@ from django.utils.timezone import now
 from django.views.generic.list import ListView
 
 from ...core.models import Cashdesk, CashdeskSession, Item, ItemMovement, User
+from .utils import backoffice_user_required
 
 
 class NewSessionItemForm(forms.Form):
@@ -50,6 +51,7 @@ class SessionBaseForm(forms.Form):
         self.helper.form_tag = False
 
 
+@backoffice_user_required
 def new_session(request):
     form = SessionBaseForm(prefix='data')
     formset = NewSessionFormSet(prefix='items')
@@ -103,14 +105,21 @@ class SessionListView(ListView):
     def get_queryset(self):
         return Cashdesk.objects.filter(is_active=True).order_by('name')
 
+    @backoffice_user_required
+    def dispatch(self, *args, **kwargs):
+        super().dispatch(*args, **kwargs)
 
+
+@backoffice_user_required
 def end_session(request):
     pass
 
 
+@backoffice_user_required
 def resupply_session(request):
     pass
 
 
+@backoffice_user_required
 def edit_session(request):
     pass
