@@ -108,12 +108,37 @@ class SessionListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView)
 
 
 @backoffice_user_required
-def end_session(request):
+def resupply_session(request, pk):
+    """ todo: show approximate current amounts of items? """
+    formset = NewSessionFormSet(prefix='items')
+    session = get_object_or_404(CashdeskSession, pk=pk)
+
+    if request.method == 'POST':
+        formset = NewSessionFormSet(request.POST, prefix='items')
+
+        if formset.is_valid():
+            for f in formset:
+                item = f.cleaned_data.get('item')
+                amount = f.cleaned_data.get('amount')
+                if item and amount:
+                    ItemMovement.objects.create(item=item, session=session, amount=amount)
+                # TODO: error handling, don't fail silently
+            messages.success(request, 'Produkte wurden der Kasse hinzugefügt.')
+
+        elif form.errors or formset.errors:
+            messages.error(request, 'Invalid data.')
+
+    return render(request, 'backoffice/resupply_session.html', {
+        'formset': formset,
+        'helper': NewSessionItemFormSetHelper(),
+        'cashdesk': session.cashdesk,
+        'cashier': session.user,
+    })
     pass
 
 
 @backoffice_user_required
-def resupply_session(request):
+def end_session(request):
     pass
 
 

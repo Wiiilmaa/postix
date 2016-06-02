@@ -15,6 +15,9 @@ input[type=number] {
 .backoffice-content form {
 }
 
+.disabled-inputs .textinput::-moz-placeholder {
+    color: #333;
+}
 /*#session-items_table::after {
     content: 'x';
 }

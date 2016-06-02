@@ -1,0 +1,53 @@
+{% extends 'backoffice/base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" type="text/css" href="{% static "backoffice/css/sessionform.css" %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="col-md-2"></div>
+<div class="col-md-8">
+    <div class="alert alert-warning">
+        Wenn Produkte aus der Kasse entnommen werden, bitte negative Anzahl eintragen.
+    </div>
+
+	<form method="post" action="">
+		{% csrf_token %}
+        <div class="disabled-inputs">
+            <div id="div_id_data-cashdesk" class="form-group">
+                <label class="control-label"> Kasse </label>
+                <div class="controls ">
+                    <input class="textinput textInput form-control" placeholder="{{ cashdesk }}" disabled />
+                </div>
+            </div>
+            <div id="div_id_data-user" class="form-group">
+                <label class="control-label"> Engel </label>
+                <div class="controls ">
+                    <input class="textinput textInput form-control" placeholder="{{ cashier }}" disabled />
+                </div>
+            </div>
+        </div>
+
+		<table>
+			{% crispy formset helper %}
+		</table>
+		<div class="form-actions">
+			<input type="submit" name="submit" value="Produkte hinzufügen" class="btn btn-primary btn-block" id="submit-save">
+		</div>
+	</form>
+</div>
+<div class="col-md-2"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/html" id="item-template">
+        <tr id="item-__prefix__">
+            {% crispy formset.empty_form formset.form.helper %}
+        </tr>
+    </script>
+    <script type="text/javascript" src="{% static "backoffice/js/sessionform.js" %}"></script>
+{% endblock %}
