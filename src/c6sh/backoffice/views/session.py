@@ -2,12 +2,13 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from django import forms
 from django.contrib import messages
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, render
 from django.utils.timezone import now
 from django.views.generic.list import ListView
 
 from ...core.models import Cashdesk, CashdeskSession, Item, ItemMovement, User
-from .utils import backoffice_user_required
+from .utils import backoffice_user_required, BackofficeUserRequiredMixin
 
 
 class NewSessionItemForm(forms.Form):
@@ -96,7 +97,7 @@ def new_session(request):
     })
 
 
-class SessionListView(ListView):
+class SessionListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView):
     """ implements only a list of active sessions for now. Ended sessions will
     be visible in the reports view """
     model = CashdeskSession
@@ -104,10 +105,6 @@ class SessionListView(ListView):
 
     def get_queryset(self):
         return Cashdesk.objects.filter(is_active=True).order_by('name')
-
-    @backoffice_user_required
-    def dispatch(self, *args, **kwargs):
-        super().dispatch(*args, **kwargs)
 
 
 @backoffice_user_required
