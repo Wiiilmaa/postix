@@ -1,0 +1,118 @@
+- model: core.user
+  fields:
+    username: mluedenscheidt
+    firstname: Herr
+    lastname: Müller-Lüdenscheidt
+    is_superuser: true
+    is_troubleshooter: true
+- model: core.user
+  fields:
+    username: khmeltzer
+    firstname: Karl-Heinz
+    lastname: Meltzer
+    is_superuser: true
+    is_troubleshooter: true
+- model: core.user
+  fields:
+    username: rdinkel
+    firstname: Renate
+    lastname: Dinkel
+    is_superuser: false
+    is_troubleshooter: false
+- model: core.user
+  fields:
+    username: drkloebner
+    firstname: Doktor
+    lastname: Klöbner
+    is_superuser: false
+    is_troubleshooter: false
+- model: core.user
+  fields:
+    username: whoppenstedt
+    firstname: Walter
+    lastname: Hoppenstedt
+    is_superuser: false
+    is_troubleshooter: false
+- model: core.user
+  fields:
+    username: lhoppenstedt
+    firstname: Lieselotte
+    lastname: Hoppenstedt
+    is_superuser: false
+    is_troubleshooter: false
+- model: core.user
+  fields:
+    username: eproehl
+    firstname: Erich
+    lastname: Pröhl
+    is_superuser: false
+    is_troubleshooter: false
+- model: core.user
+  fields:
+    username: rproehl
+    firstname: Roswitha
+    lastname: Pröhl
+    is_superuser: false
+    is_troubleshooter: false
+
+- model: core.item
+  pk: 1
+  fields:
+    name: Tagesbändchen
+    initial_stock: 1000
+- model: core.item
+  pk: 2
+  fields:
+    name: Leuchtpille
+    initial_stock: 150
+
+- model: core.product
+  pk: 1
+  fields:
+    name: Normales Ticket
+    price: 23.00
+    tax_rate: 0.19
+- model: core.product
+  pk: 2
+  fields:
+    name: Supporterticket
+    price: 42.42
+    tax_rate: 0.19
+
+- model: core.productitem
+  fields:
+    item: 1
+    product: 1
+    amount: 1
+- model: core.productitem
+  fields:
+    item: 1
+    product: 2
+    amount: 1
+- model: core.productitem
+  fields:
+    item: 2
+    product: 2
+    amount: 1
+
+- model: core.cashdesk
+  fields:
+    name: Kasse 1
+    ip_address: '127.0.0.1'
+- model: core.cashdesk
+  fields:
+    name: Kasse 2
+    ip_address: '10.0.0.2'
+- model: core.cashdesk
+  fields:
+    name: Kasse 3
+    ip_address: '10.0.0.3'
+- model: core.cashdesk
+  fields:
+    name: Kasse 4
+    is_active: false
+    ip_address: '10.0.0.4'
+- model: core.cashdesk
+  fields:
+    name: Kasse 5
+    ip_address: '10.0.0.5'
