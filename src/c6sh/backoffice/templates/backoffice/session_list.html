@@ -50,8 +50,8 @@
             {% empty %}
                 <tr>
                     <th colspan="42" class="empty-row active">
-                        Session für {{ cashdesk }} 
-                        <a href="/backoffice/session/new/?desk={{ cashdesk.pk }}">anlegen.</a>
+                        {{ cashdesk }} 
+                        <a href="/backoffice/session/new/?desk={{ cashdesk.pk }}">einzählen.</a>
                     </th>
                 <tr>
 			{% endfor %}
