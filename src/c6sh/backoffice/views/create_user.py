@@ -2,6 +2,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django import forms
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.shortcuts import redirect, render
 
 from ...core.models import User
@@ -45,9 +46,13 @@ def create_user_view(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             if form.cleaned_data.pop('is_backoffice_user'):
-                User.objects.create_superuser(**form.cleaned_data)
+                user = User.objects.create_superuser(**form.cleaned_data)
             else:
-                User.objects.create_user(**form.cleaned_data)
+                user = User.objects.create_user(**form.cleaned_data)
+            messages.success(request, '{} {} wurde angelegt.'.format(
+                'Hinterzimmer-User' if user.is_superuser else 'User',
+                user.username,
+            ))
             return redirect('backoffice:main')
     else:
         form = CreateUserForm()
