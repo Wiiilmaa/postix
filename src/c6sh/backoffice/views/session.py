@@ -13,7 +13,7 @@ from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 class NewSessionItemForm(forms.Form):
     item = forms.ModelChoiceField(queryset=Item.objects.all().order_by('-initial_stock'), label='Produkt')
-    amount = forms.IntegerField(min_value=0, label='Anzahl')
+    amount = forms.IntegerField(label='Anzahl')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
