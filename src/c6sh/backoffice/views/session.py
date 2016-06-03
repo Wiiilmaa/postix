@@ -75,7 +75,7 @@ def new_session(request):
                     # TODO: error handling, don't fail silently
                 messages.success(request, 'Session wurde angelegt.'.format(session.pk, session.cashdesk))
 
-        if form.errors or formset.errors:
+        else:
             messages.error(request, 'Session konnte nicht angelegt werden: Bitte Daten korrigieren.')
 
     elif request.method == 'GET':
