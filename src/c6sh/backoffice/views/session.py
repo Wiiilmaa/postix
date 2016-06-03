@@ -1,5 +1,4 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,7 +8,7 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
 from ...core.models import Cashdesk, CashdeskSession, Item, ItemMovement, User
-from .utils import backoffice_user_required, BackofficeUserRequiredMixin
+from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 
 class NewSessionItemForm(forms.Form):
@@ -131,8 +130,8 @@ def resupply_session(request, pk):
                 # TODO: error handling, don't fail silently
             messages.success(request, 'Produkte wurden der Kasse hinzugefügt.')
 
-        elif form.errors or formset.errors:
-            messages.error(request, 'Fehler: Bitte Daten korrigieren.')
+        elif formset.errors:
+            messages.error(request, 'Fehler: Bitte Daten prüfen und korrigieren.')
 
     return render(request, 'backoffice/resupply_session.html', {
         'formset': formset,

@@ -62,7 +62,7 @@ class CashdeskSession(models.Model):
     def get_current_items(self):
         # TODO FIXME this only gives the amount of items entered/removed via an ItemMovement
         # we completely disregard transactions for now, because testing those is hard. will come later
-        return [{'item': Item.objects.get(pk=d['item']), 'total': d['total']} \
+        return [{'item': Item.objects.get(pk=d['item']), 'total': d['total']}
                 for d in self.item_movements.values('item').annotate(total=models.Sum('amount'))]
 
 
