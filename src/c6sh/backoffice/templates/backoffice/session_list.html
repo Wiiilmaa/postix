@@ -13,10 +13,13 @@
 	</thead>
 	<tbody>
         {% language "de" %}
-		{% for cashdesk in object_list %}
+		{% for cashdesk in cashdesks %}
 			{% for session in cashdesk.get_active_sessions %}
 				<tr>
 					<th class="session-action-column">
+                        <a href="/backoffice/session/{{ session.pk }}/"</a>
+                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                        </a>
                         <a href="/backoffice/session/{{ session.pk }}/resupply/">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 						</a>

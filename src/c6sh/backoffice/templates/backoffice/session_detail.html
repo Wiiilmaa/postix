@@ -1,0 +1,82 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+
+{% block headline %}
+    {% if not session.end %}
+        <a href="/backoffice/session/{{ session.pk }}/resupply/">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </a>
+        <a href="/backoffice/session/{{ session.pk }}/end/">
+            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+        </a>
+        Laufende Session an {{ session.cashdesk }}
+    {% else %}
+        Abgeschlossene Session #{{ session.pk }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    
+{% language "de" %}
+<table class="table" id="session-detail-table">
+    <tbody>
+        <tr>
+            <td class="session-detail-label">
+                Cashdesk
+            </td>
+            <td class="session-detail-content">
+                {{ session.cashdesk }}
+            </td>
+        </tr>
+        <tr>
+            <td class="session-detail-label">
+                Engel
+            </td>
+            <td class="session-detail-content">
+                {{ session.user }}
+            </td>
+        </tr>
+
+        <tr>
+        {% if session.end %}
+            <td class="session-detail-label">
+                Zeitraum
+            </td>
+            <td class="session-detail-content">
+                {{ session.start }} - {{ session.end }}
+            </td>
+        {% else %}
+            <td class="session-detail-label">
+                Beginn
+            </td>
+            <td class="session-detail-content">
+                vor {{ session.start|timesince }}
+            </td>
+        {% endif %}
+        </tr>
+        <tr>
+        {% if session.end %}
+            <td class="session-detail-label">
+                Verkaufte Items
+            </td>
+            <td class="session-detail-content">
+                TODO: implement.
+            </td>
+        {% else %}
+            <td class="session-detail-label">
+                Eingezählte Items
+            </td>
+            <td class="session-detail-content">
+                <ul>
+                {% for product in session.get_current_items %} 
+                    <li>{{ product.item }}: {{ product.total }} erhalten</li>
+                {% endfor %} 
+                </ul>
+                <p>TODO: aktuelle statt eingezählte Items</p>
+            </td>
+        {% endif %}
+        </tr>
+    </tbody>
+</table>
+{% endlanguage %}
+{% endblock %}

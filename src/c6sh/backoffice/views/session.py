@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render
 from django.utils.timezone import now
+from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
 from ...core.models import Cashdesk, CashdeskSession, Item, ItemMovement, User
@@ -100,9 +101,16 @@ class SessionListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView)
     be visible in the reports view """
     model = CashdeskSession
     template_name = 'backoffice/session_list.html'
+    context_object_name = 'cashdesks'
 
     def get_queryset(self):
         return Cashdesk.objects.filter(is_active=True).order_by('name')
+
+
+class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
+    queryset = CashdeskSession.objects.all()
+    template_name = 'backoffice/session_detail.html'
+    context_object_name = 'session'
 
 
 @backoffice_user_required
