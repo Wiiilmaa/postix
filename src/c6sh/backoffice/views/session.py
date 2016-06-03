@@ -2,7 +2,7 @@ from crispy_forms.helper import FormHelper
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
@@ -74,6 +74,7 @@ def new_session(request):
                         ItemMovement.objects.create(item=item, session=session, amount=amount)
                     # TODO: error handling, don't fail silently
                 messages.success(request, 'Session wurde angelegt.'.format(session.pk, session.cashdesk))
+                return redirect('backoffice:main')
 
         else:
             messages.error(request, 'Session konnte nicht angelegt werden: Bitte Daten korrigieren.')
