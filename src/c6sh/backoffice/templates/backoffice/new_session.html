@@ -1,5 +1,6 @@
 {% extends 'backoffice/base.html' %}
 {% load staticfiles %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 
 {% block stylesheets %}
@@ -15,6 +16,8 @@
 	<input type="submit" value="Add More" id="add_more" style="display: None">
 
 	<form method="post" action="">
+	{% language "de" %}
+
 		{% csrf_token %}
 		{% crispy form %}
 		<table>
@@ -23,6 +26,7 @@
 		<div class="form-actions">
 			<input type="submit" name="submit" value="Session anlegen" class="btn btn-primary btn-block" id="submit-save">
 		</div>
+	{% endlanguage %}
 	</form>
 </div>
 <div class="col-md-2"></div>

@@ -33,10 +33,18 @@ tbody th {
 }
 #active-sessions-table .session-action-column .glyphicon {
     margin-left: 1em;
+    font-underli
 }
-#active-sessions-table .session-action-column .glyphicon-plus {
+.session-action-column a {
+    text-decoration: none;
+}
+.glyphicon-plus {
     color: #2a2;
 }
-#active-sessions-table .session-action-column .glyphicon-off {
+.glyphicon-off {
     color: #a22;
+}
+h1 .glyphicon {
+    font-size: 16px;
+    margin-right: 1em
 }

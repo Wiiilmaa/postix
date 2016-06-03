@@ -59,7 +59,7 @@ def new_session(request):
             try:
                 user = User.objects.get(username=form.cleaned_data['user'])
             except User.DoesNotExist:
-                form.add_error('user', 'User does not exist.')
+                form.add_error('user', 'Engel existiert nicht.')
             else:
                 session = CashdeskSession.objects.create(
                     cashdesk=form.cleaned_data['cashdesk'],
@@ -74,10 +74,10 @@ def new_session(request):
                     if item and amount and amount > 0:
                         ItemMovement.objects.create(item=item, session=session, amount=amount)
                     # TODO: error handling, don't fail silently
-                messages.success(request, 'Session created.')
+                messages.success(request, 'Session wurde angelegt.'.format(session.pk, session.cashdesk))
 
         if form.errors or formset.errors:
-            messages.error(request, 'Invalid data.')
+            messages.error(request, 'Session konnte nicht angelegt werden: Bitte Daten korrigieren.')
 
     elif request.method == 'GET':
         param = request.GET.get('desk')
@@ -132,7 +132,7 @@ def resupply_session(request, pk):
             messages.success(request, 'Produkte wurden der Kasse hinzugefügt.')
 
         elif form.errors or formset.errors:
-            messages.error(request, 'Invalid data.')
+            messages.error(request, 'Fehler: Bitte Daten korrigieren.')
 
     return render(request, 'backoffice/resupply_session.html', {
         'formset': formset,
