@@ -12,11 +12,12 @@ input[type=number] {
     -moz-appearance:textfield;
 }
 
-.backoffice-content form {
-}
-
 .disabled-inputs .textinput::-moz-placeholder {
     color: #333;
+}
+
+span.twitter-typeahead .tt-suggestion {
+    font-size: 14px;
 }
 /*#session-items_table::after {
     content: 'x';

@@ -6,12 +6,12 @@
 
     <title>c6sh {% block title %}{% endblock %}</title>
 
-    {% block stylesheets %}
-    {% endblock %}
     <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap-theme.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "backoffice/css/c6sh.css" %}">
+    {% block stylesheets %}
+    {% endblock %}
 
 </head>
 <body class="">

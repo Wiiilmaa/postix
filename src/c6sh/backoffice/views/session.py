@@ -2,12 +2,13 @@ from crispy_forms.helper import FormHelper
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
-from ...core.models import Cashdesk, CashdeskSession, Item, ItemMovement, User
+from ...core.models import Cashdesk, CashdeskSession, Item, ItemMovement, TransactionPositionItem, User
 from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 
@@ -146,6 +147,25 @@ def resupply_session(request, pk):
 @backoffice_user_required
 def end_session(request, pk):
     session = get_object_or_404(CashdeskSession, pk=pk)
+    items_in_session = set(ItemMovement.objects.filter(session=session).values_list('item', flat=True))
+    items_in_session = [Item.objects.get(pk=pk) for pk in items_in_session]
+
+    products_for_view = [{
+        'product': item,
+        'initial': ItemMovement.objects\
+            .filter(item=item, session=session)\
+            .aggregate(total=Sum('amount'))['total'],
+        'transactions': TransactionPositionItem.objects\
+            .filter(item=item, position__transaction__session=session)\
+            .aggregate(total=Sum('amount'))['total'] or 0,
+    } for item in items_in_session]
+    cash_total = session.transactions.aggregate(total=Sum('cash_given'))['total'] or 0
+
+    return render(request, 'backoffice/end_session.html', {
+        'session': session,
+        'products': products_for_view,
+        'cash': {'initial': session.cash_before, 'transactions': cash_total},
+    })
 
 
 @backoffice_user_required

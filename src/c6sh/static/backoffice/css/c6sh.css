@@ -32,10 +32,10 @@ tbody th {
     text-align: center;
 }
 #active-sessions-table .session-action-column .glyphicon {
-    margin-left: 1em;
-    font-underli
+    margin-left: 1.2rem;
+    font-size: 1.8rem;
 }
-.session-action-column a {
+.session-action-column a:hover {
     text-decoration: none;
 }
 .glyphicon-plus {
@@ -44,7 +44,10 @@ tbody th {
 .glyphicon-off {
     color: #a22;
 }
+h1 a:hover {
+    text-decoration: none;
+}
 h1 .glyphicon {
-    font-size: 16px;
+    font-size: 2rem;
     margin-right: 1em
 }
