@@ -51,3 +51,6 @@ h1 .glyphicon {
     font-size: 2rem;
     margin-right: 1em
 }
+#end-sessions-table .control-label {
+    display: none;
+}

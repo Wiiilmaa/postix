@@ -1,8 +1,11 @@
 {% extends "backoffice/base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
 
 {% block content %}
 
-<table class="table" id="active-sessions-table">
+<form method="post">
+    <table class="table" id="end-sessions-table">
 	<thead>
 		<th>Produkt</th>
 		<th>eingezählt</th>
@@ -10,29 +13,46 @@
 		<th>Endstand</th>
 		<th>Differenz</th>
 	</thead>
-	<tbody>
-        <tr>
-            <td>Bargeld</td>
-            <td>{{ cash.initial }}</td>
-            <td>{{ cash.transactions }}</td>
-            <td></td>
-            <td></td>
-        </tr>
-		{% for product in products %}
+		{% csrf_token %}
+        <tbody>
             <tr>
-                <th> {{ product.product }} </th>
-                <th> {{ product.initial }} </th>
-                <th> {{ product.transactions }}</th>
-                <th></th>
-                <th></th>
+                <td>
+                    Bargeld
+                    <div class="hide">{{ form.user }} {{ form.cashdesk }}</div>
+                </td>
+                <td class="before-value">{{ cash.initial }}</td>
+                <td class="transaction-value">{{ cash.transactions }}</td>
+                <td>{{ form.cash_before|as_crispy_field }}</td>
+                <td class="after-value danger"></td>
             </tr>
-        {% empty %}
-            <tr>
-                <th colspan="42" class="empty-row active">
-                    Die Session enthielt keine Produkte.
-                </th>
-            <tr>
-		{% endfor %}
-	</tbody>
-</table>
+            {{ formset.management_form|crispy  }}
+            {% for form in formset %}
+            {% with counter=forloop.counter0 product=products.counter %}
+                <tr>
+                    <th>
+                        {{ form.product_label.product }}
+                        <div class="hide">{{ form.item }}</div>
+                    </th>
+                    <th class="before-value"> {{ form.product_label.initial }} </th>
+                    <th class="transaction-value"> {{ form.product_label.transactions }} </th>
+                    <th > {{ form.amount|as_crispy_field }} </th>
+                    <th class="after-value danger"></th>
+                </tr>
+            {% endwith %}
+            {% empty %}
+                <tr>
+                    <th colspan="42" class="empty-row active">
+                        Die Session enthielt keine Produkte.
+                    </th>
+                <tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-actions">
+        <input type="submit" name="submit" value="Auszählung abschließen" class="btn btn-primary btn-block" id="submit-save">
+    </div>
+<form>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static "backoffice/js/end_session.js" %}"></script>
 {% endblock %}
