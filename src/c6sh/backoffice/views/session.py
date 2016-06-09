@@ -158,9 +158,16 @@ def end_session(request, pk):
         formset = NewSessionFormSet(request.POST, prefix='items')
         if form.is_valid() and formset.is_valid():
             session.end = now()
-            session.cash_after = form.data.get('cash_before')
+            session.cash_after = form.cleaned_data.get('cash_before')
             session.save()
-            # TODO: add ItemMovement instances per item
+            for f in formset:
+                item = f.cleaned_data.get('item')
+                amount = f.cleaned_data.get('amount')
+                print(item, amount)
+                if item and amount and amount >= 0:
+                    ItemMovement.objects.create(item=item, session=session, amount=-amount)
+                # TODO: error handling, don't fail silently
+                # TODO: generate and save report
             messages.success(request, 'Session wurde beendet.')
             return redirect('backoffice:main')
         else:
