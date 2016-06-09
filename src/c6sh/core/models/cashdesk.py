@@ -4,7 +4,7 @@ import string
 from django.db import models
 from django.utils.timezone import now
 
-from .base import Item
+from .base import Item, TransactionPositionItem
 
 
 def generate_key():
@@ -59,11 +59,25 @@ class CashdeskSession(models.Model):
     def is_active(self):
         return (not self.start or self.start < now()) and not self.end
 
+    def get_item_set(self):
+        return [Item.objects.get(pk=pk)
+                for pk in self.item_movements.order_by().values_list('item', flat=True).distinct()]
+
     def get_current_items(self):
-        # TODO FIXME this only gives the amount of items entered/removed via an ItemMovement
-        # we completely disregard transactions for now, because testing those is hard. will come later
-        return [{'item': Item.objects.get(pk=d['item']), 'total': d['total']}
-                for d in self.item_movements.values('item').annotate(total=models.Sum('amount'))]
+        item_movements = self.item_movements\
+            .values('item')\
+            .annotate(total=models.Sum('amount'))
+        transactions = TransactionPositionItem.objects\
+            .values('item')\
+            .filter(position__transaction__session=self)\
+            .annotate(total=models.Sum('amount'))
+        movement_dict = {d['item']: {'total': d['total']} for d in item_movements}
+        transaction_dict = {d['item']: {'total': d['total']} for d in transactions}
+
+        return [{
+            'item': Item.objects.get(pk=key),
+            'total': movement_dict[key]['total'] - transaction_dict.get(key, {'total': 0})['total'],
+        } for key in movement_dict]
 
 
 class ItemMovement(models.Model):
