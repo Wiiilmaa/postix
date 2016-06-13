@@ -1,5 +1,3 @@
-from crispy_forms.helper import FormHelper
-from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
@@ -8,53 +6,20 @@ from django.utils.timezone import now
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
-from ...core.models import Cashdesk, CashdeskSession, Item, ItemMovement, TransactionPositionItem, User
+from ...core.models import (
+    Cashdesk, CashdeskSession, Item, ItemMovement, TransactionPositionItem,
+    User,
+)
+from ..forms import ItemMovementFormSetHelper, get_form_and_formset
 from .utils import BackofficeUserRequiredMixin, backoffice_user_required
-
-
-class NewSessionItemForm(forms.Form):
-    """ This is basically only used in the formset below.
-    Normally you would use a modelformset, but the Form helper class is
-    required to correct some crispy_forms behaviour for now. """
-    item = forms.ModelChoiceField(queryset=Item.objects.all().order_by('-initial_stock'), label='Produkt')
-    amount = forms.IntegerField(label='Anzahl')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.tag = 'td'
-        self.helper.form_show_labels = False
-
-
-class NewSessionItemFormSetHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.template = 'bootstrap/table_inline_formset.html'
-        self.form_id = 'session-items'
-        self.form_tag = False
-
-
-class SessionBaseForm(forms.Form):
-    cashdesk = forms.ModelChoiceField(queryset=Cashdesk.objects.filter(is_active=True).order_by('name'), label='Kasse')
-    user = forms.CharField(max_length=254, label='Engel')
-    cash_before = forms.DecimalField(max_digits=10, decimal_places=2, label='Bargeld')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
 
 
 @backoffice_user_required
 def new_session(request):
-    form = SessionBaseForm(prefix='data')
-    NewSessionFormSet = forms.formset_factory(NewSessionItemForm)
-    formset = NewSessionFormSet(prefix='items')
+    form, formset = get_form_and_formset()
 
     if request.method == 'POST':
-        form = SessionBaseForm(request.POST, prefix='data')
-        formset = NewSessionFormSet(request.POST, prefix='items')
+        form, formset = get_form_and_formset(request=request)
 
         if form.is_valid() and formset.is_valid():
             try:
@@ -86,14 +51,14 @@ def new_session(request):
         if param:
             try:
                 desk = Cashdesk.objects.get(pk=int(param))
-                form = SessionBaseForm(prefix='data', initial={'cashdesk': desk})
+                form, _ = get_form_and_formset(initial_form={'cashdesk': desk})
             except:
                 pass
 
     return render(request, 'backoffice/new_session.html', {
         'form': form,
         'formset': formset,
-        'helper': NewSessionItemFormSetHelper(),
+        'helper': ItemMovementFormSetHelper(),
         'user_list': User.objects.values_list('username', flat=True),
     })
 
@@ -118,11 +83,11 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
 @backoffice_user_required
 def resupply_session(request, pk):
     """ todo: show approximate current amounts of items? """
-    formset = NewSessionFormSet(prefix='items')
+    _, formset, helper = get_form_and_formset()
     session = get_object_or_404(CashdeskSession, pk=pk)
 
     if request.method == 'POST':
-        formset = NewSessionFormSet(request.POST, prefix='items')
+        _, formset = get_form_and_formset(request=request)
 
         if formset.is_valid():
             for f in formset:
@@ -138,7 +103,7 @@ def resupply_session(request, pk):
 
     return render(request, 'backoffice/resupply_session.html', {
         'formset': formset,
-        'helper': NewSessionItemFormSetHelper(),
+        'helper': ItemMovementFormSetHelper(),
         'cashdesk': session.cashdesk,
         'cashier': session.user,
     })
@@ -147,15 +112,13 @@ def resupply_session(request, pk):
 
 @backoffice_user_required
 def end_session(request, pk):
-    NewSessionFormSet = forms.formset_factory(NewSessionItemForm, extra=0)
     session = get_object_or_404(CashdeskSession, pk=pk)
     items_in_session = set(ItemMovement.objects.filter(session=session).values_list('item', flat=True))
     items_in_session = [Item.objects.get(pk=pk) for pk in items_in_session]
     cash_total = session.transactions.aggregate(total=Sum('cash_given'))['total'] or 0
 
     if request.method == 'POST':
-        form = SessionBaseForm(request.POST, prefix='data')
-        formset = NewSessionFormSet(request.POST, prefix='items')
+        form, formset = get_form_and_formset(request=request, extra=0)
         if form.is_valid() and formset.is_valid():
             session.end = now()
             session.cash_after = form.cleaned_data.get('cash_before')
@@ -175,17 +138,20 @@ def end_session(request, pk):
             messages.error(request, 'Session konnte nicht beendet werden: Bitte Daten korrigieren.')
 
     elif request.method == 'GET':
-        form = SessionBaseForm(prefix='data', initial={'cashdesk': session.cashdesk, 'user': session.user})
-        formset = NewSessionFormSet(prefix='items', initial=[{'item': item} for item in items_in_session])
+        form, formset = get_form_and_formset(
+            extra=0,
+            initial_form={'cashdesk': session.cashdesk, 'user': session.user},
+            initial_formset=[{'item': item} for item in items_in_session],
+        )
 
     for f, item in zip(formset, items_in_session):
         f.product_label = {
             'product': item,
-            'initial': ItemMovement.objects\
-                .filter(item=item, session=session)\
+            'initial': ItemMovement.objects
+                .filter(item=item, session=session)
                 .aggregate(total=Sum('amount'))['total'],
-            'transactions': TransactionPositionItem.objects\
-                .filter(item=item, position__transaction__session=session)\
+            'transactions': TransactionPositionItem.objects
+                .filter(item=item, position__transaction__session=session)
                 .aggregate(total=Sum('amount'))['total'] or 0,
         }
 
