@@ -92,4 +92,7 @@ class ItemMovement(models.Model):
                              verbose_name='Item moved to/from this session')
     amount = models.IntegerField(help_text='Negative values indicate that items were taken out of a session. '
                                            'Mostly used when counting items after ending a session.')
-    timestamp = models.DateTimeField(default=now(), editable=False)
+    backoffice_user = models.ForeignKey('User', on_delete=models.PROTECT,
+                                        related_name='supervised_item_movements',
+                                        verbose_name='Backoffice operator issuing movement')
+    timestamp = models.DateTimeField(default=now, editable=False)

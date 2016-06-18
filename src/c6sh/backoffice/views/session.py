@@ -83,7 +83,7 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
 @backoffice_user_required
 def resupply_session(request, pk):
     """ todo: show approximate current amounts of items? """
-    _, formset, helper = get_form_and_formset()
+    _, formset  = get_form_and_formset()
     session = get_object_or_404(CashdeskSession, pk=pk)
 
     if request.method == 'POST':
@@ -94,7 +94,7 @@ def resupply_session(request, pk):
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
                 if item and amount:
-                    ItemMovement.objects.create(item=item, session=session, amount=amount)
+                    ItemMovement.objects.create(item=item, session=session, amount=amount, backoffice_user=request.user)
                 # TODO: error handling, don't fail silently
             messages.success(request, 'Produkte wurden der Kasse hinzugefügt.')
 
@@ -128,7 +128,7 @@ def end_session(request, pk):
                 amount = f.cleaned_data.get('amount')
                 print(item, amount)
                 if item and amount and amount >= 0:
-                    ItemMovement.objects.create(item=item, session=session, amount=-amount)
+                    ItemMovement.objects.create(item=item, session=session, amount=-amount, backoffice_user=request.user)
                 # TODO: error handling, don't fail silently
                 # TODO: generate and save report
             messages.success(request, 'Session wurde beendet.')
