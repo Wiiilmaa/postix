@@ -69,10 +69,9 @@
             <td class="session-detail-content">
                 <ul>
                 {% for product in session.get_current_items %} 
-                    <li>{{ product.item }}: {{ product.total }} erhalten</li>
+                    <li>{{ product.item }}: {{ product.total }}</li>
                 {% endfor %} 
                 </ul>
-                <p>TODO: aktuelle statt eingezählte Items</p>
             </td>
         {% endif %}
         </tr>

@@ -22,3 +22,6 @@ $('.numberinput').each(function(index) {
     console.log(this);
     $(this).on('keyup', get_difference);
 })
+$('.show-hide-heading').on('click', function() {
+    $(this).nextAll('.show-hide-div').toggle();
+});
