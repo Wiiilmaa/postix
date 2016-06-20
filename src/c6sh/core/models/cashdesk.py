@@ -79,6 +79,16 @@ class CashdeskSession(models.Model):
             'total': movement_dict[key]['total'] - transaction_dict.get(key, {'total': 0})['total'],
         } for key in movement_dict]
 
+    def get_item_transactions(self):
+        transactions = TransactionPositionItem.objects\
+            .values('item')\
+            .filter(position__transaction__session=self)\
+            .annotate(total=models.Sum('amount'))
+        return [{
+            'item': Item.objects.get(pk=d['item']),
+            'total': d['total'],
+        } for d in transactions]
+
 
 class ItemMovement(models.Model):
     """ Instead of a through-table. Negative amounts indicate items moved out

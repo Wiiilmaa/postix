@@ -74,6 +74,16 @@ class SessionListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView)
         return Cashdesk.objects.filter(is_active=True).order_by('name')
 
 
+class ReportListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView):
+    """ list of old sessions """
+    model = CashdeskSession
+    template_name = 'backoffice/report_list.html'
+    context_object_name = 'sessions'
+
+    def get_queryset(self):
+        return CashdeskSession.objects.filter(end__isnull=False).order_by('-end')
+
+
 class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
     queryset = CashdeskSession.objects.all()
     template_name = 'backoffice/session_detail.html'
@@ -97,6 +107,7 @@ def resupply_session(request, pk):
                     ItemMovement.objects.create(item=item, session=session, amount=amount, backoffice_user=request.user)
                 # TODO: error handling, don't fail silently
             messages.success(request, 'Produkte wurden der Kasse hinzugefügt.')
+            return redirect('backoffice:session-detail', pk=pk)
 
         elif formset.errors:
             messages.error(request, 'Fehler: Bitte Daten prüfen und korrigieren.')

@@ -13,6 +13,7 @@ urlpatterns = [
     url('^session/(?P<pk>[0-9]+)/resupply/$', views.resupply_session, name='resupply-session'),
     url('^session/(?P<pk>[0-9]+)/$', views.SessionDetailView.as_view(), name='session-detail'),
     url('^session/$', views.SessionListView.as_view(), name='session-list'),
+    url('^reports/$', views.ReportListView.as_view(), name='report-list'),
 
     url('^$', views.main_view, name='main'),
 ]
