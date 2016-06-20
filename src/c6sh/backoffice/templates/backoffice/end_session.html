@@ -40,10 +40,10 @@ Kassenbericht
             {% with counter=forloop.counter0 product=products.counter %}
                 <tr>
                     <th>
-                        {{ form.product_label.product }}
+                        {{ form.product_label.item }}
                         <div class="hide">{{ form.item }}</div>
                     </th>
-                    <th class="before-value"> {{ form.product_label.initial }} </th>
+                    <th class="before-value"> {{ form.product_label.movements }} </th>
                     <th class="transaction-value"> {{ form.product_label.transactions }} </th>
                     <th > {{ form.amount|as_crispy_field }} </th>
                     <th class="after-value danger"></th>

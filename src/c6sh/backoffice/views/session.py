@@ -125,8 +125,7 @@ def resupply_session(request, pk):
 @backoffice_user_required
 def end_session(request, pk):
     session = get_object_or_404(CashdeskSession, pk=pk)
-    items_in_session = set(ItemMovement.objects.filter(session=session).values_list('item', flat=True))
-    items_in_session = [Item.objects.get(pk=pk) for pk in items_in_session]
+    items_in_session = session.get_item_set()
     cash_total = session.transactions.aggregate(total=Sum('cash_given'))['total'] or 0
 
     if request.method == 'POST':
@@ -135,10 +134,10 @@ def end_session(request, pk):
             session.end = now()
             session.cash_after = form.cleaned_data.get('cash_before')
             session.save()
+
             for f in formset:
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
-                print(item, amount)
                 if item and amount and amount >= 0:
                     ItemMovement.objects.create(item=item, session=session, amount=-amount, backoffice_user=request.user)
                 # TODO: error handling, don't fail silently
@@ -156,16 +155,8 @@ def end_session(request, pk):
             initial_formset=[{'item': item} for item in items_in_session],
         )
 
-    for f, item in zip(formset, items_in_session):
-        f.product_label = {
-            'product': item,
-            'initial': ItemMovement.objects
-                .filter(item=item, session=session)
-                .aggregate(total=Sum('amount'))['total'],
-            'transactions': TransactionPositionItem.objects
-                .filter(item=item, position__transaction__session=session)
-                .aggregate(total=Sum('amount'))['total'] or 0,
-        }
+    for f, item_data in zip(formset, session.get_current_items()):
+        f.product_label = item_data
 
     return render(request, 'backoffice/end_session.html', {
         'session': session,

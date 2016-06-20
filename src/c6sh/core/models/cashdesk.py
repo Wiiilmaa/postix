@@ -75,9 +75,11 @@ class CashdeskSession(models.Model):
         transaction_dict = {d['item']: {'total': d['total']} for d in transactions}
 
         return [{
-            'item': Item.objects.get(pk=key),
-            'total': movement_dict[key]['total'] - transaction_dict.get(key, {'total': 0})['total'],
-        } for key in movement_dict]
+            'item': item,
+            'movements': movement_dict[item.pk]['total'],
+            'transactions': transaction_dict.get(item.pk, {'total': 0})['total'],
+            'total': movement_dict[item.pk]['total'] - transaction_dict.get(item.pk, {'total': 0})['total'],
+        } for item in self.get_item_set()]
 
     def get_item_transactions(self):
         transactions = TransactionPositionItem.objects\
