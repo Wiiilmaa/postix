@@ -79,6 +79,7 @@ class ReportListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView):
     model = CashdeskSession
     template_name = 'backoffice/report_list.html'
     context_object_name = 'sessions'
+    paginate_by = 25
 
     def get_queryset(self):
         return CashdeskSession.objects.filter(end__isnull=False).order_by('-end')

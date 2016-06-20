@@ -3,6 +3,24 @@
 
 {% block content %}
 
+{% if is_paginated %}
+	<div class="pagination">
+		{% if page_obj.has_previous %}
+			<a href="/reports/?page={{ page_obj.previous_page_number }}">
+                <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+            </a>
+		{% endif %}
+		<span class="page-current">
+			Seite {{ page_obj.number }} von {{ page_obj.paginator.num_pages }}.
+		</span>
+		{% if page_obj.has_next %}
+			<a href="/reports/?page={{ page_obj.next_page_number }}">
+                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+			</a>
+		{% endif %}
+	</div>
+{% endif %}
+
 <table class="table" id="active-sessions-table">
 	<thead>
 		<th></th>
