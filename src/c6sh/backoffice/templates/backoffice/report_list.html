@@ -52,8 +52,8 @@
                 <th> {{ session.end }} </th>
                 <th>
                     <ul>
-                    {% for product in session.get_item_transactions %} 
-                        <li>{{ product.item }}: {{ product.total }}</li>
+                    {% for product in session.get_current_items %} 
+                        <li>{{ product.item }}: {{ product.transactions }}</li>
                     {% endfor %} 
                     </ul>
                 </th>

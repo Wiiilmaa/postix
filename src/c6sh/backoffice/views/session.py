@@ -126,7 +126,7 @@ def resupply_session(request, pk):
 def end_session(request, pk):
     session = get_object_or_404(CashdeskSession, pk=pk)
     items_in_session = session.get_item_set()
-    cash_total = session.transactions.aggregate(total=Sum('cash_given'))['total'] or 0
+    cash_total = session.get_cash_transaction_total()
 
     if request.method == 'POST':
         form, formset = get_form_and_formset(request=request, extra=0)

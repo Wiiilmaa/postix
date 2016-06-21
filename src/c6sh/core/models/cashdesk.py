@@ -81,15 +81,8 @@ class CashdeskSession(models.Model):
             'total': movement_dict[item.pk]['total'] - transaction_dict.get(item.pk, {'total': 0})['total'],
         } for item in self.get_item_set()]
 
-    def get_item_transactions(self):
-        transactions = TransactionPositionItem.objects\
-            .values('item')\
-            .filter(position__transaction__session=self)\
-            .annotate(total=models.Sum('amount'))
-        return [{
-            'item': Item.objects.get(pk=d['item']),
-            'total': d['total'],
-        } for d in transactions]
+    def get_cash_transaction_total(self):
+        return self.transactions.aggregate(total=models.Sum('cash_given'))['total'] or 0
 
 
 class ItemMovement(models.Model):
