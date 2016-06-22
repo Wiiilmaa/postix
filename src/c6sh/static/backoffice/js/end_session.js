@@ -5,7 +5,12 @@ var get_difference = function() {
     var after = parseFloat($(this).val());
     var before = parseFloat(row.find(".before-value").text());
 	var transaction = parseFloat(row.find(".transaction-value").text());
-	var difference = (before - transaction) - after;
+
+    if (row[0].id == 'cash') {
+	    var difference = (before + transaction) - after;
+    } else {
+	    var difference = (before - transaction) - after;
+    }
 
 	result_cell = row.find(".after-value");
 	result_cell.html(difference);
