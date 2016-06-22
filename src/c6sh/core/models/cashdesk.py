@@ -94,7 +94,28 @@ class CashdeskSession(models.Model):
                 } for item in self.get_item_set()]
 
     def get_cash_transaction_total(self):
-        return self.transactions.aggregate(total=models.Sum('cash_given'))['total'] or 0
+        return TransactionPosition.objects\
+            .filter(transaction__session=self)\
+            .filter(type__in=['sale', 'reverse'])\
+            .aggregate(total=models.Sum('value'))['total'] or 0
+
+    def get_product_sales(self):
+        qs = TransactionPosition.objects.filter(transaction__session=self).order_by().values('product')
+        result = []
+
+        for combination in qs.annotate(models.Count('product')):
+            p = Product.objects.get(pk=combination['product'])
+            product_query = qs.filter(product=p)
+            summary = {
+                'product': p,
+                'sales': product_query.filter(type='sale').count(),
+                'presales': product_query.filter(type='redeem').count(),
+                'reversals': product_query.filter(type='reverse').count(),
+                'value_single': qs.filter(product=p).values_list('value')[0][0],
+            }
+            summary['value_total'] = (summary['sales'] - summary['reversals']) * summary['value_single']
+            result.append(summary)
+        return result
 
 
 class ItemMovement(models.Model):
