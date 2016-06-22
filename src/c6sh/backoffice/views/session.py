@@ -1,16 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
-from ...core.models import (
-    Cashdesk, CashdeskSession, Item, ItemMovement, TransactionPositionItem,
-    User,
-)
+from ...core.models import Cashdesk, CashdeskSession, ItemMovement, User
 from ..forms import ItemMovementFormSetHelper, get_form_and_formset
+from ..report import generate_report
 from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 
@@ -94,7 +92,7 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
 @backoffice_user_required
 def resupply_session(request, pk):
     """ todo: show approximate current amounts of items? """
-    _, formset  = get_form_and_formset()
+    _, formset = get_form_and_formset()
     session = get_object_or_404(CashdeskSession, pk=pk)
 
     if request.method == 'POST':
@@ -141,9 +139,14 @@ def end_session(request, pk):
                 if item and amount and amount >= 0:
                     ItemMovement.objects.create(item=item, session=session, amount=-amount, backoffice_user=request.user)
                 # TODO: error handling, don't fail silently
-                # TODO: generate and save report
             messages.success(request, 'Session wurde beendet.')
-            return redirect('backoffice:main')
+            report_path = generate_report(session)
+
+            response = HttpResponse(content=open(report_path, 'rb'))
+            response['Content-Type'] = 'application/pdf'
+            # attachment or inline?
+            response['Content-Disposition'] = 'attachment; filename=kassenbericht-{}.pdf'.format(session.pk)
+            return response
         else:
             print(form.errors, formset.errors)
             messages.error(request, 'Session konnte nicht beendet werden: Bitte Daten korrigieren.')
