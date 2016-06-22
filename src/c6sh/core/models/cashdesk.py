@@ -4,7 +4,7 @@ import string
 from django.db import models
 from django.utils.timezone import now
 
-from .base import Item, TransactionPositionItem
+from .base import Item, Product, TransactionPosition, TransactionPositionItem
 
 
 def generate_key():
@@ -64,22 +64,34 @@ class CashdeskSession(models.Model):
                 for pk in self.item_movements.order_by().values_list('item', flat=True).distinct()]
 
     def get_current_items(self):
-        item_movements = self.item_movements\
-            .values('item')\
-            .annotate(total=models.Sum('amount'))
         transactions = TransactionPositionItem.objects\
             .values('item')\
             .filter(position__transaction__session=self)\
+            .exclude(position__type='reverse')\
+            .filter(position__reversed_by=None)\
             .annotate(total=models.Sum('amount'))
+        item_movements = self.item_movements\
+            .values('item')\
+            .annotate(total=models.Sum('amount'))
+
+        post_movement_dict = {}
+        if self.end:
+            post_movements = item_movements.filter(timestamp__gte=self.end)
+            item_movements = item_movements.filter(timestamp__lt=self.end)
+            post_movement_dict = {d['item']: {'total': d['total']} for d in post_movements}
         movement_dict = {d['item']: {'total': d['total']} for d in item_movements}
         transaction_dict = {d['item']: {'total': d['total']} for d in transactions}
 
+        DEFAULT = {'total': 0}
         return [{
-            'item': item,
-            'movements': movement_dict[item.pk]['total'],
-            'transactions': transaction_dict.get(item.pk, {'total': 0})['total'],
-            'total': movement_dict[item.pk]['total'] - transaction_dict.get(item.pk, {'total': 0})['total'],
-        } for item in self.get_item_set()]
+                'item': item,
+                'movements': movement_dict.get(item.pk, DEFAULT)['total'],
+                'transactions': transaction_dict.get(item.pk, DEFAULT)['total'],
+                'final_movements': post_movement_dict.get(item.pk, DEFAULT)['total'] if self.end else 0,
+                'total': movement_dict.get(item.pk, DEFAULT)['total']
+                         + post_movement_dict.get(item.pk, DEFAULT)['total']
+                         - transaction_dict.get(item.pk, DEFAULT)['total'],
+                } for item in self.get_item_set()]
 
     def get_cash_transaction_total(self):
         return self.transactions.aggregate(total=models.Sum('cash_given'))['total'] or 0
