@@ -43,6 +43,10 @@ class TransactionPosition(models.Model):
         self.tax_value = round_decimal(self.value - net_value)
 
     def save(self, *args, **kwargs):
+        if self.type == 'reverse':
+            self.product = self.reverses.product
+            if self.value is None:
+                self.value = -self.reverses.value
         if self.value is None:
             self.value = self.product.price
         if self.tax_rate is None:
