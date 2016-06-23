@@ -145,8 +145,7 @@ def end_session(request, pk):
 
             response = HttpResponse(content=open(report_path, 'rb'))
             response['Content-Type'] = 'application/pdf'
-            # attachment or inline?
-            response['Content-Disposition'] = 'attachment; filename=kassenbericht-{}.pdf'.format(session.pk)
+            response['Content-Disposition'] = 'inline; filename=sessionreport-{}.pdf'.format(session.pk)
             return response
         else:
             print(form.errors, formset.errors)
