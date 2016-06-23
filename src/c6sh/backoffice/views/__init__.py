@@ -3,7 +3,7 @@ from .create_user import create_user_view
 from .main import main_view
 from .session import (
     ReportListView, SessionDetailView, SessionListView, edit_session,
-    end_session, new_session, resupply_session,
+    end_session, new_session, resupply_session, session_report,
 )
 from .utils import backoffice_user_required
 
@@ -18,6 +18,7 @@ __all__ = [
     'new_session',
     'resupply_session',
     'ReportListView',
+    'session_report',
     'SessionDetailView',
     'SessionListView',
 ]

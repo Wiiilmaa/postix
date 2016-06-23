@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 from django.views.generic import DetailView
@@ -141,14 +141,9 @@ def end_session(request, pk):
                     ItemMovement.objects.create(item=item, session=session, amount=-amount, backoffice_user=request.user)
                 # TODO: error handling, don't fail silently
             messages.success(request, 'Session wurde beendet.')
-            report_path = generate_report(session)
-
-            response = HttpResponse(content=open(report_path, 'rb'))
-            response['Content-Type'] = 'application/pdf'
-            response['Content-Disposition'] = 'inline; filename=sessionreport-{}.pdf'.format(session.pk)
-            return response
+            generate_report(session)
+            return redirect('backoffice:session-report', pk=pk)
         else:
-            print(form.errors, formset.errors)
             messages.error(request, 'Session konnte nicht beendet werden: Bitte Daten korrigieren.')
 
     elif request.method == 'GET':
@@ -167,6 +162,20 @@ def end_session(request, pk):
         'formset': formset,
         'cash': {'initial': session.cash_before, 'transactions': cash_total},
     })
+
+
+@backoffice_user_required
+def session_report(request, pk):
+    session = get_object_or_404(CashdeskSession, pk=pk)
+    report_path = session.get_report_path()
+
+    if not report_path:
+        raise Http404("This session does not have a generated report.")
+
+    response = HttpResponse(content=open(report_path, 'rb'))
+    response['Content-Type'] = 'application/pdf'
+    response['Content-Disposition'] = 'inline; filename=sessionreport-{}.pdf'.format(session.pk)
+    return response
 
 
 @backoffice_user_required
