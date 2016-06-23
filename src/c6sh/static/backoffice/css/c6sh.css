@@ -38,6 +38,12 @@ tbody th {
 .session-action-column a:hover {
     text-decoration: none;
 }
+.glyphicon-print {
+    color: #a22;
+}
+.glyphicon-pencil {
+    color: #2a2;
+}
 .glyphicon-plus {
     color: #2a2;
 }

@@ -17,13 +17,13 @@
 			{% for session in cashdesk.get_active_sessions %}
 				<tr>
 					<th class="session-action-column">
-                        <a href="/backoffice/session/{{ session.pk }}/"</a>
+                        <a href="/backoffice/session/{{ session.pk }}/" title="Details">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                         </a>
-                        <a href="/backoffice/session/{{ session.pk }}/resupply/">
+                        <a href="/backoffice/session/{{ session.pk }}/resupply/" title="Nachfüllen">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 						</a>
-                        <a href="/backoffice/session/{{ session.pk }}/end/">
+                        <a href="/backoffice/session/{{ session.pk }}/end/" title="Auszählen">
                         	<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
 						</a>
                     </th>

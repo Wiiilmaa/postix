@@ -18,7 +18,7 @@ var users = new Bloodhound({
     local: user_list
 });
 
-$('#id_data-user').typeahead({
+$('#id_session-user').typeahead({
     hint: true,
     highlight: true,
     minLength: 1

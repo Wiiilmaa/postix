@@ -36,7 +36,12 @@ def new_session(request):
                     item = f.cleaned_data.get('item')
                     amount = f.cleaned_data.get('amount')
                     if item and amount and amount > 0:
-                        ItemMovement.objects.create(item=item, session=session, amount=amount)
+                        ItemMovement.objects.create(
+                            item=item,
+                            session=session,
+                            amount=amount,
+                            backoffice_user=request.user,
+                        )
                     # TODO: error handling, don't fail silently
                 messages.success(request, 'Session wurde angelegt.'.format(session.pk, session.cashdesk))
                 return redirect('backoffice:main')
