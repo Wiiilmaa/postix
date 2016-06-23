@@ -1,6 +1,9 @@
+import glob
+import os
 import random
 import string
 
+from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
 
@@ -116,6 +119,20 @@ class CashdeskSession(models.Model):
             summary['value_total'] = (summary['sales'] - summary['reversals']) * summary['value_single']
             result.append(summary)
         return result
+
+    def get_report_path(self):
+        base = os.path.join(settings.MEDIA_ROOT, 'reports', 'sessionreport_{}-*.pdf'.format(self.pk))
+        all_reports = sorted(glob.glob(base))
+        if all_reports:
+            return all_reports[-1]
+        return None
+
+    def get_new_report_path(self):
+        return os.path.join(
+            settings.MEDIA_ROOT,
+            'reports',
+            'sessionreport_{}-{}.pdf'.format(self.pk, now().strftime('%Y%m%d-%H%M')),
+        )
 
 
 class ItemMovement(models.Model):

@@ -130,6 +130,7 @@ def end_session(request, pk):
         form, formset = get_form_and_formset(request=request, extra=0)
         if form.is_valid() and formset.is_valid():
             session.end = now()
+            session.backoffice_user_after = request.user
             session.cash_after = form.cleaned_data.get('cash_before')
             session.save()
 

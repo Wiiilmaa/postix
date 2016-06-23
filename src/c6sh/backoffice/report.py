@@ -56,10 +56,9 @@ def get_qr_image(session):
     return f
 
 
-def get_default_document(pk):
+def get_default_document(path):
     doc = BaseDocTemplate(
-        'sessionreport_{}.pdf'.format(pk),
-        title='Kassenbericht {}'.format(pk),
+        path,
         pagesize=PAGESIZE,
         leftMargin=25 * mm,
         rightMargin=20 * mm,
@@ -76,7 +75,7 @@ def get_default_document(pk):
 def generate_report(session):
     # TODO: include event in file name once we have configuration
     # TODO: include event in footer, w/ "Chaos Computer Club Veranstaltungsgesellschaft mbH,"
-    doc = get_default_document(session.pk)
+    doc = get_default_document(session.get_new_report_path())
     style = get_paragraph_style()
 
     # Header: info text and qr code

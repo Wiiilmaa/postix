@@ -74,6 +74,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'c6sh', 'static'),
 ]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'c6sh', 'media')
 
 AUTH_USER_MODEL = 'core.User'
 
