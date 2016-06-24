@@ -3,8 +3,9 @@ Django==1.9.*
 djangorestframework==3.3.*
 django-crispy-forms==1.6.*
 django-filter==0.12.*
-markdown
-
+markdown==2.6.*
+reportlab==3.3.*
+qrcode==5.3
 
 # Testing and development requirements
 pytest-django==2.9.*
