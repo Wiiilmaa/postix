@@ -134,24 +134,44 @@ def end_session(request, pk):
     if request.method == 'POST':
         form, formset = get_form_and_formset(request=request, extra=0)
         if form.is_valid() and formset.is_valid():
-            session.end = now()
-            session.backoffice_user_after = request.user
-            session.cash_after = form.cleaned_data.get('cash_before')
-            session.save()
-
             for f in formset:
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
+                # TODO: allow negative values here, it's necessary for editing sessions.
                 if item and amount and amount >= 0:
-                    ItemMovement.objects.create(item=item, session=session, amount=-amount, backoffice_user=request.user)
+                    ItemMovement.objects.create(
+                        item=item,
+                        session=session,
+                        amount=-amount,
+                        backoffice_user=request.user
+                    )
                 # TODO: error handling, don't fail silently
-            messages.success(request, 'Session wurde beendet.')
+
+            if session.end:
+                # This is not optimal, but our data model does not have a way of tracking
+                # cash movement over time. 
+                # Maybe we should at least adjust the backoffice user responsible.
+                session.cash_after += form.cleaned_data.get('cash_before')
+                session.save()
+            else:
+                session.end = now()
+                session.backoffice_user_after = request.user
+                session.cash_after = form.cleaned_data.get('cash_before')
+                session.save()
+                messages.success(request, 'Session wurde beendet.')
+
             generate_report(session)
             return redirect('backoffice:session-report', pk=pk)
         else:
             messages.error(request, 'Session konnte nicht beendet werden: Bitte Daten korrigieren.')
 
     elif request.method == 'GET':
+        if session.end:
+            msg = 'Diese Session wurde bereits ausgezählt und abgeschlossen. '\
+                  'Wenn du dieses Formular ausfüllst, wird ein zweiter, korrigierter '\
+                  'Report erstellt.'
+            messages.warning(request, msg)
+
         form, formset = get_form_and_formset(
             extra=0,
             initial_form={'cashdesk': session.cashdesk, 'user': session.user},
@@ -175,7 +195,7 @@ def session_report(request, pk):
     report_path = session.get_report_path()
 
     if not report_path:
-        raise Http404("This session does not have a generated report.")
+        report_path = generate_report(session)
 
     response = HttpResponse(content=open(report_path, 'rb'))
     response['Content-Type'] = 'application/pdf'

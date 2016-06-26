@@ -3,6 +3,15 @@
 {% load i18n %}
 {% load staticfiles %}
 
+
+{% block stylesheets %}
+{% if not session.end %}
+    <style>
+        .end-column {display: None}
+    </style>
+{% endif %}
+{% endblock %}
+
 {% block headline %}
 Kassenbericht
 {% endblock %}
@@ -20,7 +29,8 @@ Kassenbericht
 		<th>Produkt</th>
 		<th>eingezählt</th>
 		<th>Umsatz</th>
-		<th>Endstand</th>
+		<th class="end-column">Endstand</th>
+        <th>Abschluss</th>
 		<th>Differenz</th>
 	</thead>
 		{% csrf_token %}
@@ -32,6 +42,7 @@ Kassenbericht
                 </td>
                 <td class="before-value">{{ cash.initial }}</td>
                 <td class="transaction-value">{{ cash.transactions }}</td>
+                <td class="end-column">{{ session.cash_after }}</td>
                 <td>{{ form.cash_before|as_crispy_field }}</td>
                 <td class="after-value danger"></td>
             </tr>
@@ -45,6 +56,7 @@ Kassenbericht
                     </th>
                     <th class="before-value"> {{ form.product_label.movements }} </th>
                     <th class="transaction-value"> {{ form.product_label.transactions }} </th>
+                    <th class="end-column"> {{ form.product_label.final_movements }} </th>
                     <th > {{ form.amount|as_crispy_field }} </th>
                     <th class="after-value danger"></th>
                 </tr>
