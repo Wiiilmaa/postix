@@ -149,7 +149,7 @@ def end_session(request, pk):
 
             if session.end:
                 # This is not optimal, but our data model does not have a way of tracking
-                # cash movement over time. 
+                # cash movement over time.
                 # Maybe we should at least adjust the backoffice user responsible.
                 session.cash_after += form.cleaned_data.get('cash_before')
                 session.save()

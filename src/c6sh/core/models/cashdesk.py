@@ -87,14 +87,14 @@ class CashdeskSession(models.Model):
 
         DEFAULT = {'total': 0}
         return [{
-                'item': item,
-                'movements': movement_dict.get(item.pk, DEFAULT)['total'],
-                'transactions': transaction_dict.get(item.pk, DEFAULT)['total'],
-                'final_movements': -post_movement_dict.get(item.pk, DEFAULT)['total'] if self.end else 0,
-                'total': movement_dict.get(item.pk, DEFAULT)['total']
-                         + post_movement_dict.get(item.pk, DEFAULT)['total']
-                         - transaction_dict.get(item.pk, DEFAULT)['total'],
-                } for item in self.get_item_set()]
+            'item': item,
+            'movements': movement_dict.get(item.pk, DEFAULT)['total'],
+            'transactions': transaction_dict.get(item.pk, DEFAULT)['total'],
+            'final_movements': -post_movement_dict.get(item.pk, DEFAULT)['total'] if self.end else 0,
+            'total': movement_dict.get(item.pk, DEFAULT)['total']
+                + post_movement_dict.get(item.pk, DEFAULT)['total']
+                - transaction_dict.get(item.pk, DEFAULT)['total'],
+        } for item in self.get_item_set()]
 
     def get_cash_transaction_total(self):
         return TransactionPosition.objects\

@@ -168,5 +168,4 @@ def generate_report(session):
         signatures,
     ]
     doc.build(story)
-    print(doc.filename)
     return doc.filename
