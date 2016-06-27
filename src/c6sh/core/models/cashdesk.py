@@ -3,7 +3,7 @@ import os
 import random
 import string
 
-from django.conf import settings
+from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.timezone import now
 
@@ -121,18 +121,19 @@ class CashdeskSession(models.Model):
         return result
 
     def get_report_path(self):
-        base = os.path.join(settings.MEDIA_ROOT, 'reports', 'sessionreport_{}-*.pdf'.format(self.pk))
-        all_reports = sorted(glob.glob(base))
+        base = default_storage.path('reports')
+        search = os.path.join(base, 'sessionreport_{}-*.pdf'.format(self.pk))
+        all_reports = sorted(glob.glob(search))
+
         if all_reports:
             return all_reports[-1]
         return None
 
     def get_new_report_path(self):
-        return os.path.join(
-            settings.MEDIA_ROOT,
+        return default_storage.path(os.path.join(
             'reports',
             'sessionreport_{}-{}.pdf'.format(self.pk, now().strftime('%Y%m%d-%H%M')),
-        )
+        ))
 
 
 class ItemMovement(models.Model):

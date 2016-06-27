@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404, HttpResponse
+from django.core.files.storage import default_storage
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 from django.views.generic import DetailView
@@ -197,7 +198,7 @@ def session_report(request, pk):
     if not report_path:
         report_path = generate_report(session)
 
-    response = HttpResponse(content=open(report_path, 'rb'))
+    response = HttpResponse(content=default_storage.open(report_path, 'rb'))
     response['Content-Type'] = 'application/pdf'
     response['Content-Disposition'] = 'inline; filename=sessionreport-{}.pdf'.format(session.pk)
     return response
