@@ -43,7 +43,6 @@ def new_session(request):
                             amount=amount,
                             backoffice_user=request.user,
                         )
-                    # TODO: error handling, don't fail silently
                 messages.success(request, 'Session wurde angelegt.'.format(session.pk, session.cashdesk))
                 return redirect('backoffice:main')
 
@@ -97,7 +96,7 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
 
 @backoffice_user_required
 def resupply_session(request, pk):
-    """ todo: show approximate current amounts of items? """
+    """ Nice To Have: show approximate current amounts of items? """
     _, formset = get_form_and_formset()
     session = get_object_or_404(CashdeskSession, pk=pk)
 
@@ -109,8 +108,12 @@ def resupply_session(request, pk):
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
                 if item and amount:
-                    ItemMovement.objects.create(item=item, session=session, amount=amount, backoffice_user=request.user)
-                # TODO: error handling, don't fail silently
+                    ItemMovement.objects.create(
+                        item=item,
+                        session=session,
+                        amount=amount,
+                        backoffice_user=request.user
+                    )
             messages.success(request, 'Produkte wurden der Kasse hinzugefügt.')
             return redirect('backoffice:session-detail', pk=pk)
 
@@ -138,20 +141,18 @@ def end_session(request, pk):
             for f in formset:
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
-                # TODO: allow negative values here, it's necessary for editing sessions.
-                if item and amount and amount >= 0:
+                if item and amount and amount:
                     ItemMovement.objects.create(
                         item=item,
                         session=session,
                         amount=-amount,
                         backoffice_user=request.user
                     )
-                # TODO: error handling, don't fail silently
 
             if session.end:
                 # This is not optimal, but our data model does not have a way of tracking
                 # cash movement over time.
-                # Maybe we should at least adjust the backoffice user responsible.
+                # TODO: Maybe we should at least adjust the backoffice user responsible.
                 session.cash_after += form.cleaned_data.get('cash_before')
                 session.save()
             else:
