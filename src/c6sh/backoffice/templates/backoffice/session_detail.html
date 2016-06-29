@@ -1,6 +1,15 @@
 {% extends 'backoffice/base.html' %}
 {% load i18n %}
 
+{% block stylesheets %}
+    {% if not session.end %}
+        <style>
+            .end-column {display: None}
+        </style>
+    {% endif %}
+{% endblock %}
+
+
 {% block headline %}
     {% if not session.end %}
         <a href="/backoffice/session/{{ session.pk }}/resupply/">
@@ -16,65 +25,60 @@
 {% endblock %}
 
 {% block content %}
-    
+<h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }} ({{ sesion.user.username }})</h4>
 {% language "de" %}
+{% if session.end %}
+    <h4> Beginn: {{ session.start }} </h4>
+    <h4> Ende: {{ session.ende }} </h4>
+{% else %}
+    <h4> Beginn: vor {{ session.start|timesince }} </h4>
+{% endif %}
+    
+
+<h3> Verkaufte Produkte </h3>
 <table class="table" id="session-detail-table">
+	<thead>
+		<th></th>
+		<th>Verkäufe</th>
+		<th>Presale</th>
+		<th>Stornos</th>
+    </thead>
+    <tbody>
+        {% for product in session.get_product_sales %}
+            <tr>
+                <th>{{ product.product.name }}</th>
+                <th>{{ product.sales }}</th>
+                <th>{{ product.presales }}</th>
+                <th>{{ product.reversals }}</th>
+            </tr>
+        {% empty %}
+        <tr><th></th><th></th><th></th><th></th></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3> Items </h3>
+<table class="table" id="session-detail-table">
+	<thead>
+		<th></th>
+		<th>eingezählt</th>
+		<th>Umsatz</th>
+        <th class='end-column'>Abschluss</th>
     <tbody>
         <tr>
-            <td class="session-detail-label">
-                Cashdesk
-            </td>
-            <td class="session-detail-content">
-                {{ session.cashdesk }}
-            </td>
+            <td> Bargeld </td>
+            <td> {{ session.cash_before }} </td>
+            <td> {{ session.get_cash_transactions_total }} </td>
+            <td class='end-column'> {{ session.cash_after }} </td>
         </tr>
-        <tr>
-            <td class="session-detail-label">
-                Engel
-            </td>
-            <td class="session-detail-content">
-                {{ session.user }}
-            </td>
-        </tr>
-
-        <tr>
-        {% if session.end %}
-            <td class="session-detail-label">
-                Zeitraum
-            </td>
-            <td class="session-detail-content">
-                {{ session.start }} - {{ session.end }}
-            </td>
-        {% else %}
-            <td class="session-detail-label">
-                Beginn
-            </td>
-            <td class="session-detail-content">
-                vor {{ session.start|timesince }}
-            </td>
-        {% endif %}
-        </tr>
-        <tr>
-        {% if session.end %}
-            <td class="session-detail-label">
-                Verkaufte Items
-            </td>
-            <td class="session-detail-content">
-                TODO: implement.
-            </td>
-        {% else %}
-            <td class="session-detail-label">
-                Eingezählte Items
-            </td>
-            <td class="session-detail-content">
-                <ul>
-                {% for product in session.get_current_items %} 
-                    <li>{{ product.item }}: {{ product.total }}</li>
-                {% endfor %} 
-                </ul>
-            </td>
-        {% endif %}
-        </tr>
+        {% for item in session.get_current_items %}
+            <tr>
+                <td> {{ item.item.name }} </td>
+                <td> {{ item.movements }} </td>
+                <td> {{ item.transactions }} </td>
+                <td class='end-column'> {{ item.final_movements }} </td>
+            </tr>
+        {% endfor %}
     </tbody>
 </table>
 {% endlanguage %}

@@ -5,15 +5,15 @@
 
 
 {% block stylesheets %}
-{% if not session.end %}
-    <style>
-        .end-column {display: None}
-    </style>
-{% endif %}
+    {% if not session.end %}
+        <style>
+            .end-column {display: None}
+        </style>
+    {% endif %}
 {% endblock %}
 
 {% block headline %}
-Kassenbericht
+Kassenbericht #{{session.pk}}
 {% endblock %}
 
 
