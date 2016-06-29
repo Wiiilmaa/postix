@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 
 from .utils import backoffice_user_required
 
 
 @backoffice_user_required
 def main_view(request):
-    return render(request, 'backoffice/main.html')
+    return redirect('backoffice:session-list')
