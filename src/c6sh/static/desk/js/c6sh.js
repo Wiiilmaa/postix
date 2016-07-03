@@ -58,17 +58,58 @@ var preorder = {
 
     _perform: function () {
         // The actual redemption process
-        
+
+        // TODO: Block interface while loading
+        $.ajax({
+            url: '/api/transactions/',
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({
+                positions: [preorder.current_preorder],
+            }),
+            success: function (data, status, jqXHR) {
+                // TODO: Render successful message
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            error: function (jqXHR, status, error) {
+                if (jqXHR.status == 400) {
+                    var data = JSON.parse(jqXHR.responseText);
+                    var i = 0, pos = data.positions[0];
+                    if (!pos.success) {
+                        if (pos.type == 'confirmation') {
+                            dialog.show_confirmation(-1, pos.message, pos.missing_field);
+                        } else if (pos.type == 'input') {
+                            dialog.show_list_input(-1, pos.message, pos.missing_field);
+                        } else {
+                            dialog.show_error(pos.message);
+                        }
+                    }
+                } else {
+                    console.log(jqXHR.statusText);
+                    dialog.show_error(jqXHR.statusText);
+                }
+            }
+        });
     },
 
     redeem: function (secret) {
         // Start redeeming a preorder with a given secret
-        preorder.current_preorder.secret = secret;
+        preorder.current_preorder = {
+            'secret': secret,
+            'type': 'redeem'
+        };
         preorder._perform();
-    }
-    ,
+    },
+
     init: function () {
         // Initializations at page load time
+        $("#preorder-input").keyup(function (e) {
+            if (e.keyCode == 13) { // Enter
+                preorder.redeem($.trim($("#preorder-input").val()));
+            }
+        });
     }
 };
 
@@ -145,7 +186,7 @@ var transaction = {
                     dialog.show_error(jqXHR.statusText);
                 }
             }
-        })
+        });
     },
 
     remove: function (pos_nr) {
@@ -204,9 +245,13 @@ var dialog = {
         dialog._field_name = field_name;
         dialog._type = 'input';
         
-        var pos = transaction.positions[pos_id];
-        var product = productlist.products[pos.product];
-        $("#modal-title").text(product.name);
+        if (pos_id === -1) {
+            $("#modal-title").text("Preorder");
+        } else {
+            var pos = transaction.positions[pos_id];
+            var product = productlist.products[pos.product];
+            $("#modal-title").text(product.name);
+        }
         $("#modal-text").text(message);
         $("#modal-input").show();
         $("#btn-continue").show();
@@ -217,7 +262,7 @@ var dialog = {
         // Shows an error message, optionally related to the cart position pos_id.
         dialog._type = 'error';
         
-        if (pos_id) {
+        if (pos_id >= 0) {
             var pos = transaction.positions[pos_id];
             var product = productlist.products[pos.product];
             $("#modal-title").text(product.name);
@@ -237,9 +282,13 @@ var dialog = {
         dialog._type = 'confirmation';
         dialog._pos_id = pos_id;
         dialog._field_name = field_name;
-        var pos = transaction.positions[pos_id];
-        var product = productlist.products[pos.product];
-        $("#modal-title").text(product.name);
+        if (pos_id === -1) {
+            $("#modal-title").text("Preorder");
+        } else {
+            var pos = transaction.positions[pos_id];
+            var product = productlist.products[pos.product];
+            $("#modal-title").text(product.name);
+        }
         $("#modal-text").text(message);
         $("#modal-input").hide();
         $("#btn-continue").show();
@@ -248,15 +297,20 @@ var dialog = {
 
     _continue: function () {
         // Called if the user confirms the dialog.
+        var val;
         if (dialog._type === 'confirmation') {
+            val = true;
+        } else if (dialog._type === 'input') {
+            val = $("#modal-input").val();
+        }
+        if (dialog._pos_id === -1) {
+            preorder.current_preorder[dialog._field_name] = true;
+            preorder._perform();
+        } else {
             transaction.positions[dialog._pos_id][dialog._field_name] = true;
             transaction.perform();
-            dialog.reset();
-        } else if (dialog._type === 'input') {
-            transaction.positions[dialog._pos_id][dialog._field_name] = $("#modal-input").val();
-            transaction.perform();
-            dialog.reset();
         }
+        dialog.reset();
     },
 
     reset: function () {
