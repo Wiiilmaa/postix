@@ -108,6 +108,7 @@ var preorder = {
         $("#preorder-input").keyup(function (e) {
             if (e.keyCode == 13) { // Enter
                 preorder.redeem($.trim($("#preorder-input").val()));
+                $("#preorder-input").val("");
             }
         });
     }
