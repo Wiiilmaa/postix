@@ -325,6 +325,19 @@ var dialog = {
         // Initializations at page load time
         $('#btn-cancel').mousedown(dialog.reset);
         $("#btn-continue").mousedown(dialog._continue);
+
+        $(document).keyup(function(e) {
+            if (!$("body").hasClass('has-modal'))
+                return;
+            
+            if (e.keyCode === 27) {
+                // Close dialog when ESC was pressed
+                dialog.reset();
+            } else if (e.keyCode === 13 && $("#btn-continue").is(':visible')) {
+                // Confirm dialog with ENTER
+                dialog._continue();
+            }
+        });
     }
 };
 
@@ -334,6 +347,7 @@ $(function () {
     dialog.init();
     transaction.init();
     preorder.init();
+
     /*
     var preSaleTickets = new Bloodhound({
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
