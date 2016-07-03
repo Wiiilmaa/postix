@@ -108,7 +108,7 @@ var preorder = {
         $("#preorder-input").keyup(function (e) {
             if (e.keyCode == 13) { // Enter
                 preorder.redeem($.trim($("#preorder-input").val()));
-                $("#preorder-input").val("");
+                $("#preorder-input").val("").blur();
             }
         });
     }
@@ -327,16 +327,27 @@ var dialog = {
         $('#btn-cancel').mousedown(dialog.reset);
         $("#btn-continue").mousedown(dialog._continue);
 
-        $(document).keyup(function(e) {
+        $(document).keypress(function(e) {
             if (!$("body").hasClass('has-modal'))
-                return;
+                return true;
             
             if (e.keyCode === 27) {
                 // Close dialog when ESC was pressed
                 dialog.reset();
-            } else if (e.keyCode === 13 && $("#btn-continue").is(':visible')) {
-                // Confirm dialog with ENTER
-                dialog._continue();
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            } else if (e.keyCode === 13) {
+                if ($("#btn-continue").is(':visible')) {
+                    // Confirm dialog with ENTER
+                    dialog._continue();
+                } else {
+                    // Confirming not available, closing then
+                    dialog.reset();
+                }
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
             }
         });
     }
