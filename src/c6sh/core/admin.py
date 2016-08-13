@@ -6,7 +6,7 @@ from .models import (
     Cashdesk, CashdeskSession, Item, ItemMovement, ListConstraint,
     ListConstraintEntry, ListConstraintProduct, Preorder, PreorderPosition,
     Product, ProductItem, Quota, TimeConstraint, User, WarningConstraint,
-    WarningConstraintProduct,
+    WarningConstraintProduct, Transaction, TransactionPosition
 )
 
 
@@ -122,6 +122,38 @@ class WarningConstriantAdmin(admin.ModelAdmin):
     list_display = ('name',)
     exclude = ('products',)
     inlines = (WarningConstraintProductInline,)
+
+
+class TransactionPositionInline(admin.TabularInline):
+    model = TransactionPosition
+    fields = ('type', 'value', 'tax_rate', 'tax_value',
+              'product', 'reverses', 'listentry', 'preorder_position',
+              'authorized_by')
+
+    def get_readonly_fields(self, request, obj=None):
+        return TransactionPositionInline.fields
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'datetime', 'session')
+    fields = ('id', 'datetime', 'session', 'cash_given')
+    inlines = (TransactionPositionInline,)
+
+    def get_readonly_fields(self, request, obj=None):
+        return TransactionAdmin.fields
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 admin.site.unregister(Group)
