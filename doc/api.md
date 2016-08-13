@@ -74,6 +74,9 @@ The first-level ``success`` attribute tells you whether the transaction was succ
 not. If this is ``false``, nothing has been written to the database. The HTTP status code will 
 be 201 if ``success`` is ``true`` and 400 otherwise.
 
+If the transaction was successful, there will be an ``id`` attribute on the top level that contains
+the transaction ID.
+
 The ``positions`` list contains the result for the single positions in the same order you specified them. 
 If a position was unsuccessful you will be given a human-readable reason, and - if the issue can be resolved - a
 type. Currently, the following types can be returned:

@@ -143,19 +143,23 @@ class TransactionViewSet(ReadOnlyModelViewSet):
         }
 
         if success:
+            response['id'] = trans.pk
             return response
         else:
             # Break out of atomic transaction so everything gets rolled back!
             raise ProcessException(response)
 
     @detail_route(methods=["POST"])
-    def reverse(self, pk=None):
+    def reverse(self, *args, **kwargs):
         session = self.request.user.get_current_session()
         if not session:  # noqa
             raise RuntimeError('This should never happen because the auth layer should handle this.')
         try:
-            reverse_transaction(pk, session)
-            return Response({'success': True}, status=status.HTTP_201_CREATED)
+            new_id = reverse_transaction(kwargs.get('pk'), session)
+            return Response({
+                'success': True,
+                'id': new_id
+            }, status=status.HTTP_201_CREATED)
         except FlowError as e:
             return Response({
                 'success': False,

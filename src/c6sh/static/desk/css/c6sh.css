@@ -196,11 +196,20 @@ body.has-modal #main-container {
 .panel-sale .panel-heading {
     line-height: 30px;
 }
+.info-completed {
+    display: none;
+    height: 0;
+}
 #post-sale {
     display: none;
 }
 .post-sale #post-sale {
     display: block;
+}
+.post-sale .info-completed {
+    display: block;
+    height: 52px;
+    transition: height 1s;
 }
 
 .post-sale .btn-delete {

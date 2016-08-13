@@ -120,10 +120,16 @@ var transaction = {
     */
 
     positions: [],  // Positions in the current cart
+    post_sale: false,  // true if we have just completed a sale
+    last_id: null,
 
     add_product: function (prod_id) {
         // Adds the product with the ID prod_id to the cart
         var product = productlist.products[prod_id];
+        
+        if (transaction.post_sale) {
+            transaction.clear();
+        }
         
         transaction.positions.push({
             'product': product.id,
@@ -160,7 +166,9 @@ var transaction = {
             }),
             success: function (data, status, jqXHR) {
                 // TODO: Render successful message
-                transaction.clear();
+                $('#lower-right').addClass('post-sale');
+                transaction.post_sale = true;
+                transaction.last_id = data.id;
             },
             headers: {
                 'Content-Type': 'application/json'
@@ -197,11 +205,44 @@ var transaction = {
         transaction._render();
     },
 
+    reverse_last: function () {
+        if (!transaction.last_id) {
+            dialog.show_error("Last transaction is not known.")
+        }
+
+        $.ajax({
+            url: '/api/transactions/' + transaction.last_id + '/reverse/',
+            method: 'POST',
+            dataType: 'json',
+            data: '',
+            success: function (data, status, jqXHR) {
+                // TODO: Render successful message
+                transaction.clear();
+                dialog.show_success('The last transaction has been reversed.');
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            error: function (jqXHR, status, error) {
+                if (jqXHR.status == 400) {
+                    var data = JSON.parse(jqXHR.responseText);
+                    dialog.show_error(data.message);
+                } else {
+                    console.log(jqXHR.statusText);
+                    dialog.show_error(jqXHR.statusText);
+                }
+            }
+        });
+    },
+
     clear: function () {
         // Remove all positions from the cart
         transaction.positions = [];
         $("#cart").html("");
         transaction._render();
+        transaction.post_sale = false;
+        transaction.last_id = null;
+        $('#lower-right').removeClass('post-sale');
     },
 
     _render: function () {
@@ -220,6 +261,7 @@ var transaction = {
         });
         $("#btn-clear").mousedown(transaction.clear);
         $("#btn-checkout").mousedown(transaction.perform);
+        $("#btn-reverse").mousedown(transaction.reverse_last);
         $("#cart").html("").on("mousedown", ".cart-delete button", function () {
             var $row = $(this).parent().parent();
             transaction.remove($row.index());
@@ -263,13 +305,16 @@ var dialog = {
         $("#modal-text").text(message);
         $("#modal-input").show();
         $("#btn-continue").show();
+        $("#btn-cancel").show();
+        $("#btn-dismiss").hide();
         $("body").addClass("has-modal");
+        $("#modal .panel").removeClass("panel-success").addClass("panel-danger");
     },
 
     show_error: function (message, pos_id) {
         // Shows an error message, optionally related to the cart position pos_id.
         dialog._type = 'error';
-        
+
         if (pos_id >= 0) {
             var pos = transaction.positions[pos_id];
             var product = productlist.products[pos.product];
@@ -280,7 +325,25 @@ var dialog = {
         $("#modal-text").text(message);
         $("#modal-input").hide();
         $("#btn-continue").hide();
+        $("#btn-cancel").show();
+        $("#btn-dismiss").hide();
         $("body").addClass("has-modal");
+        $("#modal .panel").removeClass("panel-success").addClass("panel-danger");
+    },
+
+    show_success: function (message) {
+        // Shows a success message
+        dialog._type = 'success';
+        dialog._pos_id = null;
+        
+        $("#modal-title").text("Success");
+        $("#modal-text").text(message);
+        $("#modal-input").hide();
+        $("#btn-continue").hide();
+        $("#btn-cancel").hide();
+        $("#btn-dismiss").show();
+        $("body").addClass("has-modal");
+        $("#modal .panel").addClass("panel-success").removeClass("panel-danger");
     },
 
     show_confirmation: function (pos_id, message, field_name) {
@@ -300,7 +363,10 @@ var dialog = {
         $("#modal-text").text(message);
         $("#modal-input").hide();
         $("#btn-continue").show();
+        $("#btn-dismiss").hide();
+        $("#btn-cancel").show();
         $("body").addClass("has-modal");
+        $("#modal .panel").removeClass("panel-success").addClass("panel-danger");
     },
 
     _continue: function () {
@@ -314,7 +380,7 @@ var dialog = {
         if (dialog._pos_id === -1) {
             preorder.current_preorder[dialog._field_name] = val;
             preorder._perform();
-        } else {
+        } else if (dialog._pos_id !== null) {
             transaction.positions[dialog._pos_id][dialog._field_name] = val;
             transaction.perform();
         }
@@ -332,6 +398,7 @@ var dialog = {
     init: function () {
         // Initializations at page load time
         $('#btn-cancel').mousedown(dialog.reset);
+        $('#btn-dismiss').mousedown(dialog.reset);
         $("#btn-continue").mousedown(dialog._continue);
 
         $(document).keypress(function(e) {
