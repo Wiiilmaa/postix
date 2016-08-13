@@ -130,10 +130,10 @@ class CashdeskSession(models.Model):
         return None
 
     def get_new_report_path(self):
-        return default_storage.path(os.path.join(
+        return os.path.join(
             'reports',
             'sessionreport_{}-{}.pdf'.format(self.pk, now().strftime('%Y%m%d-%H%M')),
-        ))
+        )
 
 
 class ItemMovement(models.Model):

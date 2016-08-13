@@ -1,6 +1,9 @@
 import tempfile
+from io import BytesIO
 
 import qrcode
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from reportlab.lib import colors, utils
 from reportlab.lib.pagesizes import A4, portrait
 from reportlab.lib.styles import getSampleStyleSheet
@@ -56,9 +59,9 @@ def get_qr_image(session):
     return f
 
 
-def get_default_document(path):
+def get_default_document(buffer):
     doc = BaseDocTemplate(
-        path,
+        buffer,
         pagesize=PAGESIZE,
         leftMargin=25 * mm,
         rightMargin=20 * mm,
@@ -75,7 +78,8 @@ def get_default_document(path):
 def generate_report(session):
     # TODO: include event in file name once we have configuration
     # TODO: include event in footer, w/ "Chaos Computer Club Veranstaltungsgesellschaft mbH,"
-    doc = get_default_document(session.get_new_report_path())
+    buffer = BytesIO()
+    doc = get_default_document(buffer)
     style = get_paragraph_style()
 
     # Header: info text and qr code
@@ -168,4 +172,7 @@ def generate_report(session):
         signatures,
     ]
     doc.build(story)
-    return doc.filename
+
+    buffer.seek(0)
+    stored_name = default_storage.save(session.get_new_report_path(), ContentFile(buffer.read()))
+    return stored_name
