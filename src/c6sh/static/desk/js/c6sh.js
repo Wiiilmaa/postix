@@ -100,7 +100,36 @@ var preorder = {
                 $("#preorder-input").val("").blur();
             }
         });
-    }
+
+        $('#preorder-input').typeahead(null, {
+            name: 'preorder-tickets',
+            display: 'value',
+            minLength: 6,
+            source: preorder._typeahead_source
+        });
+    },
+
+    _typeahead_source: new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit: 4,
+        remote: {
+            url: '/api/preorderpositions/?search=%QUERY',
+            wildcard: '%QUERY',
+            transform: function (object) {
+                var results = object.results;
+                var secrets = [];
+                for (var preorder in results) {
+                    secrets.push(
+                        {
+                            value: results[preorder].secret,
+                            count: 1
+                        });
+                }
+                return secrets;
+            }
+      }
+    })
 };
 
 var transaction = {
@@ -444,12 +473,6 @@ $(function () {
       }
     });
 
-    $('#preorder-input').typeahead(null, {
-      name: 'preSaleTickets',
-      display: 'value',
-      minLength: 5,
-      source: preSaleTickets
-    });
     */
 });
 
