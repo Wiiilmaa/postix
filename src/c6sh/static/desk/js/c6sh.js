@@ -216,7 +216,6 @@ var transaction = {
             dataType: 'json',
             data: '',
             success: function (data, status, jqXHR) {
-                // TODO: Render successful message
                 transaction.clear();
                 dialog.show_success('The last transaction has been reversed.');
             },
