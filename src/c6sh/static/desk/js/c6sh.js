@@ -237,14 +237,21 @@ var dialog = {
     _field_name: null,
     _pos_id: null, // -1 if we are dealing with a preorder
     _type: null,
-    
-    show_list_input: function (pos_id, message, listid, field_name) {
+    _list_id: null,
+
+    show_list_input: function (pos_id, message, field_name) {
         // Shows a dialog that is related to cart position pos_id and asks
-        // the user to input an entry of the list listid into a field with name
-        // field_name and message message.
+        // the user to input a text into a field with name field_name and message message.
+        // If field_name is of the form list_\d+ it will be assumed that the latter part
+        // is the ID of a ListConstraint that can be used for autocompletion.
         dialog._pos_id = pos_id;
         dialog._field_name = field_name;
         dialog._type = 'input';
+        if (field_name.match(/list_\d+/)) {
+            dialog._list_id = parseInt(field_name.substring(5));
+        } else {
+            dialog._list_id = null;
+        }
         
         if (pos_id === -1) {
             $("#modal-title").text("Preorder");
@@ -305,10 +312,10 @@ var dialog = {
             val = $("#modal-input").val();
         }
         if (dialog._pos_id === -1) {
-            preorder.current_preorder[dialog._field_name] = true;
+            preorder.current_preorder[dialog._field_name] = val;
             preorder._perform();
         } else {
-            transaction.positions[dialog._pos_id][dialog._field_name] = true;
+            transaction.positions[dialog._pos_id][dialog._field_name] = val;
             transaction.perform();
         }
         dialog.reset();
