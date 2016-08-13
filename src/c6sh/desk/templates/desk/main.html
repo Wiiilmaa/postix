@@ -17,14 +17,10 @@
         <div id="product-view">
         </div>
         <div id="button-row">
-            <button class="btn btn-danger" id="btn-supply">
+            <a href="{% url "desk:logout" %}" class="btn btn-danger" id="btn-supply">
                 <span class="glyphicon glyphicon-log-out"></span>
-                End session
-            </button>
-            <button class="btn btn-default" id="btn-supply">
-                <span class="glyphicon glyphicon-pause"></span>
-                Take a break
-            </button>
+                Logout (end / break)
+            </a>
             <button class="btn btn-default" id="btn-supply">
                 <span class="glyphicon glyphicon-inbox"></span>
                 Open drawer

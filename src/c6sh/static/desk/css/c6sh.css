@@ -65,11 +65,14 @@ body.login, body.error {
     height: 70px;
     padding: 10px 0 10px 10px;
 }
-#button-row button {
+#button-row button, #button-row a.btn {
     flex: 1;
     margin-right: 10px;
 }
-#button-row button:last-child {
+#button-row a.btn {
+    line-height: 34px;
+}
+#button-row button:last-child, #button-row a.btn:last-child {
     margin-right: 0;
 }
 #right-side {
