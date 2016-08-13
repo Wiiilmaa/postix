@@ -54,53 +54,42 @@ var preorder = {
     The preorder object delals with everything directly related to redeeming a preorder ticket
      */
 
-    current_preorder: {}, // Information about the preorder that we currently try to redeem
-
-    _perform: function () {
-        // The actual redemption process
-
+    redeem: function (secret) {
         // TODO: Block interface while loading
         $.ajax({
-            url: '/api/transactions/',
-            method: 'POST',
+            url: '/api/preorderpositions/?secret=' + secret,
+            method: 'GET',
             dataType: 'json',
-            data: JSON.stringify({
-                positions: [preorder.current_preorder],
-            }),
             success: function (data, status, jqXHR) {
                 // TODO: Render successful message
+                if (data.count !== 1) {
+                    if (data.count > 1) {
+                        dialog.show_error('Secret is not unique.');
+                        return;
+                    } else {
+                        dialog.show_error('Unknown secret.');
+                        return;
+                    }
+                }
+                var res = data.results[0];
+                if (res.is_redeemed) {
+                    dialog.show_error('Ticket already redeemed.');
+                    return;
+                } else if (!res.is_paid) {
+                    dialog.show_error('Ticket has not been paid for.');
+                    return;
+                }
+
+                transaction.add_preorder(secret, res.product_name + ' - ' + secret.substring(0, 5) + '...')
             },
             headers: {
                 'Content-Type': 'application/json'
             },
             error: function (jqXHR, status, error) {
-                if (jqXHR.status == 400) {
-                    var data = JSON.parse(jqXHR.responseText);
-                    var i = 0, pos = data.positions[0];
-                    if (!pos.success) {
-                        if (pos.type == 'confirmation') {
-                            dialog.show_confirmation(-1, pos.message, pos.missing_field);
-                        } else if (pos.type == 'input') {
-                            dialog.show_list_input(-1, pos.message, pos.missing_field);
-                        } else {
-                            dialog.show_error(pos.message);
-                        }
-                    }
-                } else {
-                    console.log(jqXHR.statusText);
-                    dialog.show_error(jqXHR.statusText);
-                }
+                console.log(jqXHR.statusText);
+                dialog.show_error(jqXHR.statusText);
             }
         });
-    },
-
-    redeem: function (secret) {
-        // Start redeeming a preorder with a given secret
-        preorder.current_preorder = {
-            'secret': secret,
-            'type': 'redeem'
-        };
-        preorder._perform();
     },
 
     init: function () {
@@ -123,24 +112,37 @@ var transaction = {
     post_sale: false,  // true if we have just completed a sale
     last_id: null,
 
+    add_preorder: function (secret, product_name) {
+        transaction._add_position({
+            'secret': secret,
+            'price': '0.00',
+            'type': 'redeem'
+        }, product_name, '0.00')
+    },
+
     add_product: function (prod_id) {
         // Adds the product with the ID prod_id to the cart
         var product = productlist.products[prod_id];
-        
-        if (transaction.post_sale) {
-            transaction.clear();
-        }
-        
-        transaction.positions.push({
+
+        transaction._add_position({
             'product': product.id,
             'price': product.price,
             'type': 'sell'
-        });
-        
+        }, product.name, product.price)
+    },
+
+    _add_position: function (obj, name, price) {
+        if (transaction.post_sale) {
+            transaction.clear();
+        }
+
+        obj._title = name;
+        transaction.positions.push(obj);
+
         $("<div>").addClass("cart-line").append(
-            $("<span>").addClass("cart-product").text(product.name)
+            $("<span>").addClass("cart-product").text(name)
         ).append(
-            $("<span>").addClass("cart-price").text(product.price)
+            $("<span>").addClass("cart-price").text(price)
         ).append(
             $("<span>").addClass("cart-delete").html(
                 "<button class='btn-delete btn btn-sm btn-danger'>"
@@ -148,7 +150,7 @@ var transaction = {
                 + "</button>"
             )
         ).appendTo($("#cart"));
-        
+
         transaction._render();
     },
 
@@ -276,7 +278,7 @@ var dialog = {
 
     // Temporary information for the dialog currently shown
     _field_name: null,
-    _pos_id: null, // -1 if we are dealing with a preorder
+    _pos_id: null,
     _type: null,
     _list_id: null,
 
@@ -294,13 +296,8 @@ var dialog = {
             dialog._list_id = null;
         }
         
-        if (pos_id === -1) {
-            $("#modal-title").text("Preorder");
-        } else {
-            var pos = transaction.positions[pos_id];
-            var product = productlist.products[pos.product];
-            $("#modal-title").text(product.name);
-        }
+        var pos = transaction.positions[pos_id];
+        $("#modal-title").text(pos._title);
         $("#modal-text").text(message);
         $("#modal-input").show();
         $("#btn-continue").show();
@@ -316,8 +313,7 @@ var dialog = {
 
         if (pos_id >= 0) {
             var pos = transaction.positions[pos_id];
-            var product = productlist.products[pos.product];
-            $("#modal-title").text(product.name);
+            $("#modal-title").text(pos._title);
         } else {
             $("#modal-title").text("Error");
         }
@@ -352,13 +348,8 @@ var dialog = {
         dialog._type = 'confirmation';
         dialog._pos_id = pos_id;
         dialog._field_name = field_name;
-        if (pos_id === -1) {
-            $("#modal-title").text("Preorder");
-        } else {
-            var pos = transaction.positions[pos_id];
-            var product = productlist.products[pos.product];
-            $("#modal-title").text(product.name);
-        }
+        var pos = transaction.positions[pos_id];
+        $("#modal-title").text(pos._title);
         $("#modal-text").text(message);
         $("#modal-input").hide();
         $("#btn-continue").show();
@@ -376,10 +367,7 @@ var dialog = {
         } else if (dialog._type === 'input') {
             val = $("#modal-input").val();
         }
-        if (dialog._pos_id === -1) {
-            preorder.current_preorder[dialog._field_name] = val;
-            preorder._perform();
-        } else if (dialog._pos_id !== null) {
+        if (dialog._pos_id !== null) {
             transaction.positions[dialog._pos_id][dialog._field_name] = val;
             transaction.perform();
         }

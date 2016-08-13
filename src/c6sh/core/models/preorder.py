@@ -17,3 +17,17 @@ class PreorderPosition(models.Model):
 
     def __str__(self):
         return "{}-{}".format(self.preorder.order_code, self.secret[:10])
+
+    @property
+    def is_redeemed(self):
+        from ..utils.checks import is_redeemed
+
+        return is_redeemed(self)
+
+    @property
+    def is_paid(self):
+        return self.preorder.is_paid
+
+    @property
+    def product_name(self):
+        return self.product.name

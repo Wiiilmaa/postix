@@ -146,7 +146,9 @@ Sample result object (embedded in pagination as described above):
 
 This list view *requires* that you specify the query parameter ``secret``
 to search for a specific positions. If you do not specify this parameter,
-an empty result will be returned.
+an empty result will be returned. If you specify the query parameter
+``search`` with at least 6 characters, you will receive all positions with
+a secret starting with that value (this can be used for autocompletion).
 
 Sample result object (embedded in pagination as described above):
 

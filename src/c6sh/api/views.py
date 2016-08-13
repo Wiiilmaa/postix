@@ -46,13 +46,15 @@ class PreorderPositionViewSet(ReadOnlyModelViewSet):
     """
     queryset = PreorderPosition.objects.all()
     serializer_class = PreorderPositionSerializer
-    filter_fields = ('secret',)
 
     def get_queryset(self):
         queryset = PreorderPosition.objects.all()
-        search_param = self.request.query_params.get('search', None)
-        if search_param is not None and len(search_param) >= 6:
-            queryset = queryset.filter(secret__startswith=search_param)
+        exact_param = self.request.GET.get('secret', None)
+        search_param = self.request.GET.get('search', None)
+        if exact_param is not None:
+            queryset = queryset.filter(secret__iexact=exact_param)
+        elif search_param is not None and len(search_param) >= 6:
+            queryset = queryset.filter(secret__istartswith=search_param)
         else:
             queryset = queryset.none()
         return queryset
