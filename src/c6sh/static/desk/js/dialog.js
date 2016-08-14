@@ -26,7 +26,7 @@ var dialog = {
         var pos = transaction.positions[pos_id];
         $("#modal-title").text(pos._title);
         $("#modal-text").text(message);
-        $("#modal-input").show();
+        $("#modal-input-wrapper").show();
         $("#btn-continue").show();
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
@@ -45,7 +45,7 @@ var dialog = {
             $("#modal-title").text("Error");
         }
         $("#modal-text").text(message);
-        $("#modal-input").hide();
+        $("#modal-input-wrapper").hide();
         $("#btn-continue").hide();
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
@@ -60,7 +60,7 @@ var dialog = {
 
         $("#modal-title").text("Success");
         $("#modal-text").text(message);
-        $("#modal-input").hide();
+        $("#modal-input-wrapper").hide();
         $("#btn-continue").hide();
         $("#btn-cancel").hide();
         $("#btn-dismiss").show();
@@ -78,7 +78,7 @@ var dialog = {
         var pos = transaction.positions[pos_id];
         $("#modal-title").text(pos._title);
         $("#modal-text").text(message);
-        $("#modal-input").hide();
+        $("#modal-input-wrapper").hide();
         $("#btn-continue").show();
         $("#btn-dismiss").hide();
         $("#btn-cancel").show();
@@ -138,5 +138,46 @@ var dialog = {
                 return false;
             }
         });
-    }
+
+        $('#modal-input').typeahead(null, {
+            name: 'dialog-input',
+            display: function (obj) {
+                return obj.identifier;
+            },
+            templates: {
+                suggestion: function (obj) {
+                    return '<div>' + obj.identifier + ' (' + obj.name + ')</div>';
+                }
+            },
+            minLength: 3,
+            source: dialog._typeahead_source
+        });
+    },
+
+    _typeahead_source: new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit: 4,
+        remote: {
+            url: '/api/listconstraintentries/?listid=%LISTID&search=%QUERY',
+            prepare: function (query, settings) {
+                settings.url = settings.url.replace('%QUERY', encodeURIComponent(query));
+                settings.url = settings.url.replace('%LISTID', encodeURIComponent(dialog._list_id));
+                return settings;
+            },
+            transform: function (object) {
+                if (object.count < 1) {
+                    return [];
+                }
+                var results = object.results;
+                var suggs = [];
+                var reslen = results.length;
+                for (var i = 0; i < reslen; i++) {
+                    suggs.push(results[i]);
+                }
+                return suggs;
+            }
+        }
+    })
+
 };

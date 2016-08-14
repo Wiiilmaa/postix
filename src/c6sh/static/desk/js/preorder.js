@@ -68,12 +68,12 @@ var preorder = {
             transform: function (object) {
                 var results = object.results;
                 var secrets = [];
-                for (var preorder in results) {
-                    secrets.push(
-                        {
-                            value: results[preorder].secret,
-                            count: 1
-                        });
+                var reslen = results.length;
+                for (var i = 0; i < reslen; i++) {
+                    secrets.push({
+                        value: results[i].secret,
+                        count: 1
+                    });
                 }
                 return secrets;
             }
