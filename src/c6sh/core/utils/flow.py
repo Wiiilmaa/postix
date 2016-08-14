@@ -73,7 +73,7 @@ def redeem_preorder_ticket(**kwargs):
                                 type='input', missing_field='list_{}'.format(c.constraint.pk))
         else:
             try:
-                entry = c.constraint.entries.get(id=entryid)
+                entry = c.constraint.entries.get(identifier=entryid)
                 if is_redeemed(entry):
                     raise FlowError('This list entry already has been used.'.format(c.constraint.name),
                                     type='input', missing_field='list_{}'.format(c.constraint.pk))
@@ -145,7 +145,7 @@ def sell_ticket(**kwargs):
                                 type='input', missing_field='list_{}'.format(c.constraint.pk))
         else:
             try:
-                entry = c.constraint.entries.get(id=entryid)
+                entry = c.constraint.entries.get(identifier=entryid)
                 if is_redeemed(entry):
                     raise FlowError('This list entry already has been used.'.format(c.constraint.name),
                                     type='input', missing_field='list_{}'.format(c.constraint.pk))
