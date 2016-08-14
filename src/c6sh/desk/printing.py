@@ -25,7 +25,7 @@ class CashdeskPrinter:
     def cut_tape(self):
         self.send(bytearray([0x1D, 0x56, 66, 100]))
 
-    def print_recipe(self, transaction, do_open_drawer=True):
+    def print_receipt(self, transaction, do_open_drawer=True):
         if do_open_drawer:
             self.open_drawer()
 

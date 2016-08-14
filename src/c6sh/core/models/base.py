@@ -71,6 +71,7 @@ class TransactionPosition(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=254)
+    receipt_name = models.CharField(max_length=28)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     tax_rate = models.DecimalField(max_digits=4, decimal_places=2,
                                    verbose_name='Tax rate',
@@ -78,6 +79,11 @@ class Product(models.Model):
     is_visible = models.BooleanField(default=True)
     requires_authorization = models.BooleanField(default=False)
     items = models.ManyToManyField('Item', through='ProductItem', blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.receipt_name:
+            self.receipt_name = self.name[:28]
+        super().save(*args, **kwargs)
 
     def is_available(self):
         from . import Quota, TimeConstraint
