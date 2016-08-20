@@ -10,10 +10,12 @@ from .constraints import (
     WarningConstraintProduct,
 )
 from .preorder import Preorder, PreorderPosition
+from .settings import EventSettings
 
 __all__ = [
     'Item', 'Product', 'ProductItem', 'Transaction', 'TransactionPosition',
     'TransactionPositionItem', 'Cashdesk', 'CashdeskSession', 'ItemMovement',
     'User', 'AbstractConstraint', 'ListConstraint', 'ListConstraintEntry',
     'Quota', 'TimeConstraint', 'Preorder', 'PreorderPosition', 'generate_key',
+    'EventSettings',
 ]

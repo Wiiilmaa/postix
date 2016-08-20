@@ -19,6 +19,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'crispy_forms',
     'rest_framework',
+    'solo',
     'c6sh.core',
     'c6sh.desk',
     'c6sh.api',

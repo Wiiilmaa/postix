@@ -1,12 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
+from solo.admin import SingletonModelAdmin
 
 from .models import (
-    Cashdesk, CashdeskSession, Item, ItemMovement, ListConstraint,
-    ListConstraintEntry, ListConstraintProduct, Preorder, PreorderPosition,
-    Product, ProductItem, Quota, TimeConstraint, User, WarningConstraint,
-    WarningConstraintProduct, Transaction, TransactionPosition
+    Cashdesk, CashdeskSession, EventSettings, Item, ItemMovement,
+    ListConstraint, ListConstraintEntry, ListConstraintProduct, Preorder,
+    PreorderPosition, Product, ProductItem, Quota, TimeConstraint, Transaction,
+    TransactionPosition, User, WarningConstraint, WarningConstraintProduct,
 )
 
 

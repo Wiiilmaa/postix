@@ -1,6 +1,6 @@
-from collections import defaultdict
 import subprocess
 import time
+from collections import defaultdict
 
 
 class CashdeskPrinter:

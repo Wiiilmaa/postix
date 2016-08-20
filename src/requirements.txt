@@ -3,6 +3,7 @@ Django==1.9.*
 djangorestframework==3.3.*
 django-crispy-forms==1.6.*
 django-filter==0.12.*
+django-solo==1.1.*
 markdown==2.6.*
 reportlab==3.3.*
 qrcode==5.3
