@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 product, created = Product.objects.get_or_create(
                    name=item['name'], 
                    price=item['price'],
-                   tax_rate=decimal.Decimal('19.00'),
+                   tax_rate=item.get('tax_rate'),
                 )
                 product_dict[item['id']] = product
                 created_items += int(created)
