@@ -8,6 +8,7 @@ from django.db import models
 from django.utils.timezone import now
 
 from .base import Item, Product, TransactionPosition, TransactionPositionItem
+from ..utils.printing import CashdeskPrinter
 
 
 def generate_key():
@@ -25,6 +26,10 @@ class Cashdesk(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def printer(self):
+        return CashdeskPrinter(self.printer_queue_name)
 
     def get_active_sessions(self):
         return [session for session in self.sessions.all() if session.is_active()]

@@ -11,6 +11,9 @@ class Transaction(models.Model):
     session = models.ForeignKey('CashdeskSession', related_name='transactions',
                                 on_delete=models.PROTECT)
 
+    def print_receipt(self, do_open_drawer=True):
+        self.session.cashdesk.printer.print_receipt(self, do_open_drawer)
+
 
 class TransactionPosition(models.Model):
     TYPES = (

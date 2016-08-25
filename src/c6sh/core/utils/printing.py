@@ -1,6 +1,9 @@
 import subprocess
 import time
 from collections import defaultdict
+from string import ascii_uppercase
+
+import image_tools
 
 
 class CashdeskPrinter:
@@ -9,11 +12,11 @@ class CashdeskPrinter:
 
     @staticmethod
     def _format_number(number):
-        formatted_value = '{:.2f}'.format(float(f))
+        formatted_value = '{:.2f}'.format(float(number))
         gap = ' ' * (7 - len(formatted_value))
         return gap + formatted_value
 
-    def send(data):
+    def send(self, data):
         lpr = subprocess.Popen(['/usr/bin/lpr', '-l', '-P', self.printer], stdin=subprocess.PIPE)
         lpr.stdin.write(data)
         lpr.stdin.close()
@@ -32,6 +35,7 @@ class CashdeskPrinter:
         total_sum = 0
         position_lines = list()
         tax_sums = defaultdict(int)
+        tax_symbols = dict()
 
         for position in transaction.positions.all():
             if position.value == 0:
@@ -53,13 +57,13 @@ class CashdeskPrinter:
             return
 
         receipt = str(bytearray([0x1B, 0x61, 1]))
-        # receipt += settings.EVENT_RECEIPT_ADDRESS
-        # receipt += settings.EVENT_RECEIPT_SEPARATOR
-        # receipt += settings.EVENT_RECEIPT_POSITION_LIST_HEADER
+        receipt += settings.EVENT_RECEIPT_ADDRESS
+        receipt += settings.EVENT_RECEIPT_SEPARATOR
+        receipt += settings.EVENT_RECEIPT_POSITION_LIST_HEADER
 
         receipt += '\r\n'.join(position_lines)
-        # receipt += settings.EVENT_RECEIPT_SEPARATOR
-        # receipt += settings.EVENT_RECEIPT_TOTAL_TAX_FORMAT.format(self._format_number(total_taxes))
+        receipt += settings.EVENT_RECEIPT_SEPARATOR
+        receipt += settings.EVENT_RECEIPT_TOTAL_TAX_FORMAT.format(self._format_number(total_taxes))
 
         for tax in sorted(list(tax_symbols))[::-1]:
             receipt += settings.EVENT_RECEIPT_TAX_FORMAT.format(
@@ -69,13 +73,11 @@ class CashdeskPrinter:
             )
 
         receipt += settings.EVENT_RECEIPT_TOTAL_FORMAT.format(self._format_number(total_sum))
-        # TODO: zeilen für Rechnungsempfänger: ______________________________
-
         receipt += settings.EVENT_RECEIPT_FOOTER
         receipt += settings.EVENT_RECEIPT_TIMESTAMP_FORMAT.format(
             timestamp=transaction.timestamp.strftime("%d.%m.%Y %H:%M"),
             cashdesk_identifier=transaction.session.cashdesk.name,
-                )
+        )
         receipt += settings.EVENT_RECEIPT_SERIAL_FORMAT.format(transaction.pk)
         receipt += '\r\n\r\n'
 

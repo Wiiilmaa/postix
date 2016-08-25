@@ -145,6 +145,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
         }
 
         if success:
+            trans.print_receipt(open_drawer=True)
             response['id'] = trans.pk
             return response
         else:
