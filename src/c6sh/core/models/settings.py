@@ -21,6 +21,11 @@ class EventSettings(SingletonModel):
         default='Thank you!',
         help_text='Use this to display additional disclaimers/data not in your address, such as VAT IDs.',
     )
+    report_footer = models.CharField(
+        max_length=500,
+        default='CCCV Veransstaltungsgesellschaft mbH',
+        help_text='This will show up on backoffice session reports.'
+    )
 
     class Meta:
         verbose_name = 'Event Settings'
