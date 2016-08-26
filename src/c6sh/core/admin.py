@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
@@ -9,6 +10,22 @@ from .models import (
     PreorderPosition, Product, ProductItem, Quota, TimeConstraint, Transaction,
     TransactionPosition, User, WarningConstraint, WarningConstraintProduct,
 )
+
+
+class EventSettingsAdminForm(forms.ModelForm):
+    class Meta:
+        model = EventSettings
+        exclude=[]
+        widgets = {
+            'invoice_address': forms.widgets.Textarea,
+            'receipt_address': forms.widgets.Textarea,
+            'receipt_footer': forms.widgets.Textarea,
+        }
+
+
+@admin.register(EventSettings)
+class EventSettingsAdmin(SingletonModelAdmin):
+    form=EventSettingsAdminForm
 
 
 @admin.register(User)
