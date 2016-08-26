@@ -13,6 +13,9 @@ from reportlab.platypus import (
     TableStyle,
 )
 
+from c6sh.core.models import EventSettings
+
+
 FONTSIZE = 11
 PAGESIZE = portrait(A4)
 CUR = '{:.2f} €'
@@ -60,6 +63,14 @@ def get_qr_image(session):
 
 
 def get_default_document(buffer):
+    def on_page(canvas, doc):
+        footer = EventSettings.objects.get().report_footer
+        canvas.saveState()
+        canvas.setFontSize(8)
+        for i, line in enumerate(footer.split('\n')[::-1]):
+            canvas.drawCentredString(PAGESIZE[0] / 2, 25 + (3.5 * i) * mm, line.strip())
+        canvas.restoreState()
+
     doc = BaseDocTemplate(
         buffer,
         pagesize=PAGESIZE,
@@ -70,20 +81,19 @@ def get_default_document(buffer):
     )
     frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height,
                   leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0, id='normal')
-    doc_template = PageTemplate(id='all', pagesize=PAGESIZE, frames=[frame])
+    doc_template = PageTemplate(id='all', pagesize=PAGESIZE, frames=[frame], onPage=on_page)
     doc.addPageTemplates([doc_template])
     return doc
 
 
 def generate_report(session):
-    # TODO: include event in file name once we have configuration
-    # TODO: include event in footer, w/ "Chaos Computer Club Veranstaltungsgesellschaft mbH,"
     buffer = BytesIO()
     doc = get_default_document(buffer)
     style = get_paragraph_style()
 
     # Header: info text and qr code
-    title = Paragraph('Kassenbericht #{}'.format(session.pk), style['Heading1'])
+    title_str = '[{}] Kassenbericht #{}'.format(EventSettings.objects.get().short_name, session.pk)
+    title = Paragraph(title_str, style['Heading1'])
     text = """{session.user.firstname} {session.user.lastname} an {session.cashdesk}<br/>{date} {start} bis {end}""".format(
         session=session,
         date=session.start.date(),
