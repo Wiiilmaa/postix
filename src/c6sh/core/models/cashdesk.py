@@ -8,6 +8,7 @@ from django.db import models
 from django.utils.timezone import now
 
 from .base import Item, Product, TransactionPosition, TransactionPositionItem
+from .settings import EventSettings
 from ..utils.printing import CashdeskPrinter
 
 
@@ -137,7 +138,11 @@ class CashdeskSession(models.Model):
     def get_new_report_path(self):
         return os.path.join(
             'reports',
-            'sessionreport_{}-{}.pdf'.format(self.pk, now().strftime('%Y%m%d-%H%M')),
+            '{}_sessionreport_{}-{}.pdf'.format(
+                EventSettings.objects.get().short_name,
+                self.pk,
+                now().strftime('%Y%m%d-%H%M')
+            ),
         )
 
 

@@ -3,7 +3,13 @@ import time
 from collections import defaultdict
 from string import ascii_uppercase
 
-import image_tools
+from c6sh.core.models.settings import EventSettings
+
+
+SEPARATOR = " -----------------------------------------\r\n"
+POSITION_LIST_HEADER = """ Ticket                                EUR
+ -----------------------------------------
+"""
 
 
 class CashdeskPrinter:
@@ -29,6 +35,7 @@ class CashdeskPrinter:
         self.send(bytearray([0x1D, 0x56, 66, 100]))
 
     def print_receipt(self, transaction, do_open_drawer=True):
+        settings = EventSettings.objects.get()
         if do_open_drawer:
             self.open_drawer()
 
@@ -57,33 +64,34 @@ class CashdeskPrinter:
             return
 
         receipt = str(bytearray([0x1B, 0x61, 1]))
-        receipt += settings.EVENT_RECEIPT_ADDRESS
-        receipt += settings.EVENT_RECEIPT_SEPARATOR
-        receipt += settings.EVENT_RECEIPT_POSITION_LIST_HEADER
+        receipt += settings.receipt_address
+        receipt += SEPARATOR
+        receipt += POSITION_LIST_HEADER
 
         receipt += '\r\n'.join(position_lines)
-        receipt += settings.EVENT_RECEIPT_SEPARATOR
-        receipt += settings.EVENT_RECEIPT_TOTAL_TAX_FORMAT.format(self._format_number(total_taxes))
+        receipt += SEPARATOR
+        receipt += "                      Nettosumme:  {}\r\n".format(self._format_number(total_sum - total_taxes))
 
         for tax in sorted(list(tax_symbols))[::-1]:
-            receipt += settings.EVENT_RECEIPT_TAX_FORMAT.format(
+            receipt += "                    MwSt {tax_rate}%% ({tax_identifier}):  {tax_amount}\r\n".format(
                 tax_rate=tax,
                 tax_identifier=tax_symbols[tax],
                 tax_amount=self._format_number(tax_sums[tax]),
             )
 
-        receipt += settings.EVENT_RECEIPT_TOTAL_FORMAT.format(self._format_number(total_sum))
-        receipt += settings.EVENT_RECEIPT_FOOTER
-        receipt += settings.EVENT_RECEIPT_TIMESTAMP_FORMAT.format(
-            timestamp=transaction.timestamp.strftime("%d.%m.%Y %H:%M"),
-            cashdesk_identifier=transaction.session.cashdesk.name,
+        receipt += "                           Summe:  {}\r\n".format(self._format_number(total_sum))
+        receipt += settings.receipt_footer + '\r\n'
+        receipt += '{} {}\r\n'.format(
+            transaction.timestamp.strftime("%d.%m.%Y %H:%M"),
+            transaction.session.cashdesk.name,
         )
-        receipt += settings.EVENT_RECEIPT_SERIAL_FORMAT.format(transaction.pk)
+        receipt += 'Belegnummer: {}\r\n'.format(transaction.pk)
         receipt += '\r\n\r\n'
 
         try:
-            self.send(image_tools.get_imagedata(settings.STATIC_ROOT + '/' + settings.EVENT_RECIPE_HEADER))
+            # self.send(image_tools.get_imagedata(settings.STATIC_ROOT + '/' + settings.EVENT_RECIPE_HEADER))
             self.send(receipt)
             self.cut_tape()
         except:
+            print(receipt)
             pass
