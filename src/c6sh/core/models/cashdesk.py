@@ -107,22 +107,22 @@ class CashdeskSession(models.Model):
     def get_cash_transaction_total(self):
         return TransactionPosition.objects\
             .filter(transaction__session=self)\
-            .filter(type__in=['sale', 'reverse'])\
+            .filter(type__in=['sell', 'reverse'])\
             .aggregate(total=models.Sum('value'))['total'] or 0
 
     def get_product_sales(self):
-        qs = TransactionPosition.objects.filter(transaction__session=self).order_by().values('product')
+        qs = TransactionPosition.objects.filter(transaction__session=self)
         result = []
 
-        for combination in qs.annotate(models.Count('product')):
-            p = Product.objects.get(pk=combination['product'])
-            product_query = qs.filter(product=p)
+        for p in qs.order_by().values('product').distinct():
+            product = Product.objects.get(pk=p['product'])
+            product_query = qs.filter(product=product)
             summary = {
-                'product': p,
-                'sales': product_query.filter(type='sale').count(),
+                'product': product,
+                'sales': product_query.filter(type='sell').count(),
                 'presales': product_query.filter(type='redeem').count(),
                 'reversals': product_query.filter(type='reverse').count(),
-                'value_single': qs.filter(product=p).values_list('value')[0][0],
+                'value_single': product_query.values_list('value')[0][0],
             }
             summary['value_total'] = (summary['sales'] - summary['reversals']) * summary['value_single']
             result.append(summary)
@@ -130,7 +130,10 @@ class CashdeskSession(models.Model):
 
     def get_report_path(self):
         base = default_storage.path('reports')
-        search = os.path.join(base, 'sessionreport_{}-*.pdf'.format(self.pk))
+        search = os.path.join(base, '{}_sessionreport_{}-*.pdf'.format(
+            EventSettings.objects.get().short_name,
+            self.pk)
+        )
         all_reports = sorted(glob.glob(search))
 
         if all_reports:
