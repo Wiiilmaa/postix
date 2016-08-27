@@ -1,5 +1,4 @@
 function openDrawer() {
-    console.log('calling in')
     $.ajax({
         url: '/api/cashdesk/open-drawer/',
         method: 'POST',
@@ -7,7 +6,17 @@ function openDrawer() {
 }
 
 function reprintReceipt() {
-
+    $.ajax({
+        url: '/api/cashdesk/reprint-receipt/',
+        method: 'POST',
+        dataType: 'json',
+        data: JSON.stringify({
+            transaction: transaction.last_id,
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
 }
 
 function init_actions() {
