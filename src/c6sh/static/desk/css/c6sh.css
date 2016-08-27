@@ -1,5 +1,11 @@
 body {
     font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
 }
 body.login, body.error {
     background: #eee;
@@ -108,8 +114,13 @@ body.login, body.error {
 
 #cart {
     flex: 1;
-    overflow: auto;
+    overflow: hidden;
+    position: relative;
     /* TODO: Some kind of touchscreen-friendly scrolling. Also, this currently still destroys the design */
+}
+#cart-inner {
+    position: absolute;
+    width: 100%;
 }
 #cart .cart-line {
     display: flex;
@@ -281,4 +292,20 @@ body.has-modal #main-container {
 @keyframes spin {
     from { transform: scale(1) rotate(0deg);}
     to { transform: scale(1) rotate(360deg);}
+}
+.upfade, .downfade {
+    width:100%;
+    position:absolute;
+    left:0;
+    height:0;
+    -webkit-pointer-events: none;
+    pointer-events: none;
+}
+.upfade {
+    top:0;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.9)), color-stop(100%,rgba(255,255,255,0)));
+}
+.downfade {
+    bottom:0;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(255,255,255,0.9)));
 }

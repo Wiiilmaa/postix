@@ -6,6 +6,9 @@ var transaction = {
     positions: [],  // Positions in the current cart
     post_sale: false,  // true if we have just completed a sale
     last_id: null,
+    _touch_scrolling: false,
+    _touch_scroll_start_mpos: 0,
+    _touch_scroll_start_cpos: 0,
 
     add_preorder: function (secret, product_name) {
         transaction._add_position({
@@ -44,9 +47,10 @@ var transaction = {
                 + "<span class='glyphicon glyphicon-remove'></span>"
                 + "</button>"
             )
-        ).appendTo($("#cart"));
+        ).appendTo($("#cart-inner"));
 
         transaction._render();
+        transaction._scroll(-9000000);
     },
 
     perform: function () {
@@ -64,6 +68,7 @@ var transaction = {
             success: function (data, status, jqXHR) {
                 loading.end();
                 $('#lower-right').addClass('post-sale');
+                transaction._scroll();
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
             },
@@ -138,10 +143,11 @@ var transaction = {
     clear: function () {
         // Remove all positions from the cart
         transaction.positions = [];
-        $("#cart").html("");
+        $("#cart-inner").html("");
         transaction._render();
         transaction.post_sale = false;
         transaction.last_id = null;
+        transaction._scroll();
         $('#lower-right').removeClass('post-sale');
     },
 
@@ -167,6 +173,42 @@ var transaction = {
         var change = given - total;
         $("#post-sale-change span").text(change.toFixed(2));
     },
+
+    _scroll: function (position) {
+        var cart = $("#cart"), 
+            inner = $("#cart-inner");
+
+        if (position === undefined) {
+            position = parseInt(inner.css('top'));
+        }
+
+        var minpos = Math.min(cart.height()-inner.height(), 0);
+        position = Math.max(minpos, Math.min(0, position));
+
+        cart.find('.upfade').css('height', Math.min(-position*2, 40));
+        cart.find('.downfade').css('height', Math.min((position-minpos)*2, 40));
+        inner.css('top', position);
+    },
+
+    _touch_scroll_start: function (e) {
+        if (e.button === 0) {
+            transaction._touch_scrolling = true;
+            transaction._touch_scroll_start_cpos = parseInt($(this).css('top'));
+            transaction._touch_scroll_start_mpos = e.clientY;
+        }
+    },
+    
+    _touch_scroll_move: function (e) {
+        if (transaction._touch_scrolling) {
+            transaction._scroll(transaction._touch_scroll_start_cpos+(e.clientY-transaction._touch_scroll_start_mpos));
+        }
+    },
+    
+    _touch_scroll_end: function (e) {
+        if (e.button === 0) {
+            transaction._touch_scrolling = false;
+        }
+    },
     
     init: function () {
         // Initializations at page load time
@@ -176,7 +218,7 @@ var transaction = {
         $("#btn-clear").mousedown(transaction.clear);
         $("#btn-checkout").mousedown(transaction.perform);
         $("#btn-reverse").mousedown(transaction.reverse_last);
-        $("#cart").html("").on("mousedown", ".cart-delete button", function () {
+        $("#cart-inner").html("").on("mousedown", ".cart-delete button", function () {
             var $row = $(this).parent().parent();
             transaction.remove($row.index());
         });
@@ -185,5 +227,12 @@ var transaction = {
             .keyup(transaction._calculate_change)
             .change(transaction._calculate_change);
         transaction._render();
+        
+        $('#cart').mousedown(transaction._touch_scroll_start);
+        $('body').mousemove(transaction._touch_scroll_move).mouseup(transaction._touch_scroll_end);
+        $(window).resize(function () {
+            transaction._scroll();
+        });
+        transaction._scroll();
     }
 };
