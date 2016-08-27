@@ -279,12 +279,14 @@ body.has-modal #main-container {
     display: none;
 }
 #post-sale-buttons {
+    height: 80px;
     display: flex;
-    height: 39px; /* Align top border with button-row */
 }
 #post-sale-buttons button {
     margin-top: 0;
     margin-right: 5px;
+    font-size: 18px;
+    font-weight: bold;
 }
 #post-sale-buttons button:last-child {
     margin-right: 0;
