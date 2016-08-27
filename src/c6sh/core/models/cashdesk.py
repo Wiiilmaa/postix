@@ -9,7 +9,7 @@ from django.utils.timezone import now
 
 from .base import Item, Product, TransactionPosition, TransactionPositionItem
 from .settings import EventSettings
-from ..utils.printing import CashdeskPrinter
+from ..utils.printing import CashdeskPrinter, DummyPrinter
 
 
 def generate_key():
@@ -30,7 +30,9 @@ class Cashdesk(models.Model):
 
     @property
     def printer(self):
-        return CashdeskPrinter(self.printer_queue_name)
+        if self.printer_queue_name:
+            return CashdeskPrinter(self.printer_queue_name)
+        return DummyPrinter()
 
     def get_active_sessions(self):
         return [session for session in self.sessions.all() if session.is_active()]

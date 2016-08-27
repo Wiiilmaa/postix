@@ -95,3 +95,17 @@ class CashdeskPrinter:
         except:
             print(receipt)
             pass
+
+
+class DummyPrinter:
+    def send(self, data):
+        pass
+
+    def open_drawer(self):
+        pass
+
+    def cut_tape(self):
+        pass
+
+    def print_receipt(self, transaction, do_open_drawer=True):
+        pass
