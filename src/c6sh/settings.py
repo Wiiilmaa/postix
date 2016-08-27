@@ -26,6 +26,14 @@ INSTALLED_APPS = (
     'c6sh.backoffice',
 )
 
+
+try:
+    import django_extensions
+    INSTALLED_APPS += ('django_extensions', )
+except ImportError:
+    pass
+
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
