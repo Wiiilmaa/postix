@@ -47,14 +47,8 @@ var preorder = {
         // Initializations at page load time
         $("#preorder-input").keyup(function (e) {
             if (e.keyCode == 13) { // Enter
-                e.preventDefault();
-                code = $.trim($("#preorder-input").val());
-                if (code != "") {
-                    preorder.redeem(code);
-                }
-                //$("#preorder-input").val("").blur();
-                $('#preorder-input').val('');
-                $('#preorder-input').focus();
+                preorder.redeem($.trim($("#preorder-input").val()));
+                $("#preorder-input").val("").blur();
             }
         });
 

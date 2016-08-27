@@ -11,9 +11,3 @@ var loading = {
         $("#loading").toggle(loading._current_count > 0);
     }
 };
-
-
-$(document).click(function(e) {
-    $('#preorder-input').val('');
-    $('#preorder-input').focus();
-})
