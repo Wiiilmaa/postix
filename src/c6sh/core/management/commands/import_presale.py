@@ -4,7 +4,7 @@ import os
 
 from django.core.management.base import BaseCommand
 
-from c6sh.core.models import Preorder, PreorderPosition, Product
+from c6sh.core.models import Cashdesk, Preorder, PreorderPosition, Product
 
 
 class Command(BaseCommand):
@@ -43,13 +43,12 @@ class Command(BaseCommand):
                 order_code=order['code'],
                 is_paid=(order['status'] == 'p'),
             )
-            for position in order['positions']:
-                if position['item'] in product_dict:
-                    PreorderPosition.objects.create(
-                        preorder=preorder,
-                        secret=position['secret'],
-                        product=product_dict[position['item']],
-                    )
+
+        for cashdesk_number in range(5):
+            Cashdesk.objects.get_or_create(
+                name='Cashdesk {}'.format(cashdesk_number + 1),
+                ip_address='127.0.0.{}'.format(cashdesk_number + 1),
+            )
 
         success_msg = 'Imported {} products, loaded {} products and imported {} presale orders.'
         self.stdout.write(self.style.SUCCESS(success_msg.format(created_items, loaded_items, len(orders))))
