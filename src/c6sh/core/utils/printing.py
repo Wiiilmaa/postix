@@ -6,7 +6,6 @@ from string import ascii_uppercase
 
 from c6sh.core.models.settings import EventSettings
 
-
 SEPARATOR = " -----------------------------------------\r\n"
 POSITION_LIST_HEADER = """ Ticket                                EUR
  -----------------------------------------

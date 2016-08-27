@@ -1,14 +1,14 @@
 from django.db import transaction
 from django.db.models import Q
 from rest_framework import status
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from ..core.models import (
-    ListConstraint, ListConstraintEntry, Preorder, PreorderPosition, Product,
-    Transaction,
+    Cashdesk, ListConstraint, ListConstraintEntry, Preorder, PreorderPosition,
+    Product, Transaction,
 )
 from ..core.utils import round_decimal
 from ..core.utils.flow import (
@@ -200,3 +200,33 @@ class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
         else:
             queryset = queryset.none()
         return queryset
+
+
+class CashdeskActionViewSet(ReadOnlyModelViewSet):
+    """ Hacky class to use restframework capabilities without being RESTful.
+    We don't expose a queryset, and use a random serializer.\n\n
+    Allowed actions: open-drawer and reprint-receipt
+    """
+    serializer_class = ListConstraintEntrySerializer
+    queryset = Cashdesk.objects.none()
+
+    @list_route(methods=["POST"], url_path='open-drawer')
+    def open_drawer(self, request):
+        session = request.user.get_current_session()
+        if not session:  # noqa
+            raise RuntimeError('This should never happen because the auth layer should handle this.')
+        session.cashdesk.printer.open_drawer()
+        return Response({'success': True})
+
+    @list_route(methods=["POST"], url_path='reprint-receipt')
+    def reprint_receipt(self, request):
+        session = request.user.get_current_session()
+        if not session:  # noqa
+            raise RuntimeError('This should never happen because the auth layer should handle this.')
+
+        try:
+            transaction = Transaction.objects.get(pk=request.data.get('transaction'))
+            session.cashdesk.printer.print_receipt(transaction, do_open_drawer=False)
+            return Response({'success': True})
+        except Transaction.DoesNotExist:
+            return Response({'success': False, 'error': 'Transaction not found.'}, status=status.HTTP_400_BAD_REQUEST)

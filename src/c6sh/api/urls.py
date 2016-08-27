@@ -10,6 +10,7 @@ router.register(r'transactions', views.TransactionViewSet)
 router.register(r'listconstraints', views.ListConstraintViewSet)
 router.register(r'listconstraintentries', views.ListConstraintEntryViewSet)
 router.register(r'products', views.ProductViewSet)
+router.register(r'cashdesk', views.CashdeskActionViewSet)
 
 urlpatterns = [
     url(r'', include(router.urls, namespace='api'))

@@ -15,7 +15,6 @@ from reportlab.platypus import (
 
 from c6sh.core.models import EventSettings
 
-
 FONTSIZE = 11
 PAGESIZE = portrait(A4)
 CUR = '{:.2f} €'

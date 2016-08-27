@@ -7,9 +7,9 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.timezone import now
 
+from ..utils.printing import CashdeskPrinter, DummyPrinter
 from .base import Item, Product, TransactionPosition, TransactionPositionItem
 from .settings import EventSettings
-from ..utils.printing import CashdeskPrinter, DummyPrinter
 
 
 def generate_key():
