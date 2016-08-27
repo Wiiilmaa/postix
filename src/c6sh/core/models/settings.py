@@ -23,7 +23,7 @@ class EventSettings(SingletonModel):
     )
     report_footer = models.CharField(
         max_length=500,
-        default='CCCV Veransstaltungsgesellschaft mbH',
+        default='CCC Veranstaltungsgesellschaft mbH',
         help_text='This will show up on backoffice session reports.'
     )
 
