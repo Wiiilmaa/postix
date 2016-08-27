@@ -4,13 +4,14 @@ var preorder = {
      */
 
     redeem: function (secret) {
-        // TODO: Block interface while loading
+        loading.start();
         $.ajax({
             url: '/api/preorderpositions/?secret=' + secret,
             method: 'GET',
             dataType: 'json',
             success: function (data, status, jqXHR) {
-                // TODO: Render successful message
+                loading.end();
+                
                 if (data.count !== 1) {
                     if (data.count > 1) {
                         dialog.show_error('Secret is not unique.');
@@ -37,6 +38,7 @@ var preorder = {
             error: function (jqXHR, status, error) {
                 console.log(jqXHR.statusText);
                 dialog.show_error(jqXHR.statusText);
+                loading.end();
             }
         });
     },

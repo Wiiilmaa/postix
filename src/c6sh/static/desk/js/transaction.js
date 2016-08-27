@@ -53,7 +53,7 @@ var transaction = {
         // This tries to the transaction. If additional input is required,the
         // dialog object is used to present a dialog and then calls this again,
 
-        // TODO: Block interface while loading
+        loading.start();
         $.ajax({
             url: '/api/transactions/',
             method: 'POST',
@@ -62,7 +62,7 @@ var transaction = {
                 positions: transaction.positions
             }),
             success: function (data, status, jqXHR) {
-                // TODO: Render successful message
+                loading.end();
                 $('#lower-right').addClass('post-sale');
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
@@ -71,6 +71,7 @@ var transaction = {
                 'Content-Type': 'application/json'
             },
             error: function (jqXHR, status, error) {
+                loading.end();
                 if (jqXHR.status == 400) {
                     var data = JSON.parse(jqXHR.responseText);
                     var i = 0, pos;
@@ -107,12 +108,14 @@ var transaction = {
             dialog.show_error("Last transaction is not known.")
         }
 
+        loading.start();
         $.ajax({
             url: '/api/transactions/' + transaction.last_id + '/reverse/',
             method: 'POST',
             dataType: 'json',
             data: '',
             success: function (data, status, jqXHR) {
+                loading.end();
                 transaction.clear();
                 dialog.show_success('The last transaction has been reversed.');
             },
@@ -120,6 +123,7 @@ var transaction = {
                 'Content-Type': 'application/json'
             },
             error: function (jqXHR, status, error) {
+                loading.end();
                 if (jqXHR.status == 400) {
                     var data = JSON.parse(jqXHR.responseText);
                     dialog.show_error(data.message);
