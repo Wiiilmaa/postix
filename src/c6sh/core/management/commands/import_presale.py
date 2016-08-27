@@ -32,17 +32,25 @@ class Command(BaseCommand):
                 product, created = Product.objects.get_or_create(
                    name=item['name'], 
                    price=item['price'],
-                   tax_rate=item.get('tax_rate'),
+                   tax_rate=item.get('tax_rate', decimal.Decimal('19.00')),
                 )
                 product_dict[item['id']] = product
                 created_items += int(created)
                 loaded_items += int(not created)
 
         for order in orders:
-            preorder = Preorder.objects.create(
+            preorder, created = Preorder.objects.get_or_create(
                 order_code=order['code'],
                 is_paid=(order['status'] == 'p'),
             )
+            if created:
+                for position in order['positions']:
+                    if position['item'] in product_dict:
+                        PreorderPosition.objects.create(
+                            preorder=preorder,
+                            secret=position['secret'],
+                            product=product_dict[position['item']],
+                        )
 
         for cashdesk_number in range(5):
             Cashdesk.objects.get_or_create(
