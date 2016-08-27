@@ -124,6 +124,8 @@ var dialog = {
                 dialog.reset();
                 e.preventDefault();
                 e.stopPropagation();
+                $('#preorder-input').val('');
+                $('#preorder-input').focus();
                 return false;
             } else if (e.keyCode === 13) {
                 if ($("#btn-continue").is(':visible')) {
@@ -135,6 +137,8 @@ var dialog = {
                 }
                 e.preventDefault();
                 e.stopPropagation();
+                $('#preorder-input').val('');
+                $('#preorder-input').focus();
                 return false;
             }
         });

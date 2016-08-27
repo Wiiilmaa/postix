@@ -71,6 +71,8 @@ var transaction = {
                 transaction._scroll();
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
+                $('#preorder-input').val('');
+                $('#preorder-input').focus();
             },
             headers: {
                 'Content-Type': 'application/json'
@@ -212,15 +214,18 @@ var transaction = {
     
     init: function () {
         // Initializations at page load time
-        $("#product-view").on("mousedown", ".product button", function () {
+        $("#product-view").on("mousedown", ".product button", function (e) {
             transaction.add_product($(this).attr("data-id"));
         });
         $("#btn-clear").mousedown(transaction.clear);
         $("#btn-checkout").mousedown(transaction.perform);
         $("#btn-reverse").mousedown(transaction.reverse_last);
-        $("#cart-inner").html("").on("mousedown", ".cart-delete button", function () {
+        $("#cart-inner").html("").on("mousedown", ".cart-delete button", function (e) {
+            e.preventDefault();
             var $row = $(this).parent().parent();
             transaction.remove($row.index());
+            $('#preorder-input').val('');
+            $('#preorder-input').focus();
         });
         $("#post-sale-given input")
             .keydown(transaction._calculate_change)
