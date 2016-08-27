@@ -148,8 +148,22 @@ var transaction = {
             total += parseFloat(transaction.positions[i].price);
         }
         $("#checkout-total span").text(total.toFixed(2));
+        $("#post-sale-total span").text(total.toFixed(2));
+        $("#post-sale-given input").val();
+        $("#post-sale-change span").text("0.00");
     },
-
+    
+    _calculate_change: function () {
+        var total = parseFloat($.trim($("#post-sale-total span").text())), given;
+        if (!$("#post-sale-given input").val()) {
+            given = 0;
+        } else {
+            given = parseFloat($.trim($("#post-sale-given input").val().replace(/,/, ".")));
+        }
+        var change = given - total;
+        $("#post-sale-change span").text(change.toFixed(2));
+    },
+    
     init: function () {
         // Initializations at page load time
         $("#product-view").on("mousedown", ".product button", function () {
@@ -162,6 +176,10 @@ var transaction = {
             var $row = $(this).parent().parent();
             transaction.remove($row.index());
         });
+        $("#post-sale-given input")
+            .keydown(transaction._calculate_change)
+            .keyup(transaction._calculate_change)
+            .change(transaction._calculate_change);
         transaction._render();
     }
 };

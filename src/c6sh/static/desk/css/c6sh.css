@@ -144,6 +144,16 @@ body.login, body.error {
     width: 150px;
     font-size: 35px;
 }
+#post-sale-given {
+    line-height: 34px;
+}
+.total input {
+    display: inline-block;
+    text-align: right;
+    width: 120px;
+    margin-left: 30px;
+    font-size: 20px;
+}
 #btn-checkout {
     height: 80px;
     font-size: 30px;
@@ -210,6 +220,19 @@ body.has-modal #main-container {
     display: block;
     height: 52px;
     transition: height 1s;
+}
+.post-sale .panel {
+    border-color: #d6e9c6 !important;
+}
+.post-sale .panel>.panel-heading {
+    background-image: -webkit-linear-gradient(top,#dff0d8 0,#d0e9c6 100%);
+    background-image: -o-linear-gradient(top,#dff0d8 0,#d0e9c6 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#dff0d8),to(#d0e9c6));
+    background-image: linear-gradient(to bottom,#dff0d8 0,#d0e9c6 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdff0d8', endColorstr='#ffd0e9c6', GradientType=0);
+    color: #3c763d;
+    background-color: #dff0d8 !important;
+    border-color: #d6e9c6 !important;
 }
 
 .post-sale .btn-delete {
