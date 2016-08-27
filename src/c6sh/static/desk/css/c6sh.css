@@ -76,7 +76,7 @@ body.login, body.error {
     width: 33%;
     height: 100%;
 }
-#button-row a button, #btn-supply {
+#button-row a button, #button-row button {
     height: 100%;
     width: 100%;
     padding: 0 5px;

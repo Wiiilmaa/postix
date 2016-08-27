@@ -17,11 +17,11 @@
         <div id="product-view">
         </div>
         <div id="button-row">
-            <a href="{% url "desk:logout" %}"><button class="btn btn-danger" id="btn-supply">
+            <a href="{% url "desk:logout" %}"><button class="btn btn-danger" id="btn-logout">
                 <span class="glyphicon glyphicon-log-out"></span>
                 Logout
             </button></a>
-            <button class="btn btn-default" id="btn-supply">
+            <button class="btn btn-default" id="btn-open-drawer">
                 <span class="glyphicon glyphicon-inbox"></span>
                 Open drawer
             </button>
@@ -138,6 +138,7 @@
 <script type="text/javascript" src="{% static "desk/js/preorder.js" %}"></script>
 <script type="text/javascript" src="{% static "desk/js/transaction.js" %}"></script>
 <script type="text/javascript" src="{% static "desk/js/dialog.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/actions.js" %}"></script>
 <script type="text/javascript" src="{% static "desk/js/c6sh.js" %}"></script>
 </body>
 </html>

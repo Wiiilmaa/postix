@@ -13,6 +13,7 @@ $(function () {
     dialog.init();
     transaction.init();
     preorder.init();
+    init_actions();
 });
 
 // Django CSRF token
