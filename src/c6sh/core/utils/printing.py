@@ -6,10 +6,8 @@ from string import ascii_uppercase
 
 from c6sh.core.models.settings import EventSettings
 
-SEPARATOR = " -----------------------------------------\r\n"
-POSITION_LIST_HEADER = """ Ticket                                EUR
- -----------------------------------------
-"""
+
+SEPARATOR = '\u2500' * 42 + '\r\n'
 
 
 class CashdeskPrinter:
@@ -24,6 +22,8 @@ class CashdeskPrinter:
 
     def send(self, data):
         lpr = subprocess.Popen(['/usr/bin/lpr', '-l', '-P', self.printer], stdin=subprocess.PIPE)
+        if isinstance(data, str):
+            data = data.encode('cp437')
         lpr.stdin.write(data)
         lpr.stdin.close()
         time.sleep(0.1)
@@ -60,24 +60,27 @@ class CashdeskPrinter:
         if total_sum == 0:
             return
 
-        receipt = str(bytearray([0x1B, 0x61, 1]))
-        receipt += settings.receipt_address + '\r\n'
+        receipt = bytearray([0x1B, 0x61, 1]).decode()  # center text
+        receipt += settings.receipt_address + '\r\n\r\n'
         receipt += SEPARATOR
-        receipt += POSITION_LIST_HEADER
+        receipt += " Ticket                                EUR\r\n"
+        receipt += SEPARATOR
 
         receipt += '\r\n'.join(position_lines)
         receipt += '\r\n'
         receipt += SEPARATOR
-        receipt += "                      Nettosumme:  {}\r\n".format(self._format_number(total_sum - total_taxes))
+        receipt += bytearray([0x1B, 0x61, 2]).decode()  # right-align text (0 would be left-align)
+        receipt += "Nettosumme:  {}\r\n".format(self._format_number(total_sum - total_taxes))
 
         for tax in sorted(list(tax_symbols))[::-1]:
-            receipt += "                 MwSt {tax_rate}% ({tax_identifier}):  {tax_amount}\r\n".format(
+            receipt += "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount}\r\n".format(
                 tax_rate=tax,
                 tax_identifier=tax_symbols[tax],
                 tax_amount=self._format_number(tax_sums[tax]),
             )
 
-        receipt += "                           Summe:  {}\r\n".format(self._format_number(total_sum))
+        receipt += "Summe:  {}\r\n\r\n\r\n".format(self._format_number(total_sum))
+        receipt += bytearray([0x1B, 0x61, 1]).decode()  # center text
         receipt += settings.receipt_footer + '\r\n'
         receipt += '{} {}\r\n'.format(
             transaction.datetime.strftime("%d.%m.%Y %H:%M"),
@@ -97,7 +100,7 @@ class CashdeskPrinter:
             self.send(receipt)
             self.cut_tape()
         except:
-            pass
+            logging.getLogger('django').exception('Printing at {} failed'.format(self.printer))
 
 
 class DummyPrinter:
