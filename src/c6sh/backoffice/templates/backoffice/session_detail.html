@@ -68,7 +68,7 @@
         <tr>
             <td> Bargeld </td>
             <td> {{ session.cash_before }} </td>
-            <td> {{ session.get_cash_transactions_total }} </td>
+            <td> {{ session.get_cash_transaction_total }} </td>
             <td class='end-column'> {{ session.cash_after }} </td>
         </tr>
         {% for item in session.get_current_items %}
