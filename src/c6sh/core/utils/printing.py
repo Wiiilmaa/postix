@@ -52,10 +52,10 @@ class CashdeskPrinter:
             if position.tax_rate not in tax_symbols:
                 tax_symbols[position.tax_rate] = ascii_uppercase[len(tax_sums)]
             pos_str = ' {product_name} ({tax_str}){gap} {price}'.format(
-                position.product.name,
-                tax_symbols[position.tax_rate],
-                ' ' * (29 - len(position.product.name)),
-                self._format_number(position.value),
+                product_name=position.product.name,
+                tax_str=tax_symbols[position.tax_rate],
+                gap=' ' * (29 - len(position.product.name)),
+                price=self._format_number(position.value),
             )
             position_lines.append(pos_str)
         total_taxes = sum(tax_sums.values())
