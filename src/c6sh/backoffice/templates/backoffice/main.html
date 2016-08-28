@@ -5,8 +5,8 @@
 
 {% block content %}
     <ul>
-        <li><a href="/backoffice/create_user">Neuen User anlegen</a></li>
-        <li><a href="/backoffice/session/new/">Kasse einzählen</a></li>
-        <li><a href="/backoffice/session/">Liste von Sessions/Reports</a></li>
+        <li><a href="{% url "backoffice:create-user" %}">Neuen User anlegen</a></li>
+        <li><a href="{% url "backoffice:new-session" %}">Kasse einzählen</a></li>
+        <li><a href="{% url "backoffice:session-list" %}">Liste von Sessions/Reports</a></li>
     </ul>
 {% endblock %}

@@ -12,10 +12,10 @@
 
 {% block headline %}
     {% if not session.end %}
-        <a href="/backoffice/session/{{ session.pk }}/resupply/">
+        <a href="{% url "backoffice:resupply-session" pk=session.pk %}">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </a>
-        <a href="/backoffice/session/{{ session.pk }}/end/">
+        <a href="{% url "backoffice:end-session" pk=session.pk %}">
             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
         </a>
         Laufende Session an {{ session.cashdesk }}
