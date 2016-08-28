@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
+from django.utils.http import is_safe_url
 from django.views.generic import TemplateView
 
 from .utils import backoffice_user
@@ -27,9 +29,18 @@ class LoginView(TemplateView):
             return redirect('backoffice:login')
 
         login(request, user)
+        url = request.GET.get('next')
+        if url and is_safe_url(url, request.get_host()):
+            return redirect(url)
+
         return redirect('backoffice:main')
 
 
 def logout_view(request):
     logout(request)
     return redirect('backoffice:login')
+
+
+def switch_user(request):
+    logout(request)
+    return redirect(reverse('backoffice:login') + '?next=' + request.GET.get('next', ''))

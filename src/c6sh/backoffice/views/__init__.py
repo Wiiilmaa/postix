@@ -1,4 +1,4 @@
-from .auth import LoginView, logout_view
+from .auth import LoginView, logout_view, switch_user
 from .create_user import create_user_view
 from .main import main_view
 from .session import (
@@ -19,6 +19,7 @@ __all__ = [
     'resupply_session',
     'ReportListView',
     'session_report',
+    'switch_user',
     'SessionDetailView',
     'SessionListView',
 ]
