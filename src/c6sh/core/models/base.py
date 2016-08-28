@@ -1,3 +1,6 @@
+from decimal import Decimal
+
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
@@ -26,7 +29,8 @@ class TransactionPosition(models.Model):
                                     on_delete=models.PROTECT)
     type = models.CharField(choices=TYPES, max_length=100)
     value = models.DecimalField(max_digits=10, decimal_places=2)
-    tax_rate = models.DecimalField(max_digits=4, decimal_places=2)
+    tax_rate = models.DecimalField(max_digits=4, decimal_places=2,
+                                   validators=[MinValueValidator(Decimal('0.00'))])
     tax_value = models.DecimalField(max_digits=10, decimal_places=2)
     product = models.ForeignKey('Product', related_name='positions',
                                 on_delete=models.PROTECT)
@@ -78,7 +82,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     tax_rate = models.DecimalField(max_digits=4, decimal_places=2,
                                    verbose_name='Tax rate',
-                                   help_text='in percent')
+                                   help_text='in percent',
+                                   validators=[MinValueValidator(Decimal('0.00'))])
     is_visible = models.BooleanField(default=True)
     requires_authorization = models.BooleanField(default=False)
     items = models.ManyToManyField('Item', through='ProductItem', blank=True)
