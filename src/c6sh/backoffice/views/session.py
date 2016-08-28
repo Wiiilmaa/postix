@@ -100,8 +100,15 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
 @backoffice_user_required
 def resupply_session(request, pk):
     """ TODO: show approximate current amounts of items? """
-    _, formset = get_form_and_formset()
     session = get_object_or_404(CashdeskSession, pk=pk)
+    initial_form = {
+        'cashdesk': session.cashdesk,
+        'user': session.user,
+        'backoffice_user': request.user,
+    }
+    form, formset = get_form_and_formset(initial_form=initial_form)
+    for field in form.fields:
+        form.fields[field].disabled = True
 
     if request.method == 'POST':
         _, formset = get_form_and_formset(request=request)
@@ -126,8 +133,7 @@ def resupply_session(request, pk):
     return render(request, 'backoffice/resupply_session.html', {
         'formset': formset,
         'helper': ItemMovementFormSetHelper(),
-        'cashdesk': session.cashdesk,
-        'cashier': session.user,
+        'form': form,
     })
     pass
 

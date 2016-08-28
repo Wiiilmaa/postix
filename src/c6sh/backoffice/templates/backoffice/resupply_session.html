@@ -14,24 +14,22 @@
     <div class="alert alert-warning">
         Wenn Produkte aus der Kasse entnommen werden, bitte negative Anzahl eintragen.
     </div>
+    <div class="disabled-inputs col-md-12">
+        {{ form.cashdesk|as_crispy_field }}
+        {{ form.user|as_crispy_field }}
+    </div>
+    <div class="col-md-9">
+        {{ form.backoffice_user|as_crispy_field }}
+    </div>
+    <div class="col-md-3">
+        <a class="btn btn-default btn-block" id="switch-user" href="{% url "backoffice:switch-user" %}?next={{ request.get_full_path }}">
+            Switch user
+        </a>
+    </div>
+
 
 	<form method="post" action="">
 		{% csrf_token %}
-        <div class="disabled-inputs">
-            <div id="div_id_data-cashdesk" class="form-group">
-                <label class="control-label"> Kasse </label>
-                <div class="controls ">
-                    <input class="textinput textInput form-control" placeholder="{{ cashdesk }}" disabled />
-                </div>
-            </div>
-            <div id="div_id_data-user" class="form-group">
-                <label class="control-label"> Engel </label>
-                <div class="controls ">
-                    <input class="textinput textInput form-control" placeholder="{{ cashier }}" disabled />
-                </div>
-            </div>
-        </div>
-
 		<table>
 			{% crispy formset helper %}
 		</table>
