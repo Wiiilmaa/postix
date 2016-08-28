@@ -19,6 +19,10 @@ Kassenbericht #{{session.pk}}
 
 {% block content %}
 <h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}</h4>
+<h4>
+    Hinterzimmer-Engel: {{ form.backoffice_user.value }}
+    <a class="btn btn-default btn-xs" id="switch-user" href="{% url "backoffice:switch-user" %}?next={{ request.get_full_path }}"> Switch user </a>
+</h4>
 {% language "de" %}
 <h4> Beginn: {{ session.start }} </h4>
 {% endlanguage %}

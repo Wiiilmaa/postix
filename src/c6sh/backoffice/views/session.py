@@ -185,7 +185,7 @@ def end_session(request, pk):
 
         form, formset = get_form_and_formset(
             extra=0,
-            initial_form={'cashdesk': session.cashdesk, 'user': session.user},
+            initial_form={'cashdesk': session.cashdesk, 'user': session.user, 'backoffice_user': request.user},
             initial_formset=[{'item': item} for item in items_in_session],
         )
 
