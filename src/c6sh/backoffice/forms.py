@@ -7,7 +7,7 @@ from ..core.models import Cashdesk, Item
 class SessionBaseForm(forms.Form):
     cashdesk = forms.ModelChoiceField(queryset=Cashdesk.objects.filter(is_active=True).order_by('name'), label='Kasse')
     user = forms.CharField(max_length=254, label='Engel')
-    backoffice_user = forms.CharField(max_length=254, label='Hinterzimmer-Engel', disabled=True)
+    backoffice_user = forms.CharField(max_length=254, label='Hinterzimmer-Engel', disabled=True, required=False)
     cash_before = forms.DecimalField(max_digits=10, decimal_places=2, label='Bargeld')
 
     def __init__(self, *args, **kwargs):
