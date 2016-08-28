@@ -15,7 +15,7 @@ from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 @backoffice_user_required
 def new_session(request):
-    form, formset = get_form_and_formset()
+    form, formset = get_form_and_formset(initial_form={'backoffice_user': request.user})
 
     if request.method == 'POST':
         form, formset = get_form_and_formset(request=request)
@@ -53,8 +53,11 @@ def new_session(request):
         param = request.GET.get('desk')
         if param:
             try:
-                desk = Cashdesk.objects.get(pk=int(param))
-                form, _ = get_form_and_formset(initial_form={'cashdesk': desk})
+                initial_form = {
+                    'cashdesk': Cashdesk.objects.get(pk=int(param)),
+                    'backoffice_user': request.user,
+                }
+                form, _ = get_form_and_formset(initial_form=initial_form)
             except:
                 pass
 
@@ -96,7 +99,7 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
 
 @backoffice_user_required
 def resupply_session(request, pk):
-    """ Nice To Have: show approximate current amounts of items? """
+    """ TODO: show approximate current amounts of items? """
     _, formset = get_form_and_formset()
     session = get_object_or_404(CashdeskSession, pk=pk)
 

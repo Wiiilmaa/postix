@@ -19,11 +19,25 @@
 	{% language "de" %}
 
 		{% csrf_token %}
-		{% crispy form %}
-		<table>
-			{% crispy formset helper %}
-		</table>
-		<div class="form-actions">
+        <div class="col-md-12">
+            {{ form.cashdesk|as_crispy_field }}
+            {{ form.user|as_crispy_field }}
+        </div>
+        <div class="col-md-9">
+            {{ form.backoffice_user|as_crispy_field }}
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-default btn-block" id="switch-user" href="{% url "backoffice:switch-user" %}?next={{ request.get_full_path }}">
+                Switch user
+            </a>
+        </div>
+        <div class="col-md-12">
+            {{ form.cash_before|as_crispy_field }}
+            <table>
+                {% crispy formset helper %}
+            </table>
+        </div>
+		<div class="form-actions col-md-12">
 			<input type="submit" name="submit" value="Session anlegen" class="btn btn-primary btn-block" id="submit-save">
 		</div>
 	{% endlanguage %}
