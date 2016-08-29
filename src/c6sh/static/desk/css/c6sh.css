@@ -149,7 +149,12 @@ body.login, body.error {
 }
 #cart .cart-line .cart-product {
     flex: 1;
-    line-height: 40px;
+    padding-top: 10px;
+    line-height: 20px;
+}
+#cart .cart-line .cart-product small {
+    line-height: 16px;
+    font-size: 14px;
 }
 #cart .cart-line .cart-price {
     width: 100px;

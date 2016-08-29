@@ -172,7 +172,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
 
 class ProductViewSet(ReadOnlyModelViewSet):
 
-    queryset = Product.objects.all()
+    queryset = Product.objects.prefetch_related('product_items', 'product_items__item').all()
     serializer_class = ProductSerializer
 
 

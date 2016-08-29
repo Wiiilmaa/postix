@@ -15,7 +15,7 @@ var transaction = {
             'secret': secret,
             'price': '0.00',
             'type': 'redeem'
-        }, product_name, '0.00')
+        }, product_name, '0.00', '')
     },
 
     add_product: function (prod_id) {
@@ -26,19 +26,24 @@ var transaction = {
             'product': product.id,
             'price': product.price,
             'type': 'sell'
-        }, product.name, product.price)
+        }, product.name, product.price, product.pack_list)
     },
 
-    _add_position: function (obj, name, price) {
+    _add_position: function (obj, name, price, info) {
         if (transaction.post_sale) {
             transaction.clear();
         }
 
         obj._title = name;
         transaction.positions.push(obj);
+        
+        var productname = $("<span>").addClass("cart-product").text(name);
+        if (info) {
+            productname.append($("<small>").append("<br/>").append(info));
+        }
 
         $("<div>").addClass("cart-line").append(
-            $("<span>").addClass("cart-product").text(name)
+            productname
         ).append(
             $("<span>").addClass("cart-price").text(price)
         ).append(

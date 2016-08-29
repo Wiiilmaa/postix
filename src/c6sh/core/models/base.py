@@ -117,6 +117,17 @@ class Product(models.Model):
         negative = self.positions.filter(type='reverse').count()
         return positive - negative
 
+    @property
+    def pack_list(self):
+        l = []
+        for pi in self.product_items.all():
+            if pi.is_visible:
+                if pi.amount != 1:
+                    l.append("{}x {}".format(pi.amount, pi.item.name))
+                else:
+                    l.append(pi.item.name)
+        return ", ".join(l)
+
     def __str__(self):
         return self.name
 
@@ -138,6 +149,8 @@ class ProductItem(models.Model):
                                 related_name='product_items')
     item = models.ForeignKey('Item', on_delete=models.PROTECT,
                              related_name='product_items')
+    is_visible = models.BooleanField(default=True,
+                                     help_text='If activated, this item will be shown in the frontend')
     amount = models.PositiveIntegerField()
 
 
