@@ -216,7 +216,7 @@ var transaction = {
     _touch_scroll_start: function (e) {
         if (e.button === 0) {
             transaction._touch_scrolling = true;
-            transaction._touch_scroll_start_cpos = parseInt($(this).css('top'));
+            transaction._touch_scroll_start_cpos = parseInt($('#cart-inner').css('top'));
             transaction._touch_scroll_start_mpos = e.clientY;
         }
     },
