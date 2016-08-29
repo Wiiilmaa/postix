@@ -109,6 +109,11 @@ var transaction = {
     },
 
     reverse_last: function () {
+        dialog.show_confirmation(null, 'Do you really want to reverse the last transaction?',
+            transaction._do_reverse_last)
+    },
+
+    _do_reverse_last: function () {
         if (!transaction.last_id) {
             dialog.show_error("Last transaction is not known.")
         }

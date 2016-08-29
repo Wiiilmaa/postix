@@ -4,27 +4,29 @@ var dialog = {
      */
 
     // Temporary information for the dialog currently shown
-    _field_name: null,
+    _handler: null,
     _pos_id: null,
     _type: null,
     _list_id: null,
 
-    show_list_input: function (pos_id, message, field_name) {
+    show_list_input: function (pos_id, message, handler) {
         // Shows a dialog that is related to cart position pos_id and asks
-        // the user to input a text into a field with name field_name and message message.
-        // If field_name is of the form list_\d+ it will be assumed that the latter part
+        // the user to input a text into a field with name handler and the message message.
+        // If the dialog is confirmed, the current transaction is re-tried.
+        // If handler is of the form list_\d+ it will be assumed that the latter part
         // is the ID of a ListConstraint that can be used for autocompletion.
+        // If handler is a function, it will be called on dialog confirmation instead of
+        // the default behavior.
         dialog._pos_id = pos_id;
-        dialog._field_name = field_name;
+        dialog._handler = handler;
         dialog._type = 'input';
-        if (field_name.match(/list_\d+/)) {
-            dialog._list_id = parseInt(field_name.substring(5));
+        if (typeof handler === "string" && handler.match(/list_\d+/)) {
+            dialog._list_id = parseInt(handler.substring(5));
         } else {
             dialog._list_id = null;
         }
 
-        var pos = transaction.positions[pos_id];
-        $("#modal-title").text(pos._title);
+        $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : 'Input required');
         $("#modal-text").text(message);
         $("#modal-input-wrapper").show();
         $("#btn-continue").show();
@@ -38,12 +40,7 @@ var dialog = {
         // Shows an error message, optionally related to the cart position pos_id.
         dialog._type = 'error';
 
-        if (pos_id >= 0) {
-            var pos = transaction.positions[pos_id];
-            $("#modal-title").text(pos._title);
-        } else {
-            $("#modal-title").text("Error");
-        }
+        $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : 'Error');
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
         $("#btn-continue").hide();
@@ -68,15 +65,16 @@ var dialog = {
         $("#modal .panel").addClass("panel-success").removeClass("panel-danger");
     },
 
-    show_confirmation: function (pos_id, message, field_name) {
+    show_confirmation: function (pos_id, message, handler) {
         // Shows a dialog related to the cart entry pos_id and the message message,
-        // asking the user to confirm something. If he/she does, field_name will be
-        // set to true in the transaction.
+        // asking the user to confirm something. If he/she does, the of the name
+        // handler will be set to true in the transaction and the transaction will be
+        // re-tried. If handler is a function, it will be called if the user selects the
+        // positive option instead of the default behaviour.
         dialog._type = 'confirmation';
         dialog._pos_id = pos_id;
-        dialog._field_name = field_name;
-        var pos = transaction.positions[pos_id];
-        $("#modal-title").text(pos._title);
+        dialog._handler = handler;
+        $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : 'Confirmation required');
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
         $("#btn-continue").show();
@@ -94,8 +92,10 @@ var dialog = {
         } else if (dialog._type === 'input') {
             val = $("#modal-input").val();
         }
-        if (dialog._pos_id !== null) {
-            transaction.positions[dialog._pos_id][dialog._field_name] = val;
+        if (typeof dialog._handler === "function") {
+            dialog._handler(val);
+        } else if (dialog._pos_id !== null) {
+            transaction.positions[dialog._pos_id][dialog._handler] = val;
             transaction.perform();
         }
         dialog.reset();
@@ -105,7 +105,7 @@ var dialog = {
         // Resets the internal object state
         $('body').removeClass('has-modal');
         dialog._pos_id = null;
-        dialog._field_name = null;
+        dialog._handler = null;
         dialog._type = null;
     },
 
