@@ -77,7 +77,15 @@ var transaction = {
             success: function (data, status, jqXHR) {
                 loading.end();
                 $('#lower-right').addClass('post-sale').find('.panel-heading span').text('Last transaction');
-                $("#post-sale-given input").focus();
+
+                var i, total = 0;
+                for (i = 0; i < transaction.positions.length; i++) {
+                    total += parseFloat(transaction.positions[i].price);
+                }
+                if (total < 0.001) {
+                    $("#post-sale-given input").focus();
+                }
+                
                 transaction._scroll(0);
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
