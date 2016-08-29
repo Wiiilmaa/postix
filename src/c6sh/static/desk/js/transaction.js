@@ -131,7 +131,7 @@ var transaction = {
             data: '',
             success: function (data, status, jqXHR) {
                 loading.end();
-                transaction.clear();
+                $("#lower-right").addClass("reversed");
                 dialog.show_success('The last transaction has been reversed.');
             },
             headers: {
@@ -157,7 +157,7 @@ var transaction = {
         transaction._render();
         transaction.post_sale = false;
         transaction.last_id = null;
-        $('#lower-right').removeClass('post-sale').find('.panel-heading span').text('Current transaction');
+        $('#lower-right').removeClass('post-sale reversed').find('.panel-heading span').text('Current transaction');
     },
 
     _render: function () {

@@ -290,6 +290,27 @@ body.has-modal #main-container {
 #post-sale-buttons button:last-child {
     margin-right: 0;
 }
+#post-sale-reversed {
+    display: none;
+    height: 89px;
+    line-height: 89px;
+    font-weight: bold;
+    color: #b92c28;
+    text-align: center;
+    font-size: 40px;
+}
+.reversed #btn-reverse {
+    opacity: .65;
+    pointer-events: none;
+    -webkit-pointer-events: none;
+    background-image: none;
+}
+.reversed #post-sale-reversed {
+    display: block;
+}
+.reversed #post-sale-change, .reversed #post-sale-given {
+    display: none;
+}
 #loading {
     position: fixed;
     left: 0;
