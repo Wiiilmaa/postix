@@ -9,7 +9,7 @@ var keyboard = {
     },
     
     _enter: function () {
-        if (transaction.positions.length > 0) {
+        if (transaction.positions.length > 0 && !transaction.post_sale) {
             transaction.perform();
         }
     },
@@ -25,11 +25,9 @@ var keyboard = {
                 return;
             }
 
-            //if (tag == 'input' || tag == 'textarea') {
-            //    return;
-            //}
-
-            console.log(e.which, e.keyCode);
+            if (tag == 'input' || tag == 'textarea') {
+                return;
+            }
 
             var map = {
                 27: keyboard._escape,

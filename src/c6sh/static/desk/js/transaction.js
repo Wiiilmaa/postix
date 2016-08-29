@@ -56,6 +56,10 @@ var transaction = {
     perform: function () {
         // This tries to the transaction. If additional input is required,the
         // dialog object is used to present a dialog and then calls this again,
+        if (transaction.positions.length === 0) {
+            dialog.show_error('Cart is empty.');
+            return;
+        }
 
         loading.start();
         $.ajax({
@@ -68,6 +72,7 @@ var transaction = {
             success: function (data, status, jqXHR) {
                 loading.end();
                 $('#lower-right').addClass('post-sale').find('.panel-heading span').text('Last transaction');
+                $("#post-sale-given input").focus();
                 transaction._scroll();
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
@@ -163,12 +168,24 @@ var transaction = {
         }
         $("#checkout-total span").text(total.toFixed(2));
         $("#post-sale-total span").text(total.toFixed(2));
-        $("#post-sale-given input").val();
+        $("#post-sale-given input").val("");
         $("#post-sale-change span").text("0.00");
         transaction._scroll();
     },
     
-    _calculate_change: function () {
+    _calculate_change: function (e) {
+        if (e.which && (e.which === 13 || e.which == 9)) {
+            $("#preorder-input").focus();
+            e.preventDefault();
+            return;
+        }
+        if ($("#post-sale-given input").val().match(/.*[a-zA-Z].*/)) {
+            // This is probably a preorder secret, lets enter it there.
+            $("#preorder-input").val($("#post-sale-given input").val()).focus();
+            $("#post-sale-given input").val("");
+            return;
+        }
+        
         var total = parseFloat($.trim($("#post-sale-total span").text())), given;
         if (!$("#post-sale-given input").val()) {
             given = 0;

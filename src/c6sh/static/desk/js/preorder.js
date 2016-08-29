@@ -11,6 +11,7 @@ var preorder = {
             dataType: 'json',
             success: function (data, status, jqXHR) {
                 loading.end();
+                $("#preorder-input").val("");
                 
                 if (data.count !== 1) {
                     if (data.count > 1) {
@@ -42,15 +43,37 @@ var preorder = {
             }
         });
     },
+    
+    take_focus: function () {
+        window.setTimeout(function () {
+            // This is a bit of a hack but it works very well to fix cases
+            // where a simple .focus() call won't work because it another event
+            // takes focus that is called slightly *after* this event.
+            $("#preorder-input").focus().typeahead('close').val("");
+        }, 100);
+    },
 
     init: function () {
         // Initializations at page load time
         $("#preorder-input").keyup(function (e) {
             if (e.keyCode == 13) { // Enter
-                preorder.redeem($.trim($("#preorder-input").val()));
+                var secret = $.trim($("#preorder-input").val());
+                if (secret === "") {
+                    return;
+                }
+                preorder.redeem(secret);
                 $("#preorder-input").val("").blur();
             }
         });
+        
+        $('body').mouseup(function (e) {
+            // Global catch-all "if the finger goes up, we reset the focus"
+            if (!$('body').hasClass('has-modal') && !$(e.target).is("input, #btn-checkout")) {
+                $("#preorder-input").focus().typeahead("close");
+            }
+        });
+        
+        preorder.take_focus();
 
         $('#preorder-input').typeahead(null, {
             name: 'preorder-tickets',

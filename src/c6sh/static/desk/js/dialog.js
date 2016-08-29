@@ -111,6 +111,7 @@ var dialog = {
         dialog._pos_id = null;
         dialog._handler = null;
         dialog._type = null;
+        preorder.take_focus();
     },
 
     keypress: function (e) {
