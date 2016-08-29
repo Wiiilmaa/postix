@@ -40,6 +40,10 @@ var dialog = {
         // Shows an error message, optionally related to the cart position pos_id.
         dialog._type = 'error';
 
+        if (typeof pos_id === "undefined") {
+            pos_id = null;
+        }
+        
         $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : 'Error');
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
