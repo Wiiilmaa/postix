@@ -1,7 +1,35 @@
 {% extends 'troubleshooter/base.html' %}
 {% load staticfiles %}
 
-{% block headline %} Übersicht {% endblock %}
+{% block headline %}Overview{% endblock %}
 
 {% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Current cashdesk sessions
+                </div>
+                <ul class="list-group">
+                    {% for sess in sessions %}
+                        <li class="list-group-item open-cashdesk">
+                            <h3>{{ sess.cashdesk }}
+                                <small>User: {{ sess.user }}</small>
+                            </h3>
+                            <dl class="dl-horizontal">
+                                <dt>Session time</dt>
+                                <dd>{{ sess.start|timesince }} </dd>
+                                <dt>Gross total</dt>
+                                <dd>{{ sess.get_cash_transaction_total|floatformat:2 }}</dd>
+                                {% for i in sess.current_items %}
+                                    <dt>{{ i.item }}</dt>
+                                    <dd>{{ i.total }}</dd>
+                                {% endfor %}
+                            </dl>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}

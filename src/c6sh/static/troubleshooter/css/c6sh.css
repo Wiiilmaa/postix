@@ -28,16 +28,6 @@ body.login, body.error {
 tbody th {
     font-weight: normal;
 }
-#active-sessions-table .empty-row {
-    text-align: center;
-}
-#active-sessions-table .session-action-column .glyphicon {
-    margin-left: 1.2rem;
-    font-size: 1.8rem;
-}
-.session-action-column a:hover {
-    text-decoration: none;
-}
 .glyphicon-print {
     color: #a22;
 }
@@ -57,6 +47,9 @@ h1 .glyphicon {
     font-size: 2rem;
     margin-right: 1em
 }
-#end-sessions-table .control-label {
-    display: none;
+.open-cashdesk h3 {
+    margin-top: 0;
+}
+.open-cashdesk dl {
+    margin-bottom: 0;
 }
