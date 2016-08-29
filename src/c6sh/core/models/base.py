@@ -87,6 +87,8 @@ class Product(models.Model):
     is_visible = models.BooleanField(default=True)
     requires_authorization = models.BooleanField(default=False)
     items = models.ManyToManyField('Item', through='ProductItem', blank=True)
+    priority = models.IntegerField(default=0, verbose_name='Priority',
+                                   help_text='Will be used for sorting, high priorities come first.')
 
     def save(self, *args, **kwargs):
         if not self.receipt_name:
@@ -117,6 +119,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ('-priority', 'pk')
 
 
 class Item(models.Model):
