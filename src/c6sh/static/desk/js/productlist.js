@@ -74,11 +74,13 @@ var productlist = {
     },
 
     _touch_scroll_end: function (e) {
+        if (productlist._touch_scrolling) {
+            if ($(e.target).is("button") && productlist._touch_scroll_abs_diff < 10) {
+                transaction.add_product($(e.target).attr("data-id"));
+            }
+        }
         if (e.button === 0) {
             productlist._touch_scrolling = false;
-        }
-        if ($(e.target).is("button") && productlist._touch_scroll_abs_diff < 10) {
-            transaction.add_product($(e.target).attr("data-id"));
         }
     },
 
