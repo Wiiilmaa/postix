@@ -67,7 +67,7 @@ var transaction = {
             }),
             success: function (data, status, jqXHR) {
                 loading.end();
-                $('#lower-right').addClass('post-sale');
+                $('#lower-right').addClass('post-sale').find('.panel-heading span').text('Last transaction');
                 transaction._scroll();
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
@@ -153,7 +153,7 @@ var transaction = {
         transaction.post_sale = false;
         transaction.last_id = null;
         transaction._scroll();
-        $('#lower-right').removeClass('post-sale');
+        $('#lower-right').removeClass('post-sale').find('.panel-heading span').text('Current transaction');
     },
 
     _render: function () {
