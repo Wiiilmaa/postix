@@ -14,11 +14,13 @@ var productlist = {
                 product = data.results[i];
                 if (product.is_available) {
                     productlist.products[product.id] = product;
-                    $("<div>").addClass("product").append(
-                        $("<button>").addClass("btn btn-default btn-block").attr("data-id", product.id).append(
+                    var btn = $("<button>").addClass("btn btn-default btn-block").attr("data-id", product.id).append(
                             $("<strong>").text(product.name)
-                        ).append($("<br>")).append(product.price + ' €')
-                    ).appendTo($("#product-view"));
+                        ).append($("<br>")).append(product.price + ' €');
+                    if (product.requires_authorization) {
+                        btn.append(" ").append($("<span>").addClass("glyphicon glyphicon-lock"))
+                    }
+                    $("<div>").addClass("product").append(btn).appendTo($("#product-view"));
                 }
             }
             if (data.next !== null) {
