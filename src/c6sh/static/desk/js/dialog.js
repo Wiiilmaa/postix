@@ -32,6 +32,7 @@ var dialog = {
         $("#btn-continue").show();
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
+        $('#modal-input').val("");
         $("body").addClass("has-modal");
         $("#modal .panel").removeClass("panel-success").addClass("panel-danger");
     },
