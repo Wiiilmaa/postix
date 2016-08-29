@@ -152,7 +152,6 @@ var transaction = {
         transaction._render();
         transaction.post_sale = false;
         transaction.last_id = null;
-        transaction._scroll();
         $('#lower-right').removeClass('post-sale').find('.panel-heading span').text('Current transaction');
     },
 
@@ -166,6 +165,7 @@ var transaction = {
         $("#post-sale-total span").text(total.toFixed(2));
         $("#post-sale-given input").val();
         $("#post-sale-change span").text("0.00");
+        transaction._scroll();
     },
     
     _calculate_change: function () {
@@ -238,6 +238,5 @@ var transaction = {
         $(window).resize(function () {
             transaction._scroll();
         });
-        transaction._scroll();
     }
 };
