@@ -35,7 +35,7 @@ class Cashdesk(models.Model):
         return DummyPrinter()
 
     def get_active_sessions(self):
-        return [session for session in self.sessions.all() if session.is_active()]
+        return [session for session in self.sessions.filter(end__isnull=True) if session.is_active()]
 
 
 class CashdeskSession(models.Model):
