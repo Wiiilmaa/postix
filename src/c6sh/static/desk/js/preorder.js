@@ -11,7 +11,7 @@ var preorder = {
             dataType: 'json',
             success: function (data, status, jqXHR) {
                 loading.end();
-                $("#preorder-input").val("");
+                $("#preorder-input").typeahead('val', "");
                 
                 if (data.count !== 1) {
                     if (data.count > 1) {
@@ -49,7 +49,7 @@ var preorder = {
             // This is a bit of a hack but it works very well to fix cases
             // where a simple .focus() call won't work because it another event
             // takes focus that is called slightly *after* this event.
-            $("#preorder-input").focus().typeahead('close').val("");
+            $("#preorder-input").focus().typeahead('val', "");
         }, 100);
     },
 
@@ -62,7 +62,7 @@ var preorder = {
                     return;
                 }
                 preorder.redeem(secret);
-                $("#preorder-input").val("").blur();
+                $("#preorder-input").typeahead("val", "").blur();
             }
         });
         

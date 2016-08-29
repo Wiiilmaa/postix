@@ -38,7 +38,7 @@ var dialog = {
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
         window.setTimeout(function () {
-            $('#modal-input').val("").focus().typeahead("close");
+            $('#modal-input').focus().typeahead("val", "");
         }, 50);
         $("body").addClass("has-modal");
         $("#modal .panel").removeClass("panel-success").addClass("panel-danger");
