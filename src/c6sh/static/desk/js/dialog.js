@@ -113,35 +113,32 @@ var dialog = {
         dialog._type = null;
     },
 
+    keypress: function (e) {
+        if (e.keyCode === 27) {
+            // Close dialog when ESC was pressed
+            dialog.reset();
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        } else if (e.keyCode === 13) {
+            if ($("#btn-continue").is(':visible')) {
+                // Confirm dialog with ENTER
+                dialog._continue();
+            } else {
+                // Confirming not available, closing then
+                dialog.reset();
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    },
+    
     init: function () {
         // Initializations at page load time
         $('#btn-cancel').mousedown(dialog.reset);
         $('#btn-dismiss').mousedown(dialog.reset);
         $("#btn-continue").mousedown(dialog._continue);
-
-        $(document).keypress(function(e) {
-            if (!$("body").hasClass('has-modal'))
-                return true;
-
-            if (e.keyCode === 27) {
-                // Close dialog when ESC was pressed
-                dialog.reset();
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            } else if (e.keyCode === 13) {
-                if ($("#btn-continue").is(':visible')) {
-                    // Confirm dialog with ENTER
-                    dialog._continue();
-                } else {
-                    // Confirming not available, closing then
-                    dialog.reset();
-                }
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
-        });
 
         $('#modal-input').typeahead(null, {
             name: 'dialog-input',

@@ -13,6 +13,7 @@ $(function () {
     dialog.init();
     transaction.init();
     preorder.init();
+    keyboard.init();
     init_actions();
 });
 
