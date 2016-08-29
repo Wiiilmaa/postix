@@ -235,9 +235,6 @@ var transaction = {
     
     init: function () {
         // Initializations at page load time
-        $("#product-view").on("mousedown", ".product button", function () {
-            transaction.add_product($(this).attr("data-id"));
-        });
         $("#btn-clear").mousedown(transaction.clear);
         $("#btn-checkout").mousedown(transaction.perform);
         $("#btn-reverse").mousedown(transaction.reverse_last);

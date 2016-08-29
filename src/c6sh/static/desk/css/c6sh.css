@@ -44,9 +44,15 @@ body.login, body.error {
     flex-wrap: wrap;
     height: 100%;
     padding: 0 0 0 10px;
+    overflow: hidden;
+    position: relative;
+}
+#product-view-inner {
+    position: absolute;
+    top: 0;
 }
 #product-view .product {
-    width: 33%;
+    width: 33.333%;
     margin: 10px 0 0 0;
     float: left;
     height: 97px;  /* Same height as the "Redeem preordered ticket" box */

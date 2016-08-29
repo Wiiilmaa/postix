@@ -4,6 +4,10 @@ var productlist = {
      */
 
     products: {},  // A list of products known to the frontend
+    _touch_scrolling: false,
+    _touch_scroll_start_mpos: 0,
+    _touch_scroll_start_cpos: 0,
+    _touch_scroll_abs_diff: 0,
 
     _load_list: function (url) {
         // Loads the list of products from a given API URL and append the products to the list.
@@ -23,6 +27,7 @@ var productlist = {
                     $("<div>").addClass("product").append(btn).appendTo($("#product-view-inner"));
                 }
             }
+            productlist._scroll();
             if (data.next !== null) {
                 productlist._load_list(data.next);
             }
@@ -36,8 +41,55 @@ var productlist = {
         productlist._load_list('/api/products/');
     },
 
+    _scroll: function (position) {
+        var outer = $("#product-view"),
+            inner = $("#product-view-inner");
+
+        if (position === undefined) {
+            position = parseInt(inner.css('top'));
+        }
+
+        var minpos = Math.min(outer.height()-inner.height(), 0);
+        position = Math.max(minpos, Math.min(0, position));
+
+        outer.find('.upfade').css('height', Math.min(-position*2, 40));
+        outer.find('.downfade').css('height', Math.min((position-minpos)*2, 40));
+        inner.css('top', position);
+    },
+
+    _touch_scroll_start: function (e) {
+        if (e.button === 0) {
+            productlist._touch_scrolling = true;
+            productlist._touch_scroll_start_cpos = parseInt($("#product-view-inner").css('top'));
+            productlist._touch_scroll_start_mpos = e.clientY;
+            productlist._touch_scroll_abs_diff = 0;
+        }
+    },
+
+    _touch_scroll_move: function (e) {
+        if (productlist._touch_scrolling) {
+            productlist._touch_scroll_abs_diff += Math.abs(e.clientY-productlist._touch_scroll_start_mpos);
+            productlist._scroll(productlist._touch_scroll_start_cpos+(e.clientY-productlist._touch_scroll_start_mpos));
+        }
+    },
+
+    _touch_scroll_end: function (e) {
+        if (e.button === 0) {
+            productlist._touch_scrolling = false;
+        }
+        if ($(e.target).is("button") && productlist._touch_scroll_abs_diff < 10) {
+            transaction.add_product($(e.target).attr("data-id"));
+        }
+    },
+
     init: function () {
         // Initializations necessary at page load time
         productlist.load_all();
+
+        $('#product-view').mousedown(productlist._touch_scroll_start);
+        $('body').mousemove(productlist._touch_scroll_move).mouseup(productlist._touch_scroll_end);
+        $(window).resize(function () {
+            productlist._scroll();
+        });
     }
 };
