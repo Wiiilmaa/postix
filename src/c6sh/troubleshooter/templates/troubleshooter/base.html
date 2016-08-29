@@ -1,0 +1,65 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>c6sh {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap-theme.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "troubleshooter/css/c6sh.css" %}">
+    {% block stylesheets %}
+    {% endblock %}
+
+</head>
+<body class="">
+
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/troubleshooter/">Troubleshooter</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          {% if user.is_authenticated %}
+			  <ul class="nav navbar-nav">
+				<li><a href="/troubleshooter/">Übersicht</a></li>
+			  </ul>
+			  <ul class="nav navbar-nav navbar-right">
+				<li><a href="/troubleshooter/logout/"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a></li>
+          {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+      <div class="backoffice-main">
+        <h1>{% block headline %}{% endblock %}</h1>
+    	<div class="backoffice-content">
+			<p>
+			{% block content %}
+    		{% endblock %}
+			</p>
+		</div>
+      </div>
+
+    </div>
+
+
+    <script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
+    {% block scripts %}
+    {% endblock %}
+    
+</body>
+</html>

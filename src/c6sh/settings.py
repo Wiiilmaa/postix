@@ -24,6 +24,7 @@ INSTALLED_APPS = (
     'c6sh.desk',
     'c6sh.api',
     'c6sh.backoffice',
+    'c6sh.troubleshooter',
 )
 
 
