@@ -87,7 +87,7 @@ body.login, body.error {
 #button-row a.btn {
     line-height: 34px;
 }
-#button-row button:last-child, {
+#button-row button:last-child {
     margin-right: 0;
 }
 #right-side {
