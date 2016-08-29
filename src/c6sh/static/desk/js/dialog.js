@@ -32,7 +32,9 @@ var dialog = {
         $("#btn-continue").show();
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
-        $('#modal-input').val("");
+        window.setTimeout(function () {
+            $('#modal-input').val("").focus().typeahead("close");
+        }, 50);
         $("body").addClass("has-modal");
         $("#modal .panel").removeClass("panel-success").addClass("panel-danger");
     },
