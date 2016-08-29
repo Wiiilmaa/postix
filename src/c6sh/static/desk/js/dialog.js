@@ -9,6 +9,11 @@ var dialog = {
     _type: null,
     _list_id: null,
 
+    flash_success: function (message) {
+        $("#success-flash").find("div").text(message ? message : 'OK');
+        $("#success-flash").stop().fadeIn(100).delay(750).fadeOut(500);
+    },
+
     show_list_input: function (pos_id, message, handler) {
         // Shows a dialog that is related to cart position pos_id and asks
         // the user to input a text into a field with name handler and the message message.

@@ -73,9 +73,10 @@ var transaction = {
                 loading.end();
                 $('#lower-right').addClass('post-sale').find('.panel-heading span').text('Last transaction');
                 $("#post-sale-given input").focus();
-                transaction._scroll();
+                transaction._scroll(0);
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
+                dialog.flash_success('Transaction complete');
             },
             headers: {
                 'Content-Type': 'application/json'
@@ -132,7 +133,7 @@ var transaction = {
             success: function (data, status, jqXHR) {
                 loading.end();
                 $("#lower-right").addClass("reversed");
-                dialog.show_success('The last transaction has been reversed.');
+                dialog.flash_success('Transaction reversed');
             },
             headers: {
                 'Content-Type': 'application/json'

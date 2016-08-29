@@ -20,7 +20,7 @@ var productlist = {
                     if (product.requires_authorization) {
                         btn.append(" ").append($("<span>").addClass("glyphicon glyphicon-lock"))
                     }
-                    $("<div>").addClass("product").append(btn).appendTo($("#product-view"));
+                    $("<div>").addClass("product").append(btn).appendTo($("#product-view-inner"));
                 }
             }
             if (data.next !== null) {
@@ -31,7 +31,7 @@ var productlist = {
 
     load_all: function() {
         // Clears the current list and re-loads it from the API
-        $("#product-view").html("");
+        $("#product-view-inner").html("");
         productlist.products = {};
         productlist._load_list('/api/products/');
     },
