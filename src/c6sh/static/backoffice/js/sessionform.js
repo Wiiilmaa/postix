@@ -15,7 +15,7 @@ $('#add_more').click(addAnotherLine);
 var users = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.whitespace,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    local: user_list
+    local: users
 });
 
 $('#id_session-user').typeahead({
@@ -27,6 +27,23 @@ $('#id_session-user').typeahead({
 {
     name: 'users',
     source: users
+
+});
+
+var backoffice_users = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.whitespace,
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    local: backoffice_users
+});
+
+$('#id_session-backoffice_user').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+},
+{
+    name: 'backoffice_users',
+    source: backoffice_users
 
 });
 
