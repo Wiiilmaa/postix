@@ -173,7 +173,7 @@ def reverse_transaction(trans_id: int, current_session: CashdeskSession):
     except Transaction.DoesNotExist:
         raise FlowError('Transaction ID not known.')
 
-    if not current_session.is_active():  # noqa (catched by auth layer)
+    if not current_session.is_active():  # noqa (caught by auth layer)
         raise FlowError('You need to provide an active session.')
 
     if old_transaction.session != current_session:
@@ -212,7 +212,7 @@ def reverse_transaction_position(trans_pos_id, current_session: CashdeskSession)
     except TransactionPosition.DoesNotExist:
         raise FlowError('TransactionPosition ID not known.')
 
-    if not current_session.is_active():  # noqa (catched by auth layer)
+    if not current_session.is_active():  # noqa (caught by auth layer)
         raise FlowError('You need to provide an active session.')
 
     if old_pos.transaction.session != current_session:

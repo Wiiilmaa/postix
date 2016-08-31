@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 def backoffice_user(user):
-    return user.is_superuser
+    return user.is_superuser or user.is_backoffice_user
 
 
 class BackofficeUserRequiredMixin(UserPassesTestMixin):

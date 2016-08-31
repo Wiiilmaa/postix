@@ -20,6 +20,7 @@ class CreateUserForm(forms.Form):
     firstname = forms.CharField(label='Vorname', max_length=254)
     lastname = forms.CharField(label='Nachname', max_length=254)
     is_backoffice_user = forms.BooleanField(label='Hinterzimmer-Rechte', required=False)
+    is_troubleshooter = forms.BooleanField(label='Troubleshooter-Rechte', required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,6 +38,7 @@ class CreateUserForm(forms.Form):
             'firstname',
             'lastname',
             'is_backoffice_user',
+            'is_troubleshooter',
         )
 
 
@@ -45,12 +47,9 @@ def create_user_view(request):
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            if form.cleaned_data.pop('is_backoffice_user'):
-                user = User.objects.create_superuser(**form.cleaned_data)
-            else:
-                user = User.objects.create_user(**form.cleaned_data)
+            user = User.objects.create_user(**form.cleaned_data)
             messages.success(request, '{} {} wurde angelegt.'.format(
-                'Hinterzimmer-User' if user.is_superuser else 'User',
+                'Hinterzimmer-User' if user.is_backoffice_user else 'User',
                 user.username,
             ))
             return redirect('backoffice:main')

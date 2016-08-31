@@ -34,7 +34,7 @@ class AuthorAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password', 'auth_token')}),
         ('Personal info', {'fields': ('firstname', 'lastname')}),
-        ('Permissions', {'fields': ('is_active', 'is_superuser', 'is_troubleshooter')}),
+        ('Permissions', {'fields': ('is_active', 'is_superuser', 'is_backoffice_user', 'is_troubleshooter')}),
         ('Important dates', {'fields': ('last_login',)}),
     )
     add_fieldsets = (
@@ -43,8 +43,8 @@ class AuthorAdmin(BaseUserAdmin):
             'fields': ('username', 'password1', 'password2'),
         }),
     )
-    list_display = ('username', 'firstname', 'lastname', 'is_active', 'is_superuser', 'is_troubleshooter')
-    list_filter = ('is_active', 'is_superuser', 'is_troubleshooter')
+    list_display = ('username', 'firstname', 'lastname', 'is_active', 'is_superuser', 'is_backoffice_user', 'is_troubleshooter')
+    list_filter = ('is_active', 'is_superuser', 'is_backoffice_user', 'is_troubleshooter')
     search_fields = ('firstname', 'lastname', 'username')
     ordering = ('username',)
     filter_horizontal = []

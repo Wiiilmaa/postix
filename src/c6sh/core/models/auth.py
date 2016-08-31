@@ -27,6 +27,7 @@ class User(AbstractBaseUser):
     lastname = models.CharField(max_length=254, blank=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
+    is_backoffice_user = models.BooleanField(default=False)
     is_troubleshooter = models.BooleanField(default=False)
     auth_token = models.CharField(max_length=254, null=True, blank=True)
 
@@ -53,7 +54,7 @@ class User(AbstractBaseUser):
 
     @property
     def is_staff(self):
-        return self.is_superuser or self.is_troubleshooter
+        return self.is_superuser or self.is_backoffice_user or self.is_troubleshooter
 
     def get_current_session(self):
         from .cashdesk import CashdeskSession
