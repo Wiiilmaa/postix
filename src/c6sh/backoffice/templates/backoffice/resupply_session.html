@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block stylesheets %}
+	<link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
 	<link rel="stylesheet" type="text/css" href="{% static "backoffice/css/sessionform.css" %}">
 {% endblock %}
 
@@ -14,22 +15,11 @@
     <div class="alert alert-warning">
         Wenn Produkte aus der Kasse entnommen werden, bitte negative Anzahl eintragen.
     </div>
-    <div class="disabled-inputs col-md-12">
-        {{ form.cashdesk|as_crispy_field }}
-        {{ form.user|as_crispy_field }}
-    </div>
-    <div class="col-md-9">
-        {{ form.backoffice_user|as_crispy_field }}
-    </div>
-    <div class="col-md-3">
-        <a class="btn btn-default btn-block" id="switch-user" href="{% url "backoffice:switch-user" %}?next={{ request.get_full_path }}">
-            Switch user
-        </a>
-    </div>
-
-
 	<form method="post" action="">
 		{% csrf_token %}
+
+        {% crispy form %}
+
 		<table>
 			{% crispy formset helper %}
 		</table>
@@ -47,5 +37,10 @@
             {% crispy formset.empty_form formset.form.helper %}
         </tr>
     </script>
+    <script type="text/javascript">
+        var backoffice_users = {{ backoffice_users|safe }};
+    </script>
+
+    <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
     <script type="text/javascript" src="{% static "backoffice/js/sessionform.js" %}"></script>
 {% endblock %}

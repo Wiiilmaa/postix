@@ -10,24 +10,27 @@
             .end-column {display: None}
         </style>
     {% endif %}
+	<link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "backoffice/css/sessionform.css" %}">
 {% endblock %}
 
 {% block headline %}
-Kassenbericht #{{session.pk}}
+    Kassenbericht #{{session.pk}}
 {% endblock %}
 
 
 {% block content %}
-<h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}</h4>
-<h4>
-    Hinterzimmer-Engel: {{ form.backoffice_user.value }}
-    <a class="btn btn-default btn-xs" id="switch-user" href="{% url "backoffice:switch-user" %}?next={{ request.get_full_path }}"> Switch user </a>
-</h4>
-{% language "de" %}
-<h4> Beginn: {{ session.start }} </h4>
-{% endlanguage %}
-
 <form method="post">
+    {% csrf_token %}
+
+    <h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}</h4>
+    {% language "de" %}
+    <h4> <b>Beginn:</b> {{ session.start }} </h4>
+    {% endlanguage %}
+    <h4>
+        {{ form.backoffice_user|as_crispy_field }}
+    </h4>
+
     <table class="table" id="end-sessions-table">
 	<thead>
 		<th>Produkt</th>
@@ -37,7 +40,6 @@ Kassenbericht #{{session.pk}}
         <th>Abschluss</th>
 		<th>Differenz</th>
 	</thead>
-		{% csrf_token %}
         <tbody>
             <tr id="cash">
                 <td>
@@ -97,5 +99,9 @@ Kassenbericht #{{session.pk}}
 
 {% endblock %}
 {% block scripts %}
+    <script type="text/javascript">
+        var backoffice_users = {{ backoffice_users|safe }};
+    </script>
+    <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
     <script type="text/javascript" src="{% static "backoffice/js/end_session.js" %}"></script>
 {% endblock %}
