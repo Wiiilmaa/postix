@@ -49,8 +49,8 @@ def get_qr_image(session):
         end=session.end.strftime('%d.%m.%Y\t%H:%M:%S'),
         total='{0:,.2f}'.format(session.get_cash_transaction_total()).translate(str.maketrans(',.', '.,')),
         pk=session.pk,
-        supervisor='{u.firstname} {u.lastname}'.format(u=session.backoffice_user_after),
-        user='{u.firstname} {u.lastname}'.format(u=session.user),
+        supervisor=session.backoffice_user_after.get_full_name(),
+        user=session.user.get_full_name(),
     )
     qr.add_data(data)
     qr.make()
@@ -93,8 +93,9 @@ def generate_report(session):
     # Header: info text and qr code
     title_str = '[{}] Kassenbericht #{}'.format(EventSettings.objects.get().short_name, session.pk)
     title = Paragraph(title_str, style['Heading1'])
-    text = """{session.user.firstname} {session.user.lastname} an {session.cashdesk}<br/>{date} {start} bis {end}""".format(
-        session=session,
+    text = """{user} an {cashdesk}<br/>{date} {start} bis {end}""".format(
+        user=session.user.get_full_name(),
+        cashdesk=session.cashdesk,
         date=session.start.date(),
         start=session.start.replace(microsecond=0).time(),
         end=session.end.replace(microsecond=0).time(),
@@ -163,8 +164,8 @@ def generate_report(session):
     # Signatures
     col_width = (doc.width - 35) / 2
     signatures = Table(
-        data=[['Kassierer/in: {} {}'.format(session.user.firstname, session.user.lastname), '',
-               'Ausgezählt durch {} {}'.format(session.backoffice_user_after.firstname, session.backoffice_user_after.lastname)]],
+        data=[['Kassierer/in: {}'.format(session.user.get_full_name()), '',
+               'Ausgezählt durch {}'.format(session.backoffice_user_after.get_full_name())]],
         colWidths=[col_width, 35, col_width],
         style=TableStyle([
             ('FONTSIZE', (0, 0), (2, 0), FONTSIZE),
