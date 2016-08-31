@@ -1,19 +1,33 @@
 from crispy_forms.helper import FormHelper
 from django import forms
 
-from ..core.models import Cashdesk, Item
+from ..core.models import Cashdesk, Item, User
 
 
 class SessionBaseForm(forms.Form):
     cashdesk = forms.ModelChoiceField(queryset=Cashdesk.objects.filter(is_active=True).order_by('name'), label='Kasse')
     user = forms.CharField(max_length=254, label='Engel')
-    backoffice_user = forms.CharField(max_length=254, label='Hinterzimmer-Engel', disabled=True, required=False)
+    backoffice_user = forms.CharField(max_length=254, label='Hinterzimmer-Engel')
     cash_before = forms.DecimalField(max_digits=10, decimal_places=2, label='Bargeld')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+
+    def clean_user(self):
+        value = self.cleaned_data['user']
+        try:
+            return User.objects.get(username=value)
+        except User.DoesNotExist:
+            raise forms.ValidationError('Engel existiert nicht.')
+
+    def clean_backoffice_user(self):
+        value = self.cleaned_data['backoffice_user']
+        try:
+            return User.objects.filter(is_backoffice_user=True).get(username=value)
+        except User.DoesNotExist:
+            raise forms.ValidationError('Engel existiert nicht oder ist kein Hinterzimmer-Engel.')
 
 
 class ItemMovementForm(forms.Form):
