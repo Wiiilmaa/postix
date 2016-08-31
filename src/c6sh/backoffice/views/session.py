@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
@@ -21,30 +22,25 @@ def new_session(request):
         form, formset = get_form_and_formset(request=request)
 
         if form.is_valid() and formset.is_valid():
-            try:
-                user = User.objects.get(username=form.cleaned_data['user'])
-            except User.DoesNotExist:
-                form.add_error('user', 'Engel existiert nicht.')
-            else:
-                session = CashdeskSession.objects.create(
-                    cashdesk=form.cleaned_data['cashdesk'],
-                    user=user,
-                    start=now(),
-                    cash_before=form.cleaned_data['cash_before'],
-                    backoffice_user_before=request.user,
-                )
-                for f in formset:
-                    item = f.cleaned_data.get('item')
-                    amount = f.cleaned_data.get('amount')
-                    if item and amount and amount > 0:
-                        ItemMovement.objects.create(
-                            item=item,
-                            session=session,
-                            amount=amount,
-                            backoffice_user=request.user,
-                        )
-                messages.success(request, 'Session wurde angelegt.'.format(session.pk, session.cashdesk))
-                return redirect('backoffice:main')
+            session = CashdeskSession.objects.create(
+                cashdesk=form.cleaned_data['cashdesk'],
+                user=form.cleaned_data['user'],
+                start=now(),
+                cash_before=form.cleaned_data['cash_before'],
+                backoffice_user_before=form.cleaned_data['backoffice_user'],
+            )
+            for f in formset:
+                item = f.cleaned_data.get('item')
+                amount = f.cleaned_data.get('amount')
+                if item and amount and amount > 0:
+                    ItemMovement.objects.create(
+                        item=item,
+                        session=session,
+                        amount=amount,
+                        backoffice_user=form.cleaned_data['backoffice_user'],
+                    )
+            messages.success(request, 'Session wurde angelegt.'.format(session.pk, session.cashdesk))
+            return redirect('backoffice:main')
 
         else:
             messages.error(request, 'Session konnte nicht angelegt werden: Bitte Daten korrigieren.')
@@ -65,7 +61,8 @@ def new_session(request):
         'form': form,
         'formset': formset,
         'helper': ItemMovementFormSetHelper(),
-        'user_list': User.objects.values_list('username', flat=True),
+        'users': User.objects.values_list('username', flat=True),
+        'backoffice_users': User.objects.filter(is_backoffice_user=True).values_list('username', flat=True),
     })
 
 
@@ -105,15 +102,14 @@ def resupply_session(request, pk):
         'cashdesk': session.cashdesk,
         'user': session.user,
         'backoffice_user': request.user,
+        'cash_before': 0,
     }
     form, formset = get_form_and_formset(initial_form=initial_form)
-    for field in form.fields:
-        form.fields[field].disabled = True
 
     if request.method == 'POST':
-        _, formset = get_form_and_formset(request=request)
+        form, formset = get_form_and_formset(request=request)
 
-        if formset.is_valid():
+        if formset.is_valid() and form.is_valid():
             for f in formset:
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
@@ -122,18 +118,25 @@ def resupply_session(request, pk):
                         item=item,
                         session=session,
                         amount=amount,
-                        backoffice_user=request.user
+                        backoffice_user=form.cleaned_data['backoffice_user'],
                     )
             messages.success(request, 'Produkte wurden der Kasse hinzugefügt.')
             return redirect('backoffice:session-detail', pk=pk)
 
         elif formset.errors:
+            print(formset.errors)
+            print(form.errors)
             messages.error(request, 'Fehler: Bitte Daten prüfen und korrigieren.')
+
+    form.fields['user'].widget.attrs['readonly'] = True
+    form.fields['cashdesk'].widget.attrs['readonly'] = True
+    form.fields['cash_before'].widget = forms.HiddenInput()
 
     return render(request, 'backoffice/resupply_session.html', {
         'formset': formset,
         'helper': ItemMovementFormSetHelper(),
         'form': form,
+        'backoffice_users': User.objects.filter(is_backoffice_user=True).values_list('username', flat=True),
     })
     pass
 
@@ -155,7 +158,7 @@ def end_session(request, pk):
                         item=item,
                         session=session,
                         amount=-amount,
-                        backoffice_user=request.user
+                        backoffice_user=form.cleaned_data['backoffice_user']
                     )
 
             if session.end:
@@ -197,6 +200,7 @@ def end_session(request, pk):
         'form': form,
         'formset': formset,
         'cash': {'initial': session.cash_before, 'transactions': cash_total},
+        'backoffice_users': User.objects.filter(is_backoffice_user=True).values_list('username', flat=True),
     })
 
 
