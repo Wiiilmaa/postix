@@ -41,6 +41,14 @@ class CashdeskPrinter:
         tax_sums = defaultdict(int)
         tax_symbols = dict()
 
+        positions = [
+            position for position in transaction.positions.all()
+            if not position.preorder_position
+        ]
+
+        if not positions:
+            return
+
         for position in transaction.positions.all():
             if position.value == 0:
                 continue
@@ -57,7 +65,7 @@ class CashdeskPrinter:
             position_lines.append(pos_str)
         total_taxes = sum(tax_sums.values())
 
-        if total_sum == 0:
+        if not position_lines:
             return
 
         receipt = bytearray([0x1B, 0x61, 1]).decode()  # center text
@@ -98,12 +106,13 @@ class CashdeskPrinter:
             self.open_drawer()
         receipt = self._build_receipt(transaction)
 
-        try:
-            # self.send(image_tools.get_imagedata(settings.STATIC_ROOT + '/' + settings.EVENT_RECIPE_HEADER))
-            self.send(receipt)
-            self.cut_tape()
-        except:
-            logging.getLogger('django').exception('Printing at {} failed'.format(self.printer))
+        if receipt:
+            try:
+                # self.send(image_tools.get_imagedata(settings.STATIC_ROOT + '/' + settings.EVENT_RECIPE_HEADER))
+                self.send(receipt)
+                self.cut_tape()
+            except:
+                logging.getLogger('django').exception('Printing at {} failed'.format(self.printer))
 
 
 class DummyPrinter:
