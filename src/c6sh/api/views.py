@@ -163,6 +163,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
                 'success': True,
                 'id': new_id
             }, status=status.HTTP_201_CREATED)
+            new_id.print_receipt(do_open_drawer=False)
         except FlowError as e:
             return Response({
                 'success': False,

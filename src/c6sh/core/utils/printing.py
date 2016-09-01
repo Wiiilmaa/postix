@@ -43,8 +43,9 @@ class CashdeskPrinter:
 
         positions = [
             position for position in transaction.positions.all()
-            if not position.preorder_position
+            if not position.type == 'redeem'
         ]
+        is_cancellation = any(position.type == 'reverse' for position in positions)
 
         if not positions:
             return
@@ -73,6 +74,12 @@ class CashdeskPrinter:
         receipt += settings.name + '\r\n\r\n'
         receipt += bytearray([0x1B, 0x45, 0]).decode()  # de-emphasize
         receipt += settings.receipt_address + '\r\n\r\n'
+
+        if is_cancellation:
+            receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
+            receipt += 'Storno-Rechnung' + '\r\n\r\n'
+            receipt += bytearray([0x1B, 0x45, 0]).decode()  # de-emphasize
+
         receipt += SEPARATOR
         receipt += " Ticket                                EUR\r\n"
         receipt += SEPARATOR
