@@ -3,7 +3,9 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 def troubleshooter_user(user):
-    return user.is_troubleshooter
+    if user.is_authenticated():
+        return user.is_troubleshooter
+    return False
 
 
 class TroubleshooterUserRequiredMixin(UserPassesTestMixin):
