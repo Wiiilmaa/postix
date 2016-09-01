@@ -31,8 +31,8 @@ class Command(BaseCommand):
             if item['admission'] == True:
                 product, created = Product.objects.get_or_create(
                    name=item['name'], 
-                   price=item['price'],
-                   tax_rate=item.get('tax_rate', decimal.Decimal('19.00')),
+                   price=0,
+                   tax_rate=0,
                 )
                 product_dict[item['id']] = product
                 created_items += int(created)
