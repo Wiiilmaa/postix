@@ -110,7 +110,7 @@ class Product(models.Model):
             if not all_quotas_available:
                 return False
 
-        return True
+        return self.is_visible
 
     def amount_sold(self):
         positive = self.positions.filter(Q(type='redeem') | Q(type='sell')).count()
