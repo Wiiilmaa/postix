@@ -31,7 +31,8 @@ var preorder = {
                     return;
                 }
 
-                transaction.add_preorder(secret, res.product_name + ' - ' + secret.substring(0, 5) + '...')
+                transaction.add_preorder(secret, res.product_name + ' - ' + secret.substring(0, 5) + '...');
+		preorder.take_focus();
             },
             headers: {
                 'Content-Type': 'application/json'
