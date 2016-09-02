@@ -159,11 +159,11 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             raise RuntimeError('This should never happen because the auth layer should handle this.')
         try:
             new_id = reverse_transaction(kwargs.get('pk'), session)
+            Transaction.objects.get(pk=new_id).print_receipt(do_open_drawer=False)
             return Response({
                 'success': True,
                 'id': new_id
             }, status=status.HTTP_201_CREATED)
-            Transaction.objects.get(pk=new_id).print_receipt(do_open_drawer=False)
         except FlowError as e:
             return Response({
                 'success': False,
