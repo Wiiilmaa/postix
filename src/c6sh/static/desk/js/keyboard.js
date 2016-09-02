@@ -24,27 +24,6 @@ var keyboard = {
                 dialog.keypress(e);
                 return;
             }
-
-            if (tag == 'input' || tag == 'textarea') {
-                return;
-            }
-
-            var map = {
-                27: keyboard._escape,
-                13: keyboard._enter,
-                46: keyboard._delete
-            };
-
-            if (typeof map[e.which] !== "undefined") {
-                map[e.which]();
-                processed = true;
-            }
-
-            if (processed) {
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
         });
     }
 };
