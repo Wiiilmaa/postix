@@ -49,8 +49,12 @@ WSGI_APPLICATION = 'c6sh.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'c6sh',
+        'USER': 'c6sh',
+        'PASSWORD': 'c6sh',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
