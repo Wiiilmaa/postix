@@ -82,7 +82,7 @@ var transaction = {
                 for (i = 0; i < transaction.positions.length; i++) {
                     total += parseFloat(transaction.positions[i].price);
                 }
-                if (total < 0.001) {
+                if (total > 0.001) {
                     $("#post-sale-given input").focus();
                 }
                 
