@@ -31,3 +31,8 @@ class PreorderPosition(models.Model):
     @property
     def product_name(self):
         return self.product.name
+
+    @property
+    def pack_list(self):
+        return self.product.pack_list
+

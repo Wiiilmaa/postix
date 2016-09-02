@@ -1,21 +1,21 @@
-var transaction = {
-    /*
-     The transaction object deals with creating a cart and executing a transaction.
-     */
+	var transaction = {
+	    /*
+	     The transaction object deals with creating a cart and executing a transaction.
+	     */
 
-    positions: [],  // Positions in the current cart
-    post_sale: false,  // true if we have just completed a sale
-    last_id: null,
-    _touch_scrolling: false,
-    _touch_scroll_start_mpos: 0,
-    _touch_scroll_start_cpos: 0,
+	    positions: [],  // Positions in the current cart
+	    post_sale: false,  // true if we have just completed a sale
+	    last_id: null,
+	    _touch_scrolling: false,
+	    _touch_scroll_start_mpos: 0,
+	    _touch_scroll_start_cpos: 0,
 
-    add_preorder: function (secret, product_name) {
+	    add_preorder: function (secret, product_name, pack_list) {
         transaction._add_position({
             'secret': secret,
             'price': '0.00',
             'type': 'redeem'
-        }, product_name, '0.00', '')
+        }, product_name, '0.00', pack_list)
     },
 
     add_product: function (prod_id) {

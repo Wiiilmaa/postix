@@ -9,7 +9,7 @@ from c6sh.core.models import (
 class PreorderPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PreorderPosition
-        fields = ('id', 'preorder', 'secret', 'product', 'is_redeemed', 'is_paid', 'product_name')
+        fields = ('id', 'preorder', 'secret', 'product', 'is_redeemed', 'is_paid', 'product_name', 'pack_list')
 
 
 class PreorderSerializer(serializers.ModelSerializer):

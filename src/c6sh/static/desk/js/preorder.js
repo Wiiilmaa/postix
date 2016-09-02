@@ -31,7 +31,7 @@ var preorder = {
                     return;
                 }
 
-                transaction.add_preorder(secret, res.product_name + ' - ' + secret.substring(0, 5) + '...');
+                transaction.add_preorder(secret, res.product_name + ' - ' + secret.substring(0, 5) + '...', res.pack_list);
 		preorder.take_focus();
             },
             headers: {
