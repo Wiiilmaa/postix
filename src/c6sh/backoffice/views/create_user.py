@@ -42,6 +42,19 @@ class CreateUserForm(forms.Form):
         )
 
 
+def get_normal_user_form():
+    form = CreateUserForm()
+    form['is_backoffice_user'].widget = forms.HiddenInput()
+    form['is_troubleshooter'].widget = forms.HiddenInput()
+    form.helper.layout = Layout(
+        'username',
+        'password',
+        'firstname',
+        'lastname',
+    )
+    return form
+
+
 @backoffice_user_required
 def create_user_view(request):
     if request.method == "POST":
@@ -54,6 +67,6 @@ def create_user_view(request):
             ))
             return redirect('backoffice:main')
     else:
-        form = CreateUserForm()
+        form = get_normal_user_form()
 
     return render(request, 'backoffice/create_user.html', {'form': form})
