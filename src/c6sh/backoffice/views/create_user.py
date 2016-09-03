@@ -65,7 +65,7 @@ def create_user_view(request):
                 'Hinterzimmer-User' if user.is_backoffice_user else 'User',
                 user.username,
             ))
-            return redirect('backoffice:main')
+            return redirect('backoffice:create-user')
     else:
         form = get_normal_user_form()
 

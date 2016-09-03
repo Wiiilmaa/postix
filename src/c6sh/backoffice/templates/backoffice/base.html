@@ -29,7 +29,8 @@
                 <li><a href="{% url "backoffice:report-list" %}">Reports</a></li>
 			  </ul>
 			  <ul class="nav navbar-nav navbar-right">
-                  <li><a href="{% url "backoffice:create-user" %}">Neuer User</a></li>
+
+                  <li><a href="{% url "backoffice:create-user" %}"><span class="glyphicon glyphicon-plus-sign"></span> User</a></li>
                   <li><a href="{% url "backoffice:logout" %}"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a></li>
           {% endif %}
           </ul>
