@@ -50,6 +50,7 @@ def cashdesk_session_before_factory(ip=None, user=None):
     for i in items:
         ItemMovement.objects.create(session=cd,
                                     item=i,
+                                    backoffice_user=user_factory(troubleshooter=True, superuser=True),
                                     amount=random.randint(1, i.initial_stock))
     return cd
 

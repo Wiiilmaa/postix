@@ -28,9 +28,14 @@ def test_unredeemed_entry():
 @pytest.mark.django_db
 def test_reversed_entry():
     list_constraint = list_constraint_factory()
-    entry = list_constraint_entry_factory(list_constraint, redeemed=True)
+    entry = list_constraint_entry_factory(list_constraint)
+    t1 = TransactionPosition.objects.create(
+        type='redeem', listentry=entry,
+        value=Decimal('0.00'), tax_rate=Decimal('0.00'), tax_value=Decimal('0.00'),
+        product=product_factory(), transaction=transaction_factory()
+    )
     TransactionPosition.objects.create(
-        type='reverse', listentry=entry,
+        type='reverse', listentry=entry, reverses=t1,
         value=Decimal('0.00'), tax_rate=Decimal('0.00'), tax_value=Decimal('0.00'),
         product=product_factory(), transaction=transaction_factory()
     )
@@ -51,9 +56,14 @@ def test_unredeemed_preorder():
 
 @pytest.mark.django_db
 def test_reversed_preorder():
-    pp = preorder_position_factory(paid=True, redeemed=True)
+    pp = preorder_position_factory(paid=True)
+    t1 = TransactionPosition.objects.create(
+        type='redeem', preorder_position=pp,
+        value=Decimal('0.00'), tax_rate=Decimal('0.00'), tax_value=Decimal('0.00'),
+        product=product_factory(), transaction=transaction_factory()
+    )
     TransactionPosition.objects.create(
-        type='reverse', preorder_position=pp,
+        type='reverse', preorder_position=pp, reverses=t1,
         value=Decimal('0.00'), tax_rate=Decimal('0.00'), tax_value=Decimal('0.00'),
         product=product_factory(), transaction=transaction_factory()
     )

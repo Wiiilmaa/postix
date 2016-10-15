@@ -10,8 +10,8 @@ from tests.factories import (
 )
 
 from c6sh.core.models import (
-    ListConstraintProduct, TransactionPosition, TransactionPositionItem,
-    WarningConstraintProduct,
+    ListConstraintProduct, Transaction, TransactionPosition,
+    TransactionPositionItem, WarningConstraintProduct,
 )
 from c6sh.core.utils.checks import is_redeemed
 from c6sh.core.utils.flow import (
@@ -134,7 +134,7 @@ def test_preorder_list_constraint_used():
         product=pp.product, constraint=entry.list,
     )
     options = {
-        'list_{}'.format(entry.list.pk): str(entry.id)
+        'list_{}'.format(entry.list.pk): str(entry.identifier)
     }
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret, **options)
@@ -152,7 +152,7 @@ def test_preorder_list_constraint_success():
         product=pp.product, constraint=entry.list,
     )
     options = {
-        'list_{}'.format(entry.list.pk): str(entry.id)
+        'list_{}'.format(entry.list.pk): str(entry.identifier)
     }
     pos = redeem_preorder_ticket(secret=pp.secret, **options)
     assert pos.listentry == entry
@@ -262,7 +262,7 @@ def test_sell_list_constraint_used():
         product=p, constraint=entry.list,
     )
     options = {
-        'list_{}'.format(entry.list.pk): str(entry.id)
+        'list_{}'.format(entry.list.pk): str(entry.identifier)
     }
     with pytest.raises(FlowError) as excinfo:
         sell_ticket(product=p.id, **options)
@@ -280,7 +280,7 @@ def test_sell_list_constraint_success():
         product=p, constraint=entry.list,
     )
     options = {
-        'list_{}'.format(entry.list.pk): str(entry.id)
+        'list_{}'.format(entry.list.pk): str(entry.identifier)
     }
     pos = sell_ticket(product=p.id, **options)
     assert pos.listentry == entry
@@ -338,7 +338,8 @@ def test_reverse_success():
     trans = transaction_factory(session)
     pos = [transaction_position_factory(transaction=trans, product=product_factory(items=True)),
            transaction_position_factory(transaction=trans)]
-    revtrans = reverse_transaction(trans_id=trans.pk, current_session=session)
+    revtransid = reverse_transaction(trans_id=trans.pk, current_session=session)
+    revtrans = Transaction.objects.get(pk=revtransid)
     assert revtrans.session == session
     revpos = revtrans.positions.all()
     assert len(revpos) == len(pos)

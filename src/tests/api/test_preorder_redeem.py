@@ -129,18 +129,19 @@ def test_preorder_list_constraint_used(api_with_session):
         product=pp.product, constraint=entry.list,
     )
     options = {
-        'list_{}'.format(entry.list.pk): str(entry.id)
+        'list_{}'.format(entry.list.pk): str(entry.identifier)
     }
     assert help_test_for_error(api_with_session, pp.secret, options) == {
         'success': False,
-        'message': 'This list entry already has been used.'.format(entry.list.name),
+        'message': 'This list entry already has been used.',
         'type': 'input',
         'missing_field': 'list_{}'.format(entry.list.pk),
+        'bypass_price': None,
     }
 
 
 @pytest.mark.django_db
-def test_success(api_with_session):
+def test_success(api_with_session, event_settings):
     secret = preorder_position_factory(paid=True).secret
     req = {
         'positions': [
