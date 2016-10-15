@@ -7,6 +7,7 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.timezone import now
 
+from ..utils.displays import DummyDisplay, OverheadDisplay
 from ..utils.printing import CashdeskPrinter, DummyPrinter
 from .base import Item, Product, TransactionPosition, TransactionPositionItem
 from .settings import EventSettings
@@ -33,6 +34,12 @@ class Cashdesk(models.Model):
         if self.printer_queue_name:
             return CashdeskPrinter(self.printer_queue_name)
         return DummyPrinter()
+
+    @property
+    def display(self):
+        if self.display_address:
+            return OverheadDisplay(ip_address)
+        return DummyDisplay()
 
     def get_active_sessions(self):
         return [session for session in self.sessions.filter(end__isnull=True) if session.is_active()]
