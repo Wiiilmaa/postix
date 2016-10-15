@@ -5,7 +5,6 @@ from ...core.models import Cashdesk, Transaction, TransactionPosition
 
 
 class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
-    model = Transaction
     template_name = 'troubleshooter/transaction_list.html'
     context_object_name = 'transactions'
     paginate_by = 50
@@ -30,11 +29,9 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        qs = TransactionPosition.objects.all()
+        qs = TransactionPosition.objects.all().select_related('transaction')
         if 'cashdesk' in self.filter:
             qs = qs.filter(transaction__cashdesk=self.filter['cashdesk'])
         if 'type' in self.filter and self.filter['type']:
             qs = qs.filter(type__in=self.filter['type'])
-        # TODO: return Transactions?
-        # TODO: prefetches
         return qs

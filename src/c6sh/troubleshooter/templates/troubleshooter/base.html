@@ -24,13 +24,10 @@
         <div id="navbar" class="collapse navbar-collapse">
             {% if user.is_authenticated %}
                 <ul class="nav navbar-nav">
-                    <li><a href="/troubleshooter/">Overview</a></li>
+                    <li><a href="/troubleshooter/">Laufende Schichten</a></li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="/troubleshooter/">Sales</a></li>
-                </ul>
-                <ul class="nav navbar-nav">
-                    <li><a href="/troubleshooter/">Preorders</a></li>
+                    <li><a href="/troubleshooter/transactions/">Transaktionen</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                 <li><a href="/troubleshooter/logout/"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a>
