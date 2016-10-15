@@ -3,9 +3,12 @@ import json
 import os
 
 from django.core.management.base import BaseCommand
-from django.db.models import Sum, Count
-from c6sh.core.models import Cashdesk, Preorder, PreorderPosition, Product, TransactionPosition
- 
+from django.db.models import Count, Sum
+
+from c6sh.core.models import (
+    Cashdesk, Preorder, PreorderPosition, Product, TransactionPosition,
+)
+
 
 class Command(BaseCommand):
     help = 'Print a view stats'

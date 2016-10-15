@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from .utils import troubleshooter_user_required
 from ...core.models import Cashdesk
+from .utils import troubleshooter_user_required
 
 
 @troubleshooter_user_required
