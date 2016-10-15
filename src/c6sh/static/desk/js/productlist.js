@@ -8,6 +8,7 @@ var productlist = {
     _touch_scroll_start_mpos: 0,
     _touch_scroll_start_cpos: 0,
     _touch_scroll_abs_diff: 0,
+    _touch_product: true,
 
     _load_list: function (url) {
         // Loads the list of products from a given API URL and append the products to the list.
@@ -58,11 +59,15 @@ var productlist = {
     },
 
     _touch_scroll_start: function (e) {
-        if (e.button === 0) {
-            productlist._touch_scrolling = true;
-            productlist._touch_scroll_start_cpos = parseInt($("#product-view-inner").css('top'));
-            productlist._touch_scroll_start_mpos = e.clientY;
-            productlist._touch_scroll_abs_diff = 0;
+        productlist._touch_product = $(e.target).attr("data-id");
+        if ($("#product-view-inner").height() >= $("#product-view").height()) {
+            // Product list is long enough that we require scrolling at all
+            if (e.button === 0) {
+                productlist._touch_scrolling = true;
+                productlist._touch_scroll_start_cpos = parseInt($("#product-view-inner").css('top'));
+                productlist._touch_scroll_start_mpos = e.clientY;
+                productlist._touch_scroll_abs_diff = 0;
+            }
         }
     },
 
@@ -76,11 +81,14 @@ var productlist = {
     _touch_scroll_end: function (e) {
         if (productlist._touch_scrolling) {
             if ($(e.target).is("button") && productlist._touch_scroll_abs_diff < 10) {
-                transaction.add_product($(e.target).attr("data-id"));
+                transaction.add_product(productlist._touch_product);
             }
+        } else if (productlist._touch_product) {
+            transaction.add_product(productlist._touch_product);
         }
         if (e.button === 0) {
             productlist._touch_scrolling = false;
+            productlist._touch_product = null;
         }
     },
 
