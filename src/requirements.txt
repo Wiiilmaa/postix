@@ -6,6 +6,7 @@ django-filter==0.12.*
 django-solo==1.1.*
 markdown==2.6.*
 reportlab==3.3.*
+requests==2.11.*
 qrcode==5.3
 
 # Testing and development requirements

@@ -6,7 +6,7 @@ import requests
 from c6sh.core.models.settings import EventSettings
 
 
-class OverheadPrinter:
+class OverheadDisplay:
     def __init__(self, ip_address, *args, **kwargs):
         self.ip_address = ip_address
 
@@ -32,7 +32,7 @@ class OverheadPrinter:
         return self._request('next')
 
 
-class DummyPrinter:
+class DummyDisplay:
     def __init__(self, *args, **kwargs):
         self.logger = logging.getLogger('django')
 
