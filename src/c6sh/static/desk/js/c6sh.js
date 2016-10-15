@@ -14,6 +14,7 @@ $(function () {
     transaction.init();
     preorder.init();
     keyboard.init();
+    commands.init();
     init_actions();
 });
 

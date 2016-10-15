@@ -32,7 +32,7 @@ var preorder = {
                 }
 
                 transaction.add_preorder(secret, res.product_name + ' - ' + secret.substring(0, 5) + '...', res.pack_list);
-		preorder.take_focus();
+		        preorder.take_focus();
             },
             headers: {
                 'Content-Type': 'application/json'
@@ -62,8 +62,15 @@ var preorder = {
                 if (secret === "") {
                     return;
                 }
-                preorder.redeem(secret);
                 $("#preorder-input").typeahead("val", "").blur();
+                
+                // Special commands
+                if (secret.slice(0, 1) === "/") {
+                    if (commands.process(secret)) {
+                        return;
+                    }
+                }
+                preorder.redeem(secret);
             }
         });
         

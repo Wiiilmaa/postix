@@ -387,3 +387,23 @@ body.has-modal #main-container {
     color: white;
     font-size: 30px;
 }
+
+#info-view {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    z-index: 100000;
+    margin-top: -35px;
+    display: none;
+}
+#info-view > div {
+    margin-left: 10px;
+    background: #cccccc;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+#info-view dd {
+    text-align: left;
+}
