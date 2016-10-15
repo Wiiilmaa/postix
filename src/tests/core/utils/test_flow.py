@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 import pytest
+from c6sh.core.utils import round_decimal
 from django.db.models import Sum
 from tests.factories import (
     cashdesk_session_before_factory, list_constraint_entry_factory,
@@ -127,7 +128,7 @@ def test_preorder_list_constraint_bypass_success():
     pp = preorder_position_factory(paid=True)
     list_constraint = list_constraint_factory()
     ListConstraintProduct.objects.create(
-        product=pp.product, constraint=list_constraint, price=Decimal('23.00')
+        product=pp.product, constraint=list_constraint, price=Decimal('23.00'), tax_rate=Decimal('19.00')
     )
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret)
@@ -138,6 +139,7 @@ def test_preorder_list_constraint_bypass_success():
     assert excinfo.value.bypass_price == Decimal('23.00')
     pos = redeem_preorder_ticket(secret=pp.secret, bypass_price=23.0)
     assert pos.value == Decimal('23.00')
+    assert pos.tax_rate == Decimal('19.00')
 
 
 @pytest.mark.django_db

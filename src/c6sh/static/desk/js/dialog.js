@@ -8,13 +8,14 @@ var dialog = {
     _pos_id: null,
     _type: null,
     _list_id: null,
+    _bypass_price: null,
 
     flash_success: function (message) {
         $("#success-flash").find("div").text(message ? message : 'OK');
         $("#success-flash").stop().fadeIn(100).delay(750).fadeOut(500);
     },
 
-    show_list_input: function (pos_id, message, handler) {
+    show_list_input: function (pos_id, message, handler, bypass_price) {
         // Shows a dialog that is related to cart position pos_id and asks
         // the user to input a text into a field with name handler and the message message.
         // If the dialog is confirmed, the current transaction is re-tried.
@@ -25,6 +26,7 @@ var dialog = {
         dialog._pos_id = pos_id;
         dialog._handler = handler;
         dialog._type = 'input';
+        dialog._bypass_price = bypass_price;
         if (typeof handler === "string" && handler.match(/list_\d+/)) {
             dialog._list_id = parseInt(handler.substring(5));
         } else {
@@ -37,6 +39,11 @@ var dialog = {
         $("#btn-continue").show();
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
+        if (typeof bypass_price === "number") {
+            $("#btn-bypass").show(bypass_price).text("Upgrade (" + bypass_price.toFixed(2) + " €)");
+        } else {
+            $("#btn-bypass").hide();
+        }
         window.setTimeout(function () {
             $('#modal-input').focus().typeahead("val", "");
         }, 50);
@@ -58,6 +65,7 @@ var dialog = {
         $("#btn-continue").hide();
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
+        $("#btn-bypass").hide();
         $("body").addClass("has-modal");
         $("#modal .panel").removeClass("panel-success").addClass("panel-danger");
     },
@@ -73,11 +81,12 @@ var dialog = {
         $("#btn-continue").hide();
         $("#btn-cancel").hide();
         $("#btn-dismiss").show();
+        $("#btn-bypass").hide();
         $("body").addClass("has-modal");
         $("#modal .panel").addClass("panel-success").removeClass("panel-danger");
     },
 
-    show_confirmation: function (pos_id, message, handler) {
+    show_confirmation: function (pos_id, message, handler, bypass_price) {
         // Shows a dialog related to the cart entry pos_id and the message message,
         // asking the user to confirm something. If he/she does, the of the name
         // handler will be set to true in the transaction and the transaction will be
@@ -86,12 +95,18 @@ var dialog = {
         dialog._type = 'confirmation';
         dialog._pos_id = pos_id;
         dialog._handler = handler;
+        dialog._bypass_price = bypass_price;
         $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : 'Confirmation required');
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
         $("#btn-continue").show();
         $("#btn-dismiss").hide();
         $("#btn-cancel").show();
+        if (typeof bypass_price === "number") {
+            $("#btn-bypass").show(bypass_price).text("Upgrade (" + bypass_price.toFixed(2) + " €)");
+        } else {
+            $("#btn-bypass").hide();
+        }
         $("body").addClass("has-modal");
         $("#modal .panel").removeClass("panel-success").addClass("panel-danger");
     },
@@ -109,6 +124,16 @@ var dialog = {
         } else if (dialog._pos_id !== null) {
             transaction.positions[dialog._pos_id][dialog._handler] = val;
             transaction.perform();
+        }
+        dialog.reset();
+    },
+
+    _bypass: function () {
+        // Called if the user selects the bypass/upgrade option
+        if (dialog._pos_id !== null) {
+            transaction.upgrade(dialog._pos_id, dialog._bypass_price);
+        } else {
+            console.error('Unknown operation on non-transaction dialogs.');
         }
         dialog.reset();
     },
@@ -148,6 +173,7 @@ var dialog = {
         $('#btn-cancel').mousedown(dialog.reset);
         $('#btn-dismiss').mousedown(dialog.reset);
         $("#btn-continue").mousedown(dialog._continue);
+        $("#btn-bypass").mousedown(dialog._bypass);
 
         $('#modal-input').typeahead(null, {
             name: 'dialog-input',

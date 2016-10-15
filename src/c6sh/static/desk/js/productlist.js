@@ -8,7 +8,7 @@ var productlist = {
     _touch_scroll_start_mpos: 0,
     _touch_scroll_start_cpos: 0,
     _touch_scroll_abs_diff: 0,
-    _touch_product: true,
+    _touch_product: null,
 
     _load_list: function (url) {
         // Loads the list of products from a given API URL and append the products to the list.
@@ -82,9 +82,11 @@ var productlist = {
         if (productlist._touch_scrolling) {
             if ($(e.target).is("button") && productlist._touch_scroll_abs_diff < 10) {
                 transaction.add_product(productlist._touch_product);
+                productlist._touch_product = null;
             }
-        } else if (productlist._touch_product) {
+        } else if (productlist._touch_product !== null) {
             transaction.add_product(productlist._touch_product);
+            productlist._touch_product = null;
         }
         if (e.button === 0) {
             productlist._touch_scrolling = false;

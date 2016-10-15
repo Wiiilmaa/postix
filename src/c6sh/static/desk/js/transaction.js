@@ -37,6 +37,23 @@ var transaction = {
             'type': 'sell'
         }, product.name, product.price, product.pack_list)
     },
+    
+    upgrade: function (pos_id, bypass_price) {
+        var pos = transaction.positions[pos_id];
+        var new_price = (parseFloat(pos.price) + parseFloat(bypass_price)).toFixed(2),
+            new_bypass_price;
+        
+        if (typeof pos.bypass_price !== 'undefined') {
+            new_bypass_price = (parseFloat(pos.bypass_price) + parseFloat(bypass_price)).toFixed(2);
+        } else {
+            new_bypass_price = parseFloat(bypass_price).toFixed(2);
+        }
+
+        pos.bypass_price = new_bypass_price;
+        pos.price = new_price;
+        $($("#cart .cart-line").get(pos_id)).find(".cart-price").text(new_price);
+        transaction._render();
+    },
 
     _add_position: function (obj, name, price, info) {
         if (transaction.post_sale) {
@@ -112,9 +129,9 @@ var transaction = {
                         pos = data.positions[i];
                         if (!pos.success) {
                             if (pos.type == 'confirmation') {
-                                dialog.show_confirmation(i, pos.message, pos.missing_field);
+                                dialog.show_confirmation(i, pos.message, pos.missing_field, pos.bypass_price);
                             } else if (pos.type == 'input') {
-                                dialog.show_list_input(i, pos.message, pos.missing_field);
+                                dialog.show_list_input(i, pos.message, pos.missing_field, pos.bypass_price);
                             } else {
                                 dialog.show_error(pos.message);
                             }
