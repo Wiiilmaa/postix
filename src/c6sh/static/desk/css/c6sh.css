@@ -390,11 +390,10 @@ body.has-modal #main-container {
 
 #info-view {
     position: absolute;
-    top: 50%;
+    top: 20px;
     left: 0;
     width: 100%;
     z-index: 100000;
-    margin-top: -35px;
     display: none;
 }
 #info-view > div {
