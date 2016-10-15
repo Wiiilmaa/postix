@@ -5,6 +5,7 @@ htmlcov/
 .cache
 *.sqlite3
 *.db
+*.sql
 *.py[cod]
 *.swp
 *.aux
