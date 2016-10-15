@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.utils import timezone
 
 from ..utils import round_decimal
@@ -16,6 +16,10 @@ class Transaction(models.Model):
 
     def print_receipt(self, do_open_drawer=True):
         self.session.cashdesk.printer.print_receipt(self, do_open_drawer)
+
+    @property
+    def value(self):
+        return self.positions.aggregate(result=Sum('value'))['result']
 
 
 class TransactionPosition(models.Model):
