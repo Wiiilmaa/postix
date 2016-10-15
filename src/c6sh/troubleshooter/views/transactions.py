@@ -12,17 +12,14 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
     def dispatch(self, request, *args, **kwargs):
         self.filter = dict()
         _filter = self.request.GET
+        types = [t[0] for t in TransactionPosition.TYPES]
 
-        if 'type' in _filter:
-            print(_filter['type'])
-            self.filter['type'] = [
-                request_filter for request_filter in _filter['type']
-                if request_filter in (t[0] for t in TransactionPosition.TYPES)
-            ]
+        if 'type' in _filter and _filter['type'] in types:
+            self.filter['type'] = _filter['type']
                 
         if 'desk' in _filter:
             try:
-                desk = Cashdesk.objects.get(pk=_filter['cashdesk'])
+                desk = Cashdesk.objects.get(pk=_filter['desk'])
                 self.filter['cashdesk'] = desk
             except Cashdesk.DoesNotExist:
                 pass
@@ -31,7 +28,7 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
     def get_queryset(self):
         qs = TransactionPosition.objects.all().select_related('transaction')
         if 'cashdesk' in self.filter:
-            qs = qs.filter(transaction__cashdesk=self.filter['cashdesk'])
+            qs = qs.filter(transaction__session__cashdesk=self.filter['cashdesk'])
         if 'type' in self.filter and self.filter['type']:
-            qs = qs.filter(type__in=self.filter['type'])
+            qs = qs.filter(type=self.filter['type'])
         return qs
