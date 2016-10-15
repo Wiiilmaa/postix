@@ -25,13 +25,41 @@
 
 <div class="transaction-filter-header"></div>
 
-<div class="transaction-list">
-    <ul>
-        {% for transaction in transactions %}
-            <li>TransactionPosition an {{ transaction.transaction.session.cashdesk }}</li>
-        {% empty %}
-            Keine passenden Transaktionen gefunden.
-        {% endfor %}
-    </ul>
+<div class="transaction-list table-responsive">
+    <table class="table table-condensed table-hover">
+        <thead>
+            <tr>
+                <th> Kasse </th>
+                <th> Typ </th>
+                <th> Transaktionssumme </th>
+                <th> Bon-Nr. </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction_position in transactions %}
+                <tr>
+                    <td>
+                        <a href="{{ request.path }}?desk={{ transaction_position.transaction.session.cashdesk.pk }}">
+                            {{ transaction_position.transaction.session.cashdesk }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ request.path }}?type={{ transaction_position.type }}">
+                            {% if transaction_position.type == 'sell' %}
+                                <span class="text-primary">Verkauf</span>
+                            {% elif transaction_position.type == 'redeem' %}
+                                <span class="text-muted">Vorverkauf</span>
+                            {% elif transaction_position.type == 'reverse' %}
+                                <span class="text-danger">Storno</span>
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td> {{ transaction_position.transaction.value }} </td>
+                    <td> {{ transaction_position.transaction.receipt_id }} </td>
+            {% empty %}
+                Keine passenden Transaktionen gefunden.
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock content %}
