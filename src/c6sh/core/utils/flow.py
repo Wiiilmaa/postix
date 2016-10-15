@@ -65,8 +65,6 @@ def redeem_preorder_ticket(**kwargs):
                 c.constraint.name), type='input', missing_field='list_{}'.format(c.constraint.pk))
         if not entryid.isdigit():
             try:
-                # TODO: This breaks numeric-only auth_tokens. Either we make this logic more
-                # complicated or we enforce characters in auth_tokens.
                 pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
             except User.DoesNotExist:  # noqa
                 raise FlowError('Please supply a list entry ID.',
@@ -137,8 +135,6 @@ def sell_ticket(**kwargs):
                 c.constraint.name), type='input', missing_field='list_{}'.format(c.constraint.pk))
         if not entryid.isdigit():
             try:
-                # TODO: This breaks numeric-only auth_tokens. Either we make this logic more
-                # complicated or we enforce characters in auth_tokens.
                 pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
             except User.DoesNotExist:  # noqa
                 raise FlowError('Please supply a list entry ID.',

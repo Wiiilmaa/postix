@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -51,6 +52,10 @@ class User(AbstractBaseUser):
         elif self.firstname:
             return self.firstname
         return self.username
+
+    def clean(self):
+        if self.auth_token and self.auth_token.isnumeric():
+            raise ValidationError("Auth tokens need to contain at least one character that is not a number.")
 
     @property
     def is_staff(self):
