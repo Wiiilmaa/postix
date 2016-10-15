@@ -11,6 +11,15 @@ var transaction = {
     _touch_scroll_start_cpos: 0,
 
     add_preorder: function (secret, product_name, pack_list) {
+        for (var i = 0; i < transaction.positions.length; i++) {
+            var pos = transaction.positions[i];
+            if (pos.type == 'redeem') {
+                if (pos.secret == secret) {
+                    dialog.show_error('This preorder alread is in your cart.');
+                    return;
+                }
+            }
+        }
         transaction._add_position({
             'secret': secret,
             'price': '0.00',
