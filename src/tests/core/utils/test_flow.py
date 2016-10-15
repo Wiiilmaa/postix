@@ -93,6 +93,72 @@ def test_preorder_warning_constraint_passed():
 
 
 @pytest.mark.django_db
+def test_preorder_warning_constraint_bypass_to_low():
+    pp = preorder_position_factory(paid=True)
+    warning_constraint = warning_constraint_factory()
+    WarningConstraintProduct.objects.create(
+        product=pp.product, constraint=warning_constraint, price=Decimal('7.00')
+    )
+    with pytest.raises(FlowError) as excinfo:
+        redeem_preorder_ticket(secret=pp.secret)
+    assert excinfo.value.message == warning_constraint.message
+    assert excinfo.value.type == 'confirmation'
+    assert excinfo.value.missing_field == 'warning_{}_acknowledged'.format(warning_constraint.pk)
+    with pytest.raises(FlowError):
+        redeem_preorder_ticket(secret=pp.secret, bypass_price=4)
+
+
+@pytest.mark.django_db
+def test_preorder_warning_constraint_bypass_price_paid():
+    pp = preorder_position_factory(paid=True)
+    warning_constraint = warning_constraint_factory()
+    WarningConstraintProduct.objects.create(
+        product=pp.product, constraint=warning_constraint, price=Decimal('7.00')
+    )
+    options = {
+        'bypass_price': 7
+    }
+    pos = redeem_preorder_ticket(secret=pp.secret, **options)
+    assert pos.value == Decimal('7.00')
+
+
+@pytest.mark.django_db
+def test_preorder_list_constraint_bypass_success():
+    pp = preorder_position_factory(paid=True)
+    list_constraint = list_constraint_factory()
+    ListConstraintProduct.objects.create(
+        product=pp.product, constraint=list_constraint, price=Decimal('23.00')
+    )
+    with pytest.raises(FlowError) as excinfo:
+        redeem_preorder_ticket(secret=pp.secret)
+    assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
+        list_constraint.name)
+    assert excinfo.value.type == 'input'
+    assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
+    assert excinfo.value.bypass_price == Decimal('23.00')
+    pos = redeem_preorder_ticket(secret=pp.secret, bypass_price=23.0)
+    assert pos.value == Decimal('23.00')
+
+
+@pytest.mark.django_db
+def test_preorder_list_constraint_bypass_to_low():
+    pp = preorder_position_factory(paid=True)
+    list_constraint = list_constraint_factory()
+    ListConstraintProduct.objects.create(
+        product=pp.product, constraint=list_constraint, price=Decimal('23.00')
+    )
+    with pytest.raises(FlowError) as excinfo:
+        redeem_preorder_ticket(secret=pp.secret)
+    assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
+        list_constraint.name)
+    assert excinfo.value.type == 'input'
+    assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
+    assert excinfo.value.bypass_price == Decimal('23.00')
+    with pytest.raises(FlowError):
+        redeem_preorder_ticket(secret=pp.secret, bypass_price=12.0)
+
+
+@pytest.mark.django_db
 def test_preorder_list_constraint():
     pp = preorder_position_factory(paid=True)
     list_constraint = list_constraint_factory()
@@ -174,6 +240,36 @@ def test_preorder_list_constraint_troubleshooter_bypass():
     pos = redeem_preorder_ticket(secret=pp.secret, **options)
     assert pos.listentry is None
     assert pos.authorized_by == user
+
+
+@pytest.mark.django_db
+def test_preorder_list_and_warning_bypass():
+    pp = preorder_position_factory(paid=True)
+    warning_constraint = warning_constraint_factory()
+    WarningConstraintProduct.objects.create(
+        product=pp.product, constraint=warning_constraint, price=Decimal('23.00')
+    )
+    list_constraint = list_constraint_factory()
+    ListConstraintProduct.objects.create(
+        product=pp.product, constraint=list_constraint, price=Decimal('12.00')
+    )
+    with pytest.raises(FlowError) as excinfo:
+        redeem_preorder_ticket(secret=pp.secret)
+    assert excinfo.value.bypass_price == Decimal('23.00')
+
+    options = {
+        'bypass_price': '23.00'
+    }
+    with pytest.raises(FlowError) as excinfo:
+        redeem_preorder_ticket(secret=pp.secret, **options)
+    assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
+        list_constraint.name)
+    assert excinfo.value.type == 'input'
+    assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
+    assert excinfo.value.bypass_price == Decimal('12.00')
+
+    pos = redeem_preorder_ticket(secret=pp.secret, bypass_price=35.0)
+    assert pos.value == Decimal('35.00')
 
 
 @pytest.mark.django_db

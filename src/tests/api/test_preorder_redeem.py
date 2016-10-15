@@ -36,6 +36,7 @@ def test_invalid(api_with_session):
         'message': 'No ticket found with the given secret.',
         'type': 'error',
         'missing_field': None,
+        'bypass_price': None,
     }
 
 
@@ -46,6 +47,7 @@ def test_unpaid(api_with_session):
         'message': 'Ticket has not been paid for.',
         'type': 'error',
         'missing_field': None,
+        'bypass_price': None,
     }
 
 
@@ -56,6 +58,7 @@ def test_already_redeemed(api_with_session):
         'message': 'Ticket has already been redeemed.',
         'type': 'error',
         'missing_field': None,
+        'bypass_price': None,
     }
 
 
@@ -69,6 +72,7 @@ def test_preorder_warning(api_with_session):
         'message': 'Foo',
         'type': 'confirmation',
         'missing_field': 'warning_acknowledged',
+        'bypass_price': None,
     }
 
 
@@ -84,6 +88,7 @@ def test_preorder_warning_constraint(api_with_session):
         'message': warning_constraint.message,
         'type': 'confirmation',
         'missing_field': 'warning_{}_acknowledged'.format(warning_constraint.pk),
+        'bypass_price': None,
     }
 
 
@@ -99,6 +104,7 @@ def test_preorder_list_constraint(api_with_session):
         'message': 'This ticket can only redeemed by persons on the list "{}".'.format(list_constraint.name),
         'type': 'input',
         'missing_field': 'list_{}'.format(list_constraint.pk),
+        'bypass_price': None,
     }
 
 
@@ -117,6 +123,7 @@ def test_preorder_list_constraint_unknown(api_with_session):
         'message': 'Entry not found on list "{}".'.format(list_constraint.name),
         'type': 'input',
         'missing_field': 'list_{}'.format(list_constraint.pk),
+        'bypass_price': None,
     }
 
 

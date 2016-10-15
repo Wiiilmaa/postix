@@ -129,7 +129,8 @@ class TransactionViewSet(ReadOnlyModelViewSet):
                     'success': False,
                     'message': e.message,
                     'type': e.type,
-                    'missing_field': e.missing_field
+                    'missing_field': e.missing_field,
+                    'bypass_price': e.bypass_price
                 })
                 success = False
             else:

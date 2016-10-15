@@ -89,7 +89,16 @@ type. Currently, the following types can be returned:
   If you retry the transaction, you should include an attribute of value ``true`` with the name given in
   ``missing_field``.
   
-* ``None``: This is an error message that you cannot do anything about.
+* ``null``: This is an error message that you cannot do anything about.
+
+In some cases, a ``bypass_price`` field is present on the response for a position. If this is the case and the field
+is not ``null```, it means that instead of providing the required confirmation or input, the constraint can also be
+removed by adding a payment.
+
+This occurs for example if there is a member ticket at a reduced price. When a ticket of this kind is tried to be
+redeemed by a non-member, instead of providing a member ID you can also upgrade the ticket to a non-member ticket.
+If you choose this option, you need to include ``bypass_price`` as well in your response with the same value. This
+is currently only implemented for redeeming preorders, not for sales.
 
 #### Reversing a transaction
 

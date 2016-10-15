@@ -6,7 +6,6 @@ from string import ascii_uppercase
 
 from c6sh.core.models.settings import EventSettings
 
-
 SEPARATOR = '\u2500' * 42 + '\r\n'
 
 
