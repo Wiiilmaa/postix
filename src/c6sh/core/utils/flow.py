@@ -38,7 +38,7 @@ def redeem_preorder_ticket(**kwargs):
         raise FlowError('No secret has been given.')
 
     try:
-        pp = PreorderPosition.objects.get(secret=kwargs.get('secret'))
+        pp = PreorderPosition.objects.select_for_update().get(secret=kwargs.get('secret'))
     except PreorderPosition.DoesNotExist:
         raise FlowError('No ticket found with the given secret.')
 
