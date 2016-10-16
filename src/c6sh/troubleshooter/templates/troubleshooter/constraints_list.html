@@ -6,7 +6,11 @@
 <div class="panel panel-body">
     <ul>
         {% for list_constraint in constraints %}
-            <li>{{ list_constraint }}</li>
+            <li>
+                <a href="{% url "troubleshooter:constraint-detail" pk=list_constraint.pk %}">
+                    {{ list_constraint }}
+                </a>
+            </li>
             <ul>
                 <li>Einträge: {{ list_constraint.entries.count }}</li>
                 <li>Produkte:</li>
