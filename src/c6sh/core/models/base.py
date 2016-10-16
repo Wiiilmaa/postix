@@ -22,6 +22,18 @@ class Transaction(models.Model):
     def value(self):
         return self.positions.aggregate(result=Sum('value'))['result']
 
+    @property
+    def has_reversed_positions(self):
+        return any(tp.was_reversed() for tp in self.positions.all())
+
+    @property
+    def has_reversals(self):
+        return self.positions.filter(type='reverse').exists()
+
+    @property
+    def can_be_reversed(self):
+        return (not self.has_reversals) and (not self.has_reversed_positions)
+
 
 class TransactionPosition(models.Model):
     TYPES = (
