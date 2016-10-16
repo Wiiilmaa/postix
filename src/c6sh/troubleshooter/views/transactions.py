@@ -30,7 +30,9 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        qs = TransactionPosition.objects.all().select_related('transaction')
+        qs = TransactionPosition.objects.all()\
+            .order_by('-transaction__datetime')\
+            .select_related('transaction')
         if 'cashdesk' in self.filter:
             qs = qs.filter(transaction__session__cashdesk=self.filter['cashdesk'])
         if 'type' in self.filter and self.filter['type']:
