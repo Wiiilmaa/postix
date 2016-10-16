@@ -8,7 +8,7 @@
 {% if is_paginated %}
 	<div class="pagination">
 		{% if page_obj.has_previous %}
-        <a href="{% url "backoffice:report-list" %}?page={{ page_obj.previous_page_number }}">
+        <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.previous_page_number }}">
                 <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
             </a>
 		{% endif %}
@@ -16,7 +16,7 @@
 			Seite {{ page_obj.number }} von {{ page_obj.paginator.num_pages }}.
 		</span>
 		{% if page_obj.has_next %}
-        <a href="{% url "backoffice:report-list" %}?page={{ page_obj.next_page_number }}">
+        <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.next_page_number }}">
                 <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
 			</a>
 		{% endif %}
@@ -29,15 +29,22 @@
     <table class="table table-condensed table-hover">
         <thead>
             <tr>
+                <th></th>
                 <th> Kasse </th>
                 <th> Typ </th>
-                <th> Transaktionssumme </th>
+                <th> Betrag </th>
+                <th> Transaktionsbetrag </th>
                 <th> Bon-Nr. </th>
             </tr>
         </thead>
         <tbody>
             {% for transaction_position in transactions %}
                 <tr>
+                    <td class="session-action-column">
+                        <a href="{% url "troubleshooter:transaction-detail" pk=transaction_position.transaction.pk %}" title="Details">
+                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                        </a>
+                    </td>
                     <td>
                         <a href="{{ request.path }}?desk={{ transaction_position.transaction.session.cashdesk.pk }}">
                             {{ transaction_position.transaction.session.cashdesk }}
@@ -54,6 +61,7 @@
                             {% endif %}
                         </a>
                     </td>
+                    <td> {{ transaction_position.value }} </td>
                     <td> {{ transaction_position.transaction.value }} </td>
                     <td> {{ transaction_position.transaction.receipt_id }} </td>
             {% empty %}
