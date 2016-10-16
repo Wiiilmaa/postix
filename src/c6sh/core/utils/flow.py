@@ -198,10 +198,13 @@ def reverse_transaction(trans_id: int, current_session: CashdeskSession):
         if not current_session.user.is_troubleshooter:
             raise FlowError('Only troubleshooters can reverse sales from other sessions.')
 
+    if not old_transaction.has_reversed_positions:
+        raise FlowError('At least one position of this transaction already has been reversed.')
+    if not old_transaction.has_reversals:
+        raise FlowError('At least one position of this transaction is a reversal.')
+
     new_transaction = Transaction.objects.create(session=current_session)
     for old_pos in old_transaction.positions.all():
-        if old_pos.reversed_by.exists():
-            raise FlowError('At least one position of this transaction already has been reversed.')
         new_pos = copy.copy(old_pos)
         new_pos.transaction = new_transaction
         new_pos.pk = None
@@ -239,6 +242,8 @@ def reverse_transaction_position(trans_pos_id, current_session: CashdeskSession)
 
     if old_pos.reversed_by.exists():
         raise FlowError('This position already has been reversed.')
+    if old_pos.type == 'reverse':
+        raise FlowError('This position already is a reversal.')
 
     new_transaction = Transaction(session=current_session)
     new_transaction.save()
