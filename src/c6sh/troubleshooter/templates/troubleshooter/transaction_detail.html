@@ -11,7 +11,30 @@
     <div class="panel">Bon-Nr: {{ transaction.receipt_id }}</div>
 {% endif %}
 
-<div class="table-responsive">
+{% if transaction.has_reversed_positions %}
+    <div class="panel">
+        <em class="text-danger">*** ENTHÄLT STORNIERTE ZEILEN ***</em>
+    </div>
+{% endif %}
+
+<div class="panel col-md-12">
+    <form class="form col-md-3" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-primary btn-block" type="submit">Bon drucken</button>
+    </form>
+    <form class="form col-md-3" method="post" action="{% url "troubleshooter:transaction-invoice" pk=transaction.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-default btn-block" type="submit">Rechnung erstellen</button>
+    </form>
+    {% if transaction.can_be_reversed %}
+        <form class="form col-md-3" method="post" action="{% url "troubleshooter:transaction-cancel" pk=transaction.pk %}">
+            {% csrf_token %}
+            <button class="btn btn-danger btn-block" type="submit">Storno</button>
+        </form>
+    {% endif %}
+</div>
+
+<div class="table-responsive col-md-12">
     <table class="table table-condensed table-hover">
         <tbody>
             {% for transaction_position in transaction.positions.all %}
@@ -32,18 +55,4 @@
     </table>
 </div>
 
-<div class="panel col-md-12">
-    <form class="form col-md-4" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
-        {% csrf_token %}
-        <button class="btn btn-primary btn-block" type="submit">Bon drucken</button>
-    </form>
-    <form class="form col-md-4" method="post" action="{% url "troubleshooter:transaction-invoice" pk=transaction.pk %}">
-        {% csrf_token %}
-        <button class="btn btn-default btn-block" type="submit">Rechnung erstellen</button>
-    </form>
-    <form class="form col-md-4" method="post" action="{% url "troubleshooter:transaction-cancel" pk=transaction.pk %}">
-        {% csrf_token %}
-        <button class="btn btn-danger btn-block" type="submit">Storno</button>
-    </form>
-</div>
 {% endblock content %}
