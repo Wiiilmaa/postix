@@ -1,0 +1,36 @@
+{% extends 'troubleshooter/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<h1>Liste {{constraint}}</h1>
+    <div class="panel-body">
+        <ul>
+            {% for through in constraint.product_constraints.all %}
+                <li>
+                    {{ through.product }}
+                    {% if through.price %}
+                        (gegen Aufpreis von {{ through.price }} €)
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="panel panel-body">
+    <form class="form form-inline" action="" method="get">
+        <input type="text" class="form-control" id="filter">
+        <button class="btn btn-primary" type="submit">Filter</button>
+    </form>
+</div>
+<div class="panel panel-body">
+    <ul>
+        {% for entry in constraint.entries.all %}
+            <li>
+                {{ entry }}
+            </li>
+        {% empty %}
+            Keine Einträge gefunden.
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

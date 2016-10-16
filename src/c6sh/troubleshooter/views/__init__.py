@@ -1,5 +1,5 @@
 from .auth import LoginView, logout_view
-from .constraints import ListConstraintListView
+from .constraints import ListConstraintDetailView, ListConstraintListView
 from .main import main_view
 from .transactions import (
     TransactionDetailView,
