@@ -51,7 +51,16 @@ class TransactionDetailView(TroubleshooterUserRequiredMixin, DetailView):
 
 @troubleshooter_user_required
 def transaction_reprint(request, pk):
-    pass
+    if request.method == 'POST':
+        try:
+            transaction = Transaction.objects.get(pk=pk)
+        except Transaction.DoesNotExist:
+            messages.error(request, 'Transaktion nicht bekannt.')
+        else:
+            transaction.print_receipt(do_open_drawer=False)
+            messages.success(request, 'Bon wurde an {} neu gedruckt.'.format(transaction.session.cashdesk))
+
+    return redirect('troubleshooter:transaction-detail', pk=pk)
 
 
 @troubleshooter_user_required
