@@ -1,7 +1,9 @@
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
-from .utils import TroubleshooterUserRequiredMixin
+from .utils import TroubleshooterUserRequiredMixin, troubleshooter_user_required
 from ...core.models import Cashdesk, Transaction, TransactionPosition
 
 
@@ -45,3 +47,18 @@ class TransactionDetailView(TroubleshooterUserRequiredMixin, DetailView):
     template_name = 'troubleshooter/transaction_detail.html'
     context_object_name = 'transaction'
     model = Transaction
+
+
+@troubleshooter_user_required
+def transaction_reprint(request, pk):
+    pass
+
+
+@troubleshooter_user_required
+def transaction_invoice(request, pk):
+    pass
+
+
+@troubleshooter_user_required
+def transaction_cancel(request, pk):
+    pass

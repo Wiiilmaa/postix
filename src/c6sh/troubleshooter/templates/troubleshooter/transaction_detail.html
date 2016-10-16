@@ -8,7 +8,7 @@
     <h3>{{ transaction.session.user }}, {{ transaction.datetime|date:"Y-m-d H:i" }}</h3>
 </div>
 {% if transaction.receipt_id %}
-    <div>Bon-Nr: {{ transaction.receipt_id }}</div>
+    <div class="panel">Bon-Nr: {{ transaction.receipt_id }}</div>
 {% endif %}
 
 <div class="table-responsive">
@@ -30,5 +30,20 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+
+<div class="panel col-md-12">
+    <form class="form col-md-4" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-primary btn-block" type="submit">Bon drucken</button>
+    </form>
+    <form class="form col-md-4" method="post" action="{% url "troubleshooter:transaction-invoice" pk=transaction.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-default btn-block" type="submit">Rechnung erstellen</button>
+    </form>
+    <form class="form col-md-4" method="post" action="{% url "troubleshooter:transaction-cancel" pk=transaction.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-danger btn-block" type="submit">Storno</button>
+    </form>
 </div>
 {% endblock content %}

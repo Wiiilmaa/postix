@@ -1,6 +1,12 @@
 from .auth import LoginView, logout_view
 from .main import main_view
-from .transactions import TransactionDetailView, TransactionListView
+from .transactions import (
+    TransactionDetailView,
+    TransactionListView,
+    transaction_cancel,
+    transaction_invoice,
+    transaction_reprint,
+)
 
 __all__ = [
     'LoginView',
@@ -8,4 +14,7 @@ __all__ = [
     'main_view',
     'TransactionDetailView',
     'TransactionListView',
+    'transaction_cancel',
+    'transaction_invoice',
+    'transaction_reprint',
 ]
