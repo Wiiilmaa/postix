@@ -1,0 +1,27 @@
+{% extends 'troubleshooter/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="panel panel-body">
+    <ul>
+        {% for list_constraint in constraints %}
+            <li>{{ list_constraint }}</li>
+            <ul>
+                <li>Einträge: {{ list_constraint.entries.count }}</li>
+                <li>Produkte:</li>
+                <ul>
+                    {% for through in list_constraint.product_constraints.all %}
+                        <li>
+                            {{ through.product }}
+                            {% if through.price %}
+                                (gegen Aufpreis von {{ through.price }} €)
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </ul>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}
