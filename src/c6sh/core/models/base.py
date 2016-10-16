@@ -13,6 +13,7 @@ class Transaction(models.Model):
     cash_given = models.DecimalField(null=True, max_digits=10, decimal_places=2)
     session = models.ForeignKey('CashdeskSession', related_name='transactions',
                                 on_delete=models.PROTECT)
+    receipt_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
 
     def print_receipt(self, do_open_drawer=True):
         self.session.cashdesk.printer.print_receipt(self, do_open_drawer)
