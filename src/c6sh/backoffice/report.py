@@ -93,12 +93,11 @@ def generate_report(session):
     # Header: info text and qr code
     title_str = '[{}] Kassenbericht #{}'.format(EventSettings.objects.get().short_name, session.pk)
     title = Paragraph(title_str, style['Heading1'])
-    text = """{user} an {cashdesk}<br/>{date} {start} bis {end}""".format(
+    text = """{user} an {cashdesk}<br/>{start} – {end}""".format(
         user=session.user.get_full_name(),
         cashdesk=session.cashdesk,
-        date=session.start.date(),
-        start=session.start.replace(microsecond=0).time(),
-        end=session.end.replace(microsecond=0).time(),
+        start=session.start.strftime('%Y-%m-%d %H:%M:%S'),
+        end=session.end.strftime('%Y-%m-%d %H:%M:%S'),
     )
     info = Paragraph(text, style['Normal'])
     logo = get_image(get_qr_image(session), 100)
