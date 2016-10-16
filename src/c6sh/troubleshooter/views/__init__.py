@@ -4,6 +4,7 @@ from .transactions import (
     TransactionDetailView,
     TransactionListView,
     transaction_cancel,
+    transaction_position_cancel,
     transaction_invoice,
     transaction_reprint,
 )
@@ -15,6 +16,7 @@ __all__ = [
     'TransactionDetailView',
     'TransactionListView',
     'transaction_cancel',
+    'transaction_position_cancel',
     'transaction_invoice',
     'transaction_reprint',
 ]
