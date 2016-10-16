@@ -18,7 +18,7 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
         if 'type' in _filter and _filter['type'] in types:
             self.filter['type'] = _filter['type']
                 
-        if 'desk' in _filter:
+        if 'desk' in _filter and _filter['desk']:
             try:
                 desk = Cashdesk.objects.get(pk=_filter['desk'])
                 self.filter['cashdesk'] = desk
@@ -33,6 +33,12 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
         if 'type' in self.filter and self.filter['type']:
             qs = qs.filter(type=self.filter['type'])
         return qs
+
+    def get_context_data(self):
+        ctx = super().get_context_data()
+        ctx['cashdesks'] = Cashdesk.objects.all()
+        ctx['types'] = [t[0] for t in TransactionPosition.TYPES]
+        return ctx
 
 
 class TransactionDetailView(TroubleshooterUserRequiredMixin, DetailView):

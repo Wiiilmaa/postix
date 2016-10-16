@@ -5,25 +5,36 @@
 
 {% block content %}
 
-{% if is_paginated %}
-	<div class="pagination">
-		{% if page_obj.has_previous %}
-        <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.previous_page_number }}">
-                <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
-            </a>
-		{% endif %}
-		<span class="page-current">
-			Seite {{ page_obj.number }} von {{ page_obj.paginator.num_pages }}.
-		</span>
-		{% if page_obj.has_next %}
-        <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.next_page_number }}">
-                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
-			</a>
-		{% endif %}
-	</div>
-{% endif %}
-
-<div class="transaction-filter-header"></div>
+<div class="transaction-filter-header col-md-12">
+    <form class="form" action="" method="get">
+        <div class="col-md-3">
+            <select name="desk" class="form-control">
+                <option value=""></option>
+                {% for cashdesk in cashdesks %}
+                    <option value="{{ cashdesk.pk }}" {% if request.GET.desk|add:0 == cashdesk.id %}selected="selected"{% endif %}>
+                        {{ cashdesk.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="type" class="form-control">
+                <option value=""></option>
+                {% for type in types %}
+                    <option value="{{ type }}" {% if request.GET.type == type %}selected="selected"{% endif %}>
+                        {{ type }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary btn-block" type="submit">Filter</button>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-default btn-block" href="{{ request.path }}">Filter entfernen</a>
+        </div>
+    </form>
+</div>
 
 <div class="transaction-list table-responsive">
     <table class="table table-condensed table-hover">
