@@ -4,7 +4,8 @@ import time
 from collections import defaultdict
 from string import ascii_uppercase
 
-from c6sh.core.models.settings import EventSettings
+from django.db.models import Max
+
 
 SEPARATOR = '\u2500' * 42 + '\r\n'
 
@@ -34,6 +35,7 @@ class CashdeskPrinter:
         self.send(bytearray([0x1D, 0x56, 66, 100]))
 
     def _build_receipt(self, transaction):
+        from c6sh.core.models import EventSettings, Transaction
         settings = EventSettings.objects.get()
         total_sum = 0
         position_lines = list()
@@ -67,6 +69,13 @@ class CashdeskPrinter:
 
         if not position_lines:
             return
+
+        # Only get a new receipt ID after all early outs have passed
+        # to make sure that we'll end up with actual consecutive numbers
+        if not transaction.receipt_id:
+            # TODO: take care of race condition here (via retry)
+            transaction.receipt_id = 1 + (Transaction.objects.aggregate(m=Max('receipt_id'))['m'] or 0)
+            transaction.save(update_fields=['receipt_id'])
 
         receipt = bytearray([0x1B, 0x61, 1]).decode()  # center text
         receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
@@ -103,7 +112,7 @@ class CashdeskPrinter:
             transaction.datetime.strftime("%d.%m.%Y %H:%M"),
             transaction.session.cashdesk.name,
         )
-        receipt += 'Belegnummer: {}\r\n'.format(transaction.pk)
+        receipt += 'Belegnummer: {}\r\n'.format(transaction.receipt_id)
         receipt += '\r\n\r\n'
         return receipt
 
