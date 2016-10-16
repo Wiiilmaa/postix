@@ -1,0 +1,34 @@
+{% extends 'troubleshooter/base.html' %}
+{% load staticfiles %}
+
+{% block headline %}Transaktion #{{ transaction.pk }} ({{ transaction.session.cashdesk }}){% endblock %}
+
+{% block content %}
+<div>
+    <h3>{{ transaction.session.user }}, {{ transaction.datetime|date:"Y-m-d H:i" }}</h3>
+</div>
+{% if transaction.receipt_id %}
+    <div>Bon-Nr: {{ transaction.receipt_id }}</div>
+{% endif %}
+
+<div class="table-responsive">
+    <table class="table table-condensed table-hover">
+        <tbody>
+            {% for transaction_position in transaction.positions.all %}
+                <tr>
+                    <td>
+                        {% if transaction_position.type == 'sell' %}
+                            <span class="text-primary">Verkauf</span>
+                        {% elif transaction_position.type == 'redeem' %}
+                            <span class="text-muted">Vorverkauf</span>
+                        {% elif transaction_position.type == 'reverse' %}
+                            <span class="text-danger">Storno</span>
+                        {% endif %}
+                    </td>
+                    <td> {{ transaction_position.product }} </td>
+                    <td> {{ transaction_position.value }} </td>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

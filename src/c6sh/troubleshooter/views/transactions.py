@@ -1,3 +1,4 @@
+from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
 from .utils import TroubleshooterUserRequiredMixin
@@ -32,3 +33,9 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
         if 'type' in self.filter and self.filter['type']:
             qs = qs.filter(type=self.filter['type'])
         return qs
+
+
+class TransactionDetailView(TroubleshooterUserRequiredMixin, DetailView):
+    template_name = 'troubleshooter/transaction_detail.html'
+    context_object_name = 'transaction'
+    model = Transaction
