@@ -260,4 +260,4 @@ def reverse_transaction_position(trans_pos_id, current_session: CashdeskSession)
         ip.amount *= -1
         ip.save()
 
-    return new_transaction
+    return new_transaction.pk
