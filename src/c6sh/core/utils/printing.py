@@ -76,6 +76,9 @@ class CashdeskPrinter:
             # TODO: take care of race condition here (via retry)
             transaction.receipt_id = 1 + (Transaction.objects.aggregate(m=Max('receipt_id'))['m'] or 0)
             transaction.save(update_fields=['receipt_id'])
+            is_copy = False
+        else:
+            is_copy = True
 
         receipt = bytearray([0x1B, 0x61, 1]).decode()  # center text
         receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
@@ -86,6 +89,11 @@ class CashdeskPrinter:
         if is_cancellation:
             receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
             receipt += 'Storno-Rechnung' + '\r\n\r\n'
+            receipt += bytearray([0x1B, 0x45, 0]).decode()  # de-emphasize
+
+        if is_copy:
+            receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
+            receipt += 'Beleg-Kopie' + '\r\n\r\n'
             receipt += bytearray([0x1B, 0x45, 0]).decode()  # de-emphasize
 
         receipt += SEPARATOR
