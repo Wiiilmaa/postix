@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 
 from .utils import TroubleshooterUserRequiredMixin, troubleshooter_user_required
 from ...core.models import Cashdesk, Transaction, TransactionPosition
+from ...core.utils.flow import reverse_transaction
 
 
 class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
@@ -70,4 +71,17 @@ def transaction_invoice(request, pk):
 
 @troubleshooter_user_required
 def transaction_cancel(request, pk):
-    pass
+    if request.method == 'POST':
+        try:
+            transaction = Transaction.objects.get(pk=pk)
+        except Transaction.DoesNotExist:
+            messages.error(request, 'Transaktion nicht bekannt.')
+        else:
+            cashdesk = transaction.session.cashdesk
+            session = cashdesk.get_active_sessions()[0]
+            reversal_pk = reverse_transaction(pk, session)
+            reversal = Transaction.objects.get(pk=reversal_pk)
+            reversal.print_receipt(do_open_drawer=False)
+            messages.success(request, 'Transaktion wurde storniert ({}). Storno-Bon wurde an {} gedruckt.'.format(reversal_pk, cashdesk))
+
+    return redirect('troubleshooter:transaction-detail', pk=pk)
