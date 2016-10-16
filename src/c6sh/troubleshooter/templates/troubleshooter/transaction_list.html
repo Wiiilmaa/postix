@@ -1,8 +1,6 @@
 {% extends 'troubleshooter/base.html' %}
 {% load staticfiles %}
 
-{% block headline %}Overview{% endblock %}
-
 {% block content %}
 
 <div class="transaction-filter-header col-md-12">
@@ -36,7 +34,7 @@
     </form>
 </div>
 
-<div class="transaction-list table-responsive">
+<div class="panel panel-body col-md-12"><div class="transaction-list table-responsive">
     <table class="table table-condensed table-hover">
         <thead>
             <tr>
@@ -80,5 +78,23 @@
             {% endfor %}
         </tbody>
     </table>
-</div>
+</div></div>
+
+{% if is_paginated %}
+	<div class="pagination">
+		{% if page_obj.has_previous %}
+        <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.previous_page_number }}">
+                <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+            </a>
+		{% endif %}
+		<span class="page-current">
+			Seite {{ page_obj.number }} von {{ page_obj.paginator.num_pages }}.
+		</span>
+		{% if page_obj.has_next %}
+        <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.next_page_number }}">
+                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+			</a>
+		{% endif %}
+	</div>
+{% endif %}
 {% endblock content %}
