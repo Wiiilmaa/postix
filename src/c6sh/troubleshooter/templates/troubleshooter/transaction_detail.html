@@ -29,7 +29,7 @@
     {% if transaction.can_be_reversed %}
         <form class="form col-md-3" method="post" action="{% url "troubleshooter:transaction-cancel" pk=transaction.pk %}">
             {% csrf_token %}
-            <button class="btn btn-danger btn-block" type="submit">Storno</button>
+            <button class="btn btn-danger btn-block" type="submit">Storno{% if transaction.positions.count > 1 %} (alle Zeilen){% endif %}</button>
         </form>
     {% endif %}
 </div>
@@ -37,19 +37,28 @@
 <div class="table-responsive col-md-12">
     <table class="table table-condensed table-hover">
         <tbody>
-            {% for transaction_position in transaction.positions.all %}
+            {% for position in transaction.positions.all %}
                 <tr>
                     <td>
-                        {% if transaction_position.type == 'sell' %}
-                            <span class="text-primary">Verkauf</span>
-                        {% elif transaction_position.type == 'redeem' %}
-                            <span class="text-muted">Vorverkauf</span>
-                        {% elif transaction_position.type == 'reverse' %}
-                            <span class="text-danger">Storno</span>
+                        {% if position.was_reversed %}
+                            <a href="{% url "troubleshooter:transaction-detail" pk=position.reversed_by.all.0.transaction.pk %}">
+                                <span class="text-danger">[storniert]</span>
+                            </a>
+                        {% else %}
+                            {% if position.type == 'reverse' %}
+                                <a href="{% url "troubleshooter:transaction-detail" pk=position.reverses.transaction.pk %}">
+                                    <span class="text-danger">Storno</span>
+                                </a>
+                            {% elif transaction.positions.count > 1 %}
+                                <form class="form form-inline" method="post" action="{% url "troubleshooter:transaction-position-cancel" pk=position.pk %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger btn-xs" type="submit">stornieren</button>
+                                </form>
+                            {% endif %}
                         {% endif %}
                     </td>
-                    <td> {{ transaction_position.product }} </td>
-                    <td> {{ transaction_position.value }} </td>
+                    <td> {{ position.product }} </td>
+                    <td> {{ position.value }} </td>
             {% endfor %}
         </tbody>
     </table>
