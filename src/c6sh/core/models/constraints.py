@@ -49,6 +49,12 @@ class ListConstraintProduct(models.Model):
 class ListConstraint(AbstractConstraint):
     products = models.ManyToManyField('Product', verbose_name='Affected products',
                                       blank=True, through='ListConstraintProduct')
+    confidential = models.BooleanField(
+        default=False,
+        help_text='Confidential lists cannot be shown completely '
+                  'and only searched for substrings longer than '
+                  '3 letters for a maximum of 10 results.'
+    )
 
     def __str__(self):
         return self.name
