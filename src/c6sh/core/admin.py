@@ -15,7 +15,7 @@ from .models import (
 class EventSettingsAdminForm(forms.ModelForm):
     class Meta:
         model = EventSettings
-        exclude=[]
+        exclude = []
         widgets = {
             'invoice_address': forms.widgets.Textarea,
             'receipt_address': forms.widgets.Textarea,
@@ -25,7 +25,7 @@ class EventSettingsAdminForm(forms.ModelForm):
 
 @admin.register(EventSettings)
 class EventSettingsAdmin(SingletonModelAdmin):
-    form=EventSettingsAdminForm
+    form = EventSettingsAdminForm
 
 
 @admin.register(User)

@@ -3,8 +3,6 @@ import logging
 
 import requests
 
-from c6sh.core.models.settings import EventSettings
-
 
 class OverheadDisplay:
     def __init__(self, ip_address, *args, **kwargs):
@@ -23,7 +21,7 @@ class OverheadDisplay:
             headers=headers,
             timeout=0.5,
         )
-        return r.json().get('result', r.json().get('error'))
+        return response.json().get('result', response.json().get('error'))
 
     def open(self):
         return self._request('open')

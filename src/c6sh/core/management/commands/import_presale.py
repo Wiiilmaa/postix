@@ -1,6 +1,4 @@
-import decimal
 import json
-import os
 
 from django.core.management.base import BaseCommand
 
@@ -28,11 +26,11 @@ class Command(BaseCommand):
         product_dict = dict()
 
         for item in items:
-            if item['admission'] == True:
+            if item['admission'] is True:
                 product, created = Product.objects.get_or_create(
-                   name=item['name'], 
-                   price=0,
-                   tax_rate=0,
+                    name=item['name'],
+                    price=0,
+                    tax_rate=0,
                 )
                 product_dict[item['id']] = product
                 created_items += int(created)

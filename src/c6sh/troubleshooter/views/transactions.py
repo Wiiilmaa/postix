@@ -20,7 +20,7 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
 
         if 'type' in _filter and _filter['type'] in types:
             self.filter['type'] = _filter['type']
-                
+
         if 'desk' in _filter and _filter['desk']:
             try:
                 desk = Cashdesk.objects.get(pk=_filter['desk'])
