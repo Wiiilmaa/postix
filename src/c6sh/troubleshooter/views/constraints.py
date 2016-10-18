@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db.models import Q
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -19,13 +20,27 @@ class ListConstraintDetailView(TroubleshooterUserRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx['restricted'] = False
         obj = kwargs['object']
 
-        if self.request.GET and self.request.GET['filter'] and self.request.GET['filter'][0]:
-            query = self.request.GET['filter'][0]
-            ctx['entries'] = obj.entries.filter(
-                Q(name__icontains=query) | Q(identifier__icontains=query)
-            )
+        if self.request.GET and self.request.GET['filter']:
+            query = self.request.GET['filter']
+
+            if obj.confidential and len(query) < 3:
+                ctx['entries'] = []
+                ctx['restricted'] = True
+                messages.error(self.request, 'Search strings must be 3 characters or longer for confidential lists.')
+            else:
+                ctx['entries'] = obj.entries.filter(
+                    Q(name__icontains=query) | Q(identifier__icontains=query)
+                )
+                if obj.confidential:
+                    ctx['entries'] = ctx['entries'][:10]
+                    ctx['restricted'] = ctx['entries'].count() > 10
         else:
-            ctx['entries'] = obj.entries.all()
+            if obj.confidential:
+                ctx['entries'] = []
+                ctx['restricted'] = True
+            else:
+                ctx['entries'] = obj.entries.all()
         return ctx

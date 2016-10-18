@@ -30,6 +30,9 @@
             </li>
         {% empty %}
             Keine Einträge gefunden.
+            {% if restricted %}
+                Diese Liste ist geschützt, deshalb werden Einträge nur nach Suchanfragen gezeigt (maximal 10 Ergebnisse).
+            {% endif %}
         {% endfor %}
     </ul>
 </div>
