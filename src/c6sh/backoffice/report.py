@@ -39,8 +39,8 @@ def get_qr_image(session):
 
 
 def generate_report(session):
-    buffer = BytesIO()
-    doc = get_default_document(buffer)
+    _buffer = BytesIO()
+    doc = get_default_document(_buffer, footer=EventSettings.objects.get().report_footer)
     style = get_paragraph_style()
 
     # Header: info text and qr code
@@ -135,6 +135,6 @@ def generate_report(session):
     ]
     doc.build(story)
 
-    buffer.seek(0)
-    stored_name = default_storage.save(session.get_new_report_path(), ContentFile(buffer.read()))
+    _buffer.seek(0)
+    stored_name = default_storage.save(session.get_new_report_path(), ContentFile(_buffer.read()))
     return stored_name

@@ -36,7 +36,7 @@ def get_default_document(buffer):
         canvas.restoreState()
 
     doc = BaseDocTemplate(
-        buffer,
+        _buffer,
         pagesize=PAGESIZE,
         leftMargin=25 * mm,
         rightMargin=20 * mm,
