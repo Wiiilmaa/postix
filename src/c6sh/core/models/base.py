@@ -1,5 +1,7 @@
+import os
 from decimal import Decimal
 
+from django.core.files.storage import default_storage
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q, Sum
@@ -33,6 +35,17 @@ class Transaction(models.Model):
     @property
     def can_be_reversed(self):
         return (not self.has_reversals) and (not self.has_reversed_positions)
+
+    @property
+    def has_invoice(self):
+        return bool(self.get_invoice_path())
+
+    def get_invoice_path(self, allow_nonexistent=False):
+        base = default_storage.path('invoices')
+        path = os.path.join(base, 'invoice_{:04d}.pdf'.format(self.pk))
+        if allow_nonexistent or os.path.exists(path):
+            return path
+        return None
 
 
 class TransactionPosition(models.Model):

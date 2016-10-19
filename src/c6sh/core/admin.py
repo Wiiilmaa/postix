@@ -18,6 +18,7 @@ class EventSettingsAdminForm(forms.ModelForm):
         exclude = []
         widgets = {
             'invoice_address': forms.widgets.Textarea,
+            'invoice_footer': forms.widgets.Textarea,
             'receipt_address': forms.widgets.Textarea,
             'receipt_footer': forms.widgets.Textarea,
         }
