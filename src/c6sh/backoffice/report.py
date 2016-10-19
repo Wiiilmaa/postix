@@ -4,37 +4,14 @@ from io import BytesIO
 import qrcode
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from reportlab.lib import colors, utils
-from reportlab.lib.pagesizes import A4, portrait
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
 from reportlab.lib.units import mm
-from reportlab.platypus import (
-    BaseDocTemplate, Frame, Image, PageTemplate, Paragraph, Spacer, Table,
-    TableStyle,
-)
+from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
 from c6sh.core.models import EventSettings
-
-FONTSIZE = 11
-PAGESIZE = portrait(A4)
-CUR = '{:.2f} €'
-
-
-def get_paragraph_style():
-    style = getSampleStyleSheet()
-    # TODO: font
-    # style.fontName = 'OpenSans'
-    style['Normal'].fontSize = FONTSIZE
-    style['Normal'].leading = int(1.5 * FONTSIZE)
-    return style
-
-
-def get_image(fileish, width):
-    """ scales image with given width. fileish may be file or path """
-    img = utils.ImageReader(fileish)
-    orig_width, height = img.getSize()
-    aspect = height / orig_width
-    return Image(fileish, width=width, height=width * aspect)
+from c6sh.core.utils.pdf import (
+    CURRENCY, FONTSIZE, get_default_document, get_paragraph_style, scale_image,
+)
 
 
 def get_qr_image(session):
@@ -61,30 +38,6 @@ def get_qr_image(session):
     return f
 
 
-def get_default_document(buffer):
-    def on_page(canvas, doc):
-        footer = EventSettings.objects.get().report_footer
-        canvas.saveState()
-        canvas.setFontSize(8)
-        for i, line in enumerate(footer.split('\n')[::-1]):
-            canvas.drawCentredString(PAGESIZE[0] / 2, 25 + (3.5 * i) * mm, line.strip())
-        canvas.restoreState()
-
-    doc = BaseDocTemplate(
-        buffer,
-        pagesize=PAGESIZE,
-        leftMargin=25 * mm,
-        rightMargin=20 * mm,
-        topMargin=20 * mm,
-        bottomMargin=20 * mm,
-    )
-    frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height,
-                  leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0, id='normal')
-    doc_template = PageTemplate(id='all', pagesize=PAGESIZE, frames=[frame], onPage=on_page)
-    doc.addPageTemplates([doc_template])
-    return doc
-
-
 def generate_report(session):
     buffer = BytesIO()
     doc = get_default_document(buffer)
@@ -100,7 +53,7 @@ def generate_report(session):
         end=session.end.strftime('%Y-%m-%d %H:%M:%S'),
     )
     info = Paragraph(text, style['Normal'])
-    logo = get_image(get_qr_image(session), 100)
+    logo = scale_image(get_qr_image(session), 100)
 
     header = Table(
         data=[[[title, info], logo], ],
@@ -117,10 +70,10 @@ def generate_report(session):
     data = [['Ticket', 'Presale', 'Verkauf', 'Stornos', 'Einzelpreis', 'Gesamt'], ]
     sales_raw_data = session.get_product_sales()
     sales = [[p['product'].name, p['presales'], p['sales'], p['reversals'],
-             CUR.format(p['value_single']), CUR.format(p['value_total'])]
+             CURRENCY.format(p['value_single']), CURRENCY.format(p['value_total'])]
              for p in sales_raw_data]
     data += sales
-    data += [['', '', '', '', '', CUR.format(sum([p['value_total'] for p in sales_raw_data]))]]
+    data += [['', '', '', '', '', CURRENCY.format(sum([p['value_total'] for p in sales_raw_data]))]]
     last_row = len(data) - 1
     sales = Table(
         data=data,
@@ -142,10 +95,10 @@ def generate_report(session):
     # geld immer decimal mit € und nachkommastellen
     cash_transactions = session.get_cash_transaction_total()
     cash = [['Bargeld',
-             CUR.format(session.cash_before),
-             CUR.format(cash_transactions),
-             CUR.format(session.cash_after),
-             CUR.format(session.cash_before + cash_transactions - session.cash_after)], ]
+             CURRENCY.format(session.cash_before),
+             CURRENCY.format(cash_transactions),
+             CURRENCY.format(session.cash_after),
+             CURRENCY.format(session.cash_before + cash_transactions - session.cash_after)], ]
     items = [[d['item'].name, d['movements'], d['transactions'], abs(d['final_movements']), d['total']] for d in session.get_current_items()]
     last_row = len(items) + 1
     items = Table(
