@@ -14,8 +14,9 @@ class EventSettings(SingletonModel):
         default='Who is flying this thing? Enter your contact information as support contact info, please.',
         help_text='Your - yes YOUR - real-time contact info, e.g. phone number.',
     )
-    invoice_address = models.CharField(max_length=200)
-    receipt_address = models.CharField(max_length=200)
+    invoice_address = models.CharField(max_length=200, blank=True, null=True)
+    invoice_footer = models.CharField(max_length=200, blank=True, null=True)
+    receipt_address = models.CharField(max_length=200, blank=True, null=True)
     receipt_footer = models.CharField(
         max_length=200,
         default='Thank you!',
