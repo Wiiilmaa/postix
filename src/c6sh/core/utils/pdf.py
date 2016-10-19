@@ -26,14 +26,14 @@ def scale_image(fileish, width):
     return Image(fileish, width=width, height=width * aspect)
 
 
-def get_default_document(buffer):
-    def on_page(canvas, doc):
-        footer = EventSettings.objects.get().report_footer
+def get_default_document(_buffer, footer=None):
+    def on_page(canvas, doc, footer=footer):
         canvas.saveState()
-        canvas.setFontSize(8)
-        for i, line in enumerate(footer.split('\n')[::-1]):
-            canvas.drawCentredString(PAGESIZE[0] / 2, 25 + (3.5 * i) * mm, line.strip())
-        canvas.restoreState()
+        if footer:
+            canvas.setFontSize(8)
+            for i, line in enumerate(footer.split('\n')[::-1]):
+                canvas.drawCentredString(PAGESIZE[0] / 2, 25 + (3.5 * i) * mm, line.strip())
+            canvas.restoreState()
 
     doc = BaseDocTemplate(
         _buffer,
