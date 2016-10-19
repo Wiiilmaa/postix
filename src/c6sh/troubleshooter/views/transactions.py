@@ -3,9 +3,13 @@ from django.shortcuts import redirect
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
-from .utils import TroubleshooterUserRequiredMixin, troubleshooter_user_required
 from ...core.models import Cashdesk, Transaction, TransactionPosition
-from ...core.utils.flow import reverse_transaction, reverse_transaction_position
+from ...core.utils.flow import (
+    reverse_transaction, reverse_transaction_position,
+)
+from .utils import (
+    TroubleshooterUserRequiredMixin, troubleshooter_user_required,
+)
 
 
 class TransactionListView(TroubleshooterUserRequiredMixin, ListView):

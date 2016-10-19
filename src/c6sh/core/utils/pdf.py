@@ -4,8 +4,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.platypus import BaseDocTemplate, Frame, Image, PageTemplate
 
-from c6sh.core.models import EventSettings
-
 FONTSIZE = 11
 PAGESIZE = portrait(A4)
 CURRENCY = '{:.2f} €'

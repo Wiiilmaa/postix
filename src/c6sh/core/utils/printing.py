@@ -6,7 +6,6 @@ from string import ascii_uppercase
 
 from django.db.models import Max
 
-
 SEPARATOR = '\u2500' * 42 + '\r\n'
 
 
