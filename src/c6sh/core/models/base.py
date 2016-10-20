@@ -4,7 +4,7 @@ from decimal import Decimal
 from django.core.files.storage import default_storage
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Q, Sum
+from django.db.models import Max, Q, Sum
 from django.utils import timezone
 
 from ..utils import round_decimal
@@ -46,6 +46,16 @@ class Transaction(models.Model):
         if allow_nonexistent or os.path.exists(path):
             return path
         return None
+
+    def set_receipt_id(self, retry=0):
+        try:
+            self.receipt_id = 1 + (Transaction.objects.aggregate(m=Max('receipt_id'))['m'] or 0)
+            self.save(update_fields=['receipt_id'])
+        except:
+            if retry > 0:
+                self.set_receipt_id(retry=retry - 1)
+            else:
+                raise
 
 
 class TransactionPosition(models.Model):
