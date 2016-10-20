@@ -96,7 +96,7 @@ def transaction_invoice(request, pk):
     if request.method == 'POST':
         form = InvoiceAddressForm(request.POST)
         if form.is_valid():
-            path = generate_invoice(pk, form['address'])
+            path = generate_invoice(transaction, form.cleaned_data['address'])
             return return_invoice(path)
         else:
             messages(form.errors)
