@@ -2,6 +2,7 @@ from io import BytesIO
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.utils.timezone import now
 from reportlab.lib import colors
 from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
@@ -36,6 +37,13 @@ def generate_invoice(transaction, address):
             ('VALIGN', (0, 0), (2, 1), 'TOP'),
         ]),
     )
+    date = Table(
+        data=[[now().strftime('%Y-%m-%d')]],
+        colWidths=[doc.width],
+        style=TableStyle([
+            ('ALIGN', (0, 0), (0, 0), 'RIGHT'),
+        ]),
+    )
     invoice_title = Paragraph('Rechnung {}-{:04d}'.format(settings.short_name, transaction.pk), style['Heading1'])
 
     data = [['Ticket', 'Steuersatz', 'Netto', 'Brutto'], ]
@@ -67,7 +75,7 @@ def generate_invoice(transaction, address):
     )
 
     story = [
-        header, Spacer(1, 15 * mm), invoice_title, Spacer(1, 25 * mm), transaction_table,
+        header, Spacer(1, 15 * mm), date, invoice_title, Spacer(1, 25 * mm), transaction_table,
     ]
     doc.build(story)
     _buffer.seek(0)
