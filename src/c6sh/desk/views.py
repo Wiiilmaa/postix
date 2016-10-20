@@ -69,6 +69,6 @@ def main_view(request):
 
     if not session.start:
         session.start = now()
-        session.save()
+        session.save(update_fields=['start'])
 
     return render(request, 'desk/main.html')

@@ -166,12 +166,12 @@ def end_session(request, pk):
                 # cash movement over time.
                 # TODO: Maybe we should at least adjust the backoffice user responsible.
                 session.cash_after += form.cleaned_data.get('cash_before')
-                session.save()
+                session.save(update_fields=['cash_after'])
             else:
                 session.end = now()
                 session.backoffice_user_after = request.user
                 session.cash_after = form.cleaned_data.get('cash_before')
-                session.save()
+                session.save(update_fields=['backoffice_user_after', 'cash_after', 'end'])
                 messages.success(request, 'Session wurde beendet.')
 
             generate_report(session)
