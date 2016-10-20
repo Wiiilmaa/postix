@@ -14,6 +14,10 @@ from c6sh.core.utils.pdf import (
 
 
 def generate_invoice(transaction, address):
+    path = transaction.get_invoice_path()
+    if path:
+        return path
+
     _buffer = BytesIO()
     settings = EventSettings.objects.get()
     doc = get_default_document(_buffer, footer=settings.invoice_footer)

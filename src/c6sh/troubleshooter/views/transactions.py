@@ -1,5 +1,7 @@
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.core.files.storage import default_storage
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
@@ -7,6 +9,8 @@ from ...core.models import Cashdesk, Transaction, TransactionPosition
 from ...core.utils.flow import (
     reverse_transaction, reverse_transaction_position,
 )
+from ..forms import InvoiceAddressForm
+from ..invoicing import generate_invoice
 from .utils import (
     TroubleshooterUserRequiredMixin, troubleshooter_user_required,
 )
@@ -72,7 +76,32 @@ def transaction_reprint(request, pk):
 
 @troubleshooter_user_required
 def transaction_invoice(request, pk):
-    pass
+    def return_invoice(path, pk=pk):
+        response = HttpResponse(content=default_storage.open(path, 'rb'))
+        response['Content-Type'] = 'application/pdf'
+        response['Content-Disposition'] = 'inline; filename=invoice-{}.pdf'.format(pk)
+        return response
+
+    try:
+        transaction = Transaction.objects.get(pk=pk)
+    except:
+        messages.error('Transaktion nicht bekannt')
+        return redirect('troubleshooter:transaction-list')
+
+    path = transaction.get_invoice_path()
+    if path:
+        return return_invoice(path)
+
+    form = InvoiceAddressForm()
+    if request.method == 'POST':
+        form = InvoiceAddressForm(request.POST)
+        if form.is_valid():
+            path = generate_invoice(pk, form['address'])
+            return return_invoice(path)
+        else:
+            messages(form.errors)
+
+    return render(request, 'troubleshooter/invoice.html', {'form': form})
 
 
 @troubleshooter_user_required
