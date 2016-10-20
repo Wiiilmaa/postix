@@ -114,7 +114,7 @@ def transaction_position_cancel(request, pk):
         if request.method == 'POST':
             cashdesk = position.transaction.session.cashdesk
             session = cashdesk.get_active_sessions()[0]
-            reversal_pk = reverse_transaction_position(pk, session)
+            reversal_pk = reverse_transaction_position(pk, session, authorized_by=request.user)
             reversal = Transaction.objects.get(pk=reversal_pk)
             reversal.print_receipt(do_open_drawer=False)
             messages.success(request, 'Transaktionszeile wurde storniert ({}). Storno-Bon wurde an {} gedruckt.'.format(reversal_pk, cashdesk))
@@ -132,7 +132,7 @@ def transaction_cancel(request, pk):
         else:
             cashdesk = transaction.session.cashdesk
             session = cashdesk.get_active_sessions()[0]
-            reversal_pk = reverse_transaction(pk, session)
+            reversal_pk = reverse_transaction(pk, session, authorized_by=request.user)
             reversal = Transaction.objects.get(pk=reversal_pk)
             reversal.print_receipt(do_open_drawer=False)
             messages.success(request, 'Transaktion wurde storniert ({}). Storno-Bon wurde an {} gedruckt.'.format(reversal_pk, cashdesk))

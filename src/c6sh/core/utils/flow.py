@@ -179,7 +179,7 @@ def sell_ticket(**kwargs):
     return pos
 
 
-def reverse_transaction(trans_id: int, current_session: CashdeskSession):
+def reverse_transaction(trans_id: int, current_session: CashdeskSession, authorized_by=None):
     """
     Creates a Transaction that reverses an earlier transaction as a whole.
 
@@ -196,7 +196,8 @@ def reverse_transaction(trans_id: int, current_session: CashdeskSession):
 
     if old_transaction.session != current_session:
         if not current_session.user.is_troubleshooter:
-            raise FlowError('Only troubleshooters can reverse sales from other sessions.')
+            if not authorized_by or not authorized_by.is_troubleshooter:
+                raise FlowError('Only troubleshooters can reverse sales from other sessions.')
 
     if not old_transaction.has_reversed_positions:
         raise FlowError('At least one position of this transaction already has been reversed.')
@@ -221,7 +222,7 @@ def reverse_transaction(trans_id: int, current_session: CashdeskSession):
     return new_transaction.pk
 
 
-def reverse_transaction_position(trans_pos_id, current_session: CashdeskSession):
+def reverse_transaction_position(trans_pos_id, current_session: CashdeskSession, authorized_by=None):
     """
     Creates a Transaction that reverses a single transaction position.
 
@@ -238,7 +239,8 @@ def reverse_transaction_position(trans_pos_id, current_session: CashdeskSession)
 
     if old_pos.transaction.session != current_session:
         if not current_session.user.is_troubleshooter:
-            raise FlowError('Only troubleshooters can reverse sales from other sessions.')
+            if not authorized_by or not authorized_by.is_troubleshooter:
+                raise FlowError('Only troubleshooters can reverse sales from other sessions.')
 
     if old_pos.reversed_by.exists():
         raise FlowError('This position already has been reversed.')
