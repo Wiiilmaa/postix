@@ -2,6 +2,7 @@ import glob
 import os
 import random
 import string
+from datetime import timedelta
 
 from django.core.files.storage import default_storage
 from django.db import models
@@ -167,6 +168,9 @@ class CashdeskSession(models.Model):
             message='Requesting resupply',
         )
 
+    def has_open_requests(self):
+        return TroubleshooterNotification.objects.active(session=self).exists()
+
 
 class ItemMovement(models.Model):
     """ Instead of a through-table. Negative amounts indicate items moved out
@@ -186,6 +190,16 @@ class ItemMovement(models.Model):
     timestamp = models.DateTimeField(default=now, editable=False)
 
 
+
+class NotificationsManager(models.Manager):
+    def active(self, session=None):
+        qs = self.get_queryset().filter(
+            status=TroubleshooterNotification.STATUS_NEW,
+            created__gt=now() - timedelta(minutes=10),
+        )
+        return qs.filter(session=session) if session else qs
+
+
 class TroubleshooterNotification(models.Model):
     """
     Used for resupply requests at the moment.
@@ -203,6 +217,8 @@ class TroubleshooterNotification(models.Model):
     modified = models.DateTimeField(default=now)
     modified_by = models.ForeignKey('User')
     status = models.CharField(choices=STATUS_CHOICES, default=STATUS_NEW, max_length=3)
+
+    objects = NotificationsManager()
 
     def save(self, *args, **kwargs):
         self.modified = now()
