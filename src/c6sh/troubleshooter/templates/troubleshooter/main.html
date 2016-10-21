@@ -1,19 +1,19 @@
 {% extends 'troubleshooter/base.html' %}
 {% load staticfiles %}
 
-{% block headline %}Overview{% endblock %}
+{% block headline %}Current sessions{% endblock %}
 
 {% block content %}
     <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    Current cashdesk sessions
-                </div>
+        <div class="col-md-10">
+            <div class="panel">
                 <ul class="list-group">
                     {% for sess in sessions %}
                         <li class="list-group-item open-cashdesk">
-                            <h3>{{ sess.cashdesk }}
+                            <h3>
+                                <a href="{% url "troubleshooter:transaction-list" %}?desk={{ sess.cashdesk.pk }}">
+                                    {{ sess.cashdesk }}
+                                </a>
                                 <small>User: {{ sess.user }}</small>
                             </h3>
                             <dl class="dl-horizontal">
