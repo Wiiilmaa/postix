@@ -196,6 +196,7 @@ class NotificationsManager(models.Manager):
         qs = self.get_queryset().filter(
             status=TroubleshooterNotification.STATUS_NEW,
             created__gt=now() - timedelta(minutes=10),
+            session__end__isnull=True,
         )
         return qs.filter(session=session) if session else qs
 
