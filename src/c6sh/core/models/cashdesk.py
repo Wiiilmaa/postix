@@ -160,6 +160,13 @@ class CashdeskSession(models.Model):
             ),
         )
 
+    def request_resupply(self):
+        TroubleshooterNotification.objects.create(
+            session=self,
+            modified_by=self.user,
+            message='Requesting resupply',
+        )
+
 
 class ItemMovement(models.Model):
     """ Instead of a through-table. Negative amounts indicate items moved out

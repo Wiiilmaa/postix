@@ -232,3 +232,12 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
             return Response({'success': True})
         except Transaction.DoesNotExist:
             return Response({'success': False, 'error': 'Transaction not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @list_route(methods=["POST"], url_path='request-resupply')
+    def request_resupply(self, request):
+        session = request.user.get_current_session()
+        if not session:  # noqa
+            raise RuntimeError('This should never happen because the auth layer should handle this.')
+
+        session.request_resupply()
+        return Response({'success': True})
