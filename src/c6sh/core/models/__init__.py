@@ -3,7 +3,10 @@ from .base import (
     Item, Product, ProductItem, Transaction, TransactionPosition,
     TransactionPositionItem,
 )
-from .cashdesk import Cashdesk, CashdeskSession, ItemMovement, generate_key
+from .cashdesk import (
+    Cashdesk, CashdeskSession, ItemMovement, TroubleshooterNotification,
+    generate_key,
+)
 from .constraints import (
     AbstractConstraint, ListConstraint, ListConstraintEntry,
     ListConstraintProduct, Quota, TimeConstraint, WarningConstraint,
@@ -18,5 +21,6 @@ __all__ = [
     'ListConstraintEntry', 'ListConstraintProduct', 'Preorder',
     'PreorderPosition', 'Product', 'ProductItem', 'Quota', 'Transaction',
     'TransactionPosition', 'TransactionPositionItem', 'User', 'TimeConstraint',
-    'WarningConstraint', 'WarningConstraintProduct',
+    'TroubleshooterNotification', 'WarningConstraint',
+    'WarningConstraintProduct',
 ]
