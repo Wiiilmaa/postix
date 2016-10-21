@@ -177,3 +177,26 @@ class ItemMovement(models.Model):
                                         related_name='supervised_item_movements',
                                         verbose_name='Backoffice operator issuing movement')
     timestamp = models.DateTimeField(default=now, editable=False)
+
+
+class TroubleshooterNotification(models.Model):
+    """
+    Used for resupply requests at the moment.
+    """
+    STATUS_ACK = 'ACK'
+    STATUS_NEW = 'New'
+    STATUS_CHOICES = [
+        (STATUS_ACK, STATUS_ACK),
+        (STATUS_NEW, STATUS_NEW),
+    ]
+
+    session = models.ForeignKey('CashdeskSession', verbose_name='Cashdesk session initiating the notification')
+    message = models.CharField(max_length=500)
+    created = models.DateTimeField(default=now, editable=False)
+    modified = models.DateTimeField(default=now)
+    modified_by = models.ForeignKey('User')
+    status = models.CharField(choices=STATUS_CHOICES, default=STATUS_NEW, max_length=3)
+
+    def save(self, *args, **kwargs):
+        self.modified = now()
+        return super().save(*args, **kwargs)
