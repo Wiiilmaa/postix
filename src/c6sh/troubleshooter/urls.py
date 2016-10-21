@@ -16,7 +16,7 @@ urlpatterns = [
     url('^transactions/(?P<pk>[0-9]+)/$', views.TransactionDetailView.as_view(), name='transaction-detail'),
     url('^transactions/$', views.TransactionListView.as_view(), name='transaction-list'),
 
-    url('^desks/(?P<pk>[0-9]+)/resupply/$', views.transaction_cancel, name='confirm-resupply'),
+    url('^session/(?P<pk>[0-9]+)/resupply/$', views.confirm_resupply, name='confirm-resupply'),
 
     url('^$', views.main_view, name='main'),
 ]
