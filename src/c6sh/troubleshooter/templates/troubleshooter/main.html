@@ -4,32 +4,45 @@
 {% block headline %}Current sessions{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-10">
-            <div class="panel">
-                <ul class="list-group">
-                    {% for sess in sessions %}
-                        <li class="list-group-item open-cashdesk">
-                            <h3>
-                                <a href="{% url "troubleshooter:transaction-list" %}?desk={{ sess.cashdesk.pk }}">
-                                    {{ sess.cashdesk }}
-                                </a>
-                                <small>User: {{ sess.user }}</small>
-                            </h3>
-                            <dl class="dl-horizontal">
-                                <dt>Session time</dt>
-                                <dd>{{ sess.start|timesince }} </dd>
-                                <dt>Gross total</dt>
-                                <dd>{{ sess.get_cash_transaction_total|floatformat:2 }}</dd>
-                                {% for i in sess.current_items %}
-                                    <dt>{{ i.item }}</dt>
-                                    <dd>{{ i.total }}</dd>
-                                {% endfor %}
-                            </dl>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+    <div class="row col-md-10">
+        <div class="panel">
+            <ul class="list-group">
+                {% for sess in sessions %}
+                {% with sess.has_open_requests as requests %}
+                    <li class="list-group-item open-cashdesk {% if requests %} list-group-item-warning{% endif %}">
+                        <h3>
+                            <a href="{% url "troubleshooter:transaction-list" %}?desk={{ sess.cashdesk.pk }}">
+                                {{ sess.cashdesk }}
+                            </a>
+                            <small>User: {{ sess.user }}</small>
+                        </h3>
+
+                        {% if requests %}
+                            <span class="badge">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                Resupply<br />
+                                <form action="{% url "troubleshooter:confirm-resupply" pk=sess.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-xs btn-success" type="submit" style="margin-top: 5px;"href="{% url "troubleshooter:confirm-resupply" pk=sess.pk %}" method="post">
+                                        <span class="glyphicon glyphicon-ok-sign"></span>
+                                    </button>
+                                </form>
+                            </span>
+                        {% endif %}
+                        <dl class="dl-horizontal">
+                            <dt>Session time</dt>
+                            <dd>{{ sess.start|timesince }} </dd>
+                            <dt>Gross total</dt>
+                            <dd>{{ sess.get_cash_transaction_total|floatformat:2 }}</dd>
+                            {% for i in sess.current_items %}
+                                <dt>{{ i.item }}</dt>
+                                <dd>{{ i.total }}</dd>
+                            {% endfor %}
+                        </dl>
+                    </li>
+                {% endwith %}
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}
