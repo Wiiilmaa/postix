@@ -190,7 +190,6 @@ class ItemMovement(models.Model):
     timestamp = models.DateTimeField(default=now, editable=False)
 
 
-
 class NotificationsManager(models.Manager):
     def active(self, session=None):
         qs = self.get_queryset().filter(

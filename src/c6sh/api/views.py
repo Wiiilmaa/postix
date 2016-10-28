@@ -206,8 +206,8 @@ class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
 
 class CashdeskActionViewSet(ReadOnlyModelViewSet):
     """ Hacky class to use restframework capabilities without being RESTful.
-    We don't expose a queryset, and use a random serializer.\n\n
-    Allowed actions: open-drawer and reprint-receipt
+    We don't expose a queryset, and use a random serializer.
+    Allowed actions: open-drawer, reprint-receipt, request-resupply, display-next
     """
     serializer_class = ListConstraintEntrySerializer
     queryset = Cashdesk.objects.none()
@@ -240,4 +240,13 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
             raise RuntimeError('This should never happen because the auth layer should handle this.')
 
         session.request_resupply()
+        return Response({'success': True})
+
+    @list_route(methods=["POST"], url_path='display-next')
+    def display_next(self, request):
+        session = request.user.get_current_session()
+        if not session:  # noqa
+            raise RuntimeError('This should never happen because the auth layer should handle this.')
+
+        session.cashdesk.display.next()
         return Response({'success': True})
