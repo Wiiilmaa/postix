@@ -427,7 +427,7 @@ def test_reverse_wrong_session_troubleshooter():
     session2 = cashdesk_session_before_factory(user=user_factory(troubleshooter=True))
     trans = transaction_factory(session1)
     transaction_position_factory(transaction=trans)
-    reverse_transaction(trans_id=trans.pk, current_session=session2)
+    reverse_transaction(trans_id=trans.pk, current_session=session2, authorized_by=user_factory(troubleshooter=True))
 
 
 @pytest.mark.django_db
@@ -492,7 +492,7 @@ def test_reverse_position_wrong_session_troubleshooter():
     session2 = cashdesk_session_before_factory(user=user_factory(troubleshooter=True))
     trans = transaction_factory(session1)
     tpos = transaction_position_factory(transaction=trans)
-    reverse_transaction_position(tpos.pk, current_session=session2)
+    reverse_transaction_position(tpos.pk, current_session=session2, authorized_by=user_factory(troubleshooter=True))
 
 
 @pytest.mark.django_db
@@ -500,7 +500,9 @@ def test_reverse_success_single():
     session = cashdesk_session_before_factory()
     trans = transaction_factory(session)
     lp = transaction_position_factory(transaction=trans, product=product_factory(items=True))
-    revtrans = reverse_transaction_position(trans_pos_id=lp.pk, current_session=session)
+    revtrans = Transaction.objects.get(
+        pk=reverse_transaction_position(trans_pos_id=lp.pk, current_session=session)
+    )
     assert revtrans.session == session
     revpos = revtrans.positions.all()
     assert len(revpos) == 1
