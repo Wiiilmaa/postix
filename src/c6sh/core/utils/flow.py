@@ -78,14 +78,9 @@ def redeem_preorder_ticket(**kwargs):
                 raise FlowError(
                     'This ticket can only redeemed by persons on the list "{}".'.format(c.constraint.name),
                     type='input', missing_field='list_{}'.format(c.constraint.pk), bypass_price=c.price)
-            if not entryid.isdigit():
-                try:
-                    pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
-                except User.DoesNotExist:  # noqa
-                    raise FlowError('Please supply a list entry ID.',
-                                    type='input', missing_field='list_{}'.format(c.constraint.pk),
-                                    bypass_price=c.price)
-            else:
+            try:
+                pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
+            except User.DoesNotExist:  # noqa
                 try:
                     entry = c.constraint.entries.get(identifier=entryid)
                     if is_redeemed(entry):
@@ -98,6 +93,7 @@ def redeem_preorder_ticket(**kwargs):
                     raise FlowError('Entry not found on list "{}".'.format(c.constraint.name),
                                     type='input', missing_field='list_{}'.format(c.constraint.pk),
                                     bypass_price=c.price)
+
     except ListConstraintProduct.DoesNotExist:
         pass
 
