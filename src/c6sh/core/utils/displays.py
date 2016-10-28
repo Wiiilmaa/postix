@@ -29,13 +29,19 @@ class OverheadDisplay:
     def next(self):
         return self._request('next')
 
+    def close(self):
+        return self._request('close')
+
 
 class DummyDisplay:
     def __init__(self, *args, **kwargs):
         self.logger = logging.getLogger('django')
 
     def open(self):
-        self.logger.info('[DummyDisplay] Cashdesk was opened')
+        self.logger.info('[DummyDisplay] Cashdesk has been opened.')
 
     def next(self):
-        self.logger.info('[DummyDisplay] Cashdesk is ready for next transaction')
+        self.logger.info('[DummyDisplay] Cashdesk is ready for the next transaction.')
+
+    def close(self):
+        self.logger.info('[DummyDisplay] Cashdesk has been closed.')
