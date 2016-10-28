@@ -1,7 +1,6 @@
 from decimal import Decimal
 
 import pytest
-from c6sh.core.utils import round_decimal
 from django.db.models import Sum
 from tests.factories import (
     cashdesk_session_before_factory, list_constraint_entry_factory,
@@ -14,6 +13,7 @@ from c6sh.core.models import (
     ListConstraintProduct, Transaction, TransactionPosition,
     TransactionPositionItem, WarningConstraintProduct,
 )
+from c6sh.core.utils import round_decimal
 from c6sh.core.utils.checks import is_redeemed
 from c6sh.core.utils.flow import (
     FlowError, redeem_preorder_ticket, reverse_transaction,
@@ -126,10 +126,7 @@ def test_preorder_warning_constraint_bypass_price_paid():
 @pytest.mark.django_db
 def test_preorder_list_constraint_bypass_success():
     pp = preorder_position_factory(paid=True)
-    list_constraint = list_constraint_factory()
-    ListConstraintProduct.objects.create(
-        product=pp.product, constraint=list_constraint, price=Decimal('23.00'), tax_rate=Decimal('19.00')
-    )
+    list_constraint = list_constraint_factory(product=pp.product, price=Decimal('23.00'))
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret)
     assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
@@ -140,15 +137,16 @@ def test_preorder_list_constraint_bypass_success():
     pos = redeem_preorder_ticket(secret=pp.secret, bypass_price=23.0)
     assert pos.value == Decimal('23.00')
     assert pos.tax_rate == Decimal('19.00')
+    pos.transaction = transaction_factory()
+    pos.save()
+    assert pp.is_redeemed
+    assert pos.transaction.value == Decimal('23.00')
 
 
 @pytest.mark.django_db
-def test_preorder_list_constraint_bypass_to_low():
+def test_preorder_list_constraint_bypass_too_low():
     pp = preorder_position_factory(paid=True)
-    list_constraint = list_constraint_factory()
-    ListConstraintProduct.objects.create(
-        product=pp.product, constraint=list_constraint, price=Decimal('23.00')
-    )
+    list_constraint = list_constraint_factory(product=pp.product, price=Decimal('23.00'))
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret)
     assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(

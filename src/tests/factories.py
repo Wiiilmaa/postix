@@ -8,9 +8,9 @@ from faker import Factory
 
 from c6sh.core.models import (
     Cashdesk, CashdeskSession, Item, ItemMovement, ListConstraint,
-    ListConstraintEntry, Preorder, PreorderPosition, Product, ProductItem,
-    Quota, TimeConstraint, Transaction, TransactionPosition, User,
-    WarningConstraint,
+    ListConstraintEntry, ListConstraintProduct, Preorder, PreorderPosition,
+    Product, ProductItem, Quota, TimeConstraint, Transaction,
+    TransactionPosition, User, WarningConstraint,
 )
 
 
@@ -122,10 +122,16 @@ def warning_constraint_factory():
     )
 
 
-def list_constraint_factory():
-    return ListConstraint.objects.create(
+def list_constraint_factory(product=None, price=None):
+    lc = ListConstraint.objects.create(
         name='VIP members'
     )
+    if product:
+        tax_rate = Decimal('19.00') if price else None
+        ListConstraintProduct.objects.create(
+            constraint=lc, product=product, price=price, tax_rate=tax_rate
+        )
+    return lc
 
 
 def list_constraint_entry_factory(list_constraint, redeemed=False):
