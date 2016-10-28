@@ -41,6 +41,7 @@ class LoginView(TemplateView):
                 return redirect('desk:login')
 
             login(request, user)
+            session.cashdesk.display.next()
             return redirect('desk:main')
         else:
             messages.error(request, 'No user account matches the entered credentials.')
@@ -52,7 +53,9 @@ class LoginView(TemplateView):
 
 
 def logout_view(request):
+    session = request.user.get_current_session()
     logout(request)
+    session.cashdesk.display.close()
     return redirect('desk:login')
 
 
