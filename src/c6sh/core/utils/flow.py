@@ -199,9 +199,9 @@ def reverse_transaction(trans_id: int, current_session: CashdeskSession, authori
             if not authorized_by or not authorized_by.is_troubleshooter:
                 raise FlowError('Only troubleshooters can reverse sales from other sessions.')
 
-    if not old_transaction.has_reversed_positions:
+    if old_transaction.has_reversed_positions:
         raise FlowError('At least one position of this transaction already has been reversed.')
-    if not old_transaction.has_reversals:
+    if old_transaction.has_reversals:
         raise FlowError('At least one position of this transaction is a reversal.')
 
     new_transaction = Transaction.objects.create(session=current_session)
