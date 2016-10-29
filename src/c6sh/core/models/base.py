@@ -1,5 +1,6 @@
 import os
 from decimal import Decimal
+from typing import Union
 
 from django.core.files.storage import default_storage
 from django.core.validators import MinValueValidator
@@ -17,37 +18,37 @@ class Transaction(models.Model):
                                 on_delete=models.PROTECT)
     receipt_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
 
-    def print_receipt(self, do_open_drawer=True):
+    def print_receipt(self, do_open_drawer: bool=True) -> None:
         self.session.cashdesk.printer.print_receipt(self, do_open_drawer)
 
     @property
-    def value(self):
+    def value(self) -> Decimal:
         return self.positions.aggregate(result=Sum('value'))['result']
 
     @property
-    def has_reversed_positions(self):
+    def has_reversed_positions(self) -> bool:
         return any(tp.was_reversed() for tp in self.positions.all())
 
     @property
-    def has_reversals(self):
+    def has_reversals(self) -> bool:
         return self.positions.filter(type='reverse').exists()
 
     @property
-    def can_be_reversed(self):
+    def can_be_reversed(self) -> bool:
         return (not self.has_reversals) and (not self.has_reversed_positions)
 
     @property
-    def has_invoice(self):
+    def has_invoice(self) -> bool:
         return bool(self.get_invoice_path())
 
-    def get_invoice_path(self, allow_nonexistent=False):
+    def get_invoice_path(self, allow_nonexistent: bool=False) -> Union[str, None]:
         base = default_storage.path('invoices')
         path = os.path.join(base, 'invoice_{:04d}.pdf'.format(self.pk))
         if allow_nonexistent or os.path.exists(path):
             return path
         return None
 
-    def set_receipt_id(self, retry=0):
+    def set_receipt_id(self, retry: int=0) -> None:
         try:
             self.receipt_id = 1 + (Transaction.objects.aggregate(m=Max('receipt_id'))['m'] or 0)
             self.save(update_fields=['receipt_id'])
@@ -85,11 +86,11 @@ class TransactionPosition(models.Model):
     authorized_by = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT,
                                       related_name='authorized')
 
-    def calculate_tax(self):
+    def calculate_tax(self) -> None:
         net_value = self.value * 100 / (100 + self.tax_rate)
         self.tax_value = round_decimal(self.value - net_value)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         if self.type == 'reverse':
             self.product = self.reverses.product
             if self.value is None:
@@ -109,7 +110,7 @@ class TransactionPosition(models.Model):
                     position=self, item=pi.item, amount=pi.amount
                 )
 
-    def was_reversed(self):
+    def was_reversed(self) -> bool:
         if self.type == 'reverse':
             return False
 
@@ -130,12 +131,12 @@ class Product(models.Model):
     priority = models.IntegerField(default=0, verbose_name='Priority',
                                    help_text='Will be used for sorting, high priorities come first.')
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         if not self.receipt_name:
             self.receipt_name = self.name[:28]
         super().save(*args, **kwargs)
 
-    def is_available(self):
+    def is_available(self) -> bool:
         from . import Quota, TimeConstraint
         timeframes = TimeConstraint.objects.filter(products=self)
         if timeframes.exists():
@@ -152,13 +153,13 @@ class Product(models.Model):
 
         return self.is_visible
 
-    def amount_sold(self):
+    def amount_sold(self) -> int:
         positive = self.positions.filter(Q(type='redeem') | Q(type='sell')).count()
         negative = self.positions.filter(type='reverse').count()
         return positive - negative
 
     @property
-    def pack_list(self):
+    def pack_list(self) -> str:
         l = []
         for pi in self.product_items.all():
             if pi.is_visible:
@@ -168,7 +169,7 @@ class Product(models.Model):
                     l.append(pi.item.name)
         return ", ".join(l)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     class Meta:
@@ -180,7 +181,7 @@ class Item(models.Model):
     description = models.TextField(blank=True)
     initial_stock = models.PositiveIntegerField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 

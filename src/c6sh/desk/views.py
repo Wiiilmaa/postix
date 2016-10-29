@@ -1,18 +1,22 @@
+from typing import Union
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.views.generic import TemplateView
 
 from ..core.utils.iputils import detect_cashdesk, get_ip_address
+from ..core.models import Cashdesk
 
 
 class LoginView(TemplateView):
     template_name = 'desk/login.html'
 
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(self, request: HttpRequest, *args, **kwargs) -> Union[HttpResponseRedirect, HttpResponse]:
         if not self.cashdesk:
             return render(request, 'desk/fail.html', {
                 'message': 'This is not a registered cashdesk.',
@@ -22,7 +26,7 @@ class LoginView(TemplateView):
             return redirect('/')
         return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponseRedirect:
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
@@ -48,11 +52,11 @@ class LoginView(TemplateView):
         return redirect('desk:login')
 
     @cached_property
-    def cashdesk(self):
+    def cashdesk(self) -> Cashdesk:
         return detect_cashdesk(self.request)
 
 
-def logout_view(request):
+def logout_view(request: HttpRequest) -> HttpResponseRedirect:
     session = request.user.get_current_session()
     logout(request)
     session.cashdesk.display.close()
@@ -60,7 +64,7 @@ def logout_view(request):
 
 
 @login_required(login_url='/login/')
-def main_view(request):
+def main_view(request: HttpRequest) -> HttpResponse:
     cashdesk = detect_cashdesk(request)
     session = request.user.get_current_session()
     if not cashdesk or session is None or session.cashdesk != cashdesk:

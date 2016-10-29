@@ -3,6 +3,8 @@ import os
 import random
 import string
 from datetime import timedelta
+from decimal import Decimal
+from typing import Dict, List, Union
 
 from django.core.files.storage import default_storage
 from django.db import models
@@ -14,7 +16,7 @@ from .base import Item, Product, TransactionPosition, TransactionPositionItem
 from .settings import EventSettings
 
 
-def generate_key():
+def generate_key() -> str:
     return "".join(random.choice(string.ascii_letters + string.digits) for i in range(32))
 
 
@@ -27,22 +29,22 @@ class Cashdesk(models.Model):
                                                    verbose_name='Display IP address')
     is_active = models.BooleanField(default=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     @property
-    def printer(self):
+    def printer(self) -> Union[CashdeskPrinter, DummyPrinter]:
         if self.printer_queue_name:
             return CashdeskPrinter(self.printer_queue_name)
         return DummyPrinter()
 
     @property
-    def display(self):
+    def display(self) -> Union[OverheadDisplay, DummyDisplay]:
         if self.display_address:
             return OverheadDisplay(self.ip_address)
         return DummyDisplay()
 
-    def get_active_sessions(self):
+    def get_active_sessions(self) -> List:
         return [session for session in self.sessions.filter(end__isnull=True) if session.is_active()]
 
 
@@ -72,17 +74,17 @@ class CashdeskSession(models.Model):
                                  help_text='Used for non-browser sessions. Generated automatically.')
     comment = models.TextField(blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return '#{2} ({0} on {1})'.format(self.user, self.cashdesk, self.pk)
 
-    def is_active(self):
+    def is_active(self) -> bool:
         return (not self.start or self.start < now()) and not self.end
 
-    def get_item_set(self):
+    def get_item_set(self) -> List[Item]:
         return [Item.objects.get(pk=pk)
                 for pk in self.item_movements.order_by().values_list('item', flat=True).distinct()]
 
-    def get_current_items(self):
+    def get_current_items(self) -> List[Dict]:
         transactions = TransactionPositionItem.objects\
             .values('item')\
             .filter(position__transaction__session=self)\
@@ -115,13 +117,13 @@ class CashdeskSession(models.Model):
             for item in self.get_item_set()
         ]
 
-    def get_cash_transaction_total(self):
+    def get_cash_transaction_total(self) -> Decimal:
         return TransactionPosition.objects\
             .filter(transaction__session=self)\
             .filter(type__in=['sell', 'reverse'])\
             .aggregate(total=models.Sum('value'))['total'] or 0
 
-    def get_product_sales(self):
+    def get_product_sales(self) -> List[Dict]:
         qs = TransactionPosition.objects.filter(transaction__session=self)
         result = []
 
@@ -139,7 +141,7 @@ class CashdeskSession(models.Model):
             result.append(summary)
         return result
 
-    def get_report_path(self):
+    def get_report_path(self) -> Union[str, None]:
         base = default_storage.path('reports')
         search = os.path.join(base, '{}_sessionreport_{}-*.pdf'.format(
             EventSettings.objects.get().short_name,
@@ -151,7 +153,7 @@ class CashdeskSession(models.Model):
             return all_reports[-1]
         return None
 
-    def get_new_report_path(self):
+    def get_new_report_path(self) -> str:
         return os.path.join(
             'reports',
             '{}_sessionreport_{}-{}.pdf'.format(
@@ -161,14 +163,14 @@ class CashdeskSession(models.Model):
             ),
         )
 
-    def request_resupply(self):
+    def request_resupply(self) -> None:
         TroubleshooterNotification.objects.create(
             session=self,
             modified_by=self.user,
             message='Requesting resupply',
         )
 
-    def has_open_requests(self):
+    def has_open_requests(self) -> bool:
         return TroubleshooterNotification.objects.active(session=self).exists()
 
 
@@ -191,7 +193,7 @@ class ItemMovement(models.Model):
 
 
 class NotificationsManager(models.Manager):
-    def active(self, session=None):
+    def active(self, session=None) -> models.QuerySet:
         qs = self.get_queryset().filter(
             status=TroubleshooterNotification.STATUS_NEW,
             created__gt=now() - timedelta(minutes=10),

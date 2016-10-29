@@ -1,15 +1,19 @@
-from rest_framework import authentication, exceptions
+from typing import Tuple
 
-from ..core.models import CashdeskSession
+from django.http import HttpRequest
+from rest_framework import authentication, exceptions
+from rest_framework.authtoken.models import Token
+
+from ..core.models import CashdeskSession, User
 from ..core.utils.iputils import detect_cashdesk, get_ip_address
 
 
 class TokenAuthentication(authentication.TokenAuthentication):
-    def authenticate(self, request):
+    def authenticate(self, request: HttpRequest) -> Tuple[User, Token]:
         self.request = request
         return super().authenticate(request)
 
-    def authenticate_credentials(self, key):
+    def authenticate_credentials(self, key) -> Tuple[User, Token]:
         try:
             session = CashdeskSession.objects.get(api_token=key)
         except CashdeskSession.DoesNotExist:

@@ -1,8 +1,11 @@
+from typing import Union
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django import forms
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from ...core.models import User
@@ -10,7 +13,7 @@ from .utils import backoffice_user_required
 
 
 @backoffice_user_required
-def main_view(request):
+def main_view(request: HttpRequest) -> HttpResponse:
     return render(request, 'backoffice/main.html')
 
 
@@ -42,7 +45,7 @@ class CreateUserForm(forms.Form):
         )
 
 
-def get_normal_user_form():
+def get_normal_user_form() -> CreateUserForm:
     form = CreateUserForm()
     form['is_backoffice_user'].widget = forms.HiddenInput()
     form['is_troubleshooter'].widget = forms.HiddenInput()
@@ -56,7 +59,7 @@ def get_normal_user_form():
 
 
 @backoffice_user_required
-def create_user_view(request):
+def create_user_view(request: HttpRequest) -> Union[HttpResponseRedirect, HttpResponse]:
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():

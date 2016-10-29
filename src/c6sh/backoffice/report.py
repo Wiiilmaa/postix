@@ -1,5 +1,5 @@
-import tempfile
 from io import BytesIO
+from tempfile import TemporaryFile
 
 import qrcode
 from django.core.files.base import ContentFile
@@ -8,13 +8,13 @@ from reportlab.lib import colors
 from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
-from c6sh.core.models import EventSettings
+from c6sh.core.models import CashdeskSession, EventSettings
 from c6sh.core.utils.pdf import (
     CURRENCY, FONTSIZE, get_default_document, get_paragraph_style, scale_image,
 )
 
 
-def get_qr_image(session):
+def get_qr_image(session: CashdeskSession) -> TemporaryFile:
     # TODO: check qr code
     qr = qrcode.QRCode(
         version=1,
@@ -32,13 +32,17 @@ def get_qr_image(session):
     qr.add_data(data)
     qr.make()
 
-    f = tempfile.TemporaryFile()
+    f = TemporaryFile()
     img = qr.make_image()
     img.save(f)
     return f
 
 
-def generate_report(session):
+def generate_report(session: CashdeskSession) -> str:
+    """
+    Generates a closing report for a CashdeskSession; returns the path to the
+    report PDF.
+    """
     _buffer = BytesIO()
     doc = get_default_document(_buffer, footer=EventSettings.objects.get().report_footer)
     style = get_paragraph_style()

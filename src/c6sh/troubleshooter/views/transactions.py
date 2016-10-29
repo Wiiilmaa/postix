@@ -1,6 +1,9 @@
+from typing import Any, Dict, Union
+
 from django.contrib import messages
 from django.core.files.storage import default_storage
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.db.models import QuerySet
 from django.shortcuts import redirect, render
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -21,7 +24,7 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
     context_object_name = 'transactions'
     paginate_by = 50
 
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         self.filter = dict()
         _filter = self.request.GET
         types = [t[0] for t in TransactionPosition.TYPES]
@@ -37,7 +40,7 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
                 pass
         return super().dispatch(request, *args, **kwargs)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         qs = TransactionPosition.objects.all()\
             .order_by('-transaction__datetime')\
             .select_related('transaction')
@@ -47,7 +50,7 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
             qs = qs.filter(type=self.filter['type'])
         return qs
 
-    def get_context_data(self):
+    def get_context_data(self) -> Dict[str, Any]:
         ctx = super().get_context_data()
         ctx['cashdesks'] = Cashdesk.objects.all()
         ctx['types'] = [t[0] for t in TransactionPosition.TYPES]
@@ -61,7 +64,7 @@ class TransactionDetailView(TroubleshooterUserRequiredMixin, DetailView):
 
 
 @troubleshooter_user_required
-def transaction_reprint(request, pk):
+def transaction_reprint(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     if request.method == 'POST':
         try:
             transaction = Transaction.objects.get(pk=pk)
@@ -75,8 +78,8 @@ def transaction_reprint(request, pk):
 
 
 @troubleshooter_user_required
-def transaction_invoice(request, pk):
-    def return_invoice(path, pk=pk):
+def transaction_invoice(request, pk) -> Union[HttpResponse, HttpResponseRedirect]:
+    def return_invoice(path: str, pk: int=pk) -> HttpResponse:
         response = HttpResponse(content=default_storage.open(path, 'rb'))
         response['Content-Type'] = 'application/pdf'
         response['Content-Disposition'] = 'inline; filename=invoice-{}.pdf'.format(pk)
@@ -105,7 +108,7 @@ def transaction_invoice(request, pk):
 
 
 @troubleshooter_user_required
-def transaction_position_cancel(request, pk):
+def transaction_position_cancel(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     try:
         position = TransactionPosition.objects.get(pk=pk)
     except TransactionPosition.DoesNotExist:
@@ -123,7 +126,7 @@ def transaction_position_cancel(request, pk):
 
 
 @troubleshooter_user_required
-def transaction_cancel(request, pk):
+def transaction_cancel(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     if request.method == 'POST':
         try:
             transaction = Transaction.objects.get(pk=pk)

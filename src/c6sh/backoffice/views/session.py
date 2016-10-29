@@ -1,12 +1,15 @@
+from typing import Union
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
+from django.db.models import QuerySet
 
 from ...core.models import Cashdesk, CashdeskSession, ItemMovement, User
 from ..forms import ItemMovementFormSetHelper, get_form_and_formset
@@ -15,7 +18,7 @@ from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 
 @backoffice_user_required
-def new_session(request):
+def new_session(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirect]:
     form, formset = get_form_and_formset(initial_form={'backoffice_user': request.user})
 
     if request.method == 'POST':
@@ -73,7 +76,7 @@ class SessionListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView)
     template_name = 'backoffice/session_list.html'
     context_object_name = 'cashdesks'
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return Cashdesk.objects.filter(is_active=True).order_by('name')
 
 
@@ -84,7 +87,7 @@ class ReportListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView):
     context_object_name = 'sessions'
     paginate_by = 25
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return CashdeskSession.objects.filter(end__isnull=False).order_by('-end')
 
 
@@ -95,7 +98,7 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
 
 
 @backoffice_user_required
-def resupply_session(request, pk):
+def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpResponseRedirect]:
     """ TODO: show approximate current amounts of items? """
     session = get_object_or_404(CashdeskSession, pk=pk)
     initial_form = {
@@ -142,7 +145,7 @@ def resupply_session(request, pk):
 
 
 @backoffice_user_required
-def end_session(request, pk):
+def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpResponseRedirect]:
     session = get_object_or_404(CashdeskSession, pk=pk)
     items_in_session = session.get_item_set()
     cash_total = session.get_cash_transaction_total()
@@ -205,7 +208,7 @@ def end_session(request, pk):
 
 
 @backoffice_user_required
-def session_report(request, pk):
+def session_report(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpResponseRedirect]:
     session = get_object_or_404(CashdeskSession, pk=pk)
     report_path = session.get_report_path()
 

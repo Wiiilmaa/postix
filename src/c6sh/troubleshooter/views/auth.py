@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
@@ -9,7 +10,7 @@ from .utils import troubleshooter_user
 class LoginView(TemplateView):
     template_name = 'troubleshooter/login.html'
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponseRedirect:
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
@@ -30,6 +31,6 @@ class LoginView(TemplateView):
         return redirect('troubleshooter:main')
 
 
-def logout_view(request):
+def logout_view(request: HttpRequest) -> HttpResponseRedirect:
     logout(request)
     return redirect('troubleshooter:login')

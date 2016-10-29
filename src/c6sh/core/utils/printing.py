@@ -2,22 +2,27 @@ import logging
 import subprocess
 import time
 from collections import defaultdict
+from decimal import Decimal
 from string import ascii_uppercase
+from typing import Union
+
+from c6sh.core.models import Transaction
+
 
 SEPARATOR = '\u2500' * 42 + '\r\n'
 
 
 class CashdeskPrinter:
-    def __init__(self, printer):
+    def __init__(self, printer: str) -> None:
         self.printer = printer
 
     @staticmethod
-    def _format_number(number):
+    def _format_number(number: Decimal) -> str:
         formatted_value = '{:.2f}'.format(float(number))
         gap = ' ' * (7 - len(formatted_value))
         return gap + formatted_value
 
-    def send(self, data):
+    def send(self, data: Union[str, bytes]) -> None:
         lpr = subprocess.Popen(['/usr/bin/lpr', '-l', '-P', self.printer], stdin=subprocess.PIPE)
         if isinstance(data, str):
             data = data.encode('cp437')
@@ -25,13 +30,13 @@ class CashdeskPrinter:
         lpr.stdin.close()
         time.sleep(0.1)
 
-    def open_drawer(self):
+    def open_drawer(self) -> None:
         self.send(bytearray([0x1B, ord('p'), 48, 255, 255]))
 
-    def cut_tape(self):
+    def cut_tape(self) -> None:
         self.send(bytearray([0x1D, 0x56, 66, 100]))
 
-    def _build_receipt(self, transaction):
+    def _build_receipt(self, transaction: Transaction) -> Union[None, str]:
         from c6sh.core.models import EventSettings
         settings = EventSettings.objects.get()
         total_sum = 0
@@ -119,7 +124,7 @@ class CashdeskPrinter:
         receipt += '\r\n\r\n'
         return receipt
 
-    def print_receipt(self, transaction, do_open_drawer=True):
+    def print_receipt(self, transaction: Transaction, do_open_drawer: bool=True) -> None:
         if do_open_drawer:
             self.open_drawer()
         receipt = self._build_receipt(transaction)
@@ -134,18 +139,18 @@ class CashdeskPrinter:
 
 
 class DummyPrinter:
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self.logger = logging.getLogger('django')
 
-    def send(self, data):
+    def send(self, data) -> None:
         self.logger.info('[DummyPrinter] Received data: {}'.format(data))
 
-    def open_drawer(self):
+    def open_drawer(self) -> None:
         self.logger.info('[DummyPrinter] Opened drawer')
 
-    def cut_tape(self):
+    def cut_tape(self) -> None:
         self.logger.info('[DummyPrinter] Cut tape')
 
-    def print_receipt(self, transaction, do_open_drawer=True):
+    def print_receipt(self, transaction: Transaction, do_open_drawer: bool=True) -> None:
         receipt = CashdeskPrinter('')._build_receipt(transaction)
         self.logger.info('[DummyPrinter] Printed receipt:\n{}'.format(receipt))

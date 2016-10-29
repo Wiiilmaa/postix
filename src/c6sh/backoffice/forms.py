@@ -1,5 +1,8 @@
+from typing import Any, Tuple
+
 from crispy_forms.helper import FormHelper
 from django import forms
+from django.http import HttpRequest
 
 from ..core.models import Cashdesk, Item, User
 
@@ -15,14 +18,14 @@ class SessionBaseForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_tag = False
 
-    def clean_user(self):
+    def clean_user(self) -> User:
         value = self.cleaned_data['user']
         try:
             return User.objects.get(username=value)
         except User.DoesNotExist:
             raise forms.ValidationError('Engel existiert nicht.')
 
-    def clean_backoffice_user(self):
+    def clean_backoffice_user(self) -> User:
         value = self.cleaned_data['backoffice_user']
         try:
             return User.objects.filter(is_backoffice_user=True).get(username=value)
@@ -53,7 +56,10 @@ class ItemMovementFormSetHelper(FormHelper):
         self.form_tag = False
 
 
-def get_form_and_formset(request=None, extra=1, initial_form=None, initial_formset=None):
+def get_form_and_formset(
+    request: HttpRequest=None, extra: int=1, initial_form: SessionBaseForm=None,
+    initial_formset=None
+) -> Tuple[SessionBaseForm, Any]:
     ItemMovementFormSet = forms.formset_factory(ItemMovementForm, extra=extra)
 
     if request:

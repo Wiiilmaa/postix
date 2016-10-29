@@ -3,7 +3,7 @@ from c6sh.core.models import (
 )
 
 
-def is_redeemed(obj):
+def is_redeemed(obj) -> bool:
 
     if isinstance(obj, ListConstraintEntry):
         positions = TransactionPosition.objects.filter(listentry=obj)

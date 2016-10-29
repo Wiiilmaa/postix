@@ -5,10 +5,11 @@ import requests
 
 
 class OverheadDisplay:
-    def __init__(self, ip_address, *args, **kwargs):
+    def __init__(self, ip_address, *args, **kwargs) -> None:
         self.ip_address = ip_address
 
-    def _request(self, method):
+    def _request(self, method: str):
+        # TODO: document API responses
         payload = {
             'method': method,
             'id': 1
@@ -34,14 +35,14 @@ class OverheadDisplay:
 
 
 class DummyDisplay:
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self.logger = logging.getLogger('django')
 
-    def open(self):
+    def open(self) -> None:
         self.logger.info('[DummyDisplay] Cashdesk has been opened.')
 
-    def next(self):
+    def next(self) -> None:
         self.logger.info('[DummyDisplay] Cashdesk is ready for the next transaction.')
 
-    def close(self):
+    def close(self) -> None:
         self.logger.info('[DummyDisplay] Cashdesk has been closed.')

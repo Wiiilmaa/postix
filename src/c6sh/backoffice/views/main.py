@@ -1,8 +1,9 @@
+from django.http import HttpResponseRedirect, HttpRequest
 from django.shortcuts import redirect
 
 from .utils import backoffice_user_required
 
 
 @backoffice_user_required
-def main_view(request):
+def main_view(request: HttpRequest) -> HttpResponseRedirect:
     return redirect('backoffice:session-list')

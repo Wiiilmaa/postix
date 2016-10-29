@@ -1,3 +1,5 @@
+from typing import Union
+
 from reportlab.lib import utils
 from reportlab.lib.pagesizes import A4, portrait
 from reportlab.lib.styles import getSampleStyleSheet
@@ -18,7 +20,7 @@ def get_paragraph_style():
     return style
 
 
-def scale_image(fileish, width):
+def scale_image(fileish, width: int) -> Image:
     """ scales image with given width. fileish may be file or path """
     img = utils.ImageReader(fileish)
     orig_width, height = img.getSize()
@@ -26,7 +28,7 @@ def scale_image(fileish, width):
     return Image(fileish, width=width, height=width * aspect)
 
 
-def get_default_document(_buffer, footer=None):
+def get_default_document(_buffer, footer: str=None) -> BaseDocTemplate:
     def on_page(canvas, doc, footer=footer):
         canvas.saveState()
         if footer:

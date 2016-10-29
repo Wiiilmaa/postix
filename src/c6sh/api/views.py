@@ -1,5 +1,8 @@
+from typing import Any, Dict, List, Union
+
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, QuerySet
+from django.http import HttpRequest
 from rest_framework import status
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.permissions import IsAdminUser
@@ -22,7 +25,7 @@ from .serializers import (
 
 
 class ProcessException(Exception):
-    def __init__(self, data):
+    def __init__(self, data: Any):
         self.data = data
 
 
@@ -47,7 +50,7 @@ class PreorderPositionViewSet(ReadOnlyModelViewSet):
     queryset = PreorderPosition.objects.all()
     serializer_class = PreorderPositionSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = PreorderPosition.objects.all()
         exact_param = self.request.GET.get('secret', None)
         search_param = self.request.GET.get('search', None)
@@ -89,7 +92,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
     queryset = Transaction.objects.all().prefetch_related('positions')
     serializer_class = TransactionSerializer
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: HttpRequest, *args, **kwargs) -> Response:
         try:
             response = self.perform_create(request)
             return Response(response, status=status.HTTP_201_CREATED)
@@ -97,7 +100,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             return Response(e.data, status=status.HTTP_400_BAD_REQUEST)
 
     @transaction.atomic
-    def perform_create(self, request):
+    def perform_create(self, request: HttpRequest) -> Dict[str, Union[bool, List[Dict]]]:
         data = request.data
         trans = Transaction()
         if 'cash_given' in data:
@@ -154,7 +157,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             raise ProcessException(response)
 
     @detail_route(methods=["POST"])
-    def reverse(self, *args, **kwargs):
+    def reverse(self, *args, **kwargs) -> Response:
         session = self.request.user.get_current_session()
         if not session:  # noqa
             raise RuntimeError('This should never happen because the auth layer should handle this.')
@@ -189,7 +192,7 @@ class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
     queryset = ListConstraintEntry.objects.all()
     serializer_class = ListConstraintEntrySerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = ListConstraintEntry.objects.all()
         listid_param = self.request.query_params.get('listid', None)
         if listid_param is not None:
@@ -213,7 +216,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
     queryset = Cashdesk.objects.none()
 
     @list_route(methods=["POST"], url_path='open-drawer')
-    def open_drawer(self, request):
+    def open_drawer(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
             raise RuntimeError('This should never happen because the auth layer should handle this.')
@@ -221,7 +224,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
         return Response({'success': True})
 
     @list_route(methods=["POST"], url_path='reprint-receipt')
-    def reprint_receipt(self, request):
+    def reprint_receipt(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
             raise RuntimeError('This should never happen because the auth layer should handle this.')
@@ -234,7 +237,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
             return Response({'success': False, 'error': 'Transaction not found.'}, status=status.HTTP_400_BAD_REQUEST)
 
     @list_route(methods=["POST"], url_path='request-resupply')
-    def request_resupply(self, request):
+    def request_resupply(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
             raise RuntimeError('This should never happen because the auth layer should handle this.')
@@ -243,7 +246,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
         return Response({'success': True})
 
     @list_route(methods=["POST"], url_path='display-next')
-    def display_next(self, request):
+    def display_next(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
             raise RuntimeError('This should never happen because the auth layer should handle this.')

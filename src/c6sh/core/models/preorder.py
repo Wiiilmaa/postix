@@ -6,7 +6,7 @@ class Preorder(models.Model):
     is_paid = models.BooleanField(default=False)
     warning_text = models.TextField(blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.order_code
 
 
@@ -15,23 +15,23 @@ class PreorderPosition(models.Model):
     secret = models.CharField(max_length=254, db_index=True, unique=True)
     product = models.ForeignKey('Product', related_name='preorder_positions')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "{}-{}".format(self.preorder.order_code, self.secret[:10])
 
     @property
-    def is_redeemed(self):
+    def is_redeemed(self) -> bool:
         from ..utils.checks import is_redeemed
 
         return is_redeemed(self)
 
     @property
-    def is_paid(self):
+    def is_paid(self) -> bool:
         return self.preorder.is_paid
 
     @property
-    def product_name(self):
+    def product_name(self) -> str:
         return self.product.name
 
     @property
-    def pack_list(self):
+    def pack_list(self) -> str:
         return self.product.pack_list

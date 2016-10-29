@@ -16,11 +16,11 @@ class Quota(AbstractConstraint):
     products = models.ManyToManyField('Product', verbose_name='Affected products',
                                       blank=True)
 
-    def is_available(self):
+    def is_available(self) -> bool:
         total = sum([product.amount_sold() for product in self.products.all()])
         return total < self.size
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "{} ({})".format(self.name, self.size)
 
 
@@ -32,7 +32,7 @@ class TimeConstraint(AbstractConstraint):
     products = models.ManyToManyField('Product', verbose_name='Affected products',
                                       blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "{} ({} - {})".format(self.name, self.start, self.end)
 
 
@@ -56,7 +56,7 @@ class ListConstraint(AbstractConstraint):
                   '3 letters for a maximum of 10 results.'
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -66,7 +66,7 @@ class ListConstraintEntry(models.Model):
     name = models.CharField(max_length=254)
     identifier = models.CharField(max_length=254)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "{} ({}) – {}".format(self.name, self.identifier, self.list)
 
 

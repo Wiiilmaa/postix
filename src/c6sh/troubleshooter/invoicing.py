@@ -7,13 +7,13 @@ from reportlab.lib import colors
 from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
-from c6sh.core.models import EventSettings
+from c6sh.core.models import EventSettings, Transaction
 from c6sh.core.utils.pdf import (
     CURRENCY, FONTSIZE, get_default_document, get_paragraph_style,
 )
 
 
-def generate_invoice(transaction, address):
+def generate_invoice(transaction: Transaction, address: str) -> str:
     path = transaction.get_invoice_path()
     if path:
         return path

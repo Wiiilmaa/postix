@@ -12,17 +12,19 @@ from .checks import is_redeemed
 
 
 class FlowError(Exception):
-    def __init__(self, msg, type="error", missing_field=None, bypass_price=None):
+    def __init__(
+        self, msg: str, type: str="error", missing_field: str=None, bypass_price: Decimal=None
+    ) -> None:
         self.message = msg
         self.type = type
         self.missing_field = missing_field
         self.bypass_price = bypass_price
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.message
 
 
-def redeem_preorder_ticket(**kwargs):
+def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
     """
     Creates a TransactionPosition object that validates a given preorder position.
     This checks the various constraints placed on the given position and item and
@@ -107,7 +109,7 @@ def redeem_preorder_ticket(**kwargs):
     return pos
 
 
-def sell_ticket(**kwargs):
+def sell_ticket(**kwargs) -> TransactionPosition:
     """
     Creates a TransactionPosition object that sells a given product.
     This checks the various constraints placed on the given product and item and
@@ -175,7 +177,7 @@ def sell_ticket(**kwargs):
     return pos
 
 
-def reverse_transaction(trans_id: int, current_session: CashdeskSession, authorized_by=None):
+def reverse_transaction(trans_id: int, current_session: CashdeskSession, authorized_by=None) -> int:
     """
     Creates a Transaction that reverses an earlier transaction as a whole.
 
@@ -218,7 +220,9 @@ def reverse_transaction(trans_id: int, current_session: CashdeskSession, authori
     return new_transaction.pk
 
 
-def reverse_transaction_position(trans_pos_id, current_session: CashdeskSession, authorized_by=None):
+def reverse_transaction_position(
+    trans_pos_id: int, current_session: CashdeskSession, authorized_by=None
+) -> int:
     """
     Creates a Transaction that reverses a single transaction position.
 

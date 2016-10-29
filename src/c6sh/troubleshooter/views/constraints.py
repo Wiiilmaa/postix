@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from django.contrib import messages
 from django.db.models import Q
 from django.views.generic.detail import DetailView
@@ -18,7 +20,7 @@ class ListConstraintDetailView(TroubleshooterUserRequiredMixin, DetailView):
     context_object_name = 'constraint'
     model = ListConstraint
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
         ctx = super().get_context_data(**kwargs)
         ctx['restricted'] = False
         obj = kwargs['object']
