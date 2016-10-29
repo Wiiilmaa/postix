@@ -216,8 +216,3 @@ def session_report(request, pk):
     response['Content-Type'] = 'application/pdf'
     response['Content-Disposition'] = 'inline; filename=sessionreport-{}.pdf'.format(session.pk)
     return response
-
-
-@backoffice_user_required
-def edit_session(request):
-    pass

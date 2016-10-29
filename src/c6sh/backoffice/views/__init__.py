@@ -2,15 +2,14 @@ from .auth import LoginView, logout_view, switch_user
 from .create_user import create_user_view
 from .main import main_view
 from .session import (
-    ReportListView, SessionDetailView, SessionListView, edit_session,
-    end_session, new_session, resupply_session, session_report,
+    ReportListView, SessionDetailView, SessionListView, end_session,
+    new_session, resupply_session, session_report,
 )
 from .utils import backoffice_user_required
 
 __all__ = [
     'backoffice_user_required',
     'create_user_view',
-    'edit_session',
     'end_session',
     'LoginView',
     'logout_view',
