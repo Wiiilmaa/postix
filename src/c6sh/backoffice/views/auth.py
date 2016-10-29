@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.utils.http import is_safe_url
 from django.views.generic import TemplateView
 
-from .utils import backoffice_user
+from .utils import is_backoffice_user
 
 
 class LoginView(TemplateView):
@@ -24,7 +24,7 @@ class LoginView(TemplateView):
             messages.error(request, 'User account is deactivated.')
             return redirect('backoffice:login')
 
-        if not backoffice_user(user):
+        if not is_backoffice_user(user):
             messages.error(request, 'User does not have permission to access backoffice data.')
             return redirect('backoffice:login')
 
