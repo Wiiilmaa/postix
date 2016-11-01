@@ -29,7 +29,8 @@ ImportError: No module named 'django'
 ```
 
 You should also create a superuser with `python manage.py createsuperuser`. Now you can access the admin area
-(http://localhost:8000/admin) and the backoffice app (http://localhost:8000/backoffice/)
+(http://localhost:8000/admin), the backoffice app (http://localhost:8000/backoffice/), the troubleshooter app
+(http://localhost:8000/troubleshooter) and the cashdesk app (http://localhost:8000/).
 
 
 ## Test data
