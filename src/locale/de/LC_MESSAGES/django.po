@@ -1,0 +1,271 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-02 16:51+0100\n"
+"PO-Revision-Date: 2016-11-02 16:54+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.9\n"
+
+#: c6sh/api/auth.py:28
+msgid "Your token is valid for a different cashdesk. Your IP is: {}"
+msgstr "Dieser Token gilt nur an einer anderen Kasse. Deine IP ist: {}"
+
+#: c6sh/core/models/auth.py:59
+msgid ""
+"Auth tokens need to contain at least one character that is not a number."
+msgstr ""
+"Authentifizierungstokens müssen mindestens ein Zeichen enthalten, das keine "
+"Zahl ist."
+
+#: c6sh/core/utils/flow.py:43
+msgid "No secret has been given."
+msgstr "Es wurde kein Code eingegeben."
+
+#: c6sh/core/utils/flow.py:48
+msgid "No ticket found with the given secret."
+msgstr "Kein Ticket für diesen Code gefunden."
+
+#: c6sh/core/utils/flow.py:51
+msgid "Ticket has not been paid for."
+msgstr "Dieses Ticket wurde nicht bezahlt."
+
+#: c6sh/core/utils/flow.py:54
+msgid "Ticket has already been redeemed."
+msgstr "Dieses Ticket wurde bereits eingelöst."
+
+#: c6sh/core/utils/flow.py:76
+msgid "Multiple upgrades with different taxrates are not supported."
+msgstr ""
+"Upgrades innerhalb einer Bestellung müssen den gleichen Steuersatz haben."
+
+#: c6sh/core/utils/flow.py:81 c6sh/core/utils/flow.py:154
+msgid "This ticket can only redeemed by persons on the list \"{}\"."
+msgstr ""
+"Dieses Ticket kann nur von Personen auf der Liste \"{}\" eingelöst werden."
+
+#: c6sh/core/utils/flow.py:89 c6sh/core/utils/flow.py:166
+msgid "This list entry already has been used."
+msgstr "Dieser Listeneintrag wurde bereits abgehakt."
+
+#: c6sh/core/utils/flow.py:95 c6sh/core/utils/flow.py:171
+msgid "Entry not found on list \"{}\"."
+msgstr "Eintrag auf der Liste \"{}\" nicht gefunden."
+
+#: c6sh/core/utils/flow.py:126
+msgid "No product given."
+msgstr "Kein Produkt übergeben."
+
+#: c6sh/core/utils/flow.py:131
+msgid "Product ID not known."
+msgstr "Unbekannte Produkt-ID."
+
+#: c6sh/core/utils/flow.py:134
+msgid "Product currently unavailable or sold out."
+msgstr "Dieses Produkt ist im Moment nicht verfügbar oder ausverkauft."
+
+#: c6sh/core/utils/flow.py:141
+msgid "This sale requires authorization by a troubleshooter."
+msgstr "Diese Transaktion erfordert Authorisierung durch einen Troubleshooter."
+
+#: c6sh/core/utils/flow.py:160
+msgid "Please supply a list entry ID."
+msgstr "Bitte die ID eines Listeneintrags eingeben."
+
+#: c6sh/core/utils/flow.py:190
+msgid "Transaction ID not known."
+msgstr "Unbekannte Transaktions-ID."
+
+#: c6sh/core/utils/flow.py:193 c6sh/core/utils/flow.py:238
+msgid "You need to provide an active session."
+msgstr "Du musst eine aktive Sitzung angeben."
+
+#: c6sh/core/utils/flow.py:198 c6sh/core/utils/flow.py:243
+msgid "Only troubleshooters can reverse sales from other sessions."
+msgstr ""
+"Nur Troubleshooter können Transaktionen aus anderen Sitzungen stornieren."
+
+#: c6sh/core/utils/flow.py:201
+msgid "At least one position of this transaction already has been reversed."
+msgstr "Mindestens ein Teil dieser Transaktion wurde bereits storniert."
+
+#: c6sh/core/utils/flow.py:203
+msgid "At least one position of this transaction is a reversal."
+msgstr "Mindestens ein Teil dieser Transaktion ist eine Stornierung."
+
+#: c6sh/core/utils/flow.py:235
+msgid "TransactionPosition ID not known."
+msgstr "Unbekannte Positions-ID."
+
+#: c6sh/core/utils/flow.py:246
+msgid "This position already has been reversed."
+msgstr "Diese Position wurde bereits storniert."
+
+#: c6sh/core/utils/flow.py:248
+msgid "This position already is a reversal."
+msgstr "Diese Position ist eine Stornierung."
+
+#: c6sh/core/utils/printing.py:92
+msgid "Cancellation"
+msgstr "Storno-Rechnung"
+
+#: c6sh/core/utils/printing.py:97
+msgid "Receipt copy"
+msgstr "Bonkopie"
+
+#: c6sh/core/utils/printing.py:101
+msgid "Ticket"
+msgstr "Ticket"
+
+#: c6sh/core/utils/printing.py:108
+msgid "Net sum:  {}"
+msgstr "Nettosume:  {}"
+
+#: c6sh/core/utils/printing.py:112
+#, python-brace-format
+msgid "Tax {tax_rate}% ({tax_identifier}):  {tax_amount})"
+msgstr "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount})"
+
+#: c6sh/core/utils/printing.py:119
+msgid "Total:  {}"
+msgstr "Summe:  {}"
+
+#: c6sh/core/utils/printing.py:127
+msgid "Receipt number: {}"
+msgstr "Bonnumber: {}"
+
+#: c6sh/desk/templates/desk/fail.html:23
+msgid "Log out"
+msgstr "Abmelden"
+
+#: c6sh/desk/templates/desk/login.html:29
+msgid "User name"
+msgstr "Benutzername"
+
+#: c6sh/desk/templates/desk/login.html:33
+msgid "Password"
+msgstr "Passwort"
+
+#: c6sh/desk/templates/desk/login.html:37
+msgid "Log In"
+msgstr "Einloggen"
+
+#: c6sh/desk/templates/desk/main.html:20
+msgid "Transaction complete"
+msgstr "Transaktion erfolgreich"
+
+#: c6sh/desk/templates/desk/main.html:25
+msgid "Close"
+msgstr "Schließen"
+
+#: c6sh/desk/templates/desk/main.html:35
+msgid "Logout"
+msgstr "Abmelden"
+
+#: c6sh/desk/templates/desk/main.html:39
+msgid "Open drawer"
+msgstr "Schublade auf"
+
+#: c6sh/desk/templates/desk/main.html:43
+msgid "Request resupply"
+msgstr "Nachschub anfordern"
+
+#: c6sh/desk/templates/desk/main.html:51 c6sh/desk/templates/desk/main.html:119
+msgid "Redeem preordered ticket"
+msgstr "Vorbestellung abholen"
+
+#: c6sh/desk/templates/desk/main.html:61
+msgid "Current transaction"
+msgstr "Aktueller Bon"
+
+#: c6sh/desk/templates/desk/main.html:63
+msgid "clear"
+msgstr "leeren"
+
+#: c6sh/desk/templates/desk/main.html:74 c6sh/desk/templates/desk/main.html:101
+msgid "Total:"
+msgstr "Summe:"
+
+#: c6sh/desk/templates/desk/main.html:78
+msgid "Given:"
+msgstr "Bar gegeben:"
+
+#: c6sh/desk/templates/desk/main.html:82
+msgid "Change:"
+msgstr "Wechselgeld:"
+
+#: c6sh/desk/templates/desk/main.html:86
+msgid "REVERSED"
+msgstr "STORNIERT"
+
+#: c6sh/desk/templates/desk/main.html:91
+msgid "Reverse"
+msgstr "Storno"
+
+#: c6sh/desk/templates/desk/main.html:95
+msgid "Reprint"
+msgstr "Nachbon"
+
+#: c6sh/desk/templates/desk/main.html:106
+msgid "CHECKOUT"
+msgstr "VERBUCHEN"
+
+#: c6sh/desk/templates/desk/main.html:130
+msgid "OK"
+msgstr "OK"
+
+#: c6sh/desk/templates/desk/main.html:133
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: c6sh/desk/templates/desk/main.html:136
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: c6sh/desk/templates/desk/main.html:139
+msgid "Continue"
+msgstr "Weiter"
+
+#: c6sh/desk/views.py:23
+msgid "This is not a registered cashdesk."
+msgstr "Dieses Gerät ist keine Kasse."
+
+#: c6sh/desk/views.py:24
+#, python-brace-format
+msgid "Your IP address is {0}"
+msgstr "Deine IP-Adresse ist {0}"
+
+#: c6sh/desk/views.py:36
+msgid "User account is deactivated."
+msgstr "Dein Account wurde deaktiviert."
+
+#: c6sh/desk/views.py:41
+msgid "You do not have an active session."
+msgstr "Du hast keine aktive Sitzung."
+
+#: c6sh/desk/views.py:45
+msgid "Your session is scheduled for a different cashdesk."
+msgstr "Deine Sitzung ist für eine andere Kasse geplant."
+
+#: c6sh/desk/views.py:52
+msgid "No user account matches the entered credentials."
+msgstr "Die eingegebneen Benutzerdaten sind nicht bekannt."
+
+#: c6sh/desk/views.py:74
+msgid "You do not have an active session at this cashdesk."
+msgstr "Du hast keine aktive Sitzung an dieser Kasse."
+
+#: c6sh/desk/views.py:75
+msgid "You are logged in as {}."
+msgstr "Du bist als {} eingeloggt."

@@ -6,8 +6,9 @@ from decimal import Decimal
 from string import ascii_uppercase
 from typing import Union
 
-from c6sh.core.models import Transaction
+from django.utils.translation import ugettext as _
 
+from c6sh.core.models import Transaction
 
 SEPARATOR = '\u2500' * 42 + '\r\n'
 
@@ -88,40 +89,43 @@ class CashdeskPrinter:
 
         if is_cancellation:
             receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
-            receipt += 'Storno-Rechnung' + '\r\n\r\n'
+            receipt += _('Cancellation') + '\r\n\r\n'
             receipt += bytearray([0x1B, 0x45, 0]).decode()  # de-emphasize
 
         if is_copy:
             receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
-            receipt += 'Beleg-Kopie' + '\r\n\r\n'
+            receipt += _('Receipt copy') + '\r\n\r\n'
             receipt += bytearray([0x1B, 0x45, 0]).decode()  # de-emphasize
 
         receipt += SEPARATOR
-        receipt += " Ticket                                EUR\r\n"
+        receipt += " {: <26}            EUR\r\n".format(_('Ticket'))
         receipt += SEPARATOR
 
         receipt += '\r\n'.join(position_lines)
         receipt += '\r\n'
         receipt += SEPARATOR
         receipt += bytearray([0x1B, 0x61, 2]).decode()  # right-align text (0 would be left-align)
-        receipt += "Nettosumme:  {}\r\n".format(self._format_number(total_sum - total_taxes))
+        receipt += _("Net sum:  {}").format(self._format_number(total_sum - total_taxes))
+        receipt += '\r\n'
 
         for tax in sorted(list(tax_symbols))[::-1]:
-            receipt += "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount}\r\n".format(
+            receipt += _("Tax {tax_rate}% ({tax_identifier}):  {tax_amount})").format(
                 tax_rate=tax,
                 tax_identifier=tax_symbols[tax],
                 tax_amount=self._format_number(tax_sums[tax]),
             )
+            receipt += '\r\n'
 
-        receipt += "Summe:  {}\r\n\r\n\r\n".format(self._format_number(total_sum))
+        receipt += _("Total:  {}").format(self._format_number(total_sum))
+        receipt += '\r\n' * 3
         receipt += bytearray([0x1B, 0x61, 1]).decode()  # center text
         receipt += settings.receipt_footer + '\r\n'
         receipt += '{} {}\r\n'.format(
             transaction.datetime.strftime("%d.%m.%Y %H:%M"),
             transaction.session.cashdesk.name,
         )
-        receipt += 'Belegnummer: {}\r\n'.format(transaction.receipt_id)
-        receipt += '\r\n\r\n'
+        receipt += _('Receipt number: {}').format(transaction.receipt_id)
+        receipt += '\r\n\r\n\r\n'
         return receipt
 
     def print_receipt(self, transaction: Transaction, do_open_drawer: bool=True) -> None:

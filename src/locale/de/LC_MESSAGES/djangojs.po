@@ -1,0 +1,91 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-02 16:51+0100\n"
+"PO-Revision-Date: 2016-11-02 16:56+0100\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.9\n"
+
+#: c6sh/static/desk/js/commands.js:9
+msgid "Supported commands:"
+msgstr "Unterstützte Befehle:"
+
+#: c6sh/static/desk/js/commands.js:11
+msgid "Show reset codes for the barcode scanner"
+msgstr "Zeigt Reset-Codes für den Barcode-Scanner"
+
+#: c6sh/static/desk/js/commands.js:16
+msgid "Scan the following, in order:"
+msgstr "Scanne die folgenden Codes in dieser Reihenfolge:"
+
+#: c6sh/static/desk/js/dialog.js:36
+msgid "Input required"
+msgstr "Eingabe erforderlich"
+
+#: c6sh/static/desk/js/dialog.js:43 c6sh/static/desk/js/dialog.js:107
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: c6sh/static/desk/js/dialog.js:62
+msgid "Error"
+msgstr "Fehler"
+
+#: c6sh/static/desk/js/dialog.js:100
+msgid "Confirmation required"
+msgstr "Bestätigung erforderlich"
+
+#: c6sh/static/desk/js/preorder.js:18
+msgid "Secret is not unique."
+msgstr "Es gibt mehrere Bestellungen zu diesem Code."
+
+#: c6sh/static/desk/js/preorder.js:21
+msgid "Unknown secret."
+msgstr "Unbekannter Code."
+
+#: c6sh/static/desk/js/preorder.js:27
+msgid "Ticket already redeemed."
+msgstr "Das Ticket wurde bereits eingelöst."
+
+#: c6sh/static/desk/js/preorder.js:30
+msgid "Ticket has not been paid for."
+msgstr "Dieses Ticket wurde nicht bezahlt."
+
+#: c6sh/static/desk/js/transaction.js:18
+msgid "This preorder alread is in your cart."
+msgstr "Dieses Ticket befindet sich bereits auf dem Bon."
+
+#: c6sh/static/desk/js/transaction.js:91
+msgid "Cart is empty."
+msgstr "Bon ist leer."
+
+#: c6sh/static/desk/js/transaction.js:118
+msgid "Transaction complete"
+msgstr "Transaktion erfolgreich"
+
+#: c6sh/static/desk/js/transaction.js:157
+msgid "Do you really want to reverse the last transaction?"
+msgstr "Soll der letzte Bon wirklich storniert werden?"
+
+#: c6sh/static/desk/js/transaction.js:163
+msgid "Last transaction is not known."
+msgstr "Letzter Bon ist unbekannt."
+
+#: c6sh/static/desk/js/transaction.js:175
+msgid "Transaction reversed"
+msgstr "Bon storniert"
+
+#: c6sh/static/desk/js/transaction.js:201
+msgid "Current transaction"
+msgstr "Aktueller Bon"

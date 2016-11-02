@@ -15,7 +15,7 @@ var transaction = {
             var pos = transaction.positions[i];
             if (pos.type == 'redeem') {
                 if (pos.secret == secret) {
-                    dialog.show_error('This preorder alread is in your cart.');
+                    dialog.show_error(gettext('This preorder alread is in your cart.'));
                     return;
                 }
             }
@@ -88,7 +88,7 @@ var transaction = {
         // This tries to the transaction. If additional input is required,the
         // dialog object is used to present a dialog and then calls this again,
         if (transaction.positions.length === 0) {
-            dialog.show_error('Cart is empty.');
+            dialog.show_error(gettext('Cart is empty.'));
             return;
         }
 
@@ -115,7 +115,7 @@ var transaction = {
                 transaction._scroll(0);
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
-                dialog.flash_success('Transaction complete');
+                dialog.flash_success(gettext('Transaction complete'));
             },
             headers: {
                 'Content-Type': 'application/json'
@@ -154,13 +154,13 @@ var transaction = {
     },
 
     reverse_last: function () {
-        dialog.show_confirmation(null, 'Do you really want to reverse the last transaction?',
+        dialog.show_confirmation(null, gettext('Do you really want to reverse the last transaction?'),
             transaction._do_reverse_last)
     },
 
     _do_reverse_last: function () {
         if (!transaction.last_id) {
-            dialog.show_error("Last transaction is not known.")
+            dialog.show_error(gettext("Last transaction is not known."));
         }
 
         loading.start();
@@ -172,7 +172,7 @@ var transaction = {
             success: function (data, status, jqXHR) {
                 loading.end();
                 $("#lower-right").addClass("reversed");
-                dialog.flash_success('Transaction reversed');
+                dialog.flash_success(gettext('Transaction reversed'));
             },
             headers: {
                 'Content-Type': 'application/json'
@@ -197,7 +197,8 @@ var transaction = {
         transaction._render();
         transaction.post_sale = false;
         transaction.last_id = null;
-        $('#lower-right').removeClass('post-sale reversed').find('.panel-heading span').text('Current transaction');
+        $('#lower-right').removeClass('post-sale reversed').find('.panel-heading span').text(
+            gettext('Current transaction'));
     },
 
     _render: function () {

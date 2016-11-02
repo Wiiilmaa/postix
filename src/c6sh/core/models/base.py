@@ -136,6 +136,7 @@ class Product(models.Model):
             self.receipt_name = self.name[:28]
         super().save(*args, **kwargs)
 
+    @property
     def is_available(self) -> bool:
         from . import Quota, TimeConstraint
         timeframes = TimeConstraint.objects.filter(products=self)

@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, HttpRequest
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect
 
 from .utils import backoffice_user_required

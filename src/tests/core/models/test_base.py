@@ -25,7 +25,7 @@ def test_transactionposition_was_reversed():
 @pytest.mark.django_db
 def test_product_available_simple():
     p = product_factory()
-    assert p.is_available()
+    assert p.is_available
 
 
 @pytest.mark.django_db
@@ -33,7 +33,7 @@ def test_product_available_timeframe():
     p = product_factory()
     t = time_constraint_factory(active=True)
     t.products.add(p)
-    assert p.is_available()
+    assert p.is_available
 
 
 @pytest.mark.django_db
@@ -41,7 +41,7 @@ def test_product_unavailable_timeframe():
     p = product_factory()
     t = time_constraint_factory(active=False)
     t.products.add(p)
-    assert not p.is_available()
+    assert not p.is_available
 
 
 @pytest.mark.django_db
@@ -49,7 +49,7 @@ def test_product_available_quota():
     p = product_factory()
     q = quota_factory(size=20)
     q.products.add(p)
-    assert p.is_available()
+    assert p.is_available
 
 
 @pytest.mark.django_db
@@ -57,7 +57,7 @@ def test_product_unavailable_quota():
     p = product_factory()
     q = quota_factory(size=0)
     q.products.add(p)
-    assert not p.is_available()
+    assert not p.is_available
 
 
 @pytest.mark.django_db

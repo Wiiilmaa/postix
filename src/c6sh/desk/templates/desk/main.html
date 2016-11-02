@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,12 +17,12 @@
     <div id="left-side">
         <div id="product-view">
             <div id="success-flash">
-                <div>Transaction complete</div>
+                <div>{% trans "Transaction complete" %}</div>
             </div>
             <div id="info-view">
                 <div>
                     <div class="content"></div>
-                    <button class="btn btn-default btn-lg btn-close">Close</button>
+                    <button class="btn btn-default btn-lg btn-close">{% trans "Close" %}</button>
                 </div>
             </div>
             <div id="product-view-inner"></div>
@@ -31,15 +32,15 @@
         <div id="button-row">
             <a href="{% url "desk:logout" %}"><button class="btn btn-danger" id="btn-logout">
                 <span class="glyphicon glyphicon-log-out"></span>
-                Logout
+                {% trans "Logout" %}
             </button></a>
             <button class="btn btn-default" id="btn-open-drawer">
                 <span class="glyphicon glyphicon-inbox"></span>
-                Open drawer
+                {% trans "Open drawer" %}
             </button>
             <button class="btn btn-info" id="btn-resupply">
                 <span class="glyphicon glyphicon-bell"></span>
-                Request resupply
+                {% trans "Request resupply" %}
             </button>
         </div>
     </div>
@@ -47,7 +48,7 @@
         <div id="redeem-presale">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    Redeem preordered ticket
+                    {% trans "Redeem preordered ticket" %}
                 </div>
                 <div class="panel-body">
                     <input type="text" id="preorder-input" class="typeahead form-control">
@@ -57,9 +58,9 @@
         <div id="lower-right">
             <div class="panel panel-primary panel-sale">
                 <div class="panel-heading">
-                    <span>Current transaction</span>
+                    <span>{% trans "Current transaction" %}</span>
                     <button class="btn btn-sm btn-default pull-right" id="btn-clear">
-                        clear
+                        {% trans "clear" %}
                     </button>
                 </div>
                 <div class="panel-body">
@@ -70,39 +71,39 @@
                     </div>
                     <div id="post-sale">
                         <div id="post-sale-total" class="total">
-                            Total:
+                            {% trans "Total:" %}
                             <span>267.40</span>
                         </div>
                         <div id="post-sale-given" class="total">
-                            Given:
+                            {% trans "Given:" %}
                             <input type="text" value="" class="form-control">
                         </div>
                         <div id="post-sale-change" class="total">
-                            Change:
+                            {% trans "Change:" %}
                             <span>0.00</span>
                         </div>
                         <div id="post-sale-reversed" class="total">
-                            REVERSED
+                            {% trans "REVERSED" %}
                         </div>
                         <div id="post-sale-buttons">
                             <button class="btn btn-block btn-danger" id="btn-reverse">
                                 <span class="glyphicon glyphicon-backward"></span>
-                                Reverse
+                                {% trans "Reverse" %}
                             </button>
                             <button class="btn btn-block btn-primary" id="btn-reprint">
                                 <span class="glyphicon glyphicon-duplicate"></span>
-                                Reprint
+                                {% trans "Reprint" %}
                             </button>
                         </div>
                     </div>
                     <div id="checkout">
                         <div id="checkout-total" class="total">
-                            Total:
+                            {% trans "Total:" %}
                             <span>267.40</span>
                         </div>
                         <button class="btn btn-block btn-success" id="btn-checkout">
                             <span class="glyphicon glyphicon-shopping-cart"></span>
-                            CHECKOUT
+                            {% trans "CHECKOUT" %}
                         </button>
                     </div>
                 </div>
@@ -115,11 +116,10 @@
     <div id="modal">
         <div class="panel">
             <div class="panel-heading" id="modal-title">
-                Redeem preordered ticket
+                {% trans "Redeem preordered ticket" %}
             </div>
             <div class="panel-body">
                 <p id="modal-text">
-                    This ticket can only redeemed by a member of the list "CCC-Mitglieder".
                 </p>
                 <p id="modal-input-wrapper">
                     <input type="text" id="modal-input" class="form-control">
@@ -127,16 +127,16 @@
 
                 <div id="modal-buttons">
                     <button class="btn btn-lg btn-primary" id="btn-dismiss">
-                        OK
+                        {% trans "OK" %}
                     </button>
                     <button class="btn btn-lg btn-danger" id="btn-cancel">
-                        Cancel
+                        {% trans "Cancel" %}
                     </button>
                     <button class="btn btn-lg btn-primary" id="btn-bypass">
-                        Upgrade
+                        {% trans "Upgrade" %}
                     </button>
                     <button class="btn btn-lg btn-success" id="btn-continue">
-                        Continue
+                        {% trans "Continue" %}
                     </button>
                 </div>
             </div>
@@ -160,5 +160,6 @@
 <script type="text/javascript" src="{% static "desk/js/keyboard.js" %}"></script>
 <script type="text/javascript" src="{% static "desk/js/commands.js" %}"></script>
 <script type="text/javascript" src="{% static "desk/js/c6sh.js" %}"></script>
+<script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
 </body>
 </html>

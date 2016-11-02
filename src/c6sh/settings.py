@@ -38,6 +38,7 @@ except ImportError:
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -79,11 +80,19 @@ TEMPLATES = [
     }
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'de'
+LANGUAGES = (
+    ('en', 'English'),
+    ('de', 'German'),
+)
 TIME_ZONE = 'Europe/Berlin'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+LOCALE_PATHS = [
+    os.path.join(os.path.dirname(os.path.dirname(__file__)), 'locale')
+]
 
 STATIC_URL = '/static/c6sh/'
 STATIC_ROOT = '/srv/static/c6sh/'

@@ -33,14 +33,14 @@ var dialog = {
             dialog._list_id = null;
         }
 
-        $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : 'Input required');
+        $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : gettext('Input required'));
         $("#modal-text").text(message);
         $("#modal-input-wrapper").show();
         $("#btn-continue").show();
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
         if (typeof bypass_price === "number") {
-            $("#btn-bypass").show(bypass_price).text("Upgrade (" + bypass_price.toFixed(2) + " €)");
+            $("#btn-bypass").show(bypass_price).text(gettext("Upgrade") + " (" + bypass_price.toFixed(2) + " €)");
         } else {
             $("#btn-bypass").hide();
         }
@@ -59,7 +59,7 @@ var dialog = {
             pos_id = null;
         }
         
-        $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : 'Error');
+        $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : gettext('Error'));
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
         $("#btn-continue").hide();
@@ -96,14 +96,15 @@ var dialog = {
         dialog._pos_id = pos_id;
         dialog._handler = handler;
         dialog._bypass_price = bypass_price;
-        $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : 'Confirmation required');
+        $("#modal-title").text(
+            pos_id !== null ? transaction.positions[pos_id]._title : gettext('Confirmation required'));
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
         $("#btn-continue").show();
         $("#btn-dismiss").hide();
         $("#btn-cancel").show();
         if (typeof bypass_price === "number") {
-            $("#btn-bypass").show(bypass_price).text("Upgrade (" + bypass_price.toFixed(2) + " €)");
+            $("#btn-bypass").show(bypass_price).text(gettext("Upgrade") + " (" + bypass_price.toFixed(2) + " €)");
         } else {
             $("#btn-bypass").hide();
         }

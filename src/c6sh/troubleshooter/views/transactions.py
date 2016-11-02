@@ -2,8 +2,8 @@ from typing import Any, Dict, Union
 
 from django.contrib import messages
 from django.core.files.storage import default_storage
-from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.db.models import QuerySet
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView

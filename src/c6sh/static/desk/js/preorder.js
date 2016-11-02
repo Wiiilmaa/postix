@@ -15,19 +15,19 @@ var preorder = {
                 
                 if (data.count !== 1) {
                     if (data.count > 1) {
-                        dialog.show_error('Secret is not unique.');
+                        dialog.show_error(gettext('Secret is not unique.'));
                         return;
                     } else {
-                        dialog.show_error('Unknown secret.');
+                        dialog.show_error(gettext('Unknown secret.'));
                         return;
                     }
                 }
                 var res = data.results[0];
                 if (res.is_redeemed) {
-                    dialog.show_error('Ticket already redeemed.');
+                    dialog.show_error(gettext('Ticket already redeemed.'));
                     return;
                 } else if (!res.is_paid) {
-                    dialog.show_error('Ticket has not been paid for.');
+                    dialog.show_error(gettext('Ticket has not been paid for.'));
                     return;
                 }
 

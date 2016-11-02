@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from django.http import HttpRequest
+from django.utils.translation import ugettext as _
 from rest_framework import authentication, exceptions
 from rest_framework.authtoken.models import Token
 
@@ -24,6 +25,6 @@ class TokenAuthentication(authentication.TokenAuthentication):
 
         if session.cashdesk != detect_cashdesk(self.request):
             raise exceptions.AuthenticationFailed(
-                'Your token is valid for a different cashdesk. Your IP is: {}'.format(get_ip_address(self.request)))
+                _('Your token is valid for a different cashdesk. Your IP is: {}').format(get_ip_address(self.request)))
 
         return session.user, session.api_token
