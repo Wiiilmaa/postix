@@ -4,6 +4,7 @@ from tempfile import TemporaryFile
 import qrcode
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.utils import timezone
 from reportlab.lib import colors
 from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
@@ -50,11 +51,12 @@ def generate_report(session: CashdeskSession) -> str:
     # Header: info text and qr code
     title_str = '[{}] Kassenbericht #{}'.format(EventSettings.objects.get().short_name, session.pk)
     title = Paragraph(title_str, style['Heading1'])
+    tz = timezone.get_current_timezone()
     text = """{user} an {cashdesk}<br/>{start} – {end}""".format(
         user=session.user.get_full_name(),
         cashdesk=session.cashdesk,
-        start=session.start.strftime('%Y-%m-%d %H:%M:%S'),
-        end=session.end.strftime('%Y-%m-%d %H:%M:%S'),
+        start=session.start.astimezone(tz).strftime('%Y-%m-%d %H:%M:%S'),
+        end=session.end.astimezone(tz).strftime('%Y-%m-%d %H:%M:%S'),
     )
     info = Paragraph(text, style['Normal'])
     logo = scale_image(get_qr_image(session), 100)
