@@ -69,6 +69,9 @@ class ListConstraintEntry(models.Model):
     def __str__(self) -> str:
         return "{} ({}) – {}".format(self.name, self.identifier, self.list)
 
+    class Meta:
+        unique_together = (('list', 'identifier'),)
+
 
 class WarningConstraintProduct(models.Model):
     product = models.ForeignKey('Product', on_delete=models.PROTECT,
