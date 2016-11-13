@@ -50,6 +50,8 @@ body.login, body.error {
 #product-view-inner {
     position: absolute;
     top: 0;
+	width: 100%;
+	padding-right: 10px;
 }
 #product-view .product {
     width: 33.333%;
