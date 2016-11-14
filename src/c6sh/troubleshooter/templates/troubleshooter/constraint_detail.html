@@ -27,6 +27,9 @@
         {% for entry in entries %}
             <li>
                 {{ entry.name }} ({{ entry.identifier }})
+                {% if entry.is_redeemed %}
+                    <em>(eingelöst)</em>
+                {% endif %}
             </li>
         {% empty %}
             Keine Einträge gefunden.
