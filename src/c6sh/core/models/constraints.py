@@ -66,6 +66,11 @@ class ListConstraintEntry(models.Model):
     name = models.CharField(max_length=254)
     identifier = models.CharField(max_length=254)
 
+    @property
+    def is_redeemed(self) -> bool:
+        from c6sh.core.utils.checks import is_redeemed
+        return is_redeemed(self)
+
     def __str__(self) -> str:
         return "{} ({}) – {}".format(self.name, self.identifier, self.list)
 
