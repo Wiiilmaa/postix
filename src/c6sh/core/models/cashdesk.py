@@ -51,9 +51,9 @@ class Cashdesk(models.Model):
 class CashdeskSession(models.Model):
     cashdesk = models.ForeignKey('Cashdesk', related_name='sessions', on_delete=models.PROTECT)
     user = models.ForeignKey('User', on_delete=models.PROTECT)
-    start = models.DateTimeField(null=True, blank=True,
+    start = models.DateTimeField(default=now,
                                  verbose_name='Start of session',
-                                 help_text='Automatically set on first login')
+                                 help_text='Default: time of creation.')
     end = models.DateTimeField(null=True, blank=True,
                                verbose_name='End of session',
                                help_text='Only set if session has ended')
