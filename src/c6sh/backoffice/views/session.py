@@ -153,17 +153,6 @@ def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespons
     if request.method == 'POST':
         form, formset = get_form_and_formset(request=request, extra=0)
         if form.is_valid() and formset.is_valid():
-            for f in formset:
-                item = f.cleaned_data.get('item')
-                amount = f.cleaned_data.get('amount')
-                if item and amount and amount:
-                    ItemMovement.objects.create(
-                        item=item,
-                        session=session,
-                        amount=-amount,
-                        backoffice_user=form.cleaned_data['backoffice_user']
-                    )
-
             if session.end:
                 # This is not optimal, but our data model does not have a way of tracking
                 # cash movement over time.
@@ -176,6 +165,19 @@ def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespons
                 session.cash_after = form.cleaned_data.get('cash_before')
                 session.save(update_fields=['backoffice_user_after', 'cash_after', 'end'])
                 messages.success(request, 'Session wurde beendet.')
+
+            # It is important that we do this *after* we set session.end as the date of this movement
+            # will be used in determining this as the final item takeout *after* the session.
+            for f in formset:
+                item = f.cleaned_data.get('item')
+                amount = f.cleaned_data.get('amount')
+                if item and amount and amount:
+                    ItemMovement.objects.create(
+                        item=item,
+                        session=session,
+                        amount=-amount,
+                        backoffice_user=form.cleaned_data['backoffice_user'],
+                    )
 
             generate_report(session)
             return redirect('backoffice:session-report', pk=pk)
