@@ -54,10 +54,6 @@ class User(AbstractBaseUser):
             return self.firstname
         return self.username
 
-    def clean(self) -> None:
-        if self.auth_token and self.auth_token.isnumeric():
-            raise ValidationError(_("Auth tokens need to contain at least one character that is not a number."))
-
     @property
     def is_staff(self) -> bool:
         return self.is_superuser or self.is_backoffice_user or self.is_troubleshooter
