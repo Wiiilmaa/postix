@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-02 16:51+0100\n"
-"PO-Revision-Date: 2016-11-02 16:54+0100\n"
+"PO-Revision-Date: 2016-11-23 21:16+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: c6sh/api/auth.py:28
 msgid "Your token is valid for a different cashdesk. Your IP is: {}"
@@ -89,7 +89,7 @@ msgstr "Unbekannte Transaktions-ID."
 
 #: c6sh/core/utils/flow.py:193 c6sh/core/utils/flow.py:238
 msgid "You need to provide an active session."
-msgstr "Du musst eine aktive Sitzung angeben."
+msgstr "Du musst eine aktive Session angeben."
 
 #: c6sh/core/utils/flow.py:198 c6sh/core/utils/flow.py:243
 msgid "Only troubleshooters can reverse sales from other sessions."
@@ -175,7 +175,7 @@ msgstr "Abmelden"
 
 #: c6sh/desk/templates/desk/main.html:39
 msgid "Open drawer"
-msgstr "Schublade auf"
+msgstr "Schublade öffnen"
 
 #: c6sh/desk/templates/desk/main.html:43
 msgid "Request resupply"
@@ -199,7 +199,7 @@ msgstr "Summe:"
 
 #: c6sh/desk/templates/desk/main.html:78
 msgid "Given:"
-msgstr "Bar gegeben:"
+msgstr "Bar erhalten:"
 
 #: c6sh/desk/templates/desk/main.html:82
 msgid "Change:"
@@ -219,7 +219,7 @@ msgstr "Nachbon"
 
 #: c6sh/desk/templates/desk/main.html:106
 msgid "CHECKOUT"
-msgstr "VERBUCHEN"
+msgstr "BUCHEN"
 
 #: c6sh/desk/templates/desk/main.html:130
 msgid "OK"
@@ -239,7 +239,7 @@ msgstr "Weiter"
 
 #: c6sh/desk/views.py:23
 msgid "This is not a registered cashdesk."
-msgstr "Dieses Gerät ist keine Kasse."
+msgstr "Dieses Gerät ist keine eingetragene Kasse."
 
 #: c6sh/desk/views.py:24
 #, python-brace-format
@@ -252,15 +252,15 @@ msgstr "Dein Account wurde deaktiviert."
 
 #: c6sh/desk/views.py:41
 msgid "You do not have an active session."
-msgstr "Du hast keine aktive Sitzung."
+msgstr "Du hast keine aktive Session."
 
 #: c6sh/desk/views.py:45
 msgid "Your session is scheduled for a different cashdesk."
-msgstr "Deine Sitzung ist für eine andere Kasse geplant."
+msgstr "Deine Session ist für eine andere Kasse geplant."
 
 #: c6sh/desk/views.py:52
 msgid "No user account matches the entered credentials."
-msgstr "Die eingegebneen Benutzerdaten sind nicht bekannt."
+msgstr "Die eingegebenen Benutzerdaten sind nicht bekannt."
 
 #: c6sh/desk/views.py:74
 msgid "You do not have an active session at this cashdesk."
