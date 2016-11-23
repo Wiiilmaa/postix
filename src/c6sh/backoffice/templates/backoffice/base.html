@@ -57,16 +57,28 @@
                 </div>
             {% endfor %}
         {% endif %}
+        <div class="backoffice-main">
+          {% if not settings.initialized %}
+            <div class="alert alert-warning">
+                {% if user.is_superuser %}
+                    Please <a href="{% url "backoffice:wizard-settings" %}">initialize</a> this event's settings.
+                {% else %}
+                    Please call a superuser to initialize this event's settings.
+                {% endif %}
+            </div>
+          {% endif %}
 
-      <div class="backoffice-main">
-        <h1>{% block headline %}{% endblock %}</h1>
-    	<div class="backoffice-content">
-			<p>
-			{% block content %}
-    		{% endblock %}
-			</p>
-		</div>
-      </div>
+          {% if settings.initialized or user.is_superuser %}
+            <h1>{% block headline %}{% endblock %}</h1>
+            <div class="backoffice-content">
+                <p>
+                {% block content %}
+                {% endblock %}
+                </p>
+            </div>
+          {% endif %}
+
+        </div>
 
     </div>
 
