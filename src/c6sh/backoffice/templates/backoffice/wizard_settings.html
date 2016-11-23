@@ -4,12 +4,4 @@
 
 {% block headline %} Settings anlegen {% endblock %}
 
-{% block content %}
-
-    <div>
-        Das Event muss konfiguriert werden, bevor alles andere passieren kann.
-    </div>
-   	
-    {% crispy form %}
-
-{% endblock %}
+{% block content %}{% crispy form %}{% endblock %}
