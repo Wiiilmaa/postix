@@ -45,13 +45,13 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
     try:
         pp = PreorderPosition.objects.select_for_update().get(secret=kwargs.get('secret'))
     except PreorderPosition.DoesNotExist:
-        raise FlowError(_('No ticket found with the given secret.'))
+        raise FlowError(_('No ticket could be found with the given secret.'))
 
     if not pp.preorder.is_paid:
-        raise FlowError(_('Ticket has not been paid for.'))
+        raise FlowError(_('This ticket has not been paid for.'))
 
     if is_redeemed(pp):
-        raise FlowError(_('Ticket has already been redeemed.'))
+        raise FlowError(_('This ticket has already been redeemed.'))
 
     if pp.preorder.warning_text and 'warning_acknowledged' not in kwargs:
         raise FlowError(pp.preorder.warning_text, type='confirmation',
@@ -73,7 +73,7 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
         if c.price is not None and bypass_price_paying >= c.price:
             bypass_price_paying -= c.price
             if bypass_taxrate is not None and bypass_taxrate != c.tax_rate:
-                raise FlowError(_("Multiple upgrades with different taxrates are not supported."))
+                raise FlowError(_("Multiple upgrades with different tax rates are not supported."))
             bypass_taxrate = c.tax_rate
         else:
             if not entryid:
@@ -86,13 +86,13 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
                 try:
                     entry = c.constraint.entries.get(identifier=entryid)
                     if is_redeemed(entry):
-                        raise FlowError(_('This list entry already has been used.'),
+                        raise FlowError(_('This list entry has already been used.'),
                                         type='input', missing_field='list_{}'.format(c.constraint.pk),
                                         bypass_price=c.price)
                     else:
                         pos.listentry = entry
                 except ListConstraintEntry.DoesNotExist:
-                    raise FlowError(_('Entry not found on list "{}".').format(c.constraint.name),
+                    raise FlowError(_('This entry could not be found in list "{}".').format(c.constraint.name),
                                     type='input', missing_field='list_{}'.format(c.constraint.pk),
                                     bypass_price=c.price)
 
@@ -128,10 +128,10 @@ def sell_ticket(**kwargs) -> TransactionPosition:
     try:
         product = Product.objects.get(id=kwargs.get('product'))
     except Product.DoesNotExist:
-        raise FlowError(_('Product ID not known.'))
+        raise FlowError(_('This product ID is not known.'))
 
     if not product.is_available:
-        raise FlowError(_('Product currently unavailable or sold out.'))
+        raise FlowError(_('This product is currently unavailable or sold out.'))
 
     if product.requires_authorization:
         auth = kwargs.get('auth', '!invalid')
@@ -168,7 +168,7 @@ def sell_ticket(**kwargs) -> TransactionPosition:
                 else:
                     pos.listentry = entry
             except ListConstraintEntry.DoesNotExist:
-                raise FlowError(_('Entry not found on list "{}".').format(c.constraint.name),
+                raise FlowError(_('This entry could not be found in list "{}".').format(c.constraint.name),
                                 type='input', missing_field='list_{}'.format(c.constraint.pk))
     except ListConstraintProduct.DoesNotExist:
         pass
@@ -198,7 +198,7 @@ def reverse_transaction(trans_id: int, current_session: CashdeskSession, authori
                 raise FlowError(_('Only troubleshooters can reverse sales from other sessions.'))
 
     if old_transaction.has_reversed_positions:
-        raise FlowError(_('At least one position of this transaction already has been reversed.'))
+        raise FlowError(_('At least one position of this transaction has already been reversed.'))
     if old_transaction.has_reversals:
         raise FlowError(_('At least one position of this transaction is a reversal.'))
 
@@ -232,7 +232,7 @@ def reverse_transaction_position(
     try:
         old_pos = TransactionPosition.objects.get(id=trans_pos_id)
     except TransactionPosition.DoesNotExist:
-        raise FlowError(_('TransactionPosition ID not known.'))
+        raise FlowError(_('Transaction position ID not known.'))
 
     if not current_session.is_active():  # noqa (caught by auth layer)
         raise FlowError(_('You need to provide an active session.'))
@@ -243,9 +243,9 @@ def reverse_transaction_position(
                 raise FlowError(_('Only troubleshooters can reverse sales from other sessions.'))
 
     if old_pos.reversed_by.exists():
-        raise FlowError(_('This position already has been reversed.'))
+        raise FlowError(_('This position has already been reversed.'))
     if old_pos.type == 'reverse':
-        raise FlowError(_('This position already is a reversal.'))
+        raise FlowError(_('This position is already a reversal.'))
 
     new_transaction = Transaction(session=current_session)
     new_transaction.save()

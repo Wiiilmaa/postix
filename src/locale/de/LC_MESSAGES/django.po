@@ -34,19 +34,19 @@ msgid "No secret has been given."
 msgstr "Es wurde kein Code eingegeben."
 
 #: c6sh/core/utils/flow.py:48
-msgid "No ticket found with the given secret."
+msgid "No ticket could be found with the given secret."
 msgstr "Kein Ticket für diesen Code gefunden."
 
 #: c6sh/core/utils/flow.py:51
-msgid "Ticket has not been paid for."
+msgid "This ticket has not been paid for."
 msgstr "Dieses Ticket wurde nicht bezahlt."
 
 #: c6sh/core/utils/flow.py:54
-msgid "Ticket has already been redeemed."
+msgid "This ticket has already been redeemed."
 msgstr "Dieses Ticket wurde bereits eingelöst."
 
 #: c6sh/core/utils/flow.py:76
-msgid "Multiple upgrades with different taxrates are not supported."
+msgid "Multiple upgrades with different tax rates are not supported."
 msgstr ""
 "Upgrades innerhalb einer Bestellung müssen den gleichen Steuersatz haben."
 
@@ -56,11 +56,11 @@ msgstr ""
 "Dieses Ticket kann nur von Personen auf der Liste \"{}\" eingelöst werden."
 
 #: c6sh/core/utils/flow.py:89 c6sh/core/utils/flow.py:166
-msgid "This list entry already has been used."
+msgid "This list entry has already been used."
 msgstr "Dieser Listeneintrag wurde bereits abgehakt."
 
 #: c6sh/core/utils/flow.py:95 c6sh/core/utils/flow.py:171
-msgid "Entry not found on list \"{}\"."
+msgid "This entry could not found in list \"{}\"."
 msgstr "Eintrag auf der Liste \"{}\" nicht gefunden."
 
 #: c6sh/core/utils/flow.py:126
@@ -68,11 +68,11 @@ msgid "No product given."
 msgstr "Kein Produkt übergeben."
 
 #: c6sh/core/utils/flow.py:131
-msgid "Product ID not known."
+msgid "This product ID is not known."
 msgstr "Unbekannte Produkt-ID."
 
 #: c6sh/core/utils/flow.py:134
-msgid "Product currently unavailable or sold out."
+msgid "This product is currently unavailable or sold out."
 msgstr "Dieses Produkt ist im Moment nicht verfügbar oder ausverkauft."
 
 #: c6sh/core/utils/flow.py:141
@@ -97,7 +97,7 @@ msgstr ""
 "Nur Troubleshooter können Transaktionen aus anderen Sitzungen stornieren."
 
 #: c6sh/core/utils/flow.py:201
-msgid "At least one position of this transaction already has been reversed."
+msgid "At least one position of this transaction has already been reversed."
 msgstr "Mindestens ein Teil dieser Transaktion wurde bereits storniert."
 
 #: c6sh/core/utils/flow.py:203
@@ -105,15 +105,15 @@ msgid "At least one position of this transaction is a reversal."
 msgstr "Mindestens ein Teil dieser Transaktion ist eine Stornierung."
 
 #: c6sh/core/utils/flow.py:235
-msgid "TransactionPosition ID not known."
+msgid "Transaction position ID not known."
 msgstr "Unbekannte Positions-ID."
 
 #: c6sh/core/utils/flow.py:246
-msgid "This position already has been reversed."
+msgid "This position has already been reversed."
 msgstr "Diese Position wurde bereits storniert."
 
 #: c6sh/core/utils/flow.py:248
-msgid "This position already is a reversal."
+msgid "This position is already a reversal."
 msgstr "Diese Position ist eine Stornierung."
 
 #: c6sh/core/utils/printing.py:92
