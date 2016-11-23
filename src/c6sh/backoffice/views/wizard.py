@@ -18,10 +18,12 @@ class WizardSettingsView(BackofficeUserRequiredMixin, FormView):
 
     def get_initial(self):
         settings = EventSettings.objects.get_solo()
-        return {
+        attrs = {
             attr: getattr(settings, attr)
             for attr in EventSettingsForm().fields
         }
+        attrs.update({'initialized': True})
+        return attrs
 
     def get_success_url(self):
         return reverse('backoffice:main')

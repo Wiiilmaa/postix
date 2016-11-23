@@ -27,6 +27,7 @@ class EventSettings(SingletonModel):
         default='CCC Veranstaltungsgesellschaft mbH',
         help_text='This will show up on backoffice session reports.'
     )
+    initialized = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Event Settings'

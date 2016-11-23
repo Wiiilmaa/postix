@@ -15,6 +15,7 @@ class EventSettingsForm(forms.ModelForm):
             'receipt_address': forms.widgets.Textarea,
             'receipt_footer': forms.widgets.Textarea,
             'report_footer': forms.widgets.Textarea,
+            'initialized': forms.widgets.HiddenInput,
         }
 
     def __init__(self, *args, **kwargs):
