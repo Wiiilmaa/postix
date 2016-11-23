@@ -55,11 +55,11 @@ msgid "Unknown secret."
 msgstr "Unbekannter Code."
 
 #: c6sh/static/desk/js/preorder.js:27
-msgid "Ticket already redeemed."
+msgid "This ticket has already been redeemed."
 msgstr "Das Ticket wurde bereits eingelöst."
 
 #: c6sh/static/desk/js/preorder.js:30
-msgid "Ticket has not been paid for."
+msgid "Ticket has not been paid."
 msgstr "Dieses Ticket wurde nicht bezahlt."
 
 #: c6sh/static/desk/js/transaction.js:18
@@ -79,11 +79,11 @@ msgid "Do you really want to reverse the last transaction?"
 msgstr "Soll der letzte Bon wirklich storniert werden?"
 
 #: c6sh/static/desk/js/transaction.js:163
-msgid "Last transaction is not known."
+msgid "The last transaction is not known."
 msgstr "Letzter Bon ist unbekannt."
 
 #: c6sh/static/desk/js/transaction.js:175
-msgid "Transaction reversed"
+msgid "The transaction has been reversed."
 msgstr "Bon storniert"
 
 #: c6sh/static/desk/js/transaction.js:201

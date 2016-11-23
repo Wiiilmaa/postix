@@ -160,7 +160,7 @@ var transaction = {
 
     _do_reverse_last: function () {
         if (!transaction.last_id) {
-            dialog.show_error(gettext("Last transaction is not known."));
+            dialog.show_error(gettext("The last transaction is not known."));
         }
 
         loading.start();
@@ -172,7 +172,7 @@ var transaction = {
             success: function (data, status, jqXHR) {
                 loading.end();
                 $("#lower-right").addClass("reversed");
-                dialog.flash_success(gettext('Transaction reversed'));
+                dialog.flash_success(gettext('The transaction has been reversed.'));
             },
             headers: {
                 'Content-Type': 'application/json'
