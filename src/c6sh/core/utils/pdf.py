@@ -1,5 +1,3 @@
-from typing import Union
-
 from reportlab.lib import utils
 from reportlab.lib.pagesizes import A4, portrait
 from reportlab.lib.styles import getSampleStyleSheet
