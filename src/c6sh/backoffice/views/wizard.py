@@ -17,7 +17,7 @@ class WizardSettingsView(BackofficeUserRequiredMixin, FormView):
             return self.form_valid(form)
 
     def get_initial(self):
-        settings = EventSettings.objects.get_solo()
+        settings = EventSettings.get_solo()
         attrs = {
             attr: getattr(settings, attr)
             for attr in EventSettingsForm().fields
