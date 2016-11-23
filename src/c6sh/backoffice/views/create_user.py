@@ -1,14 +1,11 @@
 from typing import Union
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit
-from django import forms
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from ...core.models import User
+from ..forms import CreateUserForm, get_normal_user_form
 from .utils import backoffice_user_required
 
 

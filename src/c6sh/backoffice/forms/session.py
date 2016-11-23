@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 from django import forms
 from django.http import HttpRequest
 
-from ..core.models import Cashdesk, Item, User
+from c6sh.core.models import Cashdesk, Item, User
 
 
 class SessionBaseForm(forms.Form):
