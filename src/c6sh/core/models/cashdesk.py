@@ -8,6 +8,7 @@ from typing import Dict, List, Union
 
 from django.core.files.storage import default_storage
 from django.db import models
+from django.db.models import Sum
 from django.utils.timezone import now
 
 from ..utils.displays import DummyDisplay, OverheadDisplay
@@ -120,7 +121,6 @@ class CashdeskSession(models.Model):
     def get_cash_transaction_total(self) -> Decimal:
         return TransactionPosition.objects\
             .filter(transaction__session=self)\
-            .filter(type__in=['sell', 'reverse'])\
             .aggregate(total=models.Sum('value'))['total'] or 0
 
     def get_product_sales(self) -> List[Dict]:
@@ -135,9 +135,9 @@ class CashdeskSession(models.Model):
                 'sales': product_query.filter(type='sell').count(),
                 'presales': product_query.filter(type='redeem').count(),
                 'reversals': product_query.filter(type='reverse').count(),
-                'value_single': product_query.values_list('value')[0][0],
+                'value_single': product_query.values_list('value', flat=True)[0],
             }
-            summary['value_total'] = (summary['sales'] - summary['reversals']) * summary['value_single']
+            summary['value_total'] = product_query.aggregate(s=Sum('value'))['s'] or 0
             result.append(summary)
         return result
 
