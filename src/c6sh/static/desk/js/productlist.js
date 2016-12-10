@@ -59,7 +59,7 @@ var productlist = {
     },
 
     _touch_scroll_start: function (e) {
-        productlist._touch_product = $(e.target).attr("data-id") || null;
+        productlist._touch_product = $(e.target).closest("button").attr("data-id") || null;
         if ($("#product-view-inner").height() >= $("#product-view").height()) {
             // Product list is long enough that we require scrolling at all
             if (e.button === 0) {
