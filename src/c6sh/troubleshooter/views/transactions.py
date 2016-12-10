@@ -38,6 +38,11 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
                 self.filter['cashdesk'] = desk
             except Cashdesk.DoesNotExist:
                 pass
+        if 'receipt' in _filter and _filter['receipt']:
+            try:
+                self.filter['receipt'] = int(_filter['receipt'])
+            except:
+                messages.errors('Receipt ID has to be an integer.')
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet:
@@ -48,6 +53,8 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
             qs = qs.filter(transaction__session__cashdesk=self.filter['cashdesk'])
         if 'type' in self.filter and self.filter['type']:
             qs = qs.filter(type=self.filter['type'])
+        if 'receipt' in self.filter and self.filter['receipt']:
+            qs = qs.filter(transaction__receipt_id=self.filter['receipt'])
         return qs
 
     def get_context_data(self) -> Dict[str, Any]:
