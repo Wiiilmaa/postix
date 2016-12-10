@@ -19,6 +19,13 @@ function reprintReceipt() {
     })
 }
 
+function displayNext() {
+    $.ajax({
+       url: '/api/cashdesk/display-next/',
+       method: 'POST',
+   })
+}
+
 function requestResupply() {
     $.ajax({
         url: '/api/cashdesk/request-resupply/',
