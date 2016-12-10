@@ -1,8 +1,10 @@
 from decimal import Decimal
+
 from django.utils.translation import ugettext as _
 
-from c6sh.core.models import ListConstraintProduct, WarningConstraintProduct
-from c6sh.core.models import Product
+from c6sh.core.models import (
+    ListConstraintProduct, Product, WarningConstraintProduct,
+)
 
 _check_registry = set()
 
