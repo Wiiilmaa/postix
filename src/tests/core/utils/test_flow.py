@@ -24,21 +24,21 @@ from c6sh.core.utils.flow import (
 def test_invalid():
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret='abcde')
-    assert excinfo.value.message == 'No ticket found with the given secret.'
+    assert excinfo.value.message == 'No ticket could be found with the given secret.'
 
 
 @pytest.mark.django_db
 def test_unpaid():
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=preorder_position_factory().secret)
-    assert excinfo.value.message == 'Ticket has not been paid for.'
+    assert excinfo.value.message == 'This ticket has not been paid for.'
 
 
 @pytest.mark.django_db
 def test_already_redeemed():
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=preorder_position_factory(paid=True, redeemed=True).secret)
-    assert excinfo.value.message == 'Ticket has already been redeemed.'
+    assert excinfo.value.message == 'This ticket has already been redeemed.'
 
 
 @pytest.mark.django_db
@@ -184,7 +184,7 @@ def test_preorder_list_constraint_unknown():
     }
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret, **options)
-    assert excinfo.value.message == 'Entry not found on list "{}".'.format(
+    assert excinfo.value.message == 'This entry could not be found in list "{}".'.format(
         list_constraint.name)
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
@@ -203,7 +203,7 @@ def test_preorder_list_constraint_used():
     }
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret, **options)
-    assert excinfo.value.message == 'This list entry already has been used.'
+    assert excinfo.value.message == 'This list entry has already been used.'
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
 
@@ -275,7 +275,7 @@ def test_preorder_list_and_warning_bypass():
 def test_sell_unknown_product():
     with pytest.raises(FlowError) as excinfo:
         sell_ticket(product=1234678)
-    assert excinfo.value.message == 'Product ID not known.'
+    assert excinfo.value.message == 'This product ID is not known.'
 
 
 @pytest.mark.django_db
@@ -285,7 +285,7 @@ def test_sell_unavailable_product():
     t.products.add(p)
     with pytest.raises(FlowError) as excinfo:
         sell_ticket(product=p.pk)
-    assert excinfo.value.message == 'Product currently unavailable or sold out.'
+    assert excinfo.value.message == 'This product is currently unavailable or sold out.'
 
 
 @pytest.mark.django_db
@@ -342,7 +342,7 @@ def test_sell_list_constraint_unknown():
     }
     with pytest.raises(FlowError) as excinfo:
         sell_ticket(product=p.id, **options)
-    assert excinfo.value.message == 'Entry not found on list "{}".'.format(
+    assert excinfo.value.message == 'This entry could not be found in list "{}".'.format(
         list_constraint.name)
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
@@ -461,7 +461,7 @@ def test_reverse_double():
     reverse_transaction(trans_id=trans.pk, current_session=session)
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction(trans_id=trans.pk, current_session=session)
-    assert excinfo.value.message == 'At least one position of this transaction already has been reversed.'
+    assert excinfo.value.message == 'At least one position of this transaction has already been reversed.'
 
 
 @pytest.mark.django_db
@@ -469,7 +469,7 @@ def test_reverse_position_unknown():
     session = cashdesk_session_before_factory()
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction_position(1234678, current_session=session)
-    assert excinfo.value.message == 'TransactionPosition ID not known.'
+    assert excinfo.value.message == 'Transaction position ID not known.'
 
 
 @pytest.mark.django_db
@@ -526,4 +526,4 @@ def test_reverse_position_double():
     reverse_transaction_position(tpos.pk, current_session=session)
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction_position(tpos.pk, current_session=session)
-    assert excinfo.value.message == 'This position already has been reversed.'
+    assert excinfo.value.message == 'This position has already been reversed.'

@@ -33,7 +33,7 @@ def help_test_for_error(api, secret, options=None):
 def test_invalid(api_with_session):
     assert help_test_for_error(api_with_session, 'abcde') == {
         'success': False,
-        'message': 'No ticket found with the given secret.',
+        'message': 'No ticket could be found with the given secret.',
         'type': 'error',
         'missing_field': None,
         'bypass_price': None,
@@ -44,7 +44,7 @@ def test_invalid(api_with_session):
 def test_unpaid(api_with_session):
     assert help_test_for_error(api_with_session, preorder_position_factory().secret) == {
         'success': False,
-        'message': 'Ticket has not been paid for.',
+        'message': 'This ticket has not been paid for.',
         'type': 'error',
         'missing_field': None,
         'bypass_price': None,
@@ -55,7 +55,7 @@ def test_unpaid(api_with_session):
 def test_already_redeemed(api_with_session):
     assert help_test_for_error(api_with_session, preorder_position_factory(paid=True, redeemed=True).secret) == {
         'success': False,
-        'message': 'Ticket has already been redeemed.',
+        'message': 'This ticket has already been redeemed.',
         'type': 'error',
         'missing_field': None,
         'bypass_price': None,
@@ -120,7 +120,7 @@ def test_preorder_list_constraint_unknown(api_with_session):
     }
     assert help_test_for_error(api_with_session, pp.secret, options) == {
         'success': False,
-        'message': 'Entry not found on list "{}".'.format(list_constraint.name),
+        'message': 'This entry could not be found in list "{}".'.format(list_constraint.name),
         'type': 'input',
         'missing_field': 'list_{}'.format(list_constraint.pk),
         'bypass_price': None,
@@ -140,7 +140,7 @@ def test_preorder_list_constraint_used(api_with_session):
     }
     assert help_test_for_error(api_with_session, pp.secret, options) == {
         'success': False,
-        'message': 'This list entry already has been used.',
+        'message': 'This list entry has already been used.',
         'type': 'input',
         'missing_field': 'list_{}'.format(entry.list.pk),
         'bypass_price': None,
