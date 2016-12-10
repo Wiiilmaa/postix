@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from c6sh.core.models import TransactionPosition
+from c6sh.core.models import Item, ProductItem, TransactionPosition
 
 from ...factories import (
     product_factory, quota_factory, time_constraint_factory,
@@ -17,9 +17,11 @@ def test_transactionposition_was_reversed():
     tp2 = transaction_position_factory()
     tp2.type = 'reverse'
     tp2.reverses = tp
+    tp2.value = None
     tp2.save()
     assert tp.was_reversed()
     assert not tp2.was_reversed()
+    assert tp2.value == tp.product.price * -1
 
 
 @pytest.mark.django_db
@@ -95,3 +97,45 @@ def test_sale_copy_items():
     pos = TransactionPosition(type='sale', transaction=trans, product=prod)
     pos.save()
     assert set(pos.items.all()) == set(prod.items.all())
+
+
+@pytest.mark.django_db
+def test_product_pack_list():
+    prod = product_factory()
+    ProductItem.objects.create(
+        item=Item.objects.create(name='Foo', description='', initial_stock=10),
+        product=prod, amount=1
+    )
+    ProductItem.objects.create(
+        item=Item.objects.create(name='Bar', description='', initial_stock=10),
+        product=prod, amount=3
+    )
+    assert prod.pack_list == 'Foo, 3x Bar'
+
+
+@pytest.mark.django_db
+def test_has_invoice():
+    trans = transaction_factory()
+    assert not trans.has_invoice
+    assert trans.get_invoice_path() is None
+
+
+@pytest.mark.django_db
+def test_transaction_can_be_reversed():
+    tp = transaction_position_factory()
+    assert tp.transaction.can_be_reversed
+    tp2 = transaction_position_factory()
+    tp2.type = 'reverse'
+    tp2.reverses = tp
+    tp2.save()
+    assert not tp.transaction.can_be_reversed
+    assert not tp2.transaction.can_be_reversed
+
+
+@pytest.mark.django_db
+def test_transaction_receipt_id():
+    trans = transaction_factory()
+    trans.set_receipt_id(retry=3)
+    trans2 = transaction_factory()
+    trans2.set_receipt_id(retry=3)
+    assert trans2.receipt_id == trans.receipt_id + 1

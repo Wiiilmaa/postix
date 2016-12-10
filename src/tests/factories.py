@@ -39,19 +39,20 @@ def cashdesk_factory(ip=None, active=None):
                                    is_active=active if active is not None else True)
 
 
-def cashdesk_session_before_factory(ip=None, user=None):
+def cashdesk_session_before_factory(ip=None, user=None, create_items=True):
     cd = CashdeskSession.objects.create(cashdesk=cashdesk_factory(ip=ip),
                                         user=user or user_factory(),
                                         start=now() - timedelta(hours=2),
                                         cash_before=random.choice([50 * i for i in range(6)]),
                                         backoffice_user_before=user_factory(superuser=True))
 
-    items = [item_factory() for _ in range(3)]
-    for i in items:
-        ItemMovement.objects.create(session=cd,
-                                    item=i,
-                                    backoffice_user=user_factory(troubleshooter=True, superuser=True),
-                                    amount=random.randint(1, i.initial_stock))
+    if create_items:
+        items = [item_factory() for _ in range(3)]
+        for i in items:
+            ItemMovement.objects.create(session=cd,
+                                        item=i,
+                                        backoffice_user=user_factory(troubleshooter=True, superuser=True),
+                                        amount=random.randint(1, i.initial_stock))
     return cd
 
 
