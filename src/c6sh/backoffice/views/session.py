@@ -11,6 +11,7 @@ from django.utils.timezone import now
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
+from .. import checks
 from ...core.models import Cashdesk, CashdeskSession, ItemMovement, User
 from ..forms import ItemMovementFormSetHelper, get_form_and_formset
 from ..report import generate_report
@@ -78,6 +79,11 @@ class SessionListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView)
 
     def get_queryset(self) -> QuerySet:
         return Cashdesk.objects.filter(is_active=True).order_by('name')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['check_errors'] = checks.all_errors()
+        return ctx
 
 
 class ReportListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView):
