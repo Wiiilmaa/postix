@@ -42,7 +42,8 @@ class LoginView(TemplateView):
                 return redirect('desk:login')
 
             if session.cashdesk != self.cashdesk:
-                messages.error(request, _('Your session is scheduled for a different cashdesk.'))
+                messages.error(request, _('Your session is scheduled for a different cashdesk. Please go to '
+                                          '{desk}').format(desk=str(session.cashdesk)))
                 return redirect('desk:login')
 
             login(request, user)
