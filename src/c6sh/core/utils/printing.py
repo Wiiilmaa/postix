@@ -47,7 +47,7 @@ class CashdeskPrinter:
 
         positions = [
             position for position in transaction.positions.all()
-            if not position.type == 'redeem'
+            if not (position.type == 'redeem' and position.value == Decimal('0.00'))
         ]
         is_cancellation = any(position.type == 'reverse' for position in positions)
 
@@ -61,13 +61,21 @@ class CashdeskPrinter:
             tax_sums[position.tax_rate] += position.tax_value
             if position.tax_rate not in tax_symbols:
                 tax_symbols[position.tax_rate] = ascii_uppercase[len(tax_sums) - 1]
-            pos_str = ' {product_name} ({tax_str}){gap} {price}'.format(
-                product_name=position.product.name,
-                tax_str=tax_symbols[position.tax_rate],
-                gap=' ' * (29 - len(position.product.name)),
-                price=self._format_number(position.value),
-            )
-            position_lines.append(pos_str)
+
+            formatargs = {
+                'product_name': position.product.name,
+                'tax_str': tax_symbols[position.tax_rate],
+                'gap': ' ' * (29 - len(position.product.name)),
+                'price': self._format_number(position.value),
+                'upgrade': _('Upgrade'),
+                'upgradegap': ' ' * (29 - len(_('Upgrade'))),
+            }
+            if position.has_constraint_bypass:
+                position_lines.append(' {product_name}'.format(**formatargs))
+                position_lines.append(' {upgrade} ({tax_str}){upgradegap} {price}'.format(**formatargs))
+            else:
+                pos_str = ' {product_name} ({tax_str}){gap} {price}'.format(**formatargs)
+                position_lines.append(pos_str)
         total_taxes = sum(tax_sums.values())
 
         if not position_lines:

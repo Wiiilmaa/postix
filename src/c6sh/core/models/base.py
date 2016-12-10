@@ -85,6 +85,7 @@ class TransactionPosition(models.Model):
                                    blank=True)
     authorized_by = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT,
                                       related_name='authorized')
+    has_constraint_bypass = models.BooleanField(default=False)
 
     def calculate_tax(self) -> None:
         net_value = self.value * 100 / (100 + self.tax_rate)

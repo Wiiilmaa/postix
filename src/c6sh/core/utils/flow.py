@@ -104,6 +104,7 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
     if bypass_taxrate is not None and bypass_price:
         pos.value = bypass_price
         pos.tax_rate = bypass_taxrate  # tax_value is calculated by .save()
+        pos.has_constraint_bypass = True
     else:
         pos.value = pos.tax_rate = Decimal('0.00')
     return pos
