@@ -33,49 +33,51 @@
 </div>
 
 <div class="panel panel-body col-md-12"><div class="transaction-list table-responsive">
-    <table class="table table-condensed table-hover">
-        <thead>
-            <tr>
-                <th></th>
-                <th> Kasse </th>
-                <th> Typ </th>
-                <th> Betrag </th>
-                <th> Transaktionsbetrag </th>
-                <th> Bon-Nr. </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for transaction_position in transactions %}
+    {% if not transactions %}
+        Keine passenden Transaktionen gefunden.
+    {% else %}
+        <table class="table table-condensed table-hover">
+            <thead>
                 <tr>
-                    <td class="session-action-column">
-                        <a href="{% url "troubleshooter:transaction-detail" pk=transaction_position.transaction.pk %}" title="Details">
-                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ request.path }}?desk={{ transaction_position.transaction.session.cashdesk.pk }}">
-                            {{ transaction_position.transaction.session.cashdesk }}
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ request.path }}?type={{ transaction_position.type }}">
-                            {% if transaction_position.type == 'sell' %}
-                                <span class="text-primary">Verkauf</span>
-                            {% elif transaction_position.type == 'redeem' %}
-                                <span class="text-muted">Vorverkauf</span>
-                            {% elif transaction_position.type == 'reverse' %}
-                                <span class="text-danger">Storno</span>
-                            {% endif %}
-                        </a>
-                    </td>
-                    <td> {{ transaction_position.value }} </td>
-                    <td> {{ transaction_position.transaction.value }} </td>
-                    <td> {{ transaction_position.transaction.receipt_id }} </td>
-            {% empty %}
-                Keine passenden Transaktionen gefunden.
-            {% endfor %}
-        </tbody>
-    </table>
+                    <th></th>
+                    <th> Kasse </th>
+                    <th> Typ </th>
+                    <th> Betrag </th>
+                    <th> Transaktionsbetrag </th>
+                    <th> Bon-Nr. </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction_position in transactions %}
+                    <tr>
+                        <td class="session-action-column">
+                            <a href="{% url "troubleshooter:transaction-detail" pk=transaction_position.transaction.pk %}" title="Details">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ request.path }}?desk={{ transaction_position.transaction.session.cashdesk.pk }}">
+                                {{ transaction_position.transaction.session.cashdesk }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ request.path }}?type={{ transaction_position.type }}">
+                                {% if transaction_position.type == 'sell' %}
+                                    <span class="text-primary">Verkauf</span>
+                                {% elif transaction_position.type == 'redeem' %}
+                                    <span class="text-muted">Vorverkauf</span>
+                                {% elif transaction_position.type == 'reverse' %}
+                                    <span class="text-danger">Storno</span>
+                                {% endif %}
+                            </a>
+                        </td>
+                        <td> {{ transaction_position.value }} </td>
+                        <td> {{ transaction_position.transaction.value }} </td>
+                        <td> {{ transaction_position.transaction.receipt_id }} </td>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 </div></div>
 
 {% if is_paginated %}
