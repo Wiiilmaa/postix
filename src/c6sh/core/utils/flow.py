@@ -154,13 +154,9 @@ def sell_ticket(**kwargs) -> TransactionPosition:
             raise FlowError(
                 _('This ticket can only redeemed by persons on the list "{}".').format(c.constraint.name),
                 type='input', missing_field='list_{}'.format(c.constraint.pk))
-        if not entryid.isdigit():
-            try:
-                pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
-            except User.DoesNotExist:  # noqa
-                raise FlowError(_('Please supply a list entry ID.'),
-                                type='input', missing_field='list_{}'.format(c.constraint.pk))
-        else:
+        try:
+            pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
+        except User.DoesNotExist:  # noqa
             try:
                 entry = c.constraint.entries.get(identifier=entryid)
                 if is_redeemed(entry):
