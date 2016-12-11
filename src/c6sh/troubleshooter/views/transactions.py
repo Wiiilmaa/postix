@@ -5,10 +5,11 @@ from django.core.files.storage import default_storage
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.utils.timezone import now
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
-from ...core.models import Cashdesk, Transaction, TransactionPosition
+from ...core.models import Cashdesk, CashdeskSession, Transaction, TransactionPosition
 from ...core.utils.flow import (
     reverse_transaction, reverse_transaction_position,
 )
@@ -69,6 +70,11 @@ class TransactionDetailView(TroubleshooterUserRequiredMixin, DetailView):
     context_object_name = 'transaction'
     model = Transaction
 
+    def get_context_data(self, object):
+        ctx = super().get_context_data()
+        ctx['sessions'] = CashdeskSession.active.all()
+        return ctx
+
 
 @troubleshooter_user_required
 def transaction_reprint(request: HttpRequest, pk: int) -> HttpResponseRedirect:
@@ -122,12 +128,11 @@ def transaction_position_cancel(request: HttpRequest, pk: int) -> HttpResponseRe
         messages.error(request, 'Transaktionszeile nicht bekannt.')
     else:
         if request.method == 'POST':
-            cashdesk = position.transaction.session.cashdesk
-            session = cashdesk.get_active_sessions()[0]
+            session = CashdeskSession.objects.get(pk=request.POST.get('session'))
             reversal_pk = reverse_transaction_position(pk, session, authorized_by=request.user)
             reversal = Transaction.objects.get(pk=reversal_pk)
             reversal.print_receipt(do_open_drawer=False)
-            messages.success(request, 'Transaktionszeile wurde storniert ({}). Storno-Bon wurde an {} gedruckt.'.format(reversal_pk, cashdesk))
+            messages.success(request, 'Transaktionszeile wurde storniert ({}). Storno-Bon wurde an {} gedruckt.'.format(reversal_pk, session.cashdesk))
 
     return redirect('troubleshooter:transaction-detail', pk=position.transaction.pk)
 
@@ -136,15 +141,14 @@ def transaction_position_cancel(request: HttpRequest, pk: int) -> HttpResponseRe
 def transaction_cancel(request: HttpRequest, pk: int) -> HttpResponseRedirect:
     if request.method == 'POST':
         try:
-            transaction = Transaction.objects.get(pk=pk)
+            Transaction.objects.get(pk=pk)
         except Transaction.DoesNotExist:
             messages.error(request, 'Transaktion nicht bekannt.')
         else:
-            cashdesk = transaction.session.cashdesk
-            session = cashdesk.get_active_sessions()[0]
+            session = CashdeskSession.objects.get(pk=request.POST.get('session'))
             reversal_pk = reverse_transaction(pk, session, authorized_by=request.user)
             reversal = Transaction.objects.get(pk=reversal_pk)
             reversal.print_receipt(do_open_drawer=False)
-            messages.success(request, 'Transaktion wurde storniert ({}). Storno-Bon wurde an {} gedruckt.'.format(reversal_pk, cashdesk))
+            messages.success(request, 'Transaktion wurde storniert ({}). Storno-Bon wurde an {} gedruckt.'.format(reversal_pk, session.cashdesk))
 
     return redirect('troubleshooter:transaction-detail', pk=pk)

@@ -26,10 +26,21 @@
         {% csrf_token %}
         <button class="btn btn-default btn-block" type="submit">Rechnung erstellen</button>
     </form>
-    {% if transaction.can_be_reversed %}
-        <form class="form col-md-3" method="post" action="{% url "troubleshooter:transaction-cancel" pk=transaction.pk %}">
+    {% if transaction.can_be_reversed and sessions %}
+        <form method="post" action="{% url "troubleshooter:transaction-cancel" pk=transaction.pk %}">
+            <div class="col-md-3">
+                <select name="session" class="form-control">
+                    {% for session in sessions %}
+                        <option value="{{ session.pk }}">
+                            {{ session.user }} an {{ session.cashdesk }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
             {% csrf_token %}
-            <button class="btn btn-danger btn-block" type="submit">Storno{% if transaction.positions.count > 1 %} (alle Zeilen){% endif %}</button>
+            <div class="col-md-3">
+                <button class="btn btn-danger btn-block" type="submit">Storno{% if transaction.positions.count > 1 %} (alle Zeilen){% endif %}</button>
+            </div>
         </form>
     {% endif %}
 </div>
