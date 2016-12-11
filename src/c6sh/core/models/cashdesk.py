@@ -49,6 +49,13 @@ class Cashdesk(models.Model):
         return [session for session in self.sessions.filter(end__isnull=True) if session.is_active()]
 
 
+class ActiveCashdeskSessionManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset()\
+            .filter(start__lte=now())\
+            .filter(models.Q(end__gte=now()) | models.Q(end__isnull=True))
+
+
 class CashdeskSession(models.Model):
     cashdesk = models.ForeignKey('Cashdesk', related_name='sessions', on_delete=models.PROTECT)
     user = models.ForeignKey('User', on_delete=models.PROTECT)
@@ -74,6 +81,9 @@ class CashdeskSession(models.Model):
                                  verbose_name='API token',
                                  help_text='Used for non-browser sessions. Generated automatically.')
     comment = models.TextField(blank=True)
+
+    active = ActiveCashdeskSessionManager()
+    objects = models.Manager()
 
     def __str__(self) -> str:
         return '#{2} ({0} on {1})'.format(self.user, self.cashdesk, self.pk)
