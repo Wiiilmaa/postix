@@ -19,5 +19,5 @@ urlpatterns = [
 
     url('^wizard/$', views.WizardSettingsView.as_view(), name='wizard-settings'),
 
-    url('^$', views.main_view, name='main'),
+    url('^$', views.MainView.as_view(), name='main'),
 ]

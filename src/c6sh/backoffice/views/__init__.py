@@ -1,6 +1,6 @@
 from .auth import LoginView, logout_view, switch_user
 from .create_user import create_user_view
-from .main import main_view
+from .main import MainView
 from .session import (
     ReportListView, SessionDetailView, SessionListView, end_session,
     new_session, resupply_session, session_report,
@@ -14,7 +14,7 @@ __all__ = [
     'end_session',
     'LoginView',
     'logout_view',
-    'main_view',
+    'MainView',
     'new_session',
     'resupply_session',
     'ReportListView',

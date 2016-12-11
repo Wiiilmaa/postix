@@ -5,8 +5,8 @@
 
 {% block content %}
     <ul>
-        <li><a href="{% url "backoffice:create-user" %}">Neuen User anlegen</a></li>
-        <li><a href="{% url "backoffice:new-session" %}">Kasse einzählen</a></li>
-        <li><a href="{% url "backoffice:session-list" %}">Liste von Sessions/Reports</a></li>
+        {% for item, value in data.items %}
+        <li> {{ item }}: {{ value }}</li>
+        {% endfor %}
     </ul>
 {% endblock %}
