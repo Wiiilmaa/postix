@@ -1,7 +1,8 @@
 from django.db.models import Sum
 from django.views.generic import TemplateView
 
-from c6sh.core.models.base import TransactionPositionItem, Item
+from c6sh.core.models.base import Item, TransactionPositionItem
+
 from .utils import BackofficeUserRequiredMixin
 
 

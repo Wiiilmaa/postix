@@ -108,7 +108,7 @@ def test_product_sales():
     assert session.get_product_sales() == [
         {
             'presales': 1,
-            'value_single': False,  #  Decimal('23.00'),  # What should this be?
+            'value_single': False,  # Decimal('23.00'),  # What should this be?
             'product': prod_full,
             'value_total': Decimal('79.00'),
             'reversals': 1,
