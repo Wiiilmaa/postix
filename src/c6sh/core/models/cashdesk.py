@@ -137,15 +137,16 @@ class CashdeskSession(models.Model):
         qs = TransactionPosition.objects.filter(transaction__session=self)
         result = []
 
-        for p in qs.order_by().values('product').distinct():
+        # Apparently, .values() does not support Func() expressions :(
+        for p in qs.order_by().extra(select={'value_abs': "ABS(value)"}).values('product', 'value_abs').distinct():
             product = Product.objects.get(pk=p['product'])
-            product_query = qs.filter(product=product)
+            product_query = qs.filter(product=product, value__in=[p['value_abs'], -p['value_abs']])
             summary = {
                 'product': product,
                 'sales': product_query.filter(type='sell').count(),
                 'presales': product_query.filter(type='redeem').count(),
                 'reversals': product_query.filter(type='reverse').count(),
-                'value_single': product_query.values_list('value', flat=True)[0],
+                'value_single': p['value_abs'],
             }
             summary['value_total'] = product_query.aggregate(s=Sum('value'))['s'] or 0
             result.append(summary)

@@ -3,15 +3,15 @@ from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
-from tests.factories import (
-    cashdesk_session_before_factory, transaction_factory,
-    transaction_position_factory, user_factory,
-)
 
 from c6sh.core.models import (
     Item, ItemMovement, Product, ProductItem, TransactionPosition,
 )
 from c6sh.core.utils.flow import reverse_transaction
+from tests.factories import (
+    cashdesk_session_before_factory, transaction_factory,
+    transaction_position_factory, user_factory,
+)
 
 
 @pytest.mark.django_db
@@ -90,7 +90,6 @@ def test_cash_transaction_total():
 
 
 @pytest.mark.django_db
-@pytest.mark.xfail(reason="This needs some discussion.")
 def test_product_sales():
     session = cashdesk_session_before_factory(create_items=False)
     prod_full = Product.objects.create(name='Full ticket', price=23, tax_rate=19)
@@ -104,14 +103,36 @@ def test_product_sales():
         type='redeem', value=10, tax_rate=19, product=prod_full, transaction=transaction_factory(session),
         has_constraint_bypass=True
     )
+    TransactionPosition.objects.create(
+        type='redeem', value=0, tax_rate=0, product=prod_full, transaction=transaction_factory(session),
+    )
 
-    assert session.get_product_sales() == [
+    def keyfunc(d):
+        return d['value_single']
+
+    assert sorted(session.get_product_sales(), key=keyfunc) == sorted([
         {
-            'presales': 1,
-            'value_single': False,  # Decimal('23.00'),  # What should this be?
             'product': prod_full,
-            'value_total': Decimal('79.00'),
+            'presales': 0,
             'reversals': 1,
-            'sales': 4
+            'sales': 4,
+            'value_total': Decimal('69.00'),
+            'value_single': Decimal('23.00'),
+        },
+        {
+            'product': prod_full,
+            'presales': 1,
+            'reversals': 0,
+            'sales': 0,
+            'value_total': Decimal('00.00'),
+            'value_single': Decimal('00.00'),
+        },
+        {
+            'product': prod_full,
+            'presales': 1,
+            'reversals': 0,
+            'sales': 0,
+            'value_total': Decimal('10.00'),
+            'value_single': Decimal('10.00'),
         }
-    ]
+    ], key=keyfunc)
