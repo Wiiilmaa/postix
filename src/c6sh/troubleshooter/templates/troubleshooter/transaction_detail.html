@@ -20,29 +20,21 @@
 <div class="panel col-md-12">
     <form class="form col-md-3" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
         {% csrf_token %}
+        <div class="col-md-3">
+            <select name="session" class="form-control">
+                {% for session in sessions %}
+                    <option value="{{ session.pk }}">
+                        {{ session.user }} an {{ session.cashdesk }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
         <button class="btn btn-primary btn-block" type="submit">Bon drucken</button>
     </form>
     <form class="form col-md-3" method="post" action="{% url "troubleshooter:transaction-invoice" pk=transaction.pk %}">
         {% csrf_token %}
         <button class="btn btn-default btn-block" type="submit">Rechnung erstellen</button>
     </form>
-    {% if transaction.can_be_reversed and sessions %}
-        <form method="post" action="{% url "troubleshooter:transaction-cancel" pk=transaction.pk %}">
-            <div class="col-md-3">
-                <select name="session" class="form-control">
-                    {% for session in sessions %}
-                        <option value="{{ session.pk }}">
-                            {{ session.user }} an {{ session.cashdesk }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            {% csrf_token %}
-            <div class="col-md-3">
-                <button class="btn btn-danger btn-block" type="submit">Storno{% if transaction.positions.count > 1 %} (alle Zeilen){% endif %}</button>
-            </div>
-        </form>
-    {% endif %}
 </div>
 
 <div class="table-responsive col-md-12">
@@ -60,11 +52,6 @@
                                 <a href="{% url "troubleshooter:transaction-detail" pk=position.reverses.transaction.pk %}">
                                     <span class="text-danger">Storno</span>
                                 </a>
-                            {% elif transaction.positions.count > 1 %}
-                                <form class="form form-inline" method="post" action="{% url "troubleshooter:transaction-position-cancel" pk=position.pk %}">
-                                    {% csrf_token %}
-                                    <button class="btn btn-danger btn-xs" type="submit">stornieren</button>
-                                </form>
                             {% endif %}
                         {% endif %}
                     </td>

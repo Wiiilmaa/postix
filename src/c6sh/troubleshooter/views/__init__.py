@@ -3,8 +3,8 @@ from .constraints import ListConstraintDetailView, ListConstraintListView
 from .desk import confirm_resupply
 from .main import main_view
 from .transactions import (
-    TransactionDetailView, TransactionListView, transaction_cancel,
-    transaction_invoice, transaction_position_cancel, transaction_reprint,
+    TransactionDetailView, TransactionListView, transaction_invoice,
+    transaction_reprint,
 )
 
 __all__ = [
@@ -16,8 +16,6 @@ __all__ = [
     'ListConstraintListView',
     'TransactionDetailView',
     'TransactionListView',
-    'transaction_cancel',
-    'transaction_position_cancel',
     'transaction_invoice',
     'transaction_reprint',
 ]
