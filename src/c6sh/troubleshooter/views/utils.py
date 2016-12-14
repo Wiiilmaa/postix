@@ -9,6 +9,8 @@ def troubleshooter_user(user):
 
 
 class TroubleshooterUserRequiredMixin(UserPassesTestMixin):
+    login_url = 'troubleshooter:login'
+
     def test_func(self):
         return troubleshooter_user(self.request.user)
 

@@ -11,6 +11,8 @@ def is_backoffice_user(user: User) -> bool:
 
 
 class BackofficeUserRequiredMixin(UserPassesTestMixin):
+    login_url = 'backoffice:login'
+
     def test_func(self) -> bool:
         return is_backoffice_user(self.request.user)
 
