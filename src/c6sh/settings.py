@@ -1,12 +1,26 @@
 import os
 
 from django.contrib import messages
+from django.utils.crypto import get_random_string
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-SECRET_KEY = '*5n9)_c*f@pk%h9be^1(0gkj7w^x%7^2rj_@9*+4gp4-ccafqb'
+if os.getenv('C6SH_SECRET', ''):
+    SECRET_KEY = os.getenv('C6SH_SECRET', '')
+else:
+    SECRET_FILE = os.path.join(BASE_DIR, '.secret')
+    if os.path.exists(SECRET_FILE):
+        with open(SECRET_FILE, 'r') as f:
+            SECRET_KEY = f.read().strip()
+    else:
+        chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+        SECRET_KEY = get_random_string(50, chars)
+        with open(SECRET_FILE, 'w') as f:
+            os.chmod(SECRET_FILE, 0o600)
+            os.chown(SECRET_FILE, os.getuid(), os.getgid())
+            f.write(SECRET_KEY)
 
-DEBUG = True
+DEBUG = os.getenv('C6SH_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -48,14 +62,16 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'c6sh.urls'
 WSGI_APPLICATION = 'c6sh.wsgi.application'
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
-        'USER': 'c6sh',
-        'PASSWORD': 'c6sh',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.' + os.getenv('C6SH_DB_TYPE', 'sqlite3'),
+        'NAME': os.getenv('C6SH_DB_NAME', 'db.sqlite3'),
+        'USER': os.getenv('C6SH_DB_USER', ''),
+        'PASSWORD': os.getenv('C6SH_DB_PASS', ''),
+        'HOST': os.getenv('C6SH_DB_HOST', ''),
+        'PORT': os.getenv('C6SH_DB_PORT', ''),
+        'CONN_MAX_AGE': 300 if os.getenv('C6SH_DB_TYPE', 'sqlite3') != 'sqlite3' else 0,
     }
 }
 
@@ -94,8 +110,8 @@ LOCALE_PATHS = [
     os.path.join(os.path.dirname(os.path.dirname(__file__)), 'locale')
 ]
 
-STATIC_URL = '/static/c6sh/'
-STATIC_ROOT = '/srv/static/c6sh/'
+STATIC_URL = os.getenv('C6SH_STATIC_URL', '/static/c6sh/')
+STATIC_ROOT = os.getenv('C6SH_STATIC_ROOT', '/srv/static/c6sh/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'c6sh', 'static'),
 ]
