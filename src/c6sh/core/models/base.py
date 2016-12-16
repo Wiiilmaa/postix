@@ -131,6 +131,7 @@ class Product(models.Model):
     items = models.ManyToManyField('Item', through='ProductItem', blank=True)
     priority = models.IntegerField(default=0, verbose_name='Priority',
                                    help_text='Will be used for sorting, high priorities come first.')
+    import_source_id = models.CharField(max_length=180, db_index=True, null=True, blank=True)
 
     def save(self, *args, **kwargs) -> None:
         if not self.receipt_name:
