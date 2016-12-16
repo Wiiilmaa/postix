@@ -51,9 +51,9 @@
                 <th> {{ session.end }} </th>
                 <th>
                     <ul>
-                    {% for product in session.get_current_items %} 
+                    {% for product in session.get_current_items %}
                         <li>{{ product.item }}: {{ product.transactions }}</li>
-                    {% endfor %} 
+                    {% endfor %}
                     </ul>
                 </th>
 

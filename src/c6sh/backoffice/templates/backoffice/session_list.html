@@ -40,9 +40,9 @@
 					<th>seit {{ session.start|timesince }} </th>
 					<th>
                         <ul>
-                        {% for product in session.get_current_items %} 
+                        {% for product in session.get_current_items %}
                             <li>{{ product.item }}: {{ product.transactions }}</li>
-                        {% endfor %} 
+                        {% endfor %}
                         </ul>
                     </th>
                     {% with session_count=cashdesk.get_active_sessions|length %}
@@ -59,7 +59,7 @@
             {% empty %}
                 <tr>
                     <th colspan="42" class="empty-row active">
-                        {{ cashdesk }} 
+                        {{ cashdesk }}
                         <a href="{% url "backoffice:new-session" %}?desk={{ cashdesk.pk }}">einzählen.</a>
                     </th>
                 <tr>

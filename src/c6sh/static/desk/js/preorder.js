@@ -12,7 +12,7 @@ var preorder = {
             success: function (data, status, jqXHR) {
                 loading.end();
                 $("#preorder-input").typeahead('val', "");
-                
+
                 if (data.count !== 1) {
                     if (data.count > 1) {
                         dialog.show_error(gettext('Secret is not unique.'));
@@ -44,7 +44,7 @@ var preorder = {
             }
         });
     },
-    
+
     take_focus: function () {
         window.setTimeout(function () {
             // This is a bit of a hack but it works very well to fix cases
@@ -63,7 +63,7 @@ var preorder = {
                     return;
                 }
                 $("#preorder-input").typeahead("val", "").blur();
-                
+
                 // Special commands
                 if (secret.slice(0, 1) === "/") {
                     if (commands.process(secret)) {
@@ -73,14 +73,14 @@ var preorder = {
                 preorder.redeem(secret);
             }
         });
-        
+
         $('body').mouseup(function (e) {
             // Global catch-all "if the finger goes up, we reset the focus"
             if (!$('body').hasClass('has-modal') && !$(e.target).is("input, #btn-checkout")) {
                 $("#preorder-input").focus().typeahead("close");
             }
         });
-        
+
         preorder.take_focus();
 
         $('#preorder-input').typeahead(null, {

@@ -58,7 +58,7 @@ var dialog = {
         if (typeof pos_id === "undefined") {
             pos_id = null;
         }
-        
+
         $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : gettext('Error'));
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
@@ -168,7 +168,7 @@ var dialog = {
             return false;
         }
     },
-    
+
     init: function () {
         // Initializations at page load time
         $('#btn-cancel').mousedown(dialog.reset);

@@ -52,7 +52,7 @@ contains a list of transaction positions that you want to create. Example:
             }
         ]
     }
-    
+
 You will receive an answer that could look like this:
 
     {
@@ -69,26 +69,26 @@ You will receive an answer that could look like this:
             }
         ]
     }
-  
+
 The first-level ``success`` attribute tells you whether the transaction was successful or
-not. If this is ``false``, nothing has been written to the database. The HTTP status code will 
+not. If this is ``false``, nothing has been written to the database. The HTTP status code will
 be 201 if ``success`` is ``true`` and 400 otherwise.
 
 If the transaction was successful, there will be an ``id`` attribute on the top level that contains
 the transaction ID.
 
-The ``positions`` list contains the result for the single positions in the same order you specified them. 
+The ``positions`` list contains the result for the single positions in the same order you specified them.
 If a position was unsuccessful you will be given a human-readable reason, and - if the issue can be resolved - a
 type. Currently, the following types can be returned:
 
 * ``"input"``: This tells you that you should prompt the user for entering a value (normally an ID
   of a ListConstraintEntry). If you retry the transaction, you should include the input as an additional
   attribute of the position with the name given in ``missing_field``.
-  
+
 * ``"confirmation"``: This tells you that you should prompt the user to confirm a message, e.g. a warning.
   If you retry the transaction, you should include an attribute of value ``true`` with the name given in
   ``missing_field``.
-  
+
 * ``null``: This is an error message that you cannot do anything about.
 
 In some cases, a ``bypass_price`` field is present on the response for a position. If this is the case and the field
@@ -124,7 +124,7 @@ Sample result object (embedded in pagination as described above):
 
 ``/api/preorders/``
 
-Only available to admin users. 
+Only available to admin users.
 
 Sample result object (embedded in pagination as described above):
 
@@ -180,7 +180,7 @@ Sample result object (embedded in pagination as described above):
         "id": 1,
         "name": "CCC-Mitglied"
     }
-  
+
 ### List constraint entries
 
 ``/api/listconstraintentries/``
@@ -188,7 +188,7 @@ Sample result object (embedded in pagination as described above):
 Lists the entries in a list constraint.
 
 This list view *requires* that you specify the query parameter ``listid``
-with the ID of a list constraint **and** the query parameter ``search`` 
+with the ID of a list constraint **and** the query parameter ``search``
 with at least three characters of a search query that will be used to look
 up a specific entry.
 If you do not specify these two parameters, an empty result will be returned.

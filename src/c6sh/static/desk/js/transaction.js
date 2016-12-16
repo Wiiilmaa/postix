@@ -37,12 +37,12 @@ var transaction = {
             'type': 'sell'
         }, product.name, product.price, product.pack_list)
     },
-    
+
     upgrade: function (pos_id, bypass_price) {
         var pos = transaction.positions[pos_id];
         var new_price = (parseFloat(pos.price) + parseFloat(bypass_price)).toFixed(2),
             new_bypass_price;
-        
+
         if (typeof pos.bypass_price !== 'undefined') {
             new_bypass_price = (parseFloat(pos.bypass_price) + parseFloat(bypass_price)).toFixed(2);
         } else {
@@ -62,7 +62,7 @@ var transaction = {
 
         obj._title = name;
         transaction.positions.push(obj);
-        
+
         var productname = $("<span>").addClass("cart-product").text(name);
         if (info) {
             productname.append($("<small>").append("<br/>").append(info));
@@ -111,7 +111,7 @@ var transaction = {
                 if (total > 0.001) {
                     $("#post-sale-given input").focus();
                 }
-                
+
                 transaction._scroll(0);
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
@@ -214,7 +214,7 @@ var transaction = {
         $("#post-sale-change span").text("0.00");
         transaction._scroll();
     },
-    
+
     _calculate_change: function (e) {
         if (e.which && (e.which === 13 || e.which == 9)) {
             $("#preorder-input").focus();
@@ -227,7 +227,7 @@ var transaction = {
             $("#post-sale-given input").val("");
             return;
         }
-        
+
         var total = parseFloat($.trim($("#post-sale-total span").text())), given;
         if (!$("#post-sale-given input").val()) {
             given = 0;
@@ -239,7 +239,7 @@ var transaction = {
     },
 
     _scroll: function (position) {
-        var cart = $("#cart"), 
+        var cart = $("#cart"),
             inner = $("#cart-inner");
 
         if (position === undefined) {
@@ -261,19 +261,19 @@ var transaction = {
             transaction._touch_scroll_start_mpos = e.clientY;
         }
     },
-    
+
     _touch_scroll_move: function (e) {
         if (transaction._touch_scrolling) {
             transaction._scroll(transaction._touch_scroll_start_cpos+(e.clientY-transaction._touch_scroll_start_mpos));
         }
     },
-    
+
     _touch_scroll_end: function (e) {
         if (e.button === 0) {
             transaction._touch_scrolling = false;
         }
     },
-    
+
     init: function () {
         // Initializations at page load time
         $("#btn-clear").mousedown(transaction.clear);
@@ -288,7 +288,7 @@ var transaction = {
             .keyup(transaction._calculate_change)
             .change(transaction._calculate_change);
         transaction._render();
-        
+
         $('#cart').mousedown(transaction._touch_scroll_start);
         $('body').mousemove(transaction._touch_scroll_move).mouseup(transaction._touch_scroll_end);
         $(window).resize(function () {
