@@ -82,8 +82,8 @@ class CashdeskSession(models.Model):
                                  help_text='Used for non-browser sessions. Generated automatically.')
     comment = models.TextField(blank=True)
 
-    active = ActiveCashdeskSessionManager()
     objects = models.Manager()
+    active = ActiveCashdeskSessionManager()
 
     def __str__(self) -> str:
         return '#{2} ({0} on {1})'.format(self.user, self.cashdesk, self.pk)
