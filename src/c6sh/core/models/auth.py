@@ -29,7 +29,7 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     is_backoffice_user = models.BooleanField(default=False)
     is_troubleshooter = models.BooleanField(default=False)
-    auth_token = models.CharField(max_length=254, null=True, blank=True)
+    auth_token = models.CharField(max_length=254, null=True, blank=True, unique=True)
 
     USERNAME_FIELD = 'username'
     objects = UserManager()
