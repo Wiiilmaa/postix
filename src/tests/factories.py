@@ -14,15 +14,18 @@ from c6sh.core.models import (
 )
 
 
-def user_factory(troubleshooter=False, superuser=False):
+def user_factory(troubleshooter=False, superuser=False, backoffice=False, password=None):
     fake = Factory.create('en-US')
-    return User.objects.create(username=fake.user_name(),
-                               password=fake.password(),
-                               firstname=fake.first_name(),
-                               lastname=fake.last_name(),
-                               is_active=True,
-                               is_superuser=superuser,
-                               is_troubleshooter=troubleshooter)
+    u = User(username=fake.user_name(),
+             firstname=fake.first_name(),
+             lastname=fake.last_name(),
+             is_active=True,
+             is_superuser=superuser,
+             is_backoffice_user=backoffice,
+             is_troubleshooter=troubleshooter)
+    u.set_password(password or fake.password())
+    u.save()
+    return u
 
 
 def item_factory():
