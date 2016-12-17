@@ -18,3 +18,19 @@ class BackofficeUserRequiredMixin(UserPassesTestMixin):
 
 
 backoffice_user_required = user_passes_test(is_backoffice_user, login_url='backoffice:login')
+
+
+def is_superuser(user: User) -> bool:
+    if user.is_authenticated():
+        return user.is_superuser
+    return False
+
+
+class SuperuserRequiredMixin(UserPassesTestMixin):
+    login_url = 'backoffice:login'
+
+    def test_func(self) -> bool:
+        return is_superuser(self.request.user)
+
+
+superuser_required = user_passes_test(is_superuser, login_url='backoffice:login')

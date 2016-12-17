@@ -2,11 +2,11 @@ from django.core.urlresolvers import reverse
 from django.views.generic import FormView
 
 from c6sh.backoffice.forms import EventSettingsForm
-from c6sh.backoffice.views.utils import BackofficeUserRequiredMixin
+from c6sh.backoffice.views.utils import SuperuserRequiredMixin
 from c6sh.core.models import EventSettings
 
 
-class WizardSettingsView(BackofficeUserRequiredMixin, FormView):
+class WizardSettingsView(SuperuserRequiredMixin, FormView):
     template_name = 'backoffice/wizard_settings.html'
     form_class = EventSettingsForm
 
