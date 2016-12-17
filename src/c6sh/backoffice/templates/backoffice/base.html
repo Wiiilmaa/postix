@@ -35,6 +35,7 @@
                   <li><a href="{% url "backoffice:logout" %}"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a></li>
 
                   {% if user.is_superuser %}
+                    <li><a href="{% url "backoffice:wizard-users" %}">Users</a></li>
                     {% if not settings.initialized %}
                         <li><a href="{% url "backoffice:wizard-settings" %}"><span class="text-danger glyphicon glyphicon-alert"></span></a></li>
                     {% else %}

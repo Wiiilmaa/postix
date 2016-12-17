@@ -1,9 +1,12 @@
+from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.views.generic import FormView
+from django.forms import formset_factory
+from django.shortcuts import redirect
+from django.views.generic import FormView, TemplateView
 
 from c6sh.backoffice.forms import EventSettingsForm
 from c6sh.backoffice.views.utils import SuperuserRequiredMixin
-from c6sh.core.models import EventSettings
+from c6sh.core.models import EventSettings, User
 
 
 class WizardSettingsView(SuperuserRequiredMixin, FormView):
@@ -27,3 +30,31 @@ class WizardSettingsView(SuperuserRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse('backoffice:main')
+
+
+class WizardUsersView(SuperuserRequiredMixin, TemplateView):
+    template_name = 'backoffice/wizard_users.html'
+
+    def get_context_data(self):
+        ctx = super().get_context_data()
+        ctx['users'] = User.objects.order_by('username')
+        return ctx
+
+    def post(self, request):
+        target = request.POST.get('target')
+        pk = request.POST.get('user')
+        user = User.objects.get(pk=pk)
+
+        if 'troubleshooter' in target:
+            user.is_troubleshooter = target[-1] == 'y'
+        elif 'backoffice' in target:
+            user.is_backoffice_user = target[-1] == 'y'
+        elif 'superuser' in target:
+            user.is_superuser = target[-1] == 'y'
+        user.save()
+
+        if target[-1] == 'y':
+            messages.success(request, 'Userrechte wurden erweitert.')
+        else:
+            messages.success(request, 'Userrechte wurden beschnitten.')
+        return redirect('backoffice:wizard-users')

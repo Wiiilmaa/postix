@@ -17,7 +17,8 @@ urlpatterns = [
     url('^session/$', views.SessionListView.as_view(), name='session-list'),
     url('^reports/$', views.ReportListView.as_view(), name='report-list'),
 
-    url('^wizard/$', views.WizardSettingsView.as_view(), name='wizard-settings'),
+    url('^wizard/users/$', views.WizardUsersView.as_view(), name='wizard-users'),
+    url('^wizard/settings/$', views.WizardSettingsView.as_view(), name='wizard-settings'),
 
     url('^$', views.MainView.as_view(), name='main'),
 ]
