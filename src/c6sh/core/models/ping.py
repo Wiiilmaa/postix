@@ -3,7 +3,7 @@ from django.utils.crypto import get_random_string
 
 
 def generate_ping_secret():
-    return '#ping' + get_random_string(length=15)
+    return '/ping ' + get_random_string(length=15)
 
 
 class Ping(models.Model):
