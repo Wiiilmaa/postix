@@ -174,6 +174,29 @@ def test_preorder_list_constraint_success(api_with_session):
 
 
 @pytest.mark.django_db
+def test_twice_in_cart(api_with_session, event_settings):
+    pp = preorder_position_factory(paid=True)
+    secret = pp.secret
+    req = {
+        'positions': [
+            {
+                'type': 'redeem',
+                'secret': secret
+            },
+            {
+                'type': 'redeem',
+                'secret': secret
+            }
+        ]
+    }
+    response = api_with_session.post('/api/transactions/', req, format='json')
+    assert response.status_code == 400
+    j = json.loads(response.content.decode())
+    assert not j['success']
+    assert not is_redeemed(pp)
+
+
+@pytest.mark.django_db
 def test_success(api_with_session, event_settings):
     pp = preorder_position_factory(paid=True)
     secret = pp.secret
