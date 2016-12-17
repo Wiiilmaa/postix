@@ -361,7 +361,7 @@ def test_sell_list_constraint_used():
     }
     with pytest.raises(FlowError) as excinfo:
         sell_ticket(product=p.id, **options)
-    assert excinfo.value.message == 'This list entry already has been used.'
+    assert excinfo.value.message == 'This list entry has already been used.'
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
 

@@ -160,7 +160,7 @@ def sell_ticket(**kwargs) -> TransactionPosition:
             try:
                 entry = c.constraint.entries.get(identifier=entryid)
                 if is_redeemed(entry):
-                    raise FlowError(_('This list entry already has been used.'),
+                    raise FlowError(_('This list entry has already been used.'),
                                     type='input', missing_field='list_{}'.format(c.constraint.pk))
                 else:
                     pos.listentry = entry
