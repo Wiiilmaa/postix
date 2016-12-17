@@ -20,7 +20,7 @@ class CheckError(Exception):
 
 @register_check
 def check_tax_rates():
-    product_rates = set(Product.objects.values_list('tax_rate', flat=True).distinct())
+    product_rates = set(Product.objects.exclude(price=0).values_list('tax_rate', flat=True).distinct())
     constraint_rates = (
         set(ListConstraintProduct.objects.exclude(price=0).values_list('tax_rate', flat=True).distinct()) |
         set(WarningConstraintProduct.objects.exclude(price=0).values_list('tax_rate', flat=True).distinct())
@@ -38,7 +38,7 @@ def check_tax_rates():
         raise CheckError(
             _('You have some products that use a non-zero tax rate but the following products are set to 0%: '
               '{products}').format(
-                products=', '.join(str(p) for p in Product.objects.filter(tax_rate=0))
+                products=', '.join(str(p) for p in Product.objects.filter(tax_rate=0).exclude(price=0))
             )
         )
 
