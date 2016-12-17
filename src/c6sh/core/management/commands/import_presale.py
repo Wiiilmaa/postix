@@ -42,7 +42,7 @@ class Command(BaseCommand):
                 loaded_items += 1
             except Product.DoesNotExist:
                 product = Product(import_source_id=item['id'])
-                product.price = 0
+                product.price = Decimal(item['price'])
                 product.tax_rate = Decimal(item['tax_rate'])
                 created_items += 1
             product.name = item['name']
