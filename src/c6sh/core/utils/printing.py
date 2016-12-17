@@ -39,7 +39,7 @@ class CashdeskPrinter:
 
     def _build_receipt(self, transaction: Transaction) -> Union[None, str]:
         from c6sh.core.models import EventSettings
-        settings = EventSettings.objects.get()
+        settings = EventSettings.get_solo()
         total_sum = 0
         position_lines = list()
         tax_sums = defaultdict(int)
