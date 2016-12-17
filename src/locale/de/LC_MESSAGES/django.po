@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-02 16:51+0100\n"
-"PO-Revision-Date: 2016-11-23 21:16+0100\n"
+"POT-Creation-Date: 2016-12-17 07:07+0100\n"
+"PO-Revision-Date: 2016-12-17 07:12+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -22,12 +22,33 @@ msgstr ""
 msgid "Your token is valid for a different cashdesk. Your IP is: {}"
 msgstr "Dieser Token gilt nur an einer anderen Kasse. Deine IP ist: {}"
 
-#: c6sh/core/models/auth.py:59
+#: c6sh/backoffice/checks.py:30
+#, python-brace-format
 msgid ""
-"Auth tokens need to contain at least one character that is not a number."
+"You have list or warning constraints with tax rates of {constraint_rates} "
+"but your products only use the tax rates {product_rates}. Are you sure this "
+"is correct?"
 msgstr ""
-"Authentifizierungstokens müssen mindestens ein Zeichen enthalten, das keine "
-"Zahl ist."
+"Du hast Listen- oder Warnungsbeschränkungen mit Steuersatz "
+"{constraint_rates} erstellt, obwohl die übrigen Tickets nur Steuersätze von "
+"{product_rates} nutzen. Bist du dir da sicher?"
+
+#: c6sh/backoffice/checks.py:39
+#, python-brace-format
+msgid ""
+"You have some products that use a non-zero tax rate but the following "
+"products are set to 0%: {products}"
+msgstr ""
+"Du hast manche Produkte mit einem Steuersatz eingestellt, aber bei den "
+"folgenden Produkten beträgt der Steuersatz 0%: {products}"
+
+#: c6sh/backoffice/templates/backoffice/session_list.html:7
+msgid ""
+"We found some settings in your installation that are probably incorrect. We "
+"recommend that you check them again :)"
+msgstr ""
+"Huch, hier sind ein paar Einstellungen wahrscheinlich nicht ganz richtig, "
+"guck sie dir doch bitte noch mal an."
 
 #: c6sh/core/utils/flow.py:43
 msgid "No secret has been given."
@@ -50,98 +71,105 @@ msgid "Multiple upgrades with different tax rates are not supported."
 msgstr ""
 "Upgrades innerhalb einer Bestellung müssen den gleichen Steuersatz haben."
 
-#: c6sh/core/utils/flow.py:81 c6sh/core/utils/flow.py:154
+#: c6sh/core/utils/flow.py:81 c6sh/core/utils/flow.py:155
 msgid "This ticket can only redeemed by persons on the list \"{}\"."
 msgstr ""
 "Dieses Ticket kann nur von Personen auf der Liste \"{}\" eingelöst werden."
 
-#: c6sh/core/utils/flow.py:89 c6sh/core/utils/flow.py:166
+#: c6sh/core/utils/flow.py:89
 msgid "This list entry has already been used."
 msgstr "Dieser Listeneintrag wurde bereits abgehakt."
 
-#: c6sh/core/utils/flow.py:95 c6sh/core/utils/flow.py:171
-msgid "This entry could not found in list \"{}\"."
-msgstr "Eintrag auf der Liste \"{}\" nicht gefunden."
+#: c6sh/core/utils/flow.py:95 c6sh/core/utils/flow.py:168
+msgid "This entry could not be found in list \"{}\"."
+msgstr "Dieser Eintrag konnte auf der Liste \"{}\" nicht gefunden werden."
 
-#: c6sh/core/utils/flow.py:126
+#: c6sh/core/utils/flow.py:127
 msgid "No product given."
 msgstr "Kein Produkt übergeben."
 
-#: c6sh/core/utils/flow.py:131
+#: c6sh/core/utils/flow.py:132
 msgid "This product ID is not known."
 msgstr "Unbekannte Produkt-ID."
 
-#: c6sh/core/utils/flow.py:134
+#: c6sh/core/utils/flow.py:135
 msgid "This product is currently unavailable or sold out."
 msgstr "Dieses Produkt ist im Moment nicht verfügbar oder ausverkauft."
 
-#: c6sh/core/utils/flow.py:141
+#: c6sh/core/utils/flow.py:142
 msgid "This sale requires authorization by a troubleshooter."
 msgstr "Diese Transaktion erfordert Authorisierung durch einen Troubleshooter."
 
-#: c6sh/core/utils/flow.py:160
-msgid "Please supply a list entry ID."
-msgstr "Bitte die ID eines Listeneintrags eingeben."
+#: c6sh/core/utils/flow.py:163
+#, fuzzy
+#| msgid "This list entry has already been used."
+msgid "This list entry already has been used."
+msgstr "Dieser Listeneintrag wurde bereits abgehakt."
 
-#: c6sh/core/utils/flow.py:190
+#: c6sh/core/utils/flow.py:187
 msgid "Transaction ID not known."
 msgstr "Unbekannte Transaktions-ID."
 
-#: c6sh/core/utils/flow.py:193 c6sh/core/utils/flow.py:238
+#: c6sh/core/utils/flow.py:190 c6sh/core/utils/flow.py:235
 msgid "You need to provide an active session."
 msgstr "Du musst eine aktive Session angeben."
 
-#: c6sh/core/utils/flow.py:198 c6sh/core/utils/flow.py:243
+#: c6sh/core/utils/flow.py:195 c6sh/core/utils/flow.py:240
 msgid "Only troubleshooters can reverse sales from other sessions."
 msgstr ""
 "Nur Troubleshooter können Transaktionen aus anderen Sitzungen stornieren."
 
-#: c6sh/core/utils/flow.py:201
+#: c6sh/core/utils/flow.py:198
 msgid "At least one position of this transaction has already been reversed."
 msgstr "Mindestens ein Teil dieser Transaktion wurde bereits storniert."
 
-#: c6sh/core/utils/flow.py:203
+#: c6sh/core/utils/flow.py:200
 msgid "At least one position of this transaction is a reversal."
 msgstr "Mindestens ein Teil dieser Transaktion ist eine Stornierung."
 
-#: c6sh/core/utils/flow.py:235
+#: c6sh/core/utils/flow.py:232
 msgid "Transaction position ID not known."
 msgstr "Unbekannte Positions-ID."
 
-#: c6sh/core/utils/flow.py:246
+#: c6sh/core/utils/flow.py:243
 msgid "This position has already been reversed."
 msgstr "Diese Position wurde bereits storniert."
 
-#: c6sh/core/utils/flow.py:248
+#: c6sh/core/utils/flow.py:245
 msgid "This position is already a reversal."
 msgstr "Diese Position ist eine Stornierung."
 
-#: c6sh/core/utils/printing.py:92
+#: c6sh/core/utils/printing.py:70 c6sh/core/utils/printing.py:71
+#: c6sh/desk/templates/desk/main.html:137
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: c6sh/core/utils/printing.py:100
 msgid "Cancellation"
 msgstr "Storno-Rechnung"
 
-#: c6sh/core/utils/printing.py:97
+#: c6sh/core/utils/printing.py:105
 msgid "Receipt copy"
 msgstr "Bonkopie"
 
-#: c6sh/core/utils/printing.py:101
+#: c6sh/core/utils/printing.py:109
 msgid "Ticket"
 msgstr "Ticket"
 
-#: c6sh/core/utils/printing.py:108
+#: c6sh/core/utils/printing.py:116
 msgid "Net sum:  {}"
 msgstr "Nettosume:  {}"
 
-#: c6sh/core/utils/printing.py:112
+#: c6sh/core/utils/printing.py:120
 #, python-brace-format
 msgid "Tax {tax_rate}% ({tax_identifier}):  {tax_amount})"
 msgstr "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount})"
 
-#: c6sh/core/utils/printing.py:119
+#: c6sh/core/utils/printing.py:127
 msgid "Total:  {}"
 msgstr "Summe:  {}"
 
-#: c6sh/core/utils/printing.py:127
+#: c6sh/core/utils/printing.py:135
 msgid "Receipt number: {}"
 msgstr "Bonnumber: {}"
 
@@ -221,19 +249,15 @@ msgstr "Nachbon"
 msgid "CHECKOUT"
 msgstr "BUCHEN"
 
-#: c6sh/desk/templates/desk/main.html:130
+#: c6sh/desk/templates/desk/main.html:131
 msgid "OK"
 msgstr "OK"
 
-#: c6sh/desk/templates/desk/main.html:133
+#: c6sh/desk/templates/desk/main.html:134
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: c6sh/desk/templates/desk/main.html:136
-msgid "Upgrade"
-msgstr "Upgrade"
-
-#: c6sh/desk/templates/desk/main.html:139
+#: c6sh/desk/templates/desk/main.html:140
 msgid "Continue"
 msgstr "Weiter"
 
@@ -255,17 +279,27 @@ msgid "You do not have an active session."
 msgstr "Du hast keine aktive Session."
 
 #: c6sh/desk/views.py:45
-msgid "Your session is scheduled for a different cashdesk."
-msgstr "Deine Session ist für eine andere Kasse geplant."
+#, python-brace-format
+msgid "Your session is scheduled for a different cashdesk. Please go to {desk}"
+msgstr "Deine Session ist für eine andere Kasse geplant. Bitte geh zu {desk}."
 
-#: c6sh/desk/views.py:52
+#: c6sh/desk/views.py:53
 msgid "No user account matches the entered credentials."
 msgstr "Die eingegebenen Benutzerdaten sind nicht bekannt."
 
-#: c6sh/desk/views.py:74
+#: c6sh/desk/views.py:75
 msgid "You do not have an active session at this cashdesk."
 msgstr "Du hast keine aktive Sitzung an dieser Kasse."
 
-#: c6sh/desk/views.py:75
+#: c6sh/desk/views.py:76
 msgid "You are logged in as {}."
 msgstr "Du bist als {} eingeloggt."
+
+#~ msgid ""
+#~ "Auth tokens need to contain at least one character that is not a number."
+#~ msgstr ""
+#~ "Authentifizierungstokens müssen mindestens ein Zeichen enthalten, das "
+#~ "keine Zahl ist."
+
+#~ msgid "Please supply a list entry ID."
+#~ msgstr "Bitte die ID eines Listeneintrags eingeben."
