@@ -32,8 +32,6 @@
                         <dl class="dl-horizontal">
                             <dt>Session time</dt>
                             <dd>{{ sess.start|timesince }} </dd>
-                            <dt>Gross total</dt>
-                            <dd>{{ sess.get_cash_transaction_total|floatformat:2 }}</dd>
                             {% for i in sess.current_items %}
                                 <dt>{{ i.item }}</dt>
                                 <dd>{{ i.total }}</dd>
