@@ -120,16 +120,18 @@ class TestFullEvent:
             if i < d2_preorder_reversals:
                 self._simulate_reverse(client, tid)
 
+        total_cash = (
+             ((d1_sales - d1_reversals) * self.prod_d1.price) +
+             ((d2_sales - d2_reversals) * self.prod_d2.price) +
+             ((full_sales - full_reversals) * self.prod_full.price)
+        )
+
         client.login(username=self.backoffice_user.username, password='123')
         r = client.post('/backoffice/session/{}/end/'.format(session.pk), {
             'session-cashdesk': cashdesk.pk,
             'session-user': user.username,
             'session-backoffice_user': buser.username,
-            'session-cash_before': (
-                ((d1_sales - d1_reversals) * self.prod_d1.price) +
-                ((d2_sales - d2_reversals) * self.prod_d2.price) +
-                ((full_sales - full_reversals) * self.prod_full.price)
-            ),
+            'session-cash_before': total_cash,
             'items-TOTAL_FORMS': '3',
             'items-INITIAL_FORMS': '0',
             'items-MIN_NUM_FORMS': '0',
@@ -143,6 +145,51 @@ class TestFullEvent:
         }, follow=True)
         session.refresh_from_db()
         assert session.end
+
+        def keyfunc(d):
+            return d['value_single'], d['product'].pk
+
+        sales = [
+            {'value_total': self.prod_full.price * (full_sales - full_reversals),
+             'sales': full_sales,
+             'presales': 0,
+             'reversals': full_reversals,
+             'value_single': self.prod_full.price,
+             'product': self.prod_full},
+            {'value_total': self.prod_d1.price * (d1_sales - d1_reversals),
+             'sales': d1_sales,
+             'presales': 0,
+             'reversals': d1_reversals,
+             'value_single': self.prod_d1.price,
+             'product': self.prod_d1},
+            {'value_total': self.prod_d2.price * (d2_sales - d2_reversals),
+             'sales': d2_sales,
+             'presales': 0,
+             'reversals': d2_reversals,
+             'value_single': self.prod_d2.price,
+             'product': self.prod_d2},
+            {'value_total': 0,
+             'sales': 0,
+             'presales': full_preorders,
+             'reversals': full_preorder_reversals,
+             'value_single': 0,
+             'product': self.prod_full},
+            {'value_total': 0,
+             'sales': 0,
+             'presales': d1_preorders,
+             'reversals': d1_preorder_reversals,
+             'value_single': 0,
+             'product': self.prod_d1},
+            {'value_total': 0,
+             'sales': 0,
+             'presales': d2_preorders,
+             'reversals': d2_preorder_reversals,
+             'value_single': 0,
+             'product': self.prod_d2}
+        ]
+
+        assert session.get_cash_transaction_total() == total_cash
+        assert sorted(session.get_product_sales(), key=keyfunc) == sorted(sales, key=keyfunc)
 
     def test_full(self, client):
         self._setup_base()
