@@ -63,3 +63,11 @@ h1 .glyphicon {
 #end-sessions-table .control-label {
     display: none;
 }
+.pseudo-column {
+    width: 20%;
+    display: inline-block;
+}
+.pseudo-column button {
+    width: 100%;
+    margin-bottom: 0.5em;
+}

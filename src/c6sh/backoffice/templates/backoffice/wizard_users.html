@@ -7,30 +7,31 @@
 {% block content %}
 
 <div class="user-list">
-    {% for user in users %}
-        <table class="table user-entry">
-            <form class="form form-inline" method="post">
-                {% csrf_token %}
-                <tr>
-                    <td>{{ user.username }}</td>
+    <div class="table table-striped user-entry">
+        {% for user in users %}
+            <div class="pseudo-row">
+                <form class="form form-inline" method="post">
+                    {% csrf_token %}
                     <input name="user" type="hidden" value="{{ user.id }}">
+                    <span class="pseudo-column">{{ user.username }}</span>
                     {% if user.is_troubleshooter %}
-                        <td><button class="btn btn-danger" name="target" value="troubleshooter-n">Remove troubleshooter</button></td>
+                        <span class="pseudo-column"><button class="btn btn-danger" name="target" value="troubleshooter-n">Remove troubleshooter</button></span>
                     {% else %}
-                        <td><td><button class="btn btn-success" name="target" value="troubleshooter-y">Make troubleshooter</button></td>
+                        <span class="pseudo-column"><button class="btn btn-success" name="target" value="troubleshooter-y">Make troubleshooter</button></span>
                     {% endif%}
                     {% if user.is_backoffice_user %}
-                        <td><button class="btn btn-danger" name="target" value="backoffice-n">Remove backoffice user</button></td>
+                        <span class="pseudo-column"><button class="btn btn-danger" name="target" value="backoffice-n">Remove backoffice user</button></span>
                     {% else %}
-                        <td><button class="btn btn-success" name="target" value="backoffice-y">Make backoffice user</button></td>
+                        <span class="pseudo-column"><button class="btn btn-success" name="target" value="backoffice-y">Make backoffice user</button></span>
                     {% endif%}
                     {% if user.is_superuser %}
-                        <td><button class="btn btn-danger" name="target" value="superuser-n">Remove superuser</button></td>
+                        <span class="pseudo-column" class="col"><button class="btn btn-danger" name="target" value="superuser-n">Remove superuser</button></span>
                     {% else %}
-                        <td><button class="btn btn-success" name="target" value="superuser-y">Make superuser</button></td>
+                        <span class="pseudo-column"><button class="btn btn-success" name="target" value="superuser-y">Make superuser</button></span>
                     {% endif%}
-            </form>
-        </table>
-    {% endfor %}
+                </form>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
