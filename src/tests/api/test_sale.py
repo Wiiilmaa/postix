@@ -7,8 +7,8 @@ from c6sh.core.utils.checks import is_redeemed
 
 from ..factories import (
     list_constraint_entry_factory, list_constraint_factory,
-    preorder_position_factory, product_factory, warning_constraint_factory,
-    quota_factory
+    preorder_position_factory, product_factory, quota_factory, user_factory,
+    warning_constraint_factory,
 )
 
 
@@ -131,6 +131,58 @@ def test_sell_quota_failed(api_with_session):
 
 
 @pytest.mark.django_db
+def test_require_auth(api_with_session):
+    p = product_factory()
+    p.requires_authorization = True
+    p.save()
+    assert help_test_for_error(api_with_session, p) == {
+        'success': False,
+        'message': 'This sale requires authorization by a troubleshooter.',
+        'type': 'input',
+        'missing_field': 'auth',
+        'bypass_price': None,
+    }
+
+
+@pytest.mark.django_db
+def test_require_auth_invalid(api_with_session):
+    p = product_factory()
+    p.requires_authorization = True
+    p.save()
+    options = {
+        'auth': '123456'
+    }
+    assert help_test_for_error(api_with_session, p) == {
+        'success': False,
+        'message': 'This sale requires authorization by a troubleshooter.',
+        'type': 'input',
+        'missing_field': 'auth',
+        'bypass_price': None,
+    }
+
+
+@pytest.mark.django_db
+def test_require_auth_valid(api_with_session):
+    p = product_factory()
+    p.requires_authorization = True
+    p.save()
+    u = user_factory(troubleshooter=True)
+    req = {
+        'positions': [
+            {
+                'type': 'sell',
+                'product': p.id,
+                'auth': u.auth_token
+            },
+        ]
+    }
+    response = api_with_session.post('/api/transactions/', req, format='json')
+    assert response.status_code == 201
+    j = json.loads(response.content.decode())
+    assert j['success']
+
+
+@pytest.mark.django_db
 def test_sell_quota_partially(api_with_session):
     p = product_factory()
     q = quota_factory(size=1)
@@ -151,6 +203,31 @@ def test_sell_quota_partially(api_with_session):
     assert response.status_code == 400
     j = json.loads(response.content.decode())
     assert not j['success']
+
+
+@pytest.mark.django_db
+def test_sell_list_constraint_override(api_with_session):
+    p = product_factory()
+    list_constraint = list_constraint_factory()
+    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=False)
+    ListConstraintProduct.objects.create(
+        product=p, constraint=entry.list,
+    )
+    bu = user_factory(troubleshooter=True)
+    req = {
+        'positions': [
+            {
+                'type': 'sell',
+                'list_{}'.format(entry.list.pk): bu.auth_token,
+                'product': p.id
+            }
+        ]
+    }
+    response = api_with_session.post('/api/transactions/', req, format='json')
+    assert response.status_code == 201
+    j = json.loads(response.content.decode())
+    assert j['success']
+    assert j['positions'][0]['success']
 
 
 @pytest.mark.django_db

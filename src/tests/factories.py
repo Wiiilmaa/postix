@@ -3,6 +3,7 @@ import string
 from datetime import timedelta
 from decimal import Decimal
 
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from faker import Factory
 
@@ -24,6 +25,8 @@ def user_factory(troubleshooter=False, superuser=False, backoffice=False, passwo
              is_backoffice_user=backoffice,
              is_troubleshooter=troubleshooter)
     u.set_password(password or fake.password())
+    if troubleshooter:
+        u.auth_token = get_random_string(32)
     u.save()
     return u
 

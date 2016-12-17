@@ -7,7 +7,7 @@ from c6sh.core.utils.checks import is_redeemed
 
 from ..factories import (
     list_constraint_entry_factory, list_constraint_factory,
-    preorder_position_factory, warning_constraint_factory,
+    preorder_position_factory, user_factory, warning_constraint_factory,
 )
 
 
@@ -149,6 +149,31 @@ def test_preorder_list_constraint_used(api_with_session):
 
 
 @pytest.mark.django_db
+def test_preorder_list_constraint_override(api_with_session):
+    pp = preorder_position_factory(paid=True)
+    list_constraint = list_constraint_factory()
+    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=False)
+    ListConstraintProduct.objects.create(
+        product=pp.product, constraint=entry.list,
+    )
+    u = user_factory(troubleshooter=True)
+    req = {
+        'positions': [
+            {
+                'type': 'redeem',
+                'list_{}'.format(entry.list.pk): u.auth_token,
+                'secret': pp.secret
+            }
+        ]
+    }
+    response = api_with_session.post('/api/transactions/', req, format='json')
+    assert response.status_code == 201
+    j = json.loads(response.content.decode())
+    assert j['success']
+    assert j['positions'][0]['success']
+
+
+@pytest.mark.django_db
 def test_preorder_list_constraint_success(api_with_session):
     pp = preorder_position_factory(paid=True)
     list_constraint = list_constraint_factory()
@@ -194,6 +219,55 @@ def test_twice_in_cart(api_with_session, event_settings):
     j = json.loads(response.content.decode())
     assert not j['success']
     assert not is_redeemed(pp)
+
+
+@pytest.mark.django_db
+def test_list_constraint_bypass_success(api_with_session, event_settings):
+    pp = preorder_position_factory(paid=True)
+    list_constraint = list_constraint_factory()
+    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=True)
+    ListConstraintProduct.objects.create(
+        product=pp.product, constraint=entry.list, price=10
+    )
+    req = {
+        'positions': [
+            {
+                'type': 'redeem',
+                'secret': pp.secret,
+                'bypass_price': '10.00',
+            }
+        ]
+    }
+    response = api_with_session.post('/api/transactions/', req, format='json')
+    assert response.status_code == 201
+    j = json.loads(response.content.decode())
+    assert j['success']
+    assert j['positions'][0]['success']
+    assert is_redeemed(pp)
+
+
+@pytest.mark.django_db
+def test_warning_constraint_bypass_success(api_with_session, event_settings):
+    pp = preorder_position_factory(paid=True)
+    warning_constraint = warning_constraint_factory()
+    WarningConstraintProduct.objects.create(
+        product=pp.product, constraint=warning_constraint, price=65
+    )
+    req = {
+        'positions': [
+            {
+                'type': 'redeem',
+                'secret': pp.secret,
+                'bypass_price': '65.00'
+            }
+        ]
+    }
+    response = api_with_session.post('/api/transactions/', req, format='json')
+    assert response.status_code == 201
+    j = json.loads(response.content.decode())
+    assert j['success']
+    assert j['positions'][0]['success']
+    assert is_redeemed(pp)
 
 
 @pytest.mark.django_db

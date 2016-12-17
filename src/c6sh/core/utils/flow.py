@@ -82,7 +82,7 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
                     type='input', missing_field='list_{}'.format(c.constraint.pk), bypass_price=c.price)
             try:
                 pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
-            except User.DoesNotExist:  # noqa
+            except User.DoesNotExist:
                 try:
                     entry = c.constraint.entries.get(identifier=entryid)
                     if is_redeemed(entry):
@@ -138,7 +138,7 @@ def sell_ticket(**kwargs) -> TransactionPosition:
         auth = kwargs.get('auth', '!invalid')
         try:
             pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=auth)
-        except User.DoesNotExist:  # noqa
+        except User.DoesNotExist:
             raise FlowError(_('This sale requires authorization by a troubleshooter.'),
                             type='input', missing_field='auth')
 
@@ -156,7 +156,7 @@ def sell_ticket(**kwargs) -> TransactionPosition:
                 type='input', missing_field='list_{}'.format(c.constraint.pk))
         try:
             pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
-        except User.DoesNotExist:  # noqa
+        except User.DoesNotExist:
             try:
                 entry = c.constraint.entries.get(identifier=entryid)
                 if is_redeemed(entry):
