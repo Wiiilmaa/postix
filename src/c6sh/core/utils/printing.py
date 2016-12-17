@@ -165,4 +165,5 @@ class DummyPrinter:
 
     def print_receipt(self, transaction: Transaction, do_open_drawer: bool=True) -> None:
         receipt = CashdeskPrinter('')._build_receipt(transaction)
-        self.logger.info('[DummyPrinter] Printed receipt:\n{}'.format(receipt))
+        if receipt is not None:
+            self.logger.info('[DummyPrinter] Printed receipt:\n{}'.format(receipt))
