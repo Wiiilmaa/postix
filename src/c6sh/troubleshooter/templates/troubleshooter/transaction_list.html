@@ -1,4 +1,5 @@
 {% extends 'troubleshooter/base.html' %}
+{% load i18n %}
 {% load staticfiles %}
 
 {% block content %}
@@ -25,33 +26,33 @@
                 {% endfor %}
             </select>
         </div>
-        <input class="col-md-3" name="receipt" placeholder="Bon-Nr." value="{{ request.GET.receipt }}">
+        <input class="col-md-3" name="receipt" placeholder="{% trans "Receipt ID" %}" value="{{ request.GET.receipt }}">
         <div class="col-md-3">
-            <button class="btn btn-primary btn-block" type="submit">Filter</button>
+            <button class="btn btn-primary btn-block" type="submit">{% trans "Filter" %}</button>
         </div>
     </form>
 </div>
 
 <div class="panel panel-body col-md-12"><div class="transaction-list table-responsive">
     {% if not transactions %}
-        Keine passenden Transaktionen gefunden.
+        {% trans "No matching transactions found." %}
     {% else %}
         <table class="table table-condensed table-hover">
             <thead>
                 <tr>
                     <th></th>
-                    <th> Kasse </th>
-                    <th> Typ </th>
-                    <th> Betrag </th>
-                    <th> Transaktionsbetrag </th>
-                    <th> Bon-Nr. </th>
+                    <th> {% trans "Cashdesk" %} </th>
+                    <th> {% trans "Type" %} </th>
+                    <th> {% trans "Amount" %} </th>
+                    <th> {% trans "Transaction amount" %} </th>
+                    <th> {% trans "Receipt ID" %} </th>
                 </tr>
             </thead>
             <tbody>
                 {% for transaction_position in transactions %}
                     <tr>
                         <td class="session-action-column">
-                            <a href="{% url "troubleshooter:transaction-detail" pk=transaction_position.transaction.pk %}" title="Details">
+                            <a href="{% url "troubleshooter:transaction-detail" pk=transaction_position.transaction.pk %}" title="{% trans "Details" %}">
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                             </a>
                         </td>
@@ -63,11 +64,11 @@
                         <td>
                             <a href="{{ request.path }}?type={{ transaction_position.type }}">
                                 {% if transaction_position.type == 'sell' %}
-                                    <span class="text-primary">Verkauf</span>
+                                    <span class="text-primary">{% trans "Sale" %}</span>
                                 {% elif transaction_position.type == 'redeem' %}
-                                    <span class="text-muted">Vorverkauf</span>
+                                    <span class="text-muted">{% trans "Presale"}</span>
                                 {% elif transaction_position.type == 'reverse' %}
-                                    <span class="text-danger">Storno</span>
+                                <span class="text-danger">{% trans "Cancelation" %}</span>
                                 {% endif %}
                             </a>
                         </td>
@@ -88,7 +89,7 @@
             </a>
 		{% endif %}
 		<span class="page-current">
-			Seite {{ page_obj.number }} von {{ page_obj.paginator.num_pages }}.
+            {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.
 		</span>
 		{% if page_obj.has_next %}
         <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.next_page_number }}">

@@ -2,6 +2,7 @@ from typing import Any, Dict
 
 from django.contrib import messages
 from django.db.models import Q
+from django.utils.translation import ugettext as _
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
@@ -31,7 +32,7 @@ class ListConstraintDetailView(TroubleshooterUserRequiredMixin, DetailView):
             if obj.confidential and len(query) < 3:
                 ctx['entries'] = []
                 ctx['restricted'] = True
-                messages.error(self.request, 'Search strings must be 3 characters or longer for confidential lists.')
+                messages.error(self.request, _('Search strings must be 3 characters or longer for confidential lists.'))
             else:
                 ctx['entries'] = obj.entries.filter(
                     Q(name__icontains=query) | Q(identifier__icontains=query)

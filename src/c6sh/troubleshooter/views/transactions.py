@@ -5,6 +5,7 @@ from django.core.files.storage import default_storage
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.utils.translation import ugettext as _
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
@@ -41,7 +42,7 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
             try:
                 self.filter['receipt'] = int(_filter['receipt'])
             except:
-                messages.errors('Receipt ID has to be an integer.')
+                messages.errors(_('Receipt ID has to be an integer.'))
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet:
@@ -80,10 +81,10 @@ def transaction_reprint(request: HttpRequest, pk: int) -> HttpResponseRedirect:
         try:
             transaction = Transaction.objects.get(pk=pk)
         except Transaction.DoesNotExist:
-            messages.error(request, 'Transaktion nicht bekannt.')
+            messages.error(request, _('Unknown transaction.'))
         else:
             transaction.print_receipt(do_open_drawer=False)
-            messages.success(request, 'Bon wurde an {} neu gedruckt.'.format(transaction.session.cashdesk))
+            messages.success(request, _('Receipt has been reprinted at {}.').format(transaction.session.cashdesk))
 
     return redirect('troubleshooter:transaction-detail', pk=pk)
 
@@ -99,7 +100,7 @@ def transaction_invoice(request, pk) -> Union[HttpResponse, HttpResponseRedirect
     try:
         transaction = Transaction.objects.get(pk=pk)
     except:
-        messages.error('Transaktion nicht bekannt')
+        messages.error(_('Unknwon transaction.'))
         return redirect('troubleshooter:transaction-list')
 
     path = transaction.get_invoice_path()

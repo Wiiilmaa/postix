@@ -1,19 +1,20 @@
 {% extends 'troubleshooter/base.html' %}
+{% load i18n %}
 {% load staticfiles %}
 
-{% block headline %}Transaktion #{{ transaction.pk }} ({{ transaction.session.cashdesk }}){% endblock %}
+{% block headline %}{% trans "Transaction" %} #{{ transaction.pk }} ({{ transaction.session.cashdesk }}){% endblock %}
 
 {% block content %}
 <div>
     <h3>{{ transaction.session.user }}, {{ transaction.datetime|date:"Y-m-d H:i" }}</h3>
 </div>
 {% if transaction.receipt_id %}
-    <div class="panel">Bon-Nr: {{ transaction.receipt_id }}</div>
+<div class="panel">{% trans "Receipt ID" %}: {{ transaction.receipt_id }}</div>
 {% endif %}
 
 {% if transaction.has_reversed_positions %}
     <div class="panel">
-        <em class="text-danger">*** ENTHÄLT STORNIERTE ZEILEN ***</em>
+        <em class="text-danger">*** {% trans "CONTAINS CANCELED LINES" %} ***</em>
     </div>
 {% endif %}
 
@@ -24,16 +25,16 @@
             <select name="session" class="form-control">
                 {% for session in sessions %}
                     <option value="{{ session.pk }}">
-                        {{ session.user }} an {{ session.cashdesk }}
+                    {{ session.user }} {% trans "at" %} {{ session.cashdesk }}
                     </option>
                 {% endfor %}
             </select>
         </div>
-        <button class="btn btn-primary btn-block" type="submit">Bon drucken</button>
+        <button class="btn btn-primary btn-block" type="submit">{% trans "Print receipt" %}</button>
     </form>
     <form class="form col-md-3" method="post" action="{% url "troubleshooter:transaction-invoice" pk=transaction.pk %}">
         {% csrf_token %}
-        <button class="btn btn-default btn-block" type="submit">Rechnung erstellen</button>
+        <button class="btn btn-default btn-block" type="submit">{% trans "Print invoice" %}</button>
     </form>
 </div>
 
@@ -45,12 +46,12 @@
                     <td>
                         {% if position.was_reversed %}
                             <a href="{% url "troubleshooter:transaction-detail" pk=position.reversed_by.all.0.transaction.pk %}">
-                                <span class="text-danger">[storniert]</span>
+                                <span class="text-danger">[{% trans "canceled" %}]</span>
                             </a>
                         {% else %}
                             {% if position.type == 'reverse' %}
                                 <a href="{% url "troubleshooter:transaction-detail" pk=position.reverses.transaction.pk %}">
-                                    <span class="text-danger">Storno</span>
+                                    <span class="text-danger">{% trans "cancelation" %}</span>
                                 </a>
                             {% endif %}
                         {% endif %}

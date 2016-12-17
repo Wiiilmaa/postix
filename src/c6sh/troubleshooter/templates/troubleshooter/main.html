@@ -1,7 +1,8 @@
 {% extends 'troubleshooter/base.html' %}
+{% load i18n %}
 {% load staticfiles %}
 
-{% block headline %}Current sessions{% endblock %}
+{% block headline %}{% trans "Current sessions" %}{% endblock %}
 
 {% block content %}
     <div class="row col-md-10">
@@ -14,13 +15,13 @@
                             <a href="{% url "troubleshooter:transaction-list" %}?desk={{ sess.cashdesk.pk }}">
                                 {{ sess.cashdesk }}
                             </a>
-                            <small>User: {{ sess.user }}</small>
+                            <small>{% trans "User" %}: {{ sess.user }}</small>
                         </h3>
 
                         {% if requests %}
                             <span class="badge">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                Resupply<br />
+                                {% trans "Resupply" %}<br />
                                 <form action="{% url "troubleshooter:confirm-resupply" pk=sess.pk %}" method="post">
                                     {% csrf_token %}
                                     <button class="btn btn-xs btn-success" type="submit" style="margin-top: 5px;"href="{% url "troubleshooter:confirm-resupply" pk=sess.pk %}" method="post">
@@ -30,7 +31,7 @@
                             </span>
                         {% endif %}
                         <dl class="dl-horizontal">
-                            <dt>Session time</dt>
+                            <dt>{% trans "Session time" %}</dt>
                             <dd>{{ sess.start|timesince }} </dd>
                             {% for i in sess.current_items %}
                                 <dt>{{ i.item }}</dt>

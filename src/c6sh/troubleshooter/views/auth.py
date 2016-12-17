@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect
+from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 
 from .utils import troubleshooter_user
@@ -16,15 +17,15 @@ class LoginView(TemplateView):
         user = authenticate(username=username, password=password)
 
         if user is None:
-            messages.error(request, 'No user account matches the entered credentials.')
+            messages.error(request, _('No user account matches the entered credentials.'))
             return redirect('troubleshooter:login')
 
         if not user.is_active:
-            messages.error(request, 'User account is deactivated.')
+            messages.error(request, _('User account is deactivated.'))
             return redirect('troubleshooter:login')
 
         if not troubleshooter_user(user):
-            messages.error(request, 'User does not have permission to access troubleshooter data.')
+            messages.error(request, _('User does not have permission to access troubleshooter data.'))
             return redirect('troubleshooter:login')
 
         login(request, user)

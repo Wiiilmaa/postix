@@ -3,6 +3,7 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.utils.timezone import now
+from django.utils.translation import ugettext as _
 from reportlab.lib import colors
 from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
@@ -26,11 +27,11 @@ def generate_invoice(transaction: Transaction, address: str) -> str:
     # Header
     our_address = settings.invoice_address.replace('\n', '<br />')
     our_address = Paragraph(our_address, style['Normal'])
-    our_title = Paragraph('Rechnungsaussteller', style['Heading5'])
+    our_title = Paragraph(_('Invoice from'), style['Heading5'])
 
     their_address = address.replace('\n', '<br />')
     their_address = Paragraph(their_address, style['Normal'])
-    their_title = Paragraph('Rechnungsempfänger', style['Heading5'])
+    their_title = Paragraph(_('Invoice to'), style['Heading5'])
 
     data = [[their_title, '', our_title], [their_address, '', our_address]]
     header = Table(
@@ -48,9 +49,9 @@ def generate_invoice(transaction: Transaction, address: str) -> str:
             ('ALIGN', (0, 0), (0, 0), 'RIGHT'),
         ]),
     )
-    invoice_title = Paragraph('Rechnung {}-{:04d}'.format(settings.short_name, transaction.pk), style['Heading1'])
+    invoice_title = Paragraph(_('Invoice') + ' {}-{:04d}'.format(settings.short_name, transaction.pk), style['Heading1'])
 
-    data = [['Ticket', 'Steuersatz', 'Netto', 'Brutto'], ]
+    data = [[_('Product'), _('Tax rate'), _('Net'), _('Gross')], ]
     total_tax = 0
     for position in transaction.positions.all():
         total_tax += position.tax_value
@@ -60,8 +61,8 @@ def generate_invoice(transaction: Transaction, address: str) -> str:
             CURRENCY.format(position.value - position.tax_value,),
             CURRENCY.format(position.value)
         ])
-    data.append(['Enthaltene Umsatzsteuer', '', '', CURRENCY.format(total_tax)])
-    data.append(['Rechnungsbetrag', '', '', CURRENCY.format(transaction.value)])
+    data.append([_('Included taxes'), '', '', CURRENCY.format(total_tax)])
+    data.append([_('Invoice total'), '', '', CURRENCY.format(transaction.value)])
     last_row = len(data) - 1
 
     transaction_table = Table(

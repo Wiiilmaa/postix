@@ -1,4 +1,5 @@
 {% extends 'troubleshooter/base.html' %}
+{% load i18n %}
 {% load staticfiles %}
 
 {% block content %}
@@ -9,7 +10,9 @@
                 <li>
                     {{ through.product }}
                     {% if through.price %}
-                        (gegen Aufpreis von {{ through.price }} €)
+                        {% blocktrans trimmed with price=through.price %}
+                            (at extra charge of {{ price }} €)
+                        {% endblocktrans %}
                     {% endif %}
                 </li>
             {% endfor %}
@@ -19,7 +22,7 @@
 <div class="panel panel-body">
     <form class="form form-inline" action="" method="get">
         <input type="text" class="form-control" name="filter">
-        <button class="btn btn-primary form-control" type="submit">Filter</button>
+        <button class="btn btn-primary form-control" type="submit">{% trans "Filter" %}</button>
     </form>
 </div>
 <div class="panel panel-body">
@@ -28,13 +31,13 @@
             <li>
                 {{ entry.name }} ({{ entry.identifier }})
                 {% if entry.is_redeemed %}
-                    <em>(eingelöst)</em>
+                <em>({% trans "redeemed" %})</em>
                 {% endif %}
             </li>
         {% empty %}
-            Keine Einträge gefunden.
+            {% trans "No entries found." %}
             {% if restricted %}
-                Diese Liste ist geschützt, deshalb werden Einträge nur nach Suchanfragen gezeigt (maximal 10 Ergebnisse).
+                {% trans "This list is protected. Please submit a query to see entries (maximum of 10 per query)." %}
             {% endif %}
         {% endfor %}
     </ul>

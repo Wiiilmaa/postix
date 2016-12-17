@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,14 +20,14 @@
 <nav class="navbar navbar-default navbar-static-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{% url "troubleshooter:main" %}">Troubleshooter</a>
+            <a class="navbar-brand" href="{% url "troubleshooter:main" %}">{% trans "Troubleshooter" %}</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             {% if user.is_authenticated %}
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url "troubleshooter:main" %}">Laufende Schichten</a></li>
-                    <li><a href="{% url "troubleshooter:transaction-list" %}">Transaktionen</a></li>
-                    <li><a href="{% url "troubleshooter:constraint-list" %}">Listen</a></li>
+                    <li><a href="{% url "troubleshooter:main" %}">{% trans "Current sessions" %}</a></li>
+                    <li><a href="{% url "troubleshooter:transaction-list" %}">{% trans "Transactions" %}</a></li>
+                    <li><a href="{% url "troubleshooter:constraint-list" %}">{% trans "Lists" %}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{% url "troubleshooter:logout" %}"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a>

@@ -1,4 +1,5 @@
 {% extends 'troubleshooter/base.html' %}
+{% load i18n %}
 {% load staticfiles %}
 
 {% block content %}
@@ -12,14 +13,16 @@
                 </a>
             </li>
             <ul>
-                <li>Einträge: {{ list_constraint.entries.count }}</li>
-                <li>Produkte:</li>
+                <li>{% trans "Entries" %}: {{ list_constraint.entries.count }}</li>
+                <li>{% trans "Products" %}:</li>
                 <ul>
                     {% for through in list_constraint.product_constraints.all %}
                         <li>
                             {{ through.product }}
                             {% if through.price %}
-                                (gegen Aufpreis von {{ through.price }} €)
+                                {% blocktrans trimmed with price=through.price %}
+                                    (at extra charge of {{ price }} €)
+                                {% endblocktrans %}
                             {% endif %}
                         </li>
                     {% endfor %}
