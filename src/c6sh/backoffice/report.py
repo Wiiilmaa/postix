@@ -75,7 +75,7 @@ def generate_report(session: CashdeskSession) -> str:
     sales_heading = Paragraph('Tickets', style['Heading3'])
     data = [['Ticket', 'Einzelpreis', 'Presale', 'Verkauf', 'Stornos', 'Gesamt'], ]
     sales_raw_data = session.get_product_sales()
-    sales = [[p['product'].name, CURRENCY.format(p['value_single']),  p['presales'], p['sales'],
+    sales = [[p['product'].name, CURRENCY.format(p['value_single']), p['presales'], p['sales'],
               p['reversals'], CURRENCY.format(p['value_total'])]
              for p in sales_raw_data]
     data += sales
