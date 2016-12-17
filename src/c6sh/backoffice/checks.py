@@ -19,6 +19,20 @@ class CheckError(Exception):
 
 
 @register_check
+def check_quotas():
+    prods = []
+    for p in Product.objects.filter(is_visible=True).prefetch_related('quota_set'):
+        quotas = bool(p.quota_set.all())
+        if not quotas:
+            prods.append(p)
+
+    if prods:
+        raise CheckError(_('The following products are visible but have no quota: {products}'.format(
+            products=', '.join(str(r) for r in prods)
+        )))
+
+
+@register_check
 def check_tax_rates():
     product_rates = set(Product.objects.exclude(price=0).values_list('tax_rate', flat=True).distinct())
     constraint_rates = (

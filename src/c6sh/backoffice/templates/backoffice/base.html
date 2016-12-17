@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load solo_tags %}
+{% load i18n %}
 {% get_solo 'core.EventSettings' as settings %}
 <!DOCTYPE html>
 <html lang="en">
@@ -72,6 +73,16 @@
           {% if settings.initialized or user.is_superuser %}
             <h1>{% block headline %}{% endblock %}</h1>
             <div class="backoffice-content">
+                {% if check_errors %}
+                    <div class="alert alert-warning">
+                        <strong>{% trans "We found some settings in your installation that are probably incorrect. We recommend that you check them again :)" %}</strong>
+                        <ul>
+                            {% for e in check_errors %}
+                                <li>{{ e }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
                 <p>
                 {% block content %}
                 {% endblock %}

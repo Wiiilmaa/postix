@@ -2,16 +2,6 @@
 {% load i18n %}
 
 {% block content %}
-{% if check_errors %}
-    <div class="alert alert-warning">
-        <strong>{% trans "We found some settings in your installation that are probably incorrect. We recommend that you check them again :)" %}</strong>
-        <ul>
-            {% for e in check_errors %}
-                <li>{{ e }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-{% endif %}
 <table class="table" id="active-sessions-table">
 	<thead>
 		<th></th>
