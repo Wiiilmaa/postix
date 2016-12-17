@@ -1,9 +1,13 @@
 import json
 
 import pytest
-from c6sh.core.models import Item, Product, ProductItem, ItemMovement, Cashdesk, CashdeskSession, EventSettings, Preorder
 from django.utils.crypto import get_random_string
-from tests.factories import user_factory, cashdesk_session_before_factory
+from tests.factories import cashdesk_session_before_factory, user_factory
+
+from c6sh.core.models import (
+    Cashdesk, CashdeskSession, EventSettings, Item, ItemMovement, Preorder,
+    Product, ProductItem,
+)
 
 
 @pytest.mark.django_db

@@ -3,15 +3,15 @@ from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
+from tests.factories import (
+    cashdesk_session_before_factory, transaction_factory,
+    transaction_position_factory, user_factory,
+)
 
 from c6sh.core.models import (
     Item, ItemMovement, Product, ProductItem, TransactionPosition,
 )
 from c6sh.core.utils.flow import reverse_transaction
-from tests.factories import (
-    cashdesk_session_before_factory, transaction_factory,
-    transaction_position_factory, user_factory,
-)
 
 
 @pytest.mark.django_db

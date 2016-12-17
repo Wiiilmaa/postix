@@ -1,6 +1,8 @@
 import pytest
 from rest_framework.test import APIClient
 
+from c6sh.core.models import EventSettings
+
 from ..factories import cashdesk_session_before_factory
 
 

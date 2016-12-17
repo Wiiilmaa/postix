@@ -3,6 +3,7 @@ import json
 import pytest
 
 from c6sh.core.models import ListConstraintProduct, WarningConstraintProduct
+from c6sh.core.utils.checks import is_redeemed
 
 from ..factories import (
     list_constraint_entry_factory, list_constraint_factory,
@@ -148,8 +149,34 @@ def test_preorder_list_constraint_used(api_with_session):
 
 
 @pytest.mark.django_db
+def test_preorder_list_constraint_success(api_with_session):
+    pp = preorder_position_factory(paid=True)
+    list_constraint = list_constraint_factory()
+    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=False)
+    ListConstraintProduct.objects.create(
+        product=pp.product, constraint=entry.list,
+    )
+    req = {
+        'positions': [
+            {
+                'type': 'redeem',
+                'list_{}'.format(entry.list.pk): str(entry.identifier),
+                'secret': pp.secret
+            }
+        ]
+    }
+    response = api_with_session.post('/api/transactions/', req, format='json')
+    assert response.status_code == 201
+    j = json.loads(response.content.decode())
+    assert j['success']
+    assert j['positions'][0]['success']
+    assert is_redeemed(entry)
+
+
+@pytest.mark.django_db
 def test_success(api_with_session, event_settings):
-    secret = preorder_position_factory(paid=True).secret
+    pp = preorder_position_factory(paid=True)
+    secret = pp.secret
     req = {
         'positions': [
             {
@@ -163,3 +190,4 @@ def test_success(api_with_session, event_settings):
     j = json.loads(response.content.decode())
     assert j['success']
     assert j['positions'][0]['success']
+    assert is_redeemed(pp)
