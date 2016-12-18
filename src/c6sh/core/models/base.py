@@ -42,10 +42,11 @@ class Transaction(models.Model):
         return bool(self.get_invoice_path())
 
     def get_invoice_path(self, allow_nonexistent: bool=False) -> Union[str, None]:
-        base = default_storage.path('invoices')
-        path = os.path.join(base, 'invoice_{:04d}.pdf'.format(self.pk))
-        if allow_nonexistent or os.path.exists(path):
-            return path
+        if self.receipt_id:
+            base = default_storage.path('invoices')
+            path = os.path.join(base, 'invoice_{:04d}.pdf'.format(self.receipt_id))
+            if allow_nonexistent or os.path.exists(path):
+                return path
         return None
 
     def set_receipt_id(self, retry: int=0) -> None:

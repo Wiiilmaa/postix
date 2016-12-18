@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-17 16:29+0100\n"
-"PO-Revision-Date: 2016-12-17 16:30+0100\n"
+"POT-Creation-Date: 2016-12-18 14:20+0100\n"
+"PO-Revision-Date: 2016-12-18 14:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -24,6 +24,12 @@ msgstr "Dieser Token gilt nur an einer anderen Kasse. Deine IP ist: {}"
 
 #: c6sh/backoffice/checks.py:30
 #, python-brace-format
+msgid "The following products are visible but have no quota: {products}"
+msgstr ""
+"Die folgenden Produkte werden angezeigt, haben aber keine Quota: {products}"
+
+#: c6sh/backoffice/checks.py:44
+#, python-brace-format
 msgid ""
 "You have list or warning constraints with tax rates of {constraint_rates} "
 "but your products only use the tax rates {product_rates}. Are you sure this "
@@ -33,7 +39,7 @@ msgstr ""
 "{constraint_rates} erstellt, obwohl die übrigen Tickets nur Steuersätze von "
 "{product_rates} nutzen. Bist du dir da sicher?"
 
-#: c6sh/backoffice/checks.py:39
+#: c6sh/backoffice/checks.py:53
 #, python-brace-format
 msgid ""
 "You have some products that use a non-zero tax rate but the following "
@@ -42,7 +48,7 @@ msgstr ""
 "Du hast manche Produkte mit einem Steuersatz eingestellt, aber bei den "
 "folgenden Produkten beträgt der Steuersatz 0%: {products}"
 
-#: c6sh/backoffice/templates/backoffice/session_list.html:7
+#: c6sh/backoffice/templates/backoffice/base.html:78
 msgid ""
 "We found some settings in your installation that are probably incorrect. We "
 "recommend that you check them again :)"
@@ -76,7 +82,7 @@ msgid "This ticket can only redeemed by persons on the list \"{}\"."
 msgstr ""
 "Dieses Ticket kann nur von Personen auf der Liste \"{}\" eingelöst werden."
 
-#: c6sh/core/utils/flow.py:89
+#: c6sh/core/utils/flow.py:89 c6sh/core/utils/flow.py:163
 msgid "This list entry has already been used."
 msgstr "Dieser Listeneintrag wurde bereits abgehakt."
 
@@ -99,10 +105,6 @@ msgstr "Dieses Produkt ist im Moment nicht verfügbar oder ausverkauft."
 #: c6sh/core/utils/flow.py:142
 msgid "This sale requires authorization by a troubleshooter."
 msgstr "Diese Transaktion erfordert Authorisierung durch einen Troubleshooter."
-
-#: c6sh/core/utils/flow.py:163
-msgid "This list entry already has been used."
-msgstr "Dieser Listeneintrag wurde bereits abgehakt."
 
 #: c6sh/core/utils/flow.py:187
 msgid "Transaction ID not known."
@@ -142,32 +144,32 @@ msgstr "Diese Position ist eine Stornierung."
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: c6sh/core/utils/printing.py:100
+#: c6sh/core/utils/printing.py:101
 msgid "Cancellation"
 msgstr "Storno-Rechnung"
 
-#: c6sh/core/utils/printing.py:105
+#: c6sh/core/utils/printing.py:106
 msgid "Receipt copy"
 msgstr "Bonkopie"
 
-#: c6sh/core/utils/printing.py:109
+#: c6sh/core/utils/printing.py:110
 msgid "Ticket"
 msgstr "Ticket"
 
-#: c6sh/core/utils/printing.py:116
+#: c6sh/core/utils/printing.py:117
 msgid "Net sum:  {}"
 msgstr "Nettosumme:  {}"
 
-#: c6sh/core/utils/printing.py:120
+#: c6sh/core/utils/printing.py:121
 #, python-brace-format
 msgid "Tax {tax_rate}% ({tax_identifier}):  {tax_amount})"
 msgstr "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount})"
 
-#: c6sh/core/utils/printing.py:127
+#: c6sh/core/utils/printing.py:128
 msgid "Total:  {}"
 msgstr "Summe:  {}"
 
-#: c6sh/core/utils/printing.py:135
+#: c6sh/core/utils/printing.py:136
 msgid "Receipt number: {}"
 msgstr "Bonnumber: {}"
 
@@ -287,11 +289,11 @@ msgstr "Deine Session ist für eine andere Kasse geplant. Bitte geh zu {desk}."
 msgid "No user account matches the entered credentials."
 msgstr "Die eingegebenen Benutzerdaten sind nicht bekannt."
 
-#: c6sh/desk/views.py:75
+#: c6sh/desk/views.py:74
 msgid "You do not have an active session at this cashdesk."
 msgstr "Du hast keine aktive Sitzung an dieser Kasse."
 
-#: c6sh/desk/views.py:76
+#: c6sh/desk/views.py:75
 msgid "You are logged in as {}."
 msgstr "Du bist als {} eingeloggt."
 
@@ -331,20 +333,24 @@ msgstr "Enthaltene Mehrwertsteuer"
 msgid "Invoice total"
 msgstr "Rechnungsbetrag"
 
-#: c6sh/troubleshooter/templates/troubleshooter/base.html:23
+#: c6sh/troubleshooter/invoicing.py:81
+msgid "This invoice is only valid with receipt #{}."
+msgstr "Diese Rechnung ist nur mit Bon Nr {} gültig."
+
+#: c6sh/troubleshooter/templates/troubleshooter/base.html:25
 msgid "Troubleshooter"
 msgstr "Troubleshooter"
 
-#: c6sh/troubleshooter/templates/troubleshooter/base.html:28
+#: c6sh/troubleshooter/templates/troubleshooter/base.html:30
 #: c6sh/troubleshooter/templates/troubleshooter/main.html:5
 msgid "Current sessions"
 msgstr "Laufende Schichten"
 
-#: c6sh/troubleshooter/templates/troubleshooter/base.html:29
+#: c6sh/troubleshooter/templates/troubleshooter/base.html:31
 msgid "Transactions"
 msgstr "Transaktionen"
 
-#: c6sh/troubleshooter/templates/troubleshooter/base.html:30
+#: c6sh/troubleshooter/templates/troubleshooter/base.html:32
 msgid "Lists"
 msgstr "Listen"
 
@@ -395,15 +401,15 @@ msgstr "Benutzername"
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: c6sh/troubleshooter/templates/troubleshooter/main.html:18
+#: c6sh/troubleshooter/templates/troubleshooter/main.html:20
 msgid "User"
 msgstr "Benutzer"
 
-#: c6sh/troubleshooter/templates/troubleshooter/main.html:24
+#: c6sh/troubleshooter/templates/troubleshooter/main.html:26
 msgid "Resupply"
 msgstr "Nachschub"
 
-#: c6sh/troubleshooter/templates/troubleshooter/main.html:34
+#: c6sh/troubleshooter/templates/troubleshooter/main.html:36
 msgid "Session time"
 msgstr "Session-Dauer"
 
@@ -469,6 +475,10 @@ msgstr "Details"
 msgid "Sale"
 msgstr "Verkauf"
 
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:69
+msgid "Presale"
+msgstr "Vorverkauf"
+
 #: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:71
 msgid "Cancelation"
 msgstr "Storno"
@@ -514,6 +524,9 @@ msgstr "Der Bon wurde an {} nachgedruckt."
 #: c6sh/troubleshooter/views/transactions.py:103
 msgid "Unknwon transaction."
 msgstr "Transation nicht bekannt."
+
+#~ msgid "This list entry already has been used."
+#~ msgstr "Dieser Listeneintrag wurde bereits abgehakt."
 
 #~ msgid ""
 #~ "Auth tokens need to contain at least one character that is not a number."

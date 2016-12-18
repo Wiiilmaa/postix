@@ -49,7 +49,7 @@ def generate_invoice(transaction: Transaction, address: str) -> str:
             ('ALIGN', (0, 0), (0, 0), 'RIGHT'),
         ]),
     )
-    invoice_title = Paragraph(_('Invoice') + ' {}-{:04d}'.format(settings.short_name, transaction.pk), style['Heading1'])
+    invoice_title = Paragraph(_('Invoice') + ' {}-{:04d}'.format(settings.short_name, transaction.receipt_id), style['Heading1'])
 
     data = [[_('Product'), _('Tax rate'), _('Net'), _('Gross')], ]
     total_tax = 0
@@ -78,9 +78,11 @@ def generate_invoice(transaction: Transaction, address: str) -> str:
             ('LINEABOVE', (3, last_row), (3, last_row), 1.2, colors.black),
         ]),
     )
+    disclaimer = Paragraph(_('This invoice is only valid with receipt #{}.').format(transaction.receipt_id), style['Normal'])
 
     story = [
-        header, Spacer(1, 15 * mm), date, invoice_title, Spacer(1, 25 * mm), transaction_table,
+        header, Spacer(1, 15 * mm), date, invoice_title, Spacer(1, 25 * mm), transaction_table, Spacer(1, 25 * mm),
+        disclaimer
     ]
     doc.build(story)
     _buffer.seek(0)
