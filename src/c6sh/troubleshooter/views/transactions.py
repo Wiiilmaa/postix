@@ -114,6 +114,6 @@ def transaction_invoice(request, pk) -> Union[HttpResponse, HttpResponseRedirect
             path = generate_invoice(transaction, form.cleaned_data['address'])
             return return_invoice(path)
         else:
-            messages(form.errors)
+            messages.error(request, str(form.errors))
 
     return render(request, 'troubleshooter/invoice.html', {'form': form})
