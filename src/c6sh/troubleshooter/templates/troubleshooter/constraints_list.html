@@ -11,23 +11,24 @@
                 <a href="{% url "troubleshooter:constraint-detail" pk=list_constraint.pk %}">
                     {{ list_constraint }}
                 </a>
-            </li>
-            <ul>
-                <li>{% trans "Entries" %}: {{ list_constraint.entries.count }}</li>
-                <li>{% trans "Products" %}:</li>
                 <ul>
-                    {% for through in list_constraint.product_constraints.all %}
-                        <li>
-                            {{ through.product }}
-                            {% if through.price %}
-                                {% blocktrans trimmed with price=through.price %}
-                                    (at extra charge of {{ price }} €)
-                                {% endblocktrans %}
-                            {% endif %}
-                        </li>
-                    {% endfor %}
+                    <li>{% trans "Entries" %}: {{ list_constraint.entries.count }}</li>
+                    <li>{% trans "Products" %}:
+                        <ul>
+                            {% for through in list_constraint.product_constraints.all %}
+                                <li>
+                                    {{ through.product }}
+                                    {% if through.price %}
+                                        {% blocktrans trimmed with price=through.price %}
+                                            (at extra charge of {{ price }} €)
+                                        {% endblocktrans %}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
                 </ul>
-            </ul>
+            </li>
         {% endfor %}
     </ul>
 {% endblock content %}

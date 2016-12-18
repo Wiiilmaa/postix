@@ -10,7 +10,6 @@ from c6sh.core.models import (
 )
 from c6sh.core.utils.printing import CashdeskPrinter, DummyPrinter
 
-
 DUMMY_PRINTER_COUNT = 0
 
 

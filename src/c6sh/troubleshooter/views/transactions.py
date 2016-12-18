@@ -42,7 +42,7 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
             try:
                 self.filter['receipt'] = int(_filter['receipt'])
             except:
-                messages.errors(_('Receipt ID has to be an integer.'))
+                messages.error(request, _('Receipt ID has to be an integer.'))
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet:
@@ -100,7 +100,7 @@ def transaction_invoice(request, pk) -> Union[HttpResponse, HttpResponseRedirect
     try:
         transaction = Transaction.objects.get(pk=pk)
     except:
-        messages.error(_('Unknwon transaction.'))
+        messages.error(request, _('Unknwon transaction.'))
         return redirect('troubleshooter:transaction-list')
 
     path = transaction.get_invoice_path()

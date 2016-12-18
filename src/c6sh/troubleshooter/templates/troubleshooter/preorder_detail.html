@@ -1,0 +1,33 @@
+{% extends 'troubleshooter/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block headline %}
+    {% trans "Preorder" %} {{ preorder.order_code }}
+    {% if preorder.is_paid %}
+        <span class="label label-success">{% trans "Paid" %}</span>
+    {% else %}
+        <span class="label label-danger">{% trans "Unpaid" %}</span>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if preorder.warning_text %}
+        <div class="alert alert-warning">
+            {{ preorder.warning_text }}
+        </div>
+    {% endif %}
+    <div class="table-responsive">
+        <table class="table table-condensed table-hover">
+            <tbody>
+            {% for position in preorder.positions.all %}
+                <tr>
+                    <td> {{ position.product }} </td>
+                    <td> {{ position.secret|slice:":14" }}… </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock content %}

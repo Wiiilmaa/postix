@@ -1,0 +1,64 @@
+{% extends 'troubleshooter/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block headline %}{% trans "Preorders" %}{% endblock %}
+{% block content %}
+
+    <div class="transaction-filter-header row">
+        <form class="form" action="" method="get">
+            <div class="col-md-9">
+                <input class="form-control" name="code" placeholder="{% trans "Order code" %}"
+                        value="{{ request.GET.code }}">
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary btn-block" type="submit">{% trans "Filter" %}</button>
+            </div>
+        </form>
+    </div>
+    <div class="transaction-list table-responsive">
+        {% if not preorders %}
+            {% trans "No matching orders found." %}
+        {% else %}
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th> {% trans "Order code" %} </th>
+                    <th> {% trans "Paid" %} </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in preorders %}
+                    <tr>
+                    <td class="session-action-column">
+                        <a href="{% url "troubleshooter:preorder-detail" pk=p.pk %}" title="{% trans "Details" %}">
+                            {{ p.order_code }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if p.is_paid %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}
+                    </td>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.previous_page_number }}">
+                    <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+                </a>
+            {% endif %}
+            <span class="page-current">
+            {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.
+		</span>
+            {% if page_obj.has_next %}
+                <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.next_page_number }}">
+                    <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock content %}

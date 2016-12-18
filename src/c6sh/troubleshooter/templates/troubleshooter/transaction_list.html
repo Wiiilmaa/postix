@@ -4,7 +4,7 @@
 
 {% block headline %}{% trans "Transactions" %}{% endblock %}
 {% block content %}
-<div class="transaction-filter-header col-md-12">
+<div class="transaction-filter-header row">
     <form class="form" action="" method="get">
         <div class="col-md-3">
             <select name="desk" class="form-control">
@@ -36,7 +36,7 @@
     </form>
 </div>
 
-<div class="panel panel-body col-md-12"><div class="transaction-list table-responsive">
+<div class="transaction-list table-responsive">
     {% if not transactions %}
         {% trans "No matching transactions found." %}
     {% else %}
@@ -82,7 +82,7 @@
             </tbody>
         </table>
     {% endif %}
-</div></div>
+</div>
 
 {% if is_paginated %}
 	<div class="pagination">

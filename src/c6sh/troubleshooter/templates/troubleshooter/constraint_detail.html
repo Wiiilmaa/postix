@@ -3,43 +3,43 @@
 {% load staticfiles %}
 
 {% block content %}
-<h1>Liste {{constraint}}</h1>
-    <div class="panel-body">
+    <h1>{% trans "Liste" %} {{ constraint }}</h1>
+    <strong>{% trans "Products" %}</strong>
+    <ul>
+        {% for through in constraint.product_constraints.all %}
+            <li>
+                {{ through.product }}
+                {% if through.price %}
+                    {% blocktrans trimmed with price=through.price %}
+                        (at extra charge of {{ price }} €)
+                    {% endblocktrans %}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    <p></p>
+    <h2>{% trans "Entries" %}</h2>
+    <form class="form form-inline" action="" method="get">
+        <p>
+            <input type="text" class="form-control" name="filter">
+            <button class="btn btn-primary form-control" type="submit">{% trans "Filter" %}</button>
+        </p>
+    </form>
+    <div>
         <ul>
-            {% for through in constraint.product_constraints.all %}
+            {% for entry in entries %}
                 <li>
-                    {{ through.product }}
-                    {% if through.price %}
-                        {% blocktrans trimmed with price=through.price %}
-                            (at extra charge of {{ price }} €)
-                        {% endblocktrans %}
+                    {{ entry.name }} ({{ entry.identifier }})
+                    {% if entry.is_redeemed %}
+                        <em>({% trans "redeemed" %})</em>
                     {% endif %}
                 </li>
+            {% empty %}
+                {% trans "No entries found." %}
+                {% if restricted %}
+                    {% trans "This list is protected. Please submit a query to see entries (maximum of 10 per query)." %}
+                {% endif %}
             {% endfor %}
         </ul>
     </div>
-</div>
-<div class="panel panel-body">
-    <form class="form form-inline" action="" method="get">
-        <input type="text" class="form-control" name="filter">
-        <button class="btn btn-primary form-control" type="submit">{% trans "Filter" %}</button>
-    </form>
-</div>
-<div class="panel panel-body">
-    <ul>
-        {% for entry in entries %}
-            <li>
-                {{ entry.name }} ({{ entry.identifier }})
-                {% if entry.is_redeemed %}
-                <em>({% trans "redeemed" %})</em>
-                {% endif %}
-            </li>
-        {% empty %}
-            {% trans "No entries found." %}
-            {% if restricted %}
-                {% trans "This list is protected. Please submit a query to see entries (maximum of 10 per query)." %}
-            {% endif %}
-        {% endfor %}
-    </ul>
-</div>
 {% endblock content %}

@@ -9,16 +9,16 @@
     <h3>{{ transaction.session.user }}, {{ transaction.datetime|date:"Y-m-d H:i" }}</h3>
 </div>
 {% if transaction.receipt_id %}
-<div class="panel">{% trans "Receipt ID" %}: {{ transaction.receipt_id }}</div>
+<p>{% trans "Receipt ID" %}: {{ transaction.receipt_id }}</p>
 {% endif %}
 
 {% if transaction.has_reversed_positions %}
-    <div class="panel">
+    <p>
         <em class="text-danger">*** {% trans "CONTAINS CANCELED LINES" %} ***</em>
-    </div>
+    </p>
 {% endif %}
 
-<div class="panel col-md-12">
+<div class="row">
     <form class="form col-md-6" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
         {% csrf_token %}
         <div>
@@ -37,8 +37,8 @@
         <button class="btn btn-default btn-block" type="submit">{% trans "Print invoice" %}</button>
     </form>
 </div>
-
-<div class="table-responsive col-md-12">
+<p></p>
+<div class="table-responsive">
     <table class="table table-condensed table-hover">
         <tbody>
             {% for position in transaction.positions.all %}
@@ -58,6 +58,7 @@
                     </td>
                     <td> {{ position.product }} </td>
                     <td> {{ position.value }} </td>
+				</tr>
             {% endfor %}
         </tbody>
     </table>

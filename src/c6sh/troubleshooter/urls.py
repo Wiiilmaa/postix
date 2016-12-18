@@ -6,6 +6,9 @@ urlpatterns = [
     url('^login/$', views.LoginView.as_view(), name='login'),
     url('^logout/$', views.logout_view, name='logout'),
 
+    url('^preorders/$', views.PreorderListView.as_view(), name='preorder-list'),
+    url('^preorders/(?P<pk>[0-9]+)/$', views.PreorderDetailView.as_view(), name='preorder-detail'),
+
     url('^constraints/(?P<pk>[0-9]+)/$', views.ListConstraintDetailView.as_view(), name='constraint-detail'),
     url('^constraints/$', views.ListConstraintListView.as_view(), name='constraint-list'),
 
