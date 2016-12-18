@@ -3,7 +3,9 @@
 {% load staticfiles %}
 
 {% block headline %}{% trans "Current sessions" %}{% endblock %}
-
+{% block meta %}
+    <meta http-equiv="refresh" content="5">
+{% endblock %}
 {% block content %}
     <div class="row col-md-10">
         <div class="panel">
