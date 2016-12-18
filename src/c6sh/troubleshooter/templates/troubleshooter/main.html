@@ -10,7 +10,7 @@
             <ul class="list-group">
                 {% for sess in sessions %}
                 {% with sess.has_open_requests as requests %}
-                    <li class="list-group-item open-cashdesk {% if requests %} list-group-item-warning{% endif %}">
+                    <li class="list-group-item open-cashdesk {% if requests %} has-request list-group-item-warning{% endif %}">
                         <h3>
                             <a href="{% url "troubleshooter:transaction-list" %}?desk={{ sess.cashdesk.pk }}">
                                 {{ sess.cashdesk }}
@@ -44,4 +44,7 @@
             </ul>
         </div>
     </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static "troubleshooter/js/session_list.js" %}"></script>
 {% endblock %}
