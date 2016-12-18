@@ -5,10 +5,10 @@ from django.utils.crypto import get_random_string
 from tests.factories import cashdesk_session_before_factory, user_factory
 
 from c6sh.core.models import (
-    Cashdesk, CashdeskSession, EventSettings, Item, ItemMovement, Preorder,
-    Product, ProductItem,
+    Cashdesk, CashdeskSession, EventSettings, Item, Preorder, Product,
+    ProductItem,
 )
-from c6sh.core.utils.printing import CashdeskPrinter, DummyPrinter
+from c6sh.core.utils.printing import DummyPrinter
 
 DUMMY_PRINTER_COUNT = 0
 
@@ -46,7 +46,7 @@ class TestFullEvent:
         ProductItem.objects.create(product=self.prod_d2, item=self.item_d2, amount=1)
         self.desk1 = Cashdesk.objects.create(name='Desk 1', ip_address='10.1.1.1')
         self.desk2 = Cashdesk.objects.create(name='Desk 2', ip_address='10.1.1.2')
-        #ItemMovement.objects.create(session=session, item=item_1d, amount=10, backoffice_user=buser)
+        # ItemMovement.objects.create(session=session, item=item_1d, amount=10, backoffice_user=buser)
 
     def _simulate_preorder(self, client, product):
         secret = get_random_string(32)
@@ -149,13 +149,13 @@ class TestFullEvent:
         assert DUMMY_PRINTER_COUNT == old_count
 
         total_cash = (
-             ((d1_sales - d1_reversals) * self.prod_d1.price) +
-             ((d2_sales - d2_reversals) * self.prod_d2.price) +
-             ((full_sales - full_reversals) * self.prod_full.price)
+            ((d1_sales - d1_reversals) * self.prod_d1.price) +
+            ((d2_sales - d2_reversals) * self.prod_d2.price) +
+            ((full_sales - full_reversals) * self.prod_full.price)
         )
 
         client.login(username=self.backoffice_user.username, password='123')
-        r = client.post('/backoffice/session/{}/end/'.format(session.pk), {
+        client.post('/backoffice/session/{}/end/'.format(session.pk), {
             'session-cashdesk': cashdesk.pk,
             'session-user': user.username,
             'session-backoffice_user': buser.username,

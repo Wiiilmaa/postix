@@ -35,7 +35,7 @@ class Command(BaseCommand):
             if item['variations']:
                 self.stdout.write(self.style.ERROR('Warning: Import script cannot deal with variations yet!'))
 
-            #if item['admission'] is True:
+            # if item['admission'] is True:
             try:
                 product = Product.objects.get(import_source_id=item['id'])
                 loaded_items += 1
@@ -47,7 +47,7 @@ class Command(BaseCommand):
             product.name = item['name']
             product.save()
             product_dict[item['id']] = product
-            #else:
+            # else:
             #    self.stdout.write(self.style.NOTICE('Non-admission product ignored: {}'.format(item['name'])))
 
         self.stdout.write(self.style.SUCCESS(

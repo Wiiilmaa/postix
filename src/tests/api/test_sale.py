@@ -6,9 +6,8 @@ from c6sh.core.models import ListConstraintProduct, WarningConstraintProduct
 from c6sh.core.utils.checks import is_redeemed
 
 from ..factories import (
-    list_constraint_entry_factory, list_constraint_factory,
-    preorder_position_factory, product_factory, quota_factory, user_factory,
-    warning_constraint_factory,
+    list_constraint_entry_factory, list_constraint_factory, product_factory,
+    quota_factory, user_factory, warning_constraint_factory,
 )
 
 
@@ -149,9 +148,6 @@ def test_require_auth_invalid(api_with_session):
     p = product_factory()
     p.requires_authorization = True
     p.save()
-    options = {
-        'auth': '123456'
-    }
     assert help_test_for_error(api_with_session, p) == {
         'success': False,
         'message': 'This sale requires authorization by a troubleshooter.',
