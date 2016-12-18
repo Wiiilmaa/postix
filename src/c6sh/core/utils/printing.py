@@ -164,7 +164,8 @@ class DummyPrinter:
     def cut_tape(self) -> None:
         self.logger.info('[DummyPrinter] Cut tape')
 
-    def print_receipt(self, transaction: Transaction, do_open_drawer: bool=True) -> None:
+    def print_receipt(self, transaction: Transaction, do_open_drawer: bool=True) -> Union[str, None]:
         receipt = CashdeskPrinter('')._build_receipt(transaction)
         if receipt is not None:
             self.logger.info('[DummyPrinter] Printed receipt:\n{}'.format(receipt))
+        return receipt
