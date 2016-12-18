@@ -19,5 +19,6 @@ urlpatterns = [
 
     url('^session/(?P<pk>[0-9]+)/resupply/$', views.confirm_resupply, name='confirm-resupply'),
 
+    url('^session/check_requests$', views.check_requests, name='check-requests'),
     url('^$', views.main_view, name='main'),
 ]
