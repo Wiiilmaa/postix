@@ -8,6 +8,17 @@ from c6sh.core.models import (
     Cashdesk, CashdeskSession, EventSettings, Item, ItemMovement, Preorder,
     Product, ProductItem,
 )
+from c6sh.core.utils.printing import CashdeskPrinter, DummyPrinter
+
+
+DUMMY_PRINTER_COUNT = 0
+
+
+class DummyPrinterTesting(DummyPrinter):
+    def print_receipt(self, transaction, do_open_drawer=True) -> None:
+        if super().print_receipt(transaction, do_open_drawer):
+            global DUMMY_PRINTER_COUNT
+            DUMMY_PRINTER_COUNT += 1
 
 
 @pytest.mark.django_db
@@ -103,26 +114,40 @@ class TestFullEvent:
             tid = self._simulate_sale(client, self.prod_full)
             if i < full_reversals:
                 self._simulate_reverse(client, tid)
+        assert DUMMY_PRINTER_COUNT == full_sales + full_reversals
+        old_count = DUMMY_PRINTER_COUNT
+
         for i in range(d1_sales):
             tid = self._simulate_sale(client, self.prod_d1)
             if i < d1_reversals:
                 self._simulate_reverse(client, tid)
+        assert DUMMY_PRINTER_COUNT == old_count + d1_sales + d1_reversals
+        old_count = DUMMY_PRINTER_COUNT
+
         for i in range(d2_sales):
             tid = self._simulate_sale(client, self.prod_d2)
             if i < d2_reversals:
                 self._simulate_reverse(client, tid)
+        assert DUMMY_PRINTER_COUNT == old_count + d2_sales + d2_reversals
+        old_count = DUMMY_PRINTER_COUNT
+
         for i in range(full_preorders):
             tid = self._simulate_preorder(client, self.prod_full)
             if i < full_preorder_reversals:
                 self._simulate_reverse(client, tid)
+        assert DUMMY_PRINTER_COUNT == old_count
+
         for i in range(d1_preorders):
             tid = self._simulate_preorder(client, self.prod_d1)
             if i < d1_preorder_reversals:
                 self._simulate_reverse(client, tid)
+        assert DUMMY_PRINTER_COUNT == old_count
+
         for i in range(d2_preorders):
             tid = self._simulate_preorder(client, self.prod_d2)
             if i < d2_preorder_reversals:
                 self._simulate_reverse(client, tid)
+        assert DUMMY_PRINTER_COUNT == old_count
 
         total_cash = (
              ((d1_sales - d1_reversals) * self.prod_d1.price) +
@@ -195,7 +220,9 @@ class TestFullEvent:
         assert session.get_cash_transaction_total() == total_cash
         assert sorted(session.get_product_sales(), key=keyfunc) == sorted(sales, key=keyfunc)
 
-    def test_full(self, client):
+    def test_full(self, client, monkeypatch):
+        monkeypatch.setattr('c6sh.core.utils.printing.DummyPrinter', DummyPrinterTesting)
+        monkeypatch.setattr('c6sh.core.models.cashdesk.DummyPrinter', DummyPrinterTesting)
         self._setup_base()
         self._simulate_session(full_sales=20, full_preorders=60, full_reversals=3, full_preorder_reversals=2,
                                d1_sales=5, d1_preorders=10, d1_reversals=0, d1_preorder_reversals=1,
