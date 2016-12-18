@@ -7,7 +7,7 @@
     <meta http-equiv="refresh" content="5">
 {% endblock %}
 {% block content %}
-    <div class="row col-md-10">
+    <div class="">
         <div class="panel">
             <ul class="list-group">
                 {% for sess in sessions %}
@@ -15,8 +15,7 @@
                     <li class="list-group-item open-cashdesk {% if requests %} has-request list-group-item-warning{% endif %}">
                         <h3>
                             <a href="{% url "troubleshooter:transaction-list" %}?desk={{ sess.cashdesk.pk }}">
-                                {{ sess.cashdesk }}
-                            </a>
+                                {{ sess.cashdesk }}</a>
                             <small>{% trans "User" %}: {{ sess.user }}</small>
                         </h3>
 

@@ -2,8 +2,8 @@
 {% load i18n %}
 {% load staticfiles %}
 
+{% block headline %}{% trans "Transactions" %}{% endblock %}
 {% block content %}
-
 <div class="transaction-filter-header col-md-12">
     <form class="form" action="" method="get">
         <div class="col-md-3">
@@ -26,7 +26,10 @@
                 {% endfor %}
             </select>
         </div>
-        <input class="col-md-3" name="receipt" placeholder="{% trans "Receipt ID" %}" value="{{ request.GET.receipt }}">
+        <div class="col-md-3">
+            <input class="form-control" name="receipt" placeholder="{% trans "Receipt ID" %}"
+                    value="{{ request.GET.receipt }}">
+        </div>
         <div class="col-md-3">
             <button class="btn btn-primary btn-block" type="submit">{% trans "Filter" %}</button>
         </div>

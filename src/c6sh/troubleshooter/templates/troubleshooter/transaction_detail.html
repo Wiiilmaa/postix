@@ -19,9 +19,9 @@
 {% endif %}
 
 <div class="panel col-md-12">
-    <form class="form col-md-3" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
+    <form class="form col-md-6" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
         {% csrf_token %}
-        <div class="col-md-3">
+        <div>
             <select name="session" class="form-control">
                 {% for session in sessions %}
                     <option value="{{ session.pk }}">
