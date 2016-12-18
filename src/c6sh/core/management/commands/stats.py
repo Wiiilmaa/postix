@@ -12,10 +12,10 @@ class Command(BaseCommand):
         agg = TransactionPosition.objects\
             .order_by('product')\
             .values("product__name", "product__price")\
-            .annotate(c=Count('id'), r=Count('reverses'))
+            .annotate(total=Count('id'), reverses=Count('reverses'))
 
         for line in agg:
-            s = line['c'] - line['r']
+            count = line['total'] - line['reverses']
             self.stdout.write("{l[product__name]:30} {l[product__price]:>20} EUR       {count}".format(
                 l=line, count=count)
             )
