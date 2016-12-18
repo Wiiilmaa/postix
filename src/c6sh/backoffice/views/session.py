@@ -138,8 +138,6 @@ def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpR
             return redirect('backoffice:session-detail', pk=pk)
 
         elif formset.errors:
-            print(formset.errors)
-            print(form.errors)
             messages.error(request, 'Fehler: Bitte Daten prüfen und korrigieren.')
 
     form.fields['user'].widget.attrs['readonly'] = True

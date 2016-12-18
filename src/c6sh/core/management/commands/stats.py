@@ -5,15 +5,21 @@ from c6sh.core.models import TransactionPosition
 
 
 class Command(BaseCommand):
-    help = 'Print a view stats'
+    help = 'Print basic stats'
 
     def handle(self, *args, **kwargs):
-        agg = TransactionPosition.objects.order_by('product').values("product__name", "product__price").annotate(c=Count('id'), r=Count('reverses'))
         total = 0
+        agg = TransactionPosition.objects\
+            .order_by('product')\
+            .values("product__name", "product__price")\
+            .annotate(c=Count('id'), r=Count('reverses'))
+
         for line in agg:
             s = line['c'] - line['r']
-            print("{l[product__name]:30} {l[product__price]:>20} EUR       {s}".format(l=line, s=s))
+            self.stdout.write("{l[product__name]:30} {l[product__price]:>20} EUR       {count}".format(
+                l=line, count=count)
+            )
             if 'ticket' in line['product__name']:
-                total += s
+                total += count
 
-        print("Total tickets: {total}".format(total=total))
+        self.stdout.write(self.style.SUCCESS("Total tickets: {total}".format(total=total)))
