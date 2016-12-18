@@ -102,6 +102,11 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
     template_name = 'backoffice/session_detail.html'
     context_object_name = 'session'
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['url'] = self.request.build_absolute_uri('/')
+        return ctx
+
 
 @backoffice_user_required
 def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpResponseRedirect]:

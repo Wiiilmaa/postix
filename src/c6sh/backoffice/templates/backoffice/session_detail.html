@@ -1,5 +1,6 @@
 {% extends 'backoffice/base.html' %}
 {% load i18n %}
+{% load static %}
 
 {% block stylesheets %}
     {% if not session.end %}
@@ -25,6 +26,14 @@
 {% endblock %}
 
 {% block content %}
+    <div id="qrcode"></div>
+    <script type="text/json" id="qrcodedata">
+    {
+        "url": "{{ url }}",
+        "key": "{{ session.api_token }}"
+    }
+    </script>
+
 <h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }} ({{ sesion.user.username }})</h4>
 {% language "de" %}
 {% if session.end %}
@@ -35,7 +44,7 @@
 {% endif %}
 
 
-<h3> Verkaufte Produkte </h3>
+<h3 style="clear:both"> Verkaufte Produkte </h3>
 <table class="table" id="session-detail-table">
 	<thead>
 		<th></th>
@@ -82,4 +91,8 @@
     </tbody>
 </table>
 {% endlanguage %}
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static "shared/js/qrcode.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "backoffice/js/session_detail.js" %}"></script>
 {% endblock %}

@@ -71,3 +71,7 @@ h1 .glyphicon {
     width: 100%;
     margin-bottom: 0.5em;
 }
+#qrcode {
+    float: right;
+    width: 128px;
+}
