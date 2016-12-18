@@ -68,7 +68,6 @@ def logout_view(request: HttpRequest) -> HttpResponseRedirect:
 @login_required(login_url='/login/')
 def main_view(request: HttpRequest) -> HttpResponse:
     cashdesk = detect_cashdesk(request)
-    print(request.LANGUAGE_CODE)
     session = request.user.get_current_session()
     if not cashdesk or session is None or session.cashdesk != cashdesk:
         return render(request, 'desk/fail.html', {
