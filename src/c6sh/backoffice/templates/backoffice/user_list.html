@@ -1,0 +1,21 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block headline %}{% trans "User List" %}{% endblock %}
+
+{% block content %}
+
+<ul>
+    {% for user in object_list %}
+        <li>
+            {{ user.username }} ({{ user.firstname}} {{user.lastname}})
+            <a href="{% url "backoffice:reset-password" pk=user.pk %}" class="btn btn-default btn-xs">
+                {% trans "Reset password" %}
+            </a>
+        </li>
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

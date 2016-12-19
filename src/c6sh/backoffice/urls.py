@@ -8,6 +8,7 @@ urlpatterns = [
     url('^switch-user/$', views.switch_user, name='switch-user'),
 
     url('^create_user/$', views.create_user_view, name='create-user'),
+    url('^users/$', views.UserListView.as_view(), name='user-list'),
 
     url('^session/new/$', views.new_session, name='new-session'),
     url('^session/(?P<pk>[0-9]+)/end/$', views.end_session, name='end-session'),

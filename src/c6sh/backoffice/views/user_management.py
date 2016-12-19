@@ -3,10 +3,11 @@ from typing import Union
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.views.generic import ListView
 
 from ...core.models import User
 from ..forms import CreateUserForm, get_normal_user_form
-from .utils import backoffice_user_required
+from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 
 @backoffice_user_required
@@ -29,3 +30,8 @@ def create_user_view(request: HttpRequest) -> Union[HttpResponseRedirect, HttpRe
         form = get_normal_user_form()
 
     return render(request, 'backoffice/create_user.html', {'form': form})
+
+
+class UserListView(BackofficeUserRequiredMixin, ListView):
+    template_name = 'backoffice/user_list.html'
+    model = User
