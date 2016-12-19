@@ -1,10 +1,10 @@
 from .auth import LoginView, logout_view, switch_user
-from .create_user import create_user_view
 from .main import MainView
 from .session import (
     ReportListView, SessionDetailView, SessionListView, end_session,
     new_session, resupply_session, session_report,
 )
+from .user_management import create_user_view
 from .utils import backoffice_user_required
 from .wizard import WizardSettingsView, WizardUsersView
 
