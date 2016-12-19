@@ -43,3 +43,25 @@ def get_normal_user_form() -> CreateUserForm:
         'lastname',
     )
     return form
+
+
+class ResetPasswordForm(forms.Form):
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput())
+    password2 = forms.CharField(label='Password, again', widget=forms.PasswordInput())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_method = 'post'
+        self.helper.label_class = 'col-md-4'
+        self.helper.field_class = 'col-md-8'
+        self.helper.add_input(Submit('submit', 'Reset password'))
+
+    def is_valid(self):
+        valid = super().is_valid()
+        if valid:
+            if self.cleaned_data.get('password1') == self.cleaned_data.get('password2'):
+                return valid
+            self._errors['incorrect_password'] = 'Passwords do not match!'
+        return valid
