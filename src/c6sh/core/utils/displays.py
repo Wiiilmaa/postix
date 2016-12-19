@@ -3,6 +3,7 @@ import logging
 
 import requests
 
+logger = logging.getLogger('django')
 
 class OverheadDisplay:
     def __init__(self, ip_address, *args, **kwargs) -> None:
@@ -16,13 +17,16 @@ class OverheadDisplay:
         }
         headers = {'Content-Type': 'application/json'}
         url = 'http://{}:8888/jsonrpc'.format(self.ip_address)
-        response = requests.post(
-            url,
-            data=json.dumps(payload),
-            headers=headers,
-            timeout=0.5,
-        )
-        return response.json().get('result', response.json().get('error'))
+        try:
+            response = requests.post(
+                url,
+                data=json.dumps(payload),
+                headers=headers,
+                timeout=0.5,
+            )
+            return response.json().get('result', response.json().get('error'))
+        except Exception:
+            logger.exception('Error while contacting overhead display.')
 
     def open(self):
         return self._request('open')
