@@ -5,6 +5,7 @@ import requests
 
 logger = logging.getLogger('django')
 
+
 class OverheadDisplay:
     def __init__(self, ip_address, *args, **kwargs) -> None:
         self.ip_address = ip_address
