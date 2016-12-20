@@ -6,6 +6,13 @@
 
 {% block content %}
 
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    $('.ping-tooltip').tooltip(options)
+</script>
+
 <div class="ping-form">
     <form class="form form-inline col-md-9" method="post">
         {% csrf_token %}
@@ -21,7 +28,9 @@
     {% language "en" %}
     {% for ping in pings %}
         {% if ping.ponged %}
-            20 bytes from end.queue: icmp_seq={{ ping.pk }} ttl=64 duration={{ ping.pinged|timesince:ping.ponged }}
+            <span class="ping-tooltip" data-toggle="tooltip" data-placement="right" title="pong on {{ ping.ponged }}">
+                20 bytes from end.queue: icmp_seq={{ ping.pk }} ttl=64 duration={{ ping.pinged|timesince:ping.ponged }}
+            </span>
         {% else %}
             20 bytes PENDING: icmp_seq={{ ping.pk }} sent={{ ping.pinged|timesince }} ago
         {% endif %}
