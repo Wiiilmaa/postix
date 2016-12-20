@@ -14,6 +14,8 @@ SEPARATOR = '\u2500' * 42 + '\r\n'
 
 
 class CashdeskPrinter:
+    ESC = 0x1B
+
     def __init__(self, printer: str) -> None:
         self.printer = printer
 
@@ -32,7 +34,7 @@ class CashdeskPrinter:
         time.sleep(0.1)
 
     def open_drawer(self) -> None:
-        self.send(bytearray([0x1B, ord('p'), 48, 255, 255]))
+        self.send(bytearray([self.ESC, ord('p'), 48, 255, 255]))
 
     def cut_tape(self) -> None:
         self.send(bytearray([0x1D, 0x56, 66, 100]))
@@ -89,22 +91,22 @@ class CashdeskPrinter:
         else:
             is_copy = True
 
-        receipt = bytearray([0x1B, 0x61, 1]).decode()  # center text
-        receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
+        receipt = bytearray([self.ESC, 0x61, 1]).decode()  # center text
+        receipt += bytearray([self.ESC, 0x45, 1]).decode()  # emphasize
         receipt += settings.name + '\r\n\r\n'
-        receipt += bytearray([0x1B, 0x45, 0]).decode()  # de-emphasize
+        receipt += bytearray([self.ESC, 0x45, 0]).decode()  # de-emphasize
         if settings.receipt_address is not None:
             receipt += settings.receipt_address + '\r\n\r\n'
 
         if is_cancellation:
-            receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
+            receipt += bytearray([self.ESC, 0x45, 1]).decode()  # emphasize
             receipt += _('Cancellation') + '\r\n\r\n'
-            receipt += bytearray([0x1B, 0x45, 0]).decode()  # de-emphasize
+            receipt += bytearray([self.ESC, 0x45, 0]).decode()  # de-emphasize
 
         if is_copy:
-            receipt += bytearray([0x1B, 0x45, 1]).decode()  # emphasize
+            receipt += bytearray([self.ESC, 0x45, 1]).decode()  # emphasize
             receipt += _('Receipt copy') + '\r\n\r\n'
-            receipt += bytearray([0x1B, 0x45, 0]).decode()  # de-emphasize
+            receipt += bytearray([self.ESC, 0x45, 0]).decode()  # de-emphasize
 
         receipt += SEPARATOR
         receipt += " {: <26}            EUR\r\n".format(_('Ticket'))
@@ -113,7 +115,7 @@ class CashdeskPrinter:
         receipt += '\r\n'.join(position_lines)
         receipt += '\r\n'
         receipt += SEPARATOR
-        receipt += bytearray([0x1B, 0x61, 2]).decode()  # right-align text (0 would be left-align)
+        receipt += bytearray([self.ESC, 0x61, 2]).decode()  # right-align text (0 would be left-align)
         receipt += _("Net sum:  {}").format(self._format_number(total_sum - total_taxes))
         receipt += '\r\n'
 
@@ -127,7 +129,7 @@ class CashdeskPrinter:
 
         receipt += _("Total:  {}").format(self._format_number(total_sum))
         receipt += '\r\n' * 3
-        receipt += bytearray([0x1B, 0x61, 1]).decode()  # center text
+        receipt += bytearray([self.ESC, 0x61, 1]).decode()  # center text
         receipt += settings.receipt_footer + '\r\n'
         receipt += '{} {}\r\n'.format(
             transaction.datetime.strftime("%d.%m.%Y %H:%M"),
