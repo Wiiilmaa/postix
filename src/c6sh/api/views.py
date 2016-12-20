@@ -13,6 +13,7 @@ from ..core.models import (
     Cashdesk, ListConstraint, ListConstraintEntry, Preorder, PreorderPosition,
     Product, Transaction,
 )
+from ..core.models.ping import generate_ping
 from ..core.utils import round_decimal
 from ..core.utils.flow import (
     FlowError, redeem_preorder_ticket, reverse_transaction, sell_ticket,
@@ -210,7 +211,7 @@ class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
 class CashdeskActionViewSet(ReadOnlyModelViewSet):
     """ Hacky class to use restframework capabilities without being RESTful.
     We don't expose a queryset, and use a random serializer.
-    Allowed actions: open-drawer, reprint-receipt, request-resupply, display-next
+    Allowed actions: open-drawer, reprint-receipt, request-resupply, display-next, print-ping
     """
     serializer_class = ListConstraintEntrySerializer
     queryset = Cashdesk.objects.none()
@@ -252,4 +253,13 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
             raise RuntimeError('This should never happen because the auth layer should handle this.')
 
         session.cashdesk.display.next()
+        return Response({'success': True})
+
+    @list_route(methods=["POST"], url_path='print-ping')
+    def print_ping(self, request: HttpRequest) -> Response:
+        session = request.user.get_current_session()
+        if not session:  # noqa
+            raise RuntimeError('This should never happen because the auth layer should handle this.')
+
+        generate_ping(session.cashdesk)
         return Response({'success': True})
