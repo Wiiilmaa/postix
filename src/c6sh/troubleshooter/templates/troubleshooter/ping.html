@@ -32,7 +32,9 @@
                 20 bytes from end.queue: icmp_seq={{ ping.pk }} ttl=64 duration={{ ping.pinged|timesince:ping.ponged }}
             </span>
         {% else %}
-            20 bytes PENDING: icmp_seq={{ ping.pk }} sent={{ ping.pinged|timesince }} ago
+            <span class="ping-tooltip" data-toggle="tooltip" data-placement="right" title="ping on {{ ping.pinged }}">
+                20 bytes PENDING: icmp_seq={{ ping.pk }} sent={{ ping.pinged|timesince }} ago
+            </span>
         {% endif %}
         <br>
     {% endfor %}
