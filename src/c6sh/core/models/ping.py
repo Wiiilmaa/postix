@@ -4,6 +4,13 @@ import qrcode
 from django.db import models
 from django.utils.crypto import get_random_string
 
+from .cashdesk import Cashdesk
+
+
+def generate_ping(cashdesk: Cashdesk) -> None:
+    ping = Ping.objects.create()
+    cashdesk.printer.print_image(ping.get_qr_code())
+
 
 def generate_ping_secret():
     return '/ping ' + get_random_string(length=15)
