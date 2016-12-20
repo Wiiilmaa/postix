@@ -1,0 +1,21 @@
+{% extends "troubleshooter/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block headline %}<span class="ping">ping -c {{ pings.count }} end.queue</span>{% endblock %}
+
+{% block content %}
+
+<div class="ping-form">
+    <form class="form form-inline col-md-9" method="post">
+        {% csrf_token %}
+        ping -c 1 -I
+        {{ form.cashdesk }}
+        end.queue
+        <button class="btn btn-ping" type="submit">⏎</button>
+    </form>
+</div>
+
+<div class="ping-log">
+</div>
+{% endblock %}

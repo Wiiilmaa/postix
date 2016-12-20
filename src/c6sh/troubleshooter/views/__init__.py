@@ -2,6 +2,7 @@ from .auth import LoginView, logout_view
 from .constraints import ListConstraintDetailView, ListConstraintListView
 from .desk import check_requests, confirm_resupply
 from .main import main_view
+from .ping import PingView
 from .preorders import PreorderDetailView, PreorderListView
 from .transactions import (
     TransactionDetailView, TransactionListView, transaction_invoice,
@@ -20,6 +21,7 @@ __all__ = [
     'TransactionListView',
     'transaction_invoice',
     'transaction_reprint',
+    'PingView',
     'PreorderDetailView',
     'PreorderListView'
 ]

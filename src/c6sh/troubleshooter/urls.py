@@ -6,6 +6,8 @@ urlpatterns = [
     url('^login/$', views.LoginView.as_view(), name='login'),
     url('^logout/$', views.logout_view, name='logout'),
 
+    url('^ping/$', views.PingView.as_view(), name='ping'),
+
     url('^preorders/$', views.PreorderListView.as_view(), name='preorder-list'),
     url('^preorders/(?P<pk>[0-9]+)/$', views.PreorderDetailView.as_view(), name='preorder-detail'),
 
