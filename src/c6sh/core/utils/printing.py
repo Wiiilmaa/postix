@@ -122,7 +122,7 @@ class CashdeskPrinter:
         receipt += '\r\n'
 
         for tax in sorted(list(tax_symbols))[::-1]:
-            receipt += _("Tax {tax_rate}% ({tax_identifier}):  {tax_amount})").format(
+            receipt += _("Tax {tax_rate}% ({tax_identifier}):  {tax_amount}").format(
                 tax_rate=tax,
                 tax_identifier=tax_symbols[tax],
                 tax_amount=self._format_number(tax_sums[tax]),
