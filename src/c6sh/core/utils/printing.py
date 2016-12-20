@@ -1,4 +1,5 @@
 import logging
+import math
 import subprocess
 import time
 from collections import defaultdict
@@ -7,6 +8,7 @@ from string import ascii_uppercase
 from typing import Union
 
 from django.utils.translation import ugettext as _
+from PIL import Image
 
 from c6sh.core.models import Transaction
 
@@ -151,6 +153,45 @@ class CashdeskPrinter:
                 self.cut_tape()
             except:
                 logging.getLogger('django').exception('Printing at {} failed'.format(self.printer))
+
+    def print_image(self, fileish):
+        image = Image.open(fileish)
+
+        image = image.convert("1")
+        imagedata = image.load()
+        (width, height) = image.size
+        print_data = list()
+
+        width_rounded_up = math.ceil(width / 3) * 3
+        byte_count = width_rounded_up // 256
+        bit_count = width_rounded_up % 256
+
+        print_data.extend([self.ESC, ord('3'), 1])  # Set line spacing to 24 dots
+
+        for line_y in range(math.ceil(height / 24)):  # One "line" of image data is 24 px
+            print_data.extend([self.ESC, ord('*'), 33])  # Set mode to bitmap, 24 dots
+            print_data.extend([bit_count, byte_count])  # Specify data to be printed
+
+            for line_x in range(math.ceil(width / 3)):  # We write 3 x (3 x 8) pixels at once
+                for inner_x in range(3):
+                    for inner_y in range(3):
+                        pixel_value = 0
+                        for square_y in range(8):
+                            x = line_x * 3 + inner_x
+                            y = line_y * 24 + inner_y * 8 + square_y
+                            px = 0
+                            if y < height and x < width:
+                                px = int(not bool(imagedata[x, y]))
+                            pixel_value += px * 2 ** (7 - square_y)  # What.
+                        print_data.append(int(pixel_value))
+            print_data.extend([ord('\n'), ord('\r')])  # Newline
+
+        print_data.extend([ord('\n'), ord('\r')])  # Newline
+        print_data.extend([self.ESC, ord('3'), 30])  # Set linespacing back to normal
+
+        array = bytearray(print_data)
+        self.send(array)
+        self.cut_tape()
 
 
 class DummyPrinter:
