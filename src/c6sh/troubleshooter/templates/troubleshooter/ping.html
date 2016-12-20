@@ -16,6 +16,18 @@
     </form>
 </div>
 
-<div class="ping-log">
+<div class="ping-log col-md-9">
+    PING end.queue (172.23.23.1) 56(84) bytes of data.<br>
+    {% language "en" %}
+    {% for ping in pings %}
+        {% if ping.ponged %}
+            64 bytes from end.queue: icmp_seq={{ ping.pk }} ttl=64 duration={{ ping.pinged|timesince:ping.ponged }}
+        {% else %}
+            64 bytes PENDING: icmp_seq={{ ping.pk }} sent={{ ping.pinged|timesince }} ago
+        {% endif %}
+        <br>
+    {% endfor %}
+    {% endlanguage %}
+
 </div>
 {% endblock %}

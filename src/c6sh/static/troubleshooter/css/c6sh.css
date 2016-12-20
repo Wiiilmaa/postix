@@ -63,6 +63,13 @@ h1 .glyphicon {
     font-family: monospace;
     margin-top: 1em;
 }
+.ping-log {
+    background-color: black;
+    border-radius: 3px;
+    color: white;
+    font-family: monospace;
+    margin-top: 1em;
+}
 .ping-form form select {
     background-color: black;
     border: 1px solid grey;
