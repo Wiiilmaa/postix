@@ -53,3 +53,35 @@ h1 .glyphicon {
 .open-cashdesk dl {
     margin-bottom: 0;
 }
+.ping {
+    font-family: monospace;
+}
+.ping-form form {
+    background-color: black;
+    border-radius: 3px;
+    color: white;
+    font-family: monospace;
+    margin-top: 1em;
+}
+.ping-form form select {
+    background-color: black;
+    border: 1px solid grey;
+    margin: 8px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+.ping-form .btn-ping {
+    background-color: black;
+    border: 1px solid grey;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+.ping-form .btn-ping:hover {
+    background-color: #0f0;
+}
