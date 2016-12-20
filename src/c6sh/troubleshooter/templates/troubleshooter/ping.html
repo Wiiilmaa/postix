@@ -21,12 +21,21 @@
     {% language "en" %}
     {% for ping in pings %}
         {% if ping.ponged %}
-            64 bytes from end.queue: icmp_seq={{ ping.pk }} ttl=64 duration={{ ping.pinged|timesince:ping.ponged }}
+            20 bytes from end.queue: icmp_seq={{ ping.pk }} ttl=64 duration={{ ping.pinged|timesince:ping.ponged }}
         {% else %}
-            64 bytes PENDING: icmp_seq={{ ping.pk }} sent={{ ping.pinged|timesince }} ago
+            20 bytes PENDING: icmp_seq={{ ping.pk }} sent={{ ping.pinged|timesince }} ago
         {% endif %}
         <br>
     {% endfor %}
+    {% endlanguage %}
+
+</div>
+
+<div class="ping-log col-md-9">
+    {% language "en" %}
+    --- queue.end ping statistics ---<br>
+    {{ pings.count }} packets transmitted, {{ ping_success }} received, {{ loss_percent }}% packet loss, time {{ pings.first.pinged|timesince:pings.last.pinged }}<br>
+    rtt min/avg/max/mdev = {{ total_min }}/{{ total_avg }}/{{ total_max }}/{{ total_mdev }} minutes
     {% endlanguage %}
 
 </div>
