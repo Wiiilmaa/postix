@@ -214,3 +214,6 @@ class DummyPrinter:
         if receipt is not None:
             self.logger.info('[DummyPrinter] Printed receipt:\n{}'.format(receipt))
         return receipt
+
+    def print_image(self, fileish):
+        self.logger.info('[DummyPrinter] Printed image')
