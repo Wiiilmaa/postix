@@ -171,6 +171,7 @@ var transaction = {
             dataType: 'json',
             data: '',
             success: function (data, status, jqXHR) {
+                transaction.last_id = data.id;
                 loading.end();
                 $("#lower-right").addClass("reversed");
                 dialog.flash_success(gettext('The transaction has been reversed.'));
