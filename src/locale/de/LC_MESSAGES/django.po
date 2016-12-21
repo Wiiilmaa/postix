@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-18 14:20+0100\n"
-"PO-Revision-Date: 2016-12-18 14:21+0100\n"
+"POT-Creation-Date: 2016-12-21 12:08+0100\n"
+"PO-Revision-Date: 2016-12-21 12:19+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -48,13 +48,25 @@ msgstr ""
 "Du hast manche Produkte mit einem Steuersatz eingestellt, aber bei den "
 "folgenden Produkten beträgt der Steuersatz 0%: {products}"
 
-#: c6sh/backoffice/templates/backoffice/base.html:78
+#: c6sh/backoffice/templates/backoffice/base.html:79
 msgid ""
 "We found some settings in your installation that are probably incorrect. We "
 "recommend that you check them again :)"
 msgstr ""
 "Huch, hier sind ein paar Einstellungen wahrscheinlich nicht ganz richtig, "
 "guck sie dir doch bitte noch mal an."
+
+#: c6sh/backoffice/templates/backoffice/reset_password.html:6
+msgid "Password reset"
+msgstr "Passwort zurücksetzen"
+
+#: c6sh/backoffice/templates/backoffice/user_list.html:5
+msgid "User List"
+msgstr "Nutzerliste"
+
+#: c6sh/backoffice/templates/backoffice/user_list.html:14
+msgid "Reset password"
+msgstr "Passwort zurücksetzen"
 
 #: c6sh/core/utils/flow.py:43
 msgid "No secret has been given."
@@ -139,37 +151,37 @@ msgstr "Diese Position wurde bereits storniert."
 msgid "This position is already a reversal."
 msgstr "Diese Position ist eine Stornierung."
 
-#: c6sh/core/utils/printing.py:70 c6sh/core/utils/printing.py:71
+#: c6sh/core/utils/printing.py:74 c6sh/core/utils/printing.py:75
 #: c6sh/desk/templates/desk/main.html:137
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: c6sh/core/utils/printing.py:101
+#: c6sh/core/utils/printing.py:105
 msgid "Cancellation"
 msgstr "Storno-Rechnung"
 
-#: c6sh/core/utils/printing.py:106
+#: c6sh/core/utils/printing.py:110
 msgid "Receipt copy"
 msgstr "Bonkopie"
 
-#: c6sh/core/utils/printing.py:110
+#: c6sh/core/utils/printing.py:114
 msgid "Ticket"
 msgstr "Ticket"
 
-#: c6sh/core/utils/printing.py:117
+#: c6sh/core/utils/printing.py:121
 msgid "Net sum:  {}"
 msgstr "Nettosumme:  {}"
 
-#: c6sh/core/utils/printing.py:121
+#: c6sh/core/utils/printing.py:125
 #, python-brace-format
-msgid "Tax {tax_rate}% ({tax_identifier}):  {tax_amount})"
-msgstr "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount})"
+msgid "Tax {tax_rate}% ({tax_identifier}):  {tax_amount}"
+msgstr "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount}"
 
-#: c6sh/core/utils/printing.py:128
+#: c6sh/core/utils/printing.py:132
 msgid "Total:  {}"
 msgstr "Summe:  {}"
 
-#: c6sh/core/utils/printing.py:136
+#: c6sh/core/utils/printing.py:140
 msgid "Receipt number: {}"
 msgstr "Bonnumber: {}"
 
@@ -289,11 +301,11 @@ msgstr "Deine Session ist für eine andere Kasse geplant. Bitte geh zu {desk}."
 msgid "No user account matches the entered credentials."
 msgstr "Die eingegebenen Benutzerdaten sind nicht bekannt."
 
-#: c6sh/desk/views.py:74
+#: c6sh/desk/views.py:75
 msgid "You do not have an active session at this cashdesk."
 msgstr "Du hast keine aktive Sitzung an dieser Kasse."
 
-#: c6sh/desk/views.py:75
+#: c6sh/desk/views.py:76
 msgid "You are logged in as {}."
 msgstr "Du bist als {} eingeloggt."
 
@@ -347,21 +359,43 @@ msgid "Current sessions"
 msgstr "Laufende Schichten"
 
 #: c6sh/troubleshooter/templates/troubleshooter/base.html:31
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:5
 msgid "Transactions"
 msgstr "Transaktionen"
 
 #: c6sh/troubleshooter/templates/troubleshooter/base.html:32
+#: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:5
 msgid "Lists"
 msgstr "Listen"
 
+#: c6sh/troubleshooter/templates/troubleshooter/base.html:33
+#: c6sh/troubleshooter/templates/troubleshooter/preorder_detail.html:6
+msgid "Preorder"
+msgstr "VVK"
+
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:6
+msgid "Liste"
+msgstr "Liste"
+
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:7
+#: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:16
+msgid "Products"
+msgstr "Tickets"
+
 #: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:13
-#: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:23
+#: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:22
 #, python-format
 msgid "(at extra charge of %(price)s €)"
 msgstr "(gegen einen Aufpreis von %(price)s €)"
 
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:21
+#: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:15
+msgid "Entries"
+msgstr "Einträge"
+
 #: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:25
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:31
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:15
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:34
 msgid "Filter"
 msgstr "Filter"
 
@@ -381,14 +415,6 @@ msgstr ""
 "Diese Liste ist vertraulich. Einträge werden nur nach Suchanfragen gezeigt "
 "(max. 10 Einträge pro Anfrage)."
 
-#: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:16
-msgid "Entries"
-msgstr "Einträge"
-
-#: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:17
-msgid "Products"
-msgstr "Tickets"
-
 #: c6sh/troubleshooter/templates/troubleshooter/invoice.html:10
 msgid "Generate invoice"
 msgstr "Rechnung erstellen"
@@ -401,25 +427,70 @@ msgstr "Benutzername"
 msgid "Sign in"
 msgstr "Einloggen"
 
-#: c6sh/troubleshooter/templates/troubleshooter/main.html:20
+#: c6sh/troubleshooter/templates/troubleshooter/main.html:19
 msgid "User"
 msgstr "Benutzer"
 
-#: c6sh/troubleshooter/templates/troubleshooter/main.html:26
+#: c6sh/troubleshooter/templates/troubleshooter/main.html:25
 msgid "Resupply"
 msgstr "Nachschub"
 
-#: c6sh/troubleshooter/templates/troubleshooter/main.html:36
+#: c6sh/troubleshooter/templates/troubleshooter/main.html:35
 msgid "Session time"
 msgstr "Session-Dauer"
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorder_detail.html:8
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:27
+msgid "Paid"
+msgstr "Bezahlt"
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorder_detail.html:10
+msgid "Unpaid"
+msgstr "Ausstehend"
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:5
+msgid "Preorders"
+msgstr "Vorbestellungen"
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:11
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:26
+msgid "Order code"
+msgstr "Bestellnummer"
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:21
+msgid "No matching orders found."
+msgstr "Keine passenden Bestellungen gefunden."
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:34
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:58
+msgid "Details"
+msgstr "Details"
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:39
+msgid "Yes"
+msgstr "Ja"
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:39
+msgid "No"
+msgstr "Nein"
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:55
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:95
+msgid "Page"
+msgstr "Seite"
+
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:55
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:95
+msgid "of"
+msgstr "von"
 
 #: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:5
 msgid "Transaction"
 msgstr "Transaktio"
 
 #: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:12
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:29
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:48
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:30
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:51
 msgid "Receipt ID"
 msgstr "Bon-ID"
 
@@ -447,49 +518,37 @@ msgstr "storniert"
 msgid "cancelation"
 msgstr "Storno"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:38
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:41
 msgid "No matching transactions found."
 msgstr "Keine Transaktionen gefunden."
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:44
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:47
 msgid "Cashdesk"
 msgstr "Kasse"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:45
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:48
 msgid "Type"
 msgstr "Typ"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:46
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:49
 msgid "Amount"
 msgstr "Betrag"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:47
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:50
 msgid "Transaction amount"
 msgstr "Transaktionsbetrag"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:55
-msgid "Details"
-msgstr "Details"
-
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:67
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:70
 msgid "Sale"
 msgstr "Verkauf"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:69
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:72
 msgid "Presale"
 msgstr "Vorverkauf"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:71
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:74
 msgid "Cancelation"
 msgstr "Storno"
-
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:92
-msgid "Page"
-msgstr "Seite"
-
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:92
-msgid "of"
-msgstr "von"
 
 #: c6sh/troubleshooter/views/auth.py:28
 msgid "User does not have permission to access troubleshooter data."
@@ -501,13 +560,17 @@ msgstr ""
 "Suchanfragen müssen bei vertraulichen Listen mindestens drei Buchstaben lang "
 "sein."
 
-#: c6sh/troubleshooter/views/desk.py:16
+#: c6sh/troubleshooter/views/desk.py:23
 msgid "Unknown session."
 msgstr "Session nicht bekannt."
 
-#: c6sh/troubleshooter/views/desk.py:22
+#: c6sh/troubleshooter/views/desk.py:29
 msgid "{} has been resupplied."
 msgstr "{} hat dringend notwendigen Nachschub erhalten! Yay!"
+
+#: c6sh/troubleshooter/views/preorders.py:21
+msgid "You need to enter at least four characters of the order code."
+msgstr "Du musst mindestens vier Zeichen der Bestellnummer eingeben."
 
 #: c6sh/troubleshooter/views/transactions.py:45
 msgid "Receipt ID has to be an integer."
@@ -527,12 +590,6 @@ msgstr "Transation nicht bekannt."
 
 #~ msgid "This list entry already has been used."
 #~ msgstr "Dieser Listeneintrag wurde bereits abgehakt."
-
-#~ msgid ""
-#~ "Auth tokens need to contain at least one character that is not a number."
-#~ msgstr ""
-#~ "Authentifizierungstokens müssen mindestens ein Zeichen enthalten, das "
-#~ "keine Zahl ist."
 
 #~ msgid "Please supply a list entry ID."
 #~ msgstr "Bitte die ID eines Listeneintrags eingeben."
