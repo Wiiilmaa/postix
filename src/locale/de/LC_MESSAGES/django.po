@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-21 13:03+0100\n"
-"PO-Revision-Date: 2016-12-21 12:19+0100\n"
+"POT-Creation-Date: 2016-12-21 14:46+0100\n"
+"PO-Revision-Date: 2016-12-21 14:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -158,7 +158,7 @@ msgstr "Upgrade"
 
 #: c6sh/core/utils/printing.py:105
 msgid "Cancellation"
-msgstr "Storno-Rechnung"
+msgstr "Storno-Bon"
 
 #: c6sh/core/utils/printing.py:110
 msgid "Receipt copy"
@@ -349,6 +349,10 @@ msgstr "Rechnungsbetrag"
 msgid "This invoice is only valid with receipt #{}."
 msgstr "Diese Rechnung ist nur mit Bon Nr {} gültig."
 
+#: c6sh/troubleshooter/invoicing.py:82
+msgid "The invoice total has already been paid."
+msgstr "Der Rechnungsbetrag wurde bereits beglichen."
+
 #: c6sh/troubleshooter/templates/troubleshooter/base.html:25
 msgid "Troubleshooter"
 msgstr "Troubleshooter"
@@ -486,7 +490,7 @@ msgstr "von"
 
 #: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:5
 msgid "Transaction"
-msgstr "Transaktio"
+msgstr "Transaktion"
 
 #: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:12
 #: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:30

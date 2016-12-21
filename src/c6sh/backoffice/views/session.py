@@ -196,8 +196,7 @@ def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespons
     elif request.method == 'GET':
         if session.end:
             msg = 'Diese Session wurde bereits ausgezählt und abgeschlossen. '\
-                  'Wenn du dieses Formular ausfüllst, wird ein zweiter, korrigierter '\
-                  'Report erstellt.'
+                  'Wenn du dieses Formular ausfüllst, wird der bestehende Report korrigiert.'
             messages.warning(request, msg)
 
         form, formset = get_form_and_formset(

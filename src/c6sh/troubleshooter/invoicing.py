@@ -78,7 +78,9 @@ def generate_invoice(transaction: Transaction, address: str) -> str:
             ('LINEABOVE', (3, last_row), (3, last_row), 1.2, colors.black),
         ]),
     )
-    disclaimer = Paragraph(_('This invoice is only valid with receipt #{}.').format(transaction.receipt_id), style['Normal'])
+    disclaimer_text = _('This invoice is only valid with receipt #{}.').format(transaction.receipt_id)
+    disclaimer_text += _('The invoice total has already been paid.')
+    disclaimer = Paragraph(disclaimer_text, style['Normal'])
 
     story = [
         header, Spacer(1, 15 * mm), date, invoice_title, Spacer(1, 25 * mm), transaction_table, Spacer(1, 25 * mm),
