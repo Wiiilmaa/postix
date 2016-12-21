@@ -49,18 +49,19 @@ class CashdeskPrinter:
         tax_sums = defaultdict(int)
         tax_symbols = dict()
 
-        positions = [
-            position for position in transaction.positions.all()
-            if not (position.type == 'redeem' and position.value == Decimal('0.00'))
-        ]
+        positions = transaction.positions.exclude(
+            type='redeem', value=Decimal('0.00')
+        )
+
+        if not positions.exists():
+            return
+
+        # Caution! This code assumes that cancellations are always made on transaction level
         cancellations = positions.filter(type='reverse')
         if cancellations.exists():
             cancels = cancellations.first().reverses.transaction
         else:
             cancels = None
-
-        if not positions:
-            return
 
         for position in transaction.positions.all():
             if position.value == 0:
