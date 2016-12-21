@@ -150,6 +150,8 @@ class CashdeskSession(models.Model):
             }
             summary['value_total'] = product_query.aggregate(s=Sum('value'))['s'] or 0
             result.append(summary)
+
+        result = sorted(result, key=lambda entry: entry['product'].name)
         return result
 
     def get_report_path(self) -> Union[str, None]:
