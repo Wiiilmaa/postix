@@ -17,7 +17,7 @@ class MainView(BackofficeUserRequiredMixin, TemplateView):
             position__reversed_by__isnull=True,
             position__type__in=['redeem', 'sell']
         )
-        for item in Item.objects.all():
+        for item in Item.objects.order_by('name'):
             data[item.name] = qs.filter(item=item).aggregate(total=Sum('amount'))['total']
         ctx['data'] = data
         ctx['check_errors'] = checks.all_errors()
