@@ -154,7 +154,7 @@ class CashdeskPrinter:
             except:
                 logging.getLogger('django').exception('Printing at {} failed'.format(self.printer))
 
-    def _get_pixel_value(outer_x, outer_y, inner_x, inner_y, total_x, total_y, image):
+    def _get_pixel_value(self, outer_x, outer_y, inner_x, inner_y, total_x, total_y, image):
         pixel_value = 0
         for square_y in range(8):
             x = outer_x * 3 + inner_x
