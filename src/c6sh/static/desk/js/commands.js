@@ -12,6 +12,22 @@ var commands = {
             + "</dl>");
     },
 
+    '/ping': function(param) {
+        if (param && param.length > 5) {
+
+        } else {
+            $.ajax({
+                url: '/api/cashdesk/print-ping/',
+                method: 'POST',
+                dataType: 'json',
+                data: '',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+        }
+    },
+
     '/scanner': function () {
         commands._info_view("<p><strong>" + gettext("Scan the following, in order:") + "</strong></p>"
             + "<p>"
@@ -40,6 +56,9 @@ var commands = {
         if (typeof commands[command] !== 'undefined') {
             commands[command]();
             return true;
+
+        } else if (command.slice(0, 5) === '/ping') {
+            commands['/ping'](command);
         } else {
             return false;
         }
