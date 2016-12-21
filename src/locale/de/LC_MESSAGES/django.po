@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-21 14:46+0100\n"
-"PO-Revision-Date: 2016-12-21 14:46+0100\n"
+"POT-Creation-Date: 2016-12-21 16:18+0100\n"
+"PO-Revision-Date: 2016-12-21 16:19+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -151,37 +151,41 @@ msgstr "Diese Position wurde bereits storniert."
 msgid "This position is already a reversal."
 msgstr "Diese Position ist eine Stornierung."
 
-#: c6sh/core/utils/printing.py:74 c6sh/core/utils/printing.py:75
+#: c6sh/core/utils/printing.py:78 c6sh/core/utils/printing.py:79
 #: c6sh/desk/templates/desk/main.html:137
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: c6sh/core/utils/printing.py:105
+#: c6sh/core/utils/printing.py:109
 msgid "Cancellation"
 msgstr "Storno-Bon"
 
-#: c6sh/core/utils/printing.py:110
+#: c6sh/core/utils/printing.py:111
+msgid "for receipt {}"
+msgstr "für Bon {}"
+
+#: c6sh/core/utils/printing.py:115
 msgid "Receipt copy"
 msgstr "Bonkopie"
 
-#: c6sh/core/utils/printing.py:114
+#: c6sh/core/utils/printing.py:119
 msgid "Ticket"
 msgstr "Ticket"
 
-#: c6sh/core/utils/printing.py:121
+#: c6sh/core/utils/printing.py:126
 msgid "Net sum:  {}"
 msgstr "Nettosumme:  {}"
 
-#: c6sh/core/utils/printing.py:125
+#: c6sh/core/utils/printing.py:130
 #, python-brace-format
 msgid "Tax {tax_rate}% ({tax_identifier}):  {tax_amount}"
 msgstr "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount}"
 
-#: c6sh/core/utils/printing.py:132
+#: c6sh/core/utils/printing.py:137
 msgid "Total:  {}"
 msgstr "Summe:  {}"
 
-#: c6sh/core/utils/printing.py:140
+#: c6sh/core/utils/printing.py:145
 msgid "Receipt number: {}"
 msgstr "Bonnumber: {}"
 

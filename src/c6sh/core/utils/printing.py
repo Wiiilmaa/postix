@@ -53,7 +53,11 @@ class CashdeskPrinter:
             position for position in transaction.positions.all()
             if not (position.type == 'redeem' and position.value == Decimal('0.00'))
         ]
-        is_cancellation = any(position.type == 'reverse' for position in positions)
+        cancellations = positions.filter(type='reverse')
+        if cancellations.exists():
+            cancels = cancellations.first().reverses.transaction
+        else:
+            cancels = None
 
         if not positions:
             return
@@ -100,10 +104,11 @@ class CashdeskPrinter:
         if settings.receipt_address is not None:
             receipt += settings.receipt_address + '\r\n\r\n'
 
-        if is_cancellation:
+        if cancels:
             receipt += bytearray([self.ESC, 0x45, 1]).decode()  # emphasize
-            receipt += _('Cancellation') + '\r\n\r\n'
+            receipt += _('Cancellation') + '\r\n'
             receipt += bytearray([self.ESC, 0x45, 0]).decode()  # de-emphasize
+            receipt += _('for receipt {}').format(cancels.receipt_id) + '\r\n\r\n'
 
         if is_copy:
             receipt += bytearray([self.ESC, 0x45, 1]).decode()  # emphasize
