@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Union
 from django.db import transaction
 from django.db.models import Q, QuerySet
 from django.http import HttpRequest
+from django.utils.translation import ugettext as _
 from rest_framework import status
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.permissions import IsAdminUser
@@ -127,7 +128,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
                 elif postype == "sell":
                     pos = sell_ticket(**inppos)
                 else:  # noqa
-                    raise FlowError('Type {} is not yet implemented'.format(postype))
+                    raise FlowError(_('Type {} is not yet implemented').format(postype))
             except FlowError as e:
                 position_feedback.append({
                     'success': False,

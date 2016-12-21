@@ -2,15 +2,16 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django import forms
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
 
 
 class CreateUserForm(forms.Form):
-    username = forms.CharField(label='Username', max_length=254)
-    password = forms.CharField(widget=forms.PasswordInput(), label='Passwort')
-    firstname = forms.CharField(label='Vorname', max_length=254)
-    lastname = forms.CharField(label='Nachname', max_length=254)
-    is_backoffice_user = forms.BooleanField(label='Hinterzimmer-Rechte', required=False)
-    is_troubleshooter = forms.BooleanField(label='Troubleshooter-Rechte', required=False)
+    username = forms.CharField(label=_('User name'), max_length=254)
+    password = forms.CharField(widget=forms.PasswordInput(), label=_('Password'))
+    firstname = forms.CharField(label=_('First name'), max_length=254)
+    lastname = forms.CharField(label=_('Last name'), max_length=254)
+    is_backoffice_user = forms.BooleanField(label=_('Is backoffice angel'), required=False)
+    is_troubleshooter = forms.BooleanField(label=_('Is troubleshooter'), required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,8 +47,8 @@ def get_normal_user_form() -> CreateUserForm:
 
 
 class ResetPasswordForm(forms.Form):
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput())
-    password2 = forms.CharField(label='Password, again', widget=forms.PasswordInput())
+    password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput())
+    password2 = forms.CharField(label=_('Password, again'), widget=forms.PasswordInput())
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -56,12 +57,12 @@ class ResetPasswordForm(forms.Form):
         self.helper.form_method = 'post'
         self.helper.label_class = 'col-md-4'
         self.helper.field_class = 'col-md-8'
-        self.helper.add_input(Submit('submit', 'Reset password'))
+        self.helper.add_input(Submit('submit', _('Reset password')))
 
     def is_valid(self):
         valid = super().is_valid()
         if valid:
             if self.cleaned_data.get('password1') == self.cleaned_data.get('password2'):
                 return valid
-            self._errors['incorrect_password'] = 'Passwords do not match!'
+            self._errors['incorrect_password'] = _('Passwords do not match!')
         return valid

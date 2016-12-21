@@ -3,15 +3,16 @@ from typing import Any, Tuple
 from crispy_forms.helper import FormHelper
 from django import forms
 from django.http import HttpRequest
+from django.utils.translation import ugettext as _
 
 from c6sh.core.models import Cashdesk, Item, User
 
 
 class SessionBaseForm(forms.Form):
-    cashdesk = forms.ModelChoiceField(queryset=Cashdesk.objects.filter(is_active=True).order_by('name'), label='Kasse')
-    user = forms.CharField(max_length=254, label='Engel')
-    backoffice_user = forms.CharField(max_length=254, label='Hinterzimmer-Engel')
-    cash_before = forms.DecimalField(max_digits=10, decimal_places=2, label='Bargeld')
+    cashdesk = forms.ModelChoiceField(queryset=Cashdesk.objects.filter(is_active=True).order_by('name'), label=_('Cashdesk'))
+    user = forms.CharField(max_length=254, label=_('Angel'))
+    backoffice_user = forms.CharField(max_length=254, label=_('Backoffice angel'))
+    cash_before = forms.DecimalField(max_digits=10, decimal_places=2, label=_('Cash'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,21 +24,21 @@ class SessionBaseForm(forms.Form):
         try:
             return User.objects.get(username=value)
         except User.DoesNotExist:
-            raise forms.ValidationError('Engel existiert nicht.')
+            raise forms.ValidationError(_('Angel does not exist.'))
 
     def clean_backoffice_user(self) -> User:
         value = self.cleaned_data['backoffice_user']
         try:
             return User.objects.filter(is_backoffice_user=True).get(username=value)
         except User.DoesNotExist:
-            raise forms.ValidationError('Engel existiert nicht oder ist kein Hinterzimmer-Engel.')
+            raise forms.ValidationError(_('Angel does not exist or is no backoffice angel.'))
 
 
 class ItemMovementForm(forms.Form):
     """ This is basically only used in the formset below.
     Normally you would use a modelformset, but the Form helper class is
     required to correct some crispy_forms behaviour for now. """
-    item = forms.ModelChoiceField(queryset=Item.objects.all().order_by('-initial_stock'), label='Produkt')
+    item = forms.ModelChoiceField(queryset=Item.objects.all().order_by('-initial_stock'), label=_('Product'))
     amount = forms.IntegerField(label='Anzahl')
 
     def __init__(self, *args, **kwargs):
