@@ -3,6 +3,7 @@ from tempfile import TemporaryFile
 import qrcode
 from django.db import models
 from django.utils.crypto import get_random_string
+from django.utils.timezone import now
 
 from .cashdesk import Cashdesk
 
@@ -34,3 +35,8 @@ class Ping(models.Model):
         img = qr.make_image()
         img.save(f)
         return f
+
+    def pong(self):
+        if not self.ponged:
+            self.ponged = now()
+            self.save()
