@@ -27,10 +27,12 @@ class PingView(TroubleshooterUserRequiredMixin, FormView):
         ctx['pings'] = pings
         ctx['ping_success'] = ping_success_count
         ctx['loss_percent'] = loss_percent
-        ctx['total_min'] = min(durations)
-        ctx['total_max'] = max(durations)
-        ctx['total_avg'] = sum(durations) / len(durations)
-        ctx['total_mdev'] = sum(((duration - ctx['total_avg']) ** 2) for duration in durations) / len(durations)
+
+        if durations:
+            ctx['total_min'] = min(durations)
+            ctx['total_max'] = max(durations)
+            ctx['total_avg'] = sum(durations) / len(durations)
+            ctx['total_mdev'] = sum(((duration - ctx['total_avg']) ** 2) for duration in durations) / len(durations)
         return ctx
 
     def post(self, request):
