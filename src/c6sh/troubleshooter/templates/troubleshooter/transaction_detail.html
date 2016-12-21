@@ -12,12 +12,6 @@
 <p>{% trans "Receipt ID" %}: {{ transaction.receipt_id }}</p>
 {% endif %}
 
-{% if transaction.has_reversed_positions %}
-    <p>
-        <em class="text-danger">*** {% trans "CONTAINS CANCELED LINES" %} ***</em>
-    </p>
-{% endif %}
-
 <div class="row">
     <form class="form col-md-6" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
         {% csrf_token %}

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-21 16:18+0100\n"
-"PO-Revision-Date: 2016-12-21 16:19+0100\n"
+"POT-Creation-Date: 2016-12-21 18:58+0100\n"
+"PO-Revision-Date: 2016-12-21 18:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -151,41 +151,41 @@ msgstr "Diese Position wurde bereits storniert."
 msgid "This position is already a reversal."
 msgstr "Diese Position ist eine Stornierung."
 
-#: c6sh/core/utils/printing.py:78 c6sh/core/utils/printing.py:79
+#: c6sh/core/utils/printing.py:79 c6sh/core/utils/printing.py:80
 #: c6sh/desk/templates/desk/main.html:137
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: c6sh/core/utils/printing.py:109
+#: c6sh/core/utils/printing.py:110
 msgid "Cancellation"
 msgstr "Storno-Bon"
 
-#: c6sh/core/utils/printing.py:111
+#: c6sh/core/utils/printing.py:112
 msgid "for receipt {}"
 msgstr "für Bon {}"
 
-#: c6sh/core/utils/printing.py:115
+#: c6sh/core/utils/printing.py:116
 msgid "Receipt copy"
 msgstr "Bonkopie"
 
-#: c6sh/core/utils/printing.py:119
+#: c6sh/core/utils/printing.py:120
 msgid "Ticket"
 msgstr "Ticket"
 
-#: c6sh/core/utils/printing.py:126
+#: c6sh/core/utils/printing.py:127
 msgid "Net sum:  {}"
 msgstr "Nettosumme:  {}"
 
-#: c6sh/core/utils/printing.py:130
+#: c6sh/core/utils/printing.py:131
 #, python-brace-format
 msgid "Tax {tax_rate}% ({tax_identifier}):  {tax_amount}"
 msgstr "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount}"
 
-#: c6sh/core/utils/printing.py:137
+#: c6sh/core/utils/printing.py:138
 msgid "Total:  {}"
 msgstr "Summe:  {}"
 
-#: c6sh/core/utils/printing.py:145
+#: c6sh/core/utils/printing.py:146
 msgid "Receipt number: {}"
 msgstr "Bonnumber: {}"
 
@@ -408,6 +408,7 @@ msgid "Filter"
 msgstr "Filter"
 
 #: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:34
+#: c6sh/troubleshooter/templates/troubleshooter/preorder_detail.html:29
 msgid "redeemed"
 msgstr "eingelöst"
 
@@ -456,6 +457,10 @@ msgstr "Bezahlt"
 msgid "Unpaid"
 msgstr "Ausstehend"
 
+#: c6sh/troubleshooter/templates/troubleshooter/preorder_detail.html:31
+msgid "not redeemed"
+msgstr "nicht eingelöst"
+
 #: c6sh/troubleshooter/templates/troubleshooter/preorders.html:5
 msgid "Preorders"
 msgstr "Vorbestellungen"
@@ -502,27 +507,23 @@ msgstr "Transaktion"
 msgid "Receipt ID"
 msgstr "Bon-ID"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:17
-msgid "CONTAINS CANCELED LINES"
-msgstr "ENTHÄLT STORNIERTE ZEILEN"
-
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:28
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:22
 msgid "at"
 msgstr "an"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:33
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:27
 msgid "Print receipt"
 msgstr "Bon drucken"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:37
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:31
 msgid "Print invoice"
 msgstr "Rechnung erstellen"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:49
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:43
 msgid "canceled"
 msgstr "storniert"
 
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:54
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:48
 msgid "cancelation"
 msgstr "Storno"
 
@@ -595,6 +596,9 @@ msgstr "Der Bon wurde an {} nachgedruckt."
 #: c6sh/troubleshooter/views/transactions.py:103
 msgid "Unknwon transaction."
 msgstr "Transation nicht bekannt."
+
+#~ msgid "CONTAINS CANCELED LINES"
+#~ msgstr "ENTHÄLT STORNIERTE ZEILEN"
 
 #~ msgid "This list entry already has been used."
 #~ msgstr "Dieser Listeneintrag wurde bereits abgehakt."
