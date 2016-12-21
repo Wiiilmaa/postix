@@ -14,7 +14,17 @@ var commands = {
 
     '/ping': function(param) {
         if (param && param.length > 5) {
-
+            $.ajax({
+                url: '/api/cashdesk/pong/',
+                method: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({
+                    'pong': param
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
         } else {
             $.ajax({
                 url: '/api/cashdesk/print-ping/',
@@ -52,7 +62,6 @@ var commands = {
         if (command.slice(0, 1) !== "/") {
             command = "/" + command;
         }
-        console.log(typeof commands[command]);
         if (typeof commands[command] !== 'undefined') {
             commands[command]();
             return true;
