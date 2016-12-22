@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-21 22:04+0100\n"
-"PO-Revision-Date: 2016-12-21 22:04+0100\n"
+"POT-Creation-Date: 2016-12-22 16:13+0100\n"
+"PO-Revision-Date: 2016-12-22 16:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -385,8 +385,8 @@ msgid "Invoice to"
 msgstr "Rechnungsempfänger"
 
 #: c6sh/troubleshooter/invoicing.py:52
-msgid "Invoice"
-msgstr "Rechnung"
+msgid "Invoice for receipt {}"
+msgstr "Rechnung für Bon {}"
 
 #: c6sh/troubleshooter/invoicing.py:54
 msgid "Tax rate"
@@ -651,3 +651,6 @@ msgstr "Der Bon wurde an {} nachgedruckt."
 #: c6sh/troubleshooter/views/transactions.py:103
 msgid "Unknwon transaction."
 msgstr "Transation nicht bekannt."
+
+#~ msgid "Invoice"
+#~ msgstr "Rechnung"

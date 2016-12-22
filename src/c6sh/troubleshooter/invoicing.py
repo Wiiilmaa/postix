@@ -49,7 +49,7 @@ def generate_invoice(transaction: Transaction, address: str) -> str:
             ('ALIGN', (0, 0), (0, 0), 'RIGHT'),
         ]),
     )
-    invoice_title = Paragraph(_('Invoice') + ' {}-{:04d}'.format(settings.short_name, transaction.receipt_id), style['Heading1'])
+    invoice_title = Paragraph(_('Invoice for receipt {}').format(transaction.receipt_id), style['Heading1'])
 
     data = [[_('Product'), _('Tax rate'), _('Net'), _('Gross')], ]
     total_tax = 0
