@@ -7,6 +7,8 @@ from django.utils.timezone import now
 
 from .cashdesk import Cashdesk
 
+MAX_LENGTH = 20
+
 
 def generate_ping(cashdesk: Cashdesk) -> None:
     ping = Ping.objects.create()
@@ -14,13 +16,14 @@ def generate_ping(cashdesk: Cashdesk) -> None:
 
 
 def generate_ping_secret():
-    return '/ping ' + get_random_string(length=15)
+    prefix = '/ping '
+    return prefix + get_random_string(length=MAX_LENGTH - len(prefix))
 
 
 class Ping(models.Model):
     pinged = models.DateTimeField(auto_now_add=True)
     ponged = models.DateTimeField(null=True, blank=True)
-    secret = models.CharField(max_length=20, default=generate_ping_secret)
+    secret = models.CharField(max_length=MAX_LENGTH, default=generate_ping_secret)
 
     def get_qr_code(self):
         qr = qrcode.QRCode(
