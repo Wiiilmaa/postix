@@ -42,7 +42,7 @@ class Cashdesk(models.Model):
     @property
     def display(self) -> Union[OverheadDisplay, DummyDisplay]:
         if self.display_address:
-            return OverheadDisplay(self.ip_address)
+            return OverheadDisplay(self.display_address)
         return DummyDisplay()
 
     def get_active_sessions(self) -> List:
