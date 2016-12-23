@@ -5,21 +5,23 @@ var commands = {
         $("#info-view").show();
     },
 
-    '/help': function () {
+    '/help': function (args) {
         commands._info_view("<p><strong>" + gettext("Supported commands:") + "</strong></p>"
             + "<dl class='dl-horizontal'>"
             + "<dt>/scanner</dt><dd>" + gettext("Show reset codes for the barcode scanner") + "</dd>"
+            + "<dt>/ping</dt><dd>" + gettext("Initiate a ping") + "</dd>"
+            + "<dt>/ping abcde</dt><dd>" + gettext("Save a response to a ping") + "</dd>"
             + "</dl>");
     },
 
-    '/ping': function(param) {
-        if (param && param.length > 5) {
+    '/ping': function(args) {
+        if (args && args.length > 1) {
             $.ajax({
                 url: '/api/cashdesk/pong/',
                 method: 'POST',
                 dataType: 'json',
                 data: JSON.stringify({
-                    'pong': param
+                    'pong': args.join(' ')
                 }),
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,7 +40,7 @@ var commands = {
         }
     },
 
-    '/scanner': function () {
+    '/scanner': function (args) {
         commands._info_view("<p><strong>" + gettext("Scan the following, in order:") + "</strong></p>"
             + "<p>"
             + "<img src='/static/c6sh/desk/img/scanner/honeywell01.png'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -62,12 +64,11 @@ var commands = {
         if (command.slice(0, 1) !== "/") {
             command = "/" + command;
         }
+        var args = command.split(" ");
+        command = args[0];
         if (typeof commands[command] !== 'undefined') {
-            commands[command]();
+            commands[command](args);
             return true;
-
-        } else if (command.slice(0, 5) === '/ping') {
-            commands['/ping'](command);
         } else {
             return false;
         }

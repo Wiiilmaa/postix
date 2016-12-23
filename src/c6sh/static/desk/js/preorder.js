@@ -67,6 +67,7 @@ var preorder = {
                 // Special commands
                 if (secret.slice(0, 1) === "/") {
                     if (commands.process(secret)) {
+                        preorder.take_focus();
                         return;
                     }
                 }
