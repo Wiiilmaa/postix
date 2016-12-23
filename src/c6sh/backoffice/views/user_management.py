@@ -52,6 +52,11 @@ class ResetPasswordView(BackofficeUserRequiredMixin, FormView):
         form = self.get_form()
         pk = self.kwargs['pk']
         user = User.objects.get(pk=pk)
+        if user.is_superuser and not request.user.is_superuser:
+            messages.error(self.request, 'Du kannst das Passwort eines Admins nur ändern, wenn du selbst '
+                                         'Admin-Rechte hast.')
+            return self.form_valid(form)
+
         if form.is_valid():
             user.set_password(form.cleaned_data.get('password1'))
             user.save()
