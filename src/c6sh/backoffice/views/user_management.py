@@ -53,8 +53,6 @@ class ResetPasswordView(BackofficeUserRequiredMixin, FormView):
         pk = self.kwargs['pk']
         user = User.objects.get(pk=pk)
         if form.is_valid():
-            print(form)
-            print(form.cleaned_data.get('password1'))
             user.set_password(form.cleaned_data.get('password1'))
             user.save()
             messages.success(self.request, 'Passwort wurde geändert.')
