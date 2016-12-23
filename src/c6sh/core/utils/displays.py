@@ -15,6 +15,7 @@ class OverheadDisplay:
         payload = {
             'method': method,
             'id': 1
+            'params': [],
         }
         headers = {'Content-Type': 'application/json'}
         url = 'http://{}:8888/jsonrpc'.format(self.ip_address)
