@@ -14,7 +14,7 @@ class OverheadDisplay:
         # TODO: document API responses
         payload = {
             'method': method,
-            'id': 1
+            'id': 1,
             'params': [],
         }
         headers = {'Content-Type': 'application/json'}
