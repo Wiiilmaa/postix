@@ -12,6 +12,7 @@ from .constraints import (
     ListConstraintProduct, Quota, TimeConstraint, WarningConstraint,
     WarningConstraintProduct,
 )
+from .info import Info
 from .ping import Ping
 from .preorder import Preorder, PreorderPosition
 from .settings import EventSettings
@@ -19,7 +20,7 @@ from .settings import EventSettings
 __all__ = [
     'AbstractConstraint', 'Cashdesk', 'CashdeskSession', 'EventSettings',
     'generate_key', 'Item', 'ItemMovement', 'ListConstraint',
-    'ListConstraintEntry', 'ListConstraintProduct', 'Ping', 'Preorder',
+    'ListConstraintEntry', 'ListConstraintProduct', 'Info', 'Ping', 'Preorder',
     'PreorderPosition', 'Product', 'ProductItem', 'Quota', 'Transaction',
     'TransactionPosition', 'TransactionPositionItem', 'User', 'TimeConstraint',
     'TroubleshooterNotification', 'WarningConstraint',
