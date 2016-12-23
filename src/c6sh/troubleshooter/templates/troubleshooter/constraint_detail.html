@@ -3,6 +3,11 @@
 {% load staticfiles %}
 
 {% block content %}
+    <div class="alert alert-warning">
+        {% if restricted %}
+            {% trans "This list is protected. A maximum of 10 results will be shown for any given query." %}
+        {% endif %}
+    </div>
     <h1>{% trans "Liste" %} {{ constraint }}</h1>
     <strong>{% trans "Products" %}</strong>
     <ul>
@@ -37,7 +42,7 @@
             {% empty %}
                 {% trans "No entries found." %}
                 {% if restricted %}
-                    {% trans "This list is protected. Please submit a query to see entries (maximum of 10 per query)." %}
+                    {% trans "This list is protected. Please submit a query to see entries." %}
                 {% endif %}
             {% endfor %}
         </ul>

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-22 16:13+0100\n"
-"PO-Revision-Date: 2016-12-22 16:14+0100\n"
+"POT-Creation-Date: 2016-12-23 21:55+0100\n"
+"PO-Revision-Date: 2016-12-23 22:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -440,48 +440,53 @@ msgstr "Listen"
 msgid "Preorder"
 msgstr "VVK"
 
-#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:6
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:8
+msgid ""
+"This list is protected. A maximum of 10 results will be shown for any given "
+"query."
+msgstr ""
+"Diese Liste ist vertraulich. Es werden höchstens 10 Suchergebnisse pro Suche "
+"angezeigt."
+
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:11
 msgid "Liste"
 msgstr "Liste"
 
-#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:7
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:12
 #: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:16
 msgid "Products"
 msgstr "Tickets"
 
-#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:13
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:18
 #: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:22
 #, python-format
 msgid "(at extra charge of %(price)s €)"
 msgstr "(gegen einen Aufpreis von %(price)s €)"
 
-#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:21
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:26
 #: c6sh/troubleshooter/templates/troubleshooter/constraints_list.html:15
 msgid "Entries"
 msgstr "Einträge"
 
-#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:25
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:30
 #: c6sh/troubleshooter/templates/troubleshooter/preorders.html:15
 #: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:34
 msgid "Filter"
 msgstr "Filter"
 
-#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:34
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:39
 #: c6sh/troubleshooter/templates/troubleshooter/preorder_detail.html:29
 msgid "redeemed"
 msgstr "eingelöst"
 
-#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:38
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:43
 msgid "No entries found."
 msgstr "Keine Einträge gefunden."
 
-#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:40
-msgid ""
-"This list is protected. Please submit a query to see entries (maximum of 10 "
-"per query)."
+#: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:45
+msgid "This list is protected. Please submit a query to see entries."
 msgstr ""
-"Diese Liste ist vertraulich. Einträge werden nur nach Suchanfragen gezeigt "
-"(max. 10 Einträge pro Anfrage)."
+"Diese Liste ist vertraulich. Einträge werden nur nach Suchanfragen gezeigt."
 
 #: c6sh/troubleshooter/templates/troubleshooter/invoice.html:10
 msgid "Generate invoice"
