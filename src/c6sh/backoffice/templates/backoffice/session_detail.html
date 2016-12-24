@@ -16,6 +16,9 @@
         <a href="{% url "backoffice:resupply-session" pk=session.pk %}">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </a>
+        <a href="{% url "backoffice:move-session" pk=session.pk %}">
+            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+        </a>
         <a href="{% url "backoffice:end-session" pk=session.pk %}">
             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
         </a>

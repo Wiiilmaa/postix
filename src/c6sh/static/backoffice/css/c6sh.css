@@ -21,7 +21,7 @@ body.login, body.error {
 .error-page .glyphicon {
     font-size: 200px;
 }
-.glyphicon-log-out {
+.navbar .glyphicon-log-out {
     margin-right: 0.5em;
 }
 .glyphicon-plus-sign {
@@ -52,6 +52,9 @@ tbody th {
 }
 .glyphicon-off {
     color: #a22;
+}
+.glyphicon-log-out {
+    color: #777;
 }
 h1 a:hover {
     text-decoration: none;
