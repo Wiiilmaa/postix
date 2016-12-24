@@ -8,9 +8,9 @@ var get_difference = function(numberinput) {
     var end = parseFloat(row.find(".end-column").text()) || 0;
 
     if (row[0].id == 'cash') {
-	    var difference = (before + transaction) - end - after;
+        var difference = (before + transaction) - after;
     } else {
-	    var difference = (before - transaction) - end - after;
+        var difference = (before - transaction) - after;
     }
 
 	result_cell = row.find(".after-value");
