@@ -1,6 +1,5 @@
 from typing import Union
 
-
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,7 +14,9 @@ from django.views.generic.list import ListView
 
 from .. import checks
 from ...core.models import Cashdesk, CashdeskSession, ItemMovement, User
-from ..forms import ItemMovementFormSetHelper, SessionBaseForm, get_form_and_formset
+from ..forms import (
+    ItemMovementFormSetHelper, SessionBaseForm, get_form_and_formset,
+)
 from ..report import generate_report
 from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
@@ -157,7 +158,6 @@ def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpR
 @backoffice_user_required
 def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpResponseRedirect]:
     session = get_object_or_404(CashdeskSession, pk=pk)
-    items_in_session = session.get_item_set()
     item_data = session.get_current_items()
     cash_total = session.get_cash_transaction_total()
 
