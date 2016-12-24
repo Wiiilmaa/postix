@@ -1,0 +1,44 @@
+{% extends 'backoffice/base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "backoffice/css/sessionform.css" %}">
+{% endblock %}
+
+
+{% block headline %}
+        <a href="{% url "backoffice:resupply-session" pk=session.pk %}">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </a>
+        <a href="{% url "backoffice:end-session" pk=session.pk %}">
+            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+        </a>
+        Laufende Session an {{ session.cashdesk }}
+{% endblock %}
+
+{% block content %}
+<h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }} ({{ session.user.username }})</h4>
+<h4> Beginn: vor {{ session.start|timesince }} </h4>
+
+<div class="alert alert-warning">Bitte Sessions nicht unabgesprochen im laufenden Betrieb verschieben!</div>
+
+<div class="col-md-2"></div>
+<div class="col-md-8">
+	<form method="post" action="">
+		{% csrf_token %}
+
+        {% crispy form %}
+
+		<div class="form-actions">
+			<input type="submit" name="submit" value="Session verschieben" class="btn btn-primary btn-block" id="submit-save">
+		</div>
+	</form>
+</div>
+<div class="col-md-2"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static "backoffice/js/sessionform.js" %}"></script>
+{% endblock %}
