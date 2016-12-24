@@ -105,7 +105,10 @@ def generate_report(session: CashdeskSession) -> str:
              CURRENCY.format(cash_transactions),
              CURRENCY.format(session.cash_after),
              CURRENCY.format(session.cash_before + cash_transactions - session.cash_after)], ]
-    items = [[d['item'].name, d['movements'], d['transactions'], abs(d['final_movements']), d['total']] for d in session.get_current_items()]
+    items = [
+        [d['item'].name, d['movements'], d['transactions'], abs(d['final_movements']), d['total']]
+        for d in session.get_current_items()
+    ]
     last_row = len(items) + 1
     items = Table(
         data=data + cash + items,
