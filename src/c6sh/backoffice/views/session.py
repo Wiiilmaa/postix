@@ -150,7 +150,6 @@ def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpR
         'form': form,
         'backoffice_users': User.objects.filter(is_backoffice_user=True).values_list('username', flat=True),
     })
-    pass
 
 
 @backoffice_user_required
