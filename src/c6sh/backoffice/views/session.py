@@ -248,6 +248,7 @@ def move_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespon
             messages.success(request, _('Session wurde verlegt.'))
         else:
             messages.error(request, _('Session konnte nicht verlegt werden!'))
+            return redirect('backoffice:session-detail', pk=pk)
 
     elif request.method == 'GET':
         form = SessionBaseForm(
