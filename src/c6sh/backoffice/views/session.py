@@ -1,5 +1,6 @@
 from typing import Union
 
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,12 +9,13 @@ from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
+from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 
 from .. import checks
 from ...core.models import Cashdesk, CashdeskSession, ItemMovement, User
-from ..forms import ItemMovementFormSetHelper, get_form_and_formset
+from ..forms import ItemMovementFormSetHelper, SessionBaseForm, get_form_and_formset
 from ..report import generate_report
 from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
@@ -228,3 +230,41 @@ def session_report(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpRes
     response['Content-Type'] = 'application/pdf'
     response['Content-Disposition'] = 'inline; filename=sessionreport-{}.pdf'.format(session.pk)
     return response
+
+
+@backoffice_user_required
+def move_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpResponseRedirect]:
+    session = get_object_or_404(CashdeskSession, pk=pk)
+
+    if session.end:
+        messages.error(request, _('Session wurde bereits beendet, und kann nicht mehr verlegt werden.'))
+
+    if request.method == 'POST':
+        form = SessionBaseForm(request.POST, prefix='session')
+
+        if form.is_valid():
+            session.cashdesk = form.cleaned_data.get('cashdesk')
+            session.save(update_fields=['cashdesk'])
+            messages.success(request, _('Session wurde verlegt.'))
+        else:
+            messages.error(request, _('Session konnte nicht verlegt werden!'))
+
+    elif request.method == 'GET':
+        form = SessionBaseForm(
+            prefix='session',
+            initial={
+                'cashdesk': session.cashdesk,
+                'user': session.user,
+                'backoffice_user': session.backoffice_user_before,
+                'cash_before': session.cash_before,
+            },
+        )
+
+    form.fields['user'].widget.attrs['readonly'] = True
+    form.fields['backoffice_user'].widget = forms.HiddenInput()
+    form.fields['cash_before'].widget = forms.HiddenInput()
+
+    return render(request, 'backoffice/move_session.html', {
+        'session': session,
+        'form': form,
+    })

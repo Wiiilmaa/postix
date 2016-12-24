@@ -2,7 +2,7 @@ from .auth import LoginView, logout_view, switch_user
 from .main import MainView
 from .session import (
     ReportListView, SessionDetailView, SessionListView, end_session,
-    new_session, resupply_session, session_report,
+    move_session, new_session, resupply_session, session_report,
 )
 from .user_management import ResetPasswordView, UserListView, create_user_view
 from .utils import backoffice_user_required
@@ -15,6 +15,7 @@ __all__ = [
     'LoginView',
     'logout_view',
     'MainView',
+    'move_session',
     'new_session',
     'resupply_session',
     'ReportListView',
