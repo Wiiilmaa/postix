@@ -256,7 +256,7 @@ def move_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespon
     session = get_object_or_404(CashdeskSession, pk=pk)
 
     if session.end:
-        messages.error(request, _('Session wurde bereits beendet, und kann nicht mehr verlegt werden.'))
+        messages.error(request, _('Session has already ended and cannot be moved.'))
 
     if request.method == 'POST':
         form = SessionBaseForm(request.POST, prefix='session')
@@ -264,9 +264,9 @@ def move_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespon
         if form.is_valid():
             session.cashdesk = form.cleaned_data.get('cashdesk')
             session.save(update_fields=['cashdesk'])
-            messages.success(request, _('Session wurde verlegt.'))
+            messages.success(request, _('Session has been moved.'))
         else:
-            messages.error(request, _('Session konnte nicht verlegt werden!'))
+            messages.error(request, _('Session could not be moved!'))
             return redirect('backoffice:session-detail', pk=pk)
 
     elif request.method == 'GET':

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-23 21:55+0100\n"
-"PO-Revision-Date: 2016-12-23 22:43+0100\n"
+"POT-Creation-Date: 2016-12-25 20:58+0100\n"
+"PO-Revision-Date: 2016-12-25 20:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -139,6 +139,18 @@ msgstr "Passwort zurücksetzen"
 #: c6sh/backoffice/templates/backoffice/user_list.html:5
 msgid "User List"
 msgstr "Nutzerliste"
+
+#: c6sh/backoffice/views/session.py:259
+msgid "Session has already ended and cannot be moved."
+msgstr "Die Session wurde bereits beendet und kann nicht mehr verlegt werden."
+
+#: c6sh/backoffice/views/session.py:267
+msgid "Session has been moved."
+msgstr "Die Session wurde verlegt."
+
+#: c6sh/backoffice/views/session.py:269
+msgid "Session could not be moved!"
+msgstr "Die Session konnte nicht verlegt werden."
 
 #: c6sh/core/utils/flow.py:43
 msgid "No secret has been given."
@@ -439,6 +451,10 @@ msgstr "Listen"
 #: c6sh/troubleshooter/templates/troubleshooter/preorder_detail.html:6
 msgid "Preorder"
 msgstr "VVK"
+
+#: c6sh/troubleshooter/templates/troubleshooter/base.html:34
+msgid "Ping"
+msgstr "Ping"
 
 #: c6sh/troubleshooter/templates/troubleshooter/constraint_detail.html:8
 msgid ""
