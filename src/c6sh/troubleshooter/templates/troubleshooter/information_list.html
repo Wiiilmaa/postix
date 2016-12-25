@@ -1,0 +1,39 @@
+{% extends 'troubleshooter/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block headline %}{% trans "Printable Information" %}{% endblock %}
+{% block content %}
+
+<div>
+    {% if not information %}
+        {% trans "No snippets found." %}
+    {% else %}
+    <ul>
+        {% for info in information %}
+            <li>
+                <b>{{ info.name }}</b>: {{ info.content|truncatewords:10 }}</b>
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+{% if is_paginated %}
+	<div class="pagination">
+		{% if page_obj.has_previous %}
+        <a href="{% url "troubleshooter:information-list" %}?page={{ page_obj.previous_page_number }}">
+                <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+            </a>
+		{% endif %}
+		<span class="page-current">
+            {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.
+		</span>
+		{% if page_obj.has_next %}
+        <a href="{% url "troubleshooter:information-list" %}?page={{ page_obj.next_page_number }}">
+                <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+			</a>
+		{% endif %}
+	</div>
+{% endif %}
+{% endblock %}

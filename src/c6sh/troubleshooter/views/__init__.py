@@ -1,6 +1,7 @@
 from .auth import LoginView, logout_view
 from .constraints import ListConstraintDetailView, ListConstraintListView
 from .desk import check_requests, confirm_resupply
+from .information import InformationListView
 from .main import main_view
 from .ping import PingView
 from .preorders import PreorderDetailView, PreorderListView
@@ -15,6 +16,7 @@ __all__ = [
     'logout_view',
     'main_view',
     'check_requests',
+    'InformationListView',
     'ListConstraintDetailView',
     'ListConstraintListView',
     'TransactionDetailView',

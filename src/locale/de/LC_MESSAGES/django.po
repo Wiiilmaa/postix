@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-25 20:58+0100\n"
-"PO-Revision-Date: 2016-12-25 20:58+0100\n"
+"POT-Creation-Date: 2016-12-25 21:14+0100\n"
+"PO-Revision-Date: 2016-12-25 21:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -504,6 +504,28 @@ msgid "This list is protected. Please submit a query to see entries."
 msgstr ""
 "Diese Liste ist vertraulich. Einträge werden nur nach Suchanfragen gezeigt."
 
+#: c6sh/troubleshooter/templates/troubleshooter/information_list.html:5
+msgid "Printable Information"
+msgstr "Druckbare Infos"
+
+#: c6sh/troubleshooter/templates/troubleshooter/information_list.html:10
+#, fuzzy
+#| msgid "No entries found."
+msgid "No snippets found."
+msgstr "Keine Einträge gefunden."
+
+#: c6sh/troubleshooter/templates/troubleshooter/information_list.html:30
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:55
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:95
+msgid "Page"
+msgstr "Seite"
+
+#: c6sh/troubleshooter/templates/troubleshooter/information_list.html:30
+#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:55
+#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:95
+msgid "of"
+msgstr "von"
+
 #: c6sh/troubleshooter/templates/troubleshooter/invoice.html:10
 msgid "Generate invoice"
 msgstr "Rechnung erstellen"
@@ -566,16 +588,6 @@ msgstr "Ja"
 #: c6sh/troubleshooter/templates/troubleshooter/preorders.html:39
 msgid "No"
 msgstr "Nein"
-
-#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:55
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:95
-msgid "Page"
-msgstr "Seite"
-
-#: c6sh/troubleshooter/templates/troubleshooter/preorders.html:55
-#: c6sh/troubleshooter/templates/troubleshooter/transaction_list.html:95
-msgid "of"
-msgstr "von"
 
 #: c6sh/troubleshooter/templates/troubleshooter/transaction_detail.html:5
 msgid "Transaction"
