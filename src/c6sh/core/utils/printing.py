@@ -160,6 +160,12 @@ class CashdeskPrinter:
             except:
                 logging.getLogger('django').exception('Printing at {} failed'.format(self.printer))
 
+    def print_text(self, text: str) -> None:
+        center = bytearray([self.ESC, 0x61, 1]).decode()  # center text
+        left_align = bytearray([self.ESC, 0x61, 0]).decode()  # left-align text (0 would be left-align)
+        print_text = center + text.replace('\n', '\r\n') + left_align
+        self.send(print_text)
+
     def _get_pixel_value(self, outer_x, outer_y, inner_x, inner_y, total_x, total_y, image):
         pixel_value = 0
         for square_y in range(8):
@@ -223,3 +229,6 @@ class DummyPrinter:
 
     def print_image(self, fileish):
         self.logger.info('[DummyPrinter] Printed image')
+
+    def print_text(self, text: str) -> None:
+        self.send(text)
