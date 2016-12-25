@@ -14,6 +14,7 @@ urlpatterns = [
     url('^constraints/(?P<pk>[0-9]+)/$', views.ListConstraintDetailView.as_view(), name='constraint-detail'),
     url('^constraints/$', views.ListConstraintListView.as_view(), name='constraint-list'),
 
+    url('^information/(?P<pk>[0-9]+)/$', views.InformationDetailView.as_view(), name='information-detail'),
     url('^information/$', views.InformationListView.as_view(), name='information-list'),
 
     url('^transactions/(?P<pk>[0-9]+)/reprint/$', views.transaction_reprint, name='transaction-reprint'),

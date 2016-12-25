@@ -1,0 +1,18 @@
+{% extends 'troubleshooter/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block headline %}"{{ information.nam3 }}"{% endblock %}
+
+{% block content %}
+
+<div>
+    {% trans "Information snippet content:" %}
+</div>
+
+<div>
+    {{ information.content }}
+</div>
+
+{% endblock %}
+
