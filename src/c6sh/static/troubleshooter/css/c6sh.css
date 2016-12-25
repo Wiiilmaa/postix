@@ -92,3 +92,9 @@ h1 .glyphicon {
 .ping-form .btn-ping:hover {
     background-color: #0f0;
 }
+.info-content {
+    margin: 3em;
+    border: 1px solid grey;
+    padding: 3em;
+    width: 50%;
+}

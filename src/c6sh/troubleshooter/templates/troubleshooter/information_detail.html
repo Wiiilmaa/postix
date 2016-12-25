@@ -2,16 +2,23 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block headline %}"{{ information.nam3 }}"{% endblock %}
+{% block headline %} {% trans "Information" %} "{{ information.name }}"{% endblock %}
 
 {% block content %}
 
-<div>
-    {% trans "Information snippet content:" %}
+<div class="info-content">
+    {{ information.content }}
+
 </div>
 
-<div>
-    {{ information.content }}
+<div class="row">
+    <form class="form form-inline col-md-9" method="post">
+    <b>{% trans "Print" %}</b>
+        {% csrf_token %}
+        {{ form.cashdesk }}
+        {{ form.amount }}
+        <button class="btn btn-primary" type="submit">{% trans "Print" %}</button>
+    </form>
 </div>
 
 {% endblock %}

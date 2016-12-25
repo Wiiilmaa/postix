@@ -9,3 +9,8 @@ class InvoiceAddressForm(forms.Form):
 
 class CashdeskForm(forms.Form):
     cashdesk = forms.ModelChoiceField(queryset=Cashdesk.objects.all())
+
+
+class PrintForm(forms.Form):
+    cashdesk = forms.ModelChoiceField(queryset=Cashdesk.objects.all())
+    amount = forms.IntegerField(min_value=1, max_value=50)
