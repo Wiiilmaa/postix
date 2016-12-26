@@ -271,6 +271,9 @@ body.has-modal #main-container {
     height: 52px;
     transition: height 1s;
 }
+.post-sale #cart {
+    opacity: 0.5;
+}
 .post-sale .panel {
     border-color: #d6e9c6 !important;
 }
