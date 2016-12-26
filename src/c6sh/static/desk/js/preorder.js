@@ -53,25 +53,29 @@ var preorder = {
             $("#preorder-input").focus().typeahead('val', "");
         }, 100);
     },
+    
+    _submit: function () {
+        var secret = $.trim($("#preorder-input").val());
+        if (secret === "") {
+            return;
+        }
+        $("#preorder-input").typeahead("val", "").blur();
+
+        // Special commands
+        if (secret.slice(0, 1) === "/") {
+            if (commands.process(secret)) {
+                preorder.take_focus();
+                return;
+            }
+        }
+        preorder.redeem(secret);
+    },
 
     init: function () {
         // Initializations at page load time
         $("#preorder-input").keyup(function (e) {
             if (e.keyCode == 13) { // Enter
-                var secret = $.trim($("#preorder-input").val());
-                if (secret === "") {
-                    return;
-                }
-                $("#preorder-input").typeahead("val", "").blur();
-
-                // Special commands
-                if (secret.slice(0, 1) === "/") {
-                    if (commands.process(secret)) {
-                        preorder.take_focus();
-                        return;
-                    }
-                }
-                preorder.redeem(secret);
+                preorder._submit();
             }
         });
 
@@ -89,6 +93,9 @@ var preorder = {
             display: 'value',
             minLength: 6,
             source: preorder._typeahead_source
+        });
+        $('#preorder-input').bind('typeahead:selected', function(obj, datum, name) {
+            preorder._submit();
         });
     },
 
