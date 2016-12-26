@@ -7,6 +7,7 @@ from decimal import Decimal
 from string import ascii_uppercase
 from typing import Union
 
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from PIL import Image
 
@@ -139,8 +140,9 @@ class CashdeskPrinter:
         receipt += '\r\n' * 3
         receipt += bytearray([self.ESC, 0x61, 1]).decode()  # center text
         receipt += settings.receipt_footer + '\r\n'
+        tz = timezone.get_current_timezone()
         receipt += '{} {}\r\n'.format(
-            transaction.datetime.strftime("%d.%m.%Y %H:%M"),
+            transaction.datetime.astimezone(tz).strftime("%d.%m.%Y %H:%M"),
             transaction.session.cashdesk.name,
         )
         receipt += _('Receipt number: {}').format(transaction.receipt_id)
