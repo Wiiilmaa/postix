@@ -23,7 +23,7 @@ def generate_key() -> str:
 
 class Cashdesk(models.Model):
     name = models.CharField(max_length=254)
-    ip_address = models.GenericIPAddressField(unique=True, verbose_name='IP address')
+    ip_address = models.GenericIPAddressField(verbose_name='IP address')
     printer_queue_name = models.CharField(max_length=254, null=True, blank=True,
                                           verbose_name='Printer queue name')
     display_address = models.GenericIPAddressField(null=True, blank=True,
