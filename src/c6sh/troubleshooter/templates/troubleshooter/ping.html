@@ -42,12 +42,13 @@
 
 </div>
 
-<div class="ping-log col-md-9">
-    {% language "en" %}
-    --- queue.end ping statistics ---<br>
-    {{ pings.count }} packets transmitted, {{ ping_success }} received, {{ loss_percent }}% packet loss, time {{ pings.first.pinged|timesince:pings.last.pinged }}<br>
-    rtt min/avg/max/mdev = {{ total_min }}/{{ total_avg }}/{{ total_max }}/{{ total_mdev }} minutes
-    {% endlanguage %}
-
-</div>
+{% if pings %}
+    <div class="ping-log col-md-9">
+        {% language "en" %}
+        --- queue.end ping statistics ---<br>
+        {{ pings.count }} packets transmitted, {{ ping_success }} received, {{ loss_percent }}% packet loss, time {{ pings.first.pinged|timesince:pings.last.pinged }}<br>
+        rtt min/avg/max/mdev = {{ total_min }}/{{ total_avg }}/{{ total_max }}/{{ total_mdev }} minutes
+        {% endlanguage %}
+    </div>
+{% endif %}
 {% endblock %}
