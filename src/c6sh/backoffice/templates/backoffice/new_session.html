@@ -37,8 +37,8 @@
     </script>
 
     <script type="text/javascript">
-        var users = {{ users|safe }};
-        var backoffice_users = {{ backoffice_users|safe }};
+        var users = [ {% for user in users %} '{{ user }}', {% endfor %} ];
+        var backoffice_users = [ {% for user in backoffice_users %} '{{ user }}', {% endfor %} ];
     </script>
 
     <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>

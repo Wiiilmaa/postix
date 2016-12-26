@@ -100,7 +100,7 @@
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript">
-        var backoffice_users = {{ backoffice_users|safe }};
+        var backoffice_users = [ {% for user in backoffice_users %} '{{ user }}', {% endfor %} ];
         var already_ended = {% if session.end %}true{% else %}false{% endif %};
     </script>
     <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
