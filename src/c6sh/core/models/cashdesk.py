@@ -29,6 +29,7 @@ class Cashdesk(models.Model):
     display_address = models.GenericIPAddressField(null=True, blank=True,
                                                    verbose_name='Display IP address')
     is_active = models.BooleanField(default=True)
+    printer_handles_drawer = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return self.name
@@ -36,7 +37,7 @@ class Cashdesk(models.Model):
     @property
     def printer(self) -> Union[CashdeskPrinter, DummyPrinter]:
         if self.printer_queue_name:
-            return CashdeskPrinter(self.printer_queue_name)
+            return CashdeskPrinter(self.printer_queue_name, self)
         return DummyPrinter()
 
     @property

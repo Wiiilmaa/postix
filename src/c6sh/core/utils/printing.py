@@ -19,8 +19,9 @@ SEPARATOR = '\u2500' * 42 + '\r\n'
 class CashdeskPrinter:
     ESC = 0x1B
 
-    def __init__(self, printer: str) -> None:
+    def __init__(self, printer: str, cashdesk) -> None:
         self.printer = printer
+        self.cashdesk = cashdesk
 
     @staticmethod
     def _format_number(number: Decimal) -> str:
@@ -37,7 +38,8 @@ class CashdeskPrinter:
         time.sleep(0.1)
 
     def open_drawer(self) -> None:
-        self.send(bytearray([self.ESC, ord('p'), 48, 255, 255]))
+        if self.cashdesk.printer_handles_drawer:
+            self.send(bytearray([self.ESC, ord('p'), 48, 255, 255]))
 
     def cut_tape(self) -> None:
         self.send(bytearray([0x1D, 0x56, 66, 100]))
