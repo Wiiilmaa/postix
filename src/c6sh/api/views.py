@@ -202,6 +202,8 @@ class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
             search_param = self.request.query_params.get('search', None)
             if search_param is not None and len(search_param) >= 3:
                 queryset = queryset.filter(Q(name__icontains=search_param) | Q(identifier__icontains=search_param))
+            elif search_param is not None:
+                queryset = queryset.filter(identifier__iexact=search_param)
             else:
                 queryset = queryset.none()
         else:
