@@ -169,6 +169,7 @@ class CashdeskPrinter:
         left_align = bytearray([self.ESC, 0x61, 0]).decode()  # left-align text (0 would be left-align)
         print_text = center + text.replace('\n', '\r\n') + left_align
         self.send(print_text)
+        self.cut_tape()
 
     def _get_pixel_value(self, outer_x, outer_y, inner_x, inner_y, total_x, total_y, image):
         pixel_value = 0
