@@ -194,7 +194,7 @@ var dialog = {
     _typeahead_source: new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
-        limit: 4,
+        limit: Infinity,
         remote: {
             url: '/api/listconstraintentries/?listid=%LISTID&search=%QUERY',
             prepare: function (query, settings) {
@@ -209,6 +209,9 @@ var dialog = {
                 var results = object.results;
                 var suggs = [];
                 var reslen = results.length;
+                if (reslen >= 4) {
+                    reslen = 3;
+                }
                 for (var i = 0; i < reslen; i++) {
                     suggs.push(results[i]);
                 }
