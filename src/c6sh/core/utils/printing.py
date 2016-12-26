@@ -213,7 +213,8 @@ class CashdeskPrinter:
 
 
 class DummyPrinter:
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, printer=None, cashdesk=None, *args, **kwargs) -> None:
+        self.cashdesk = cashdesk
         self.logger = logging.getLogger('django')
 
     def send(self, data) -> None:
@@ -226,7 +227,7 @@ class DummyPrinter:
         self.logger.info('[DummyPrinter] Cut tape')
 
     def print_receipt(self, transaction: Transaction, do_open_drawer: bool=True) -> Union[str, None]:
-        receipt = CashdeskPrinter('')._build_receipt(transaction)
+        receipt = CashdeskPrinter('', self.cashdesk)._build_receipt(transaction)
         if receipt is not None:
             self.logger.info('[DummyPrinter] Printed receipt:\n{}'.format(receipt))
         return receipt
