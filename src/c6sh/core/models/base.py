@@ -158,8 +158,8 @@ class Product(models.Model):
         return self.is_visible
 
     def amount_sold(self) -> int:
-        positive = self.positions.filter(Q(type='redeem') | Q(type='sell')).count()
-        negative = self.positions.filter(type='reverse').count()
+        positive = self.positions.filter(type='sell').count()
+        negative = self.positions.filter(type='reverse').exclude(preorder_position__isnull=False).count()
         return positive - negative
 
     @property

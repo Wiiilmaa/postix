@@ -1,6 +1,7 @@
 import pytest
 from tests.factories import (
-    product_factory, quota_factory, transaction_position_factory,
+    preorder_position_factory, product_factory, quota_factory,
+    transaction_position_factory,
 )
 
 
@@ -28,6 +29,15 @@ def test_quota_used():
     quota.products.add(product)
     [transaction_position_factory(product=product) for _ in range(5)]
     assert not quota.is_available()
+
+
+@pytest.mark.django_db
+def test_quota_preorder():
+    quota = quota_factory(size=1)
+    product = product_factory()
+    quota.products.add(product)
+    preorder_position_factory(paid=True, redeemed=True)
+    assert quota.is_available()
 
 
 @pytest.mark.django_db
