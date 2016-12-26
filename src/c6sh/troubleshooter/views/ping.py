@@ -20,19 +20,18 @@ class PingView(TroubleshooterUserRequiredMixin, FormView):
         ping_count = pings.count()
         ping_success = pings.filter(ponged__isnull=False)
         ping_success_count = ping_success.count()
-        loss_percent = '{:.2f}'.format((ping_count - ping_success_count) * 100 / ping_count)
 
         durations = [get_minutes(p.ponged - p.pinged) for p in ping_success]
 
         ctx['pings'] = pings
         ctx['ping_success'] = ping_success_count
-        ctx['loss_percent'] = loss_percent
 
         if durations:
             ctx['total_min'] = min(durations)
             ctx['total_max'] = max(durations)
             ctx['total_avg'] = sum(durations) / len(durations)
             ctx['total_mdev'] = sum(((duration - ctx['total_avg']) ** 2) for duration in durations) / len(durations)
+            ctx['loss_percent'] = '{:.2f}'.format((ping_count - ping_success_count) * 100 / ping_count)
         return ctx
 
     def post(self, request):
