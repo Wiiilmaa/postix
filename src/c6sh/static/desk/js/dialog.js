@@ -172,8 +172,8 @@ var dialog = {
     _cancel: function () {
         if (dialog._pos_id !== null) {
             transaction.remove(dialog._pos_id);
-            dialog.reset();
         }
+        dialog.reset();
     },
 
     init: function () {
