@@ -12,7 +12,9 @@
     <ul>
         {% for info in information %}
             <li>
-                <b>{{ info.name }}</b>: {{ info.content|truncatewords:10 }}</b>
+                <a href="{% url "troubleshooter:information-detail" pk=info.pk %}">
+                    <b>{{ info.name }}</b>: {{ info.content|truncatewords:10 }}</b>
+                </a>
             </li>
         {% endfor %}
     </ul>
