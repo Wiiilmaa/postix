@@ -80,7 +80,7 @@ var productlist = {
 
     _touch_scroll_end: function (e) {
         if (productlist._touch_scrolling) {
-            if ($(e.target).is("button") && productlist._touch_scroll_abs_diff < 10) {
+            if ($(e.target).closest("button") && productlist._touch_scroll_abs_diff < 10) {
                 transaction.add_product(productlist._touch_product);
                 productlist._touch_product = null;
             }
