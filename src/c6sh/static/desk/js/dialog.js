@@ -169,10 +169,17 @@ var dialog = {
         }
     },
 
+    _cancel: function () {
+        if (dialog._pos_id !== null) {
+            transaction.remove(dialog._pos_id);
+            dialog.reset();
+        }
+    },
+
     init: function () {
         // Initializations at page load time
-        $('#btn-cancel').mousedown(dialog.reset);
-        $('#btn-dismiss').mousedown(dialog.reset);
+        $('#btn-cancel').mousedown(dialog._cancel);
+        $('#btn-dismiss').mousedown(dialog._cancel);
         $("#btn-continue").mousedown(dialog._continue);
         $("#btn-bypass").mousedown(dialog._bypass);
 
