@@ -16,22 +16,27 @@ class PingView(TroubleshooterUserRequiredMixin, FormView):
 
     def get_context_data(self):
         ctx = super().get_context_data()
-        pings = Ping.objects.order_by('pinged')
-        ping_count = pings.count()
-        ping_success = pings.filter(ponged__isnull=False)
-        ping_success_count = ping_success.count()
+        if Ping.objects.exists():
+            pings = Ping.objects.order_by('pinged')
+            ping_count = pings.count()
+            ping_success = pings.filter(ponged__isnull=False)
+            ping_success_count = ping_success.count()
 
-        durations = [get_minutes(p.ponged - p.pinged) for p in ping_success]
+            durations = [get_minutes(p.ponged - p.pinged) for p in ping_success]
 
-        ctx['pings'] = pings
-        ctx['ping_success'] = ping_success_count
-
-        if durations:
-            ctx['total_min'] = min(durations)
-            ctx['total_max'] = max(durations)
-            ctx['total_avg'] = sum(durations) / len(durations)
-            ctx['total_mdev'] = sum(((duration - ctx['total_avg']) ** 2) for duration in durations) / len(durations)
+            ctx['pings'] = pings
+            ctx['ping_success'] = ping_success_count
             ctx['loss_percent'] = '{:.2f}'.format((ping_count - ping_success_count) * 100 / ping_count)
+
+            if durations:
+                ctx['total_min'] = min(durations)
+                ctx['total_max'] = max(durations)
+                ctx['total_avg'] = sum(durations) / len(durations)
+                ctx['total_mdev'] = sum(((duration - ctx['total_avg']) ** 2) for duration in durations) / len(durations)
+        else:
+            ctx['pings'] = []
+            ctx['ping_success'] = 0
+
         return ctx
 
     def post(self, request):
