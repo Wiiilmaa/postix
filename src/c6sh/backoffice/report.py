@@ -23,8 +23,9 @@ def get_qr_image(session: CashdeskSession) -> TemporaryFile:
         box_size=10,
         border=4,
     )
+    tz = timezone.get_current_timezone()
     data = '{end}\tEinnahme\t{total}\tKassensession\t#{pk}\t{supervisor}\t{user}'.format(
-        end=session.end.strftime('%d.%m.%Y\t%H:%M:%S'),
+        end=session.end.astimezone(tz).strftime('%Y-%m-%d %H:%M:%S'),
         total='{0:,.2f}'.format(session.get_cash_transaction_total()).translate(str.maketrans(',.', '.,')),
         pk=session.pk,
         supervisor=session.backoffice_user_after.get_full_name(),
