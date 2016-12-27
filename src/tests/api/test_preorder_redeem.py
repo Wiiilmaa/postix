@@ -56,7 +56,7 @@ def test_unpaid(api_with_session):
 def test_already_redeemed(api_with_session):
     d = help_test_for_error(api_with_session, preorder_position_factory(paid=True, redeemed=True).secret)
     assert d['success'] == False
-    assert 'already been redeemd' in d['message']
+    assert 'already been redeemed' in d['message']
     assert d['type'] == 'error'
 
 
