@@ -94,6 +94,7 @@
     </tbody>
 </table>
 
+    {% comment %}
     {% if not session.end %}
         <h3>Komplette Session stornieren</h3>
         <div class="alert alert-warning">
@@ -104,6 +105,7 @@
             <div style="clear: both"></div>
         </div>
     {% endif %}
+    {% endcomment %}
 {% endlanguage %}
 {% endblock %}
 {% block scripts %}
