@@ -17,7 +17,7 @@ from c6sh.core.utils.checks import is_redeemed
 from c6sh.core.utils.flow import (
     FlowError, redeem_preorder_ticket, reverse_transaction,
     reverse_transaction_position, sell_ticket,
-)
+    reverse_session)
 
 
 @pytest.mark.django_db
@@ -527,3 +527,32 @@ def test_reverse_position_double():
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction_position(tpos.pk, current_session=session)
     assert excinfo.value.message == 'This position has already been reversed.'
+
+
+@pytest.mark.django_db
+def test_reverse_whole_session_double():
+    session = cashdesk_session_before_factory()
+    pp = preorder_position_factory(paid=True)
+    trans = transaction_factory(session)
+    transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    pos = redeem_preorder_ticket(secret=pp.secret)
+    pos.transaction = trans
+    pos.save()
+    assert is_redeemed(pp)
+    reverse_session(session)
+    with pytest.raises(FlowError):
+        reverse_session(session)
+
+
+@pytest.mark.django_db
+def test_reverse_whole_session():
+    session = cashdesk_session_before_factory()
+    pp = preorder_position_factory(paid=True)
+    trans = transaction_factory(session)
+    transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    pos = redeem_preorder_ticket(secret=pp.secret)
+    pos.transaction = trans
+    pos.save()
+    assert is_redeemed(pp)
+    reverse_session(session)
+    assert not is_redeemed(pp)

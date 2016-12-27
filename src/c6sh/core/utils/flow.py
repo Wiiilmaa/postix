@@ -260,3 +260,36 @@ def reverse_transaction_position(
         ip.save()
 
     return new_transaction.pk
+
+
+def reverse_session(session: CashdeskSession) -> int:
+    """
+    Creates a Transaction that reverses all earlier transactions of this
+    session.
+
+    :param session: The session to reverse
+    :returns: The new Transaction object
+    """
+    if not session.is_active():
+        raise FlowError(_('The session needs to be still active.'))
+
+    if TransactionPosition.objects.filter(transaction__session=session, type='reverse').exists():
+        raise FlowError(_('For safety, you cannot execute this on sessions that contain reversals.'))
+
+    new_transaction = Transaction(session=session)
+    new_transaction.save()
+    for old_pos in TransactionPosition.objects.filter(transaction__session=session):
+        new_pos = copy.copy(old_pos)
+        new_pos.transaction = new_transaction
+        new_pos.pk = None
+        new_pos.type = 'reverse'
+        new_pos.value *= -1
+        new_pos.tax_value *= -1
+        new_pos.reverses = old_pos
+        new_pos.authorized_by = None
+        new_pos.save()
+        for ip in TransactionPositionItem.objects.filter(position=new_pos):
+            ip.amount *= -1
+            ip.save()
+
+    return new_transaction.pk
