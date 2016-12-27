@@ -1,6 +1,5 @@
 from typing import Union
 
-from c6sh.core.utils.flow import FlowError, reverse_session
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,6 +11,8 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
+
+from c6sh.core.utils.flow import FlowError, reverse_session
 
 from .. import checks
 from ...core.models import Cashdesk, CashdeskSession, ItemMovement, User
