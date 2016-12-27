@@ -26,6 +26,9 @@ var commands = {
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                success: function (data, status, xhr) {
+                    dialog.flash_success(gettext('Pong. Thanks!'));
+                }
             });
         } else {
             $.ajax({
@@ -36,6 +39,9 @@ var commands = {
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                success: function (data, status, xhr) {
+                    dialog.flash_success(gettext('Ping printed!'));
+                }
             });
         }
     },
