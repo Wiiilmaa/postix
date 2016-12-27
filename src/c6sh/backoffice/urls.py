@@ -16,6 +16,7 @@ urlpatterns = [
     url('^session/(?P<pk>[0-9]+)/report/$', views.session_report, name='session-report'),
     url('^session/(?P<pk>[0-9]+)/resupply/$', views.resupply_session, name='resupply-session'),
     url('^session/(?P<pk>[0-9]+)/move/$', views.move_session, name='move-session'),
+    url('^session/(?P<pk>[0-9]+)/reverse/$', views.reverse_session_view, name='reverse-session'),
     url('^session/(?P<pk>[0-9]+)/$', views.SessionDetailView.as_view(), name='session-detail'),
     url('^session/$', views.SessionListView.as_view(), name='session-list'),
     url('^reports/$', views.ReportListView.as_view(), name='report-list'),

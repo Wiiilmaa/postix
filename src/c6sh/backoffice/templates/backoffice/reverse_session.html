@@ -1,0 +1,38 @@
+{% extends "backoffice/base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load staticfiles %}
+
+
+{% block stylesheets %}
+    {% if not session.end %}
+        <style>
+            .end-column {display: None}
+        </style>
+    {% endif %}
+	<link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "backoffice/css/sessionform.css" %}">
+{% endblock %}
+
+{% block headline %}
+    Stornieren aller Buchungen in Session #{{session.pk}}
+{% endblock %}
+
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+
+    <h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}</h4>
+    {% language "de" %}
+    <h4> <b>Beginn:</b> {{ session.start }} </h4>
+    {% endlanguage %}
+
+    <div class="alert alert-warning">
+        Möchtest du wirklich alle Buchungen in dieser Session stornieren?
+        <button type="submit" class="btn btn-danger pull-right">Stornieren</button>
+        <div style="clear: both"></div>
+    </div>
+</form>
+
+{% endblock %}

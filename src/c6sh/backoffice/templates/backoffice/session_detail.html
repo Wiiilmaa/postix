@@ -93,6 +93,17 @@
         {% endfor %}
     </tbody>
 </table>
+
+    {% if not session.end %}
+        <h3>Komplette Session stornieren</h3>
+        <div class="alert alert-warning">
+            <a href="{% url "backoffice:reverse-session" pk=session.pk %}" class="btn btn-danger pull-right">Stornieren</a>
+            Mit diesem Button ist es möglich, <strong>alle Transaktionen</strong> innerhalb dieser
+            Session zu stornieren. Dies funktioniert nur, solange in der Session noch keine anderen
+            Stornierungen getätigt wurden.
+            <div style="clear: both"></div>
+        </div>
+    {% endif %}
 {% endlanguage %}
 {% endblock %}
 {% block scripts %}

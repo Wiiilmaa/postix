@@ -1,5 +1,6 @@
 from typing import Union
 
+from c6sh.core.utils.flow import FlowError, reverse_session
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -153,6 +154,25 @@ def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpR
         'form': form,
         'backoffice_users': User.objects.filter(is_backoffice_user=True).values_list('username', flat=True),
     })
+
+
+@backoffice_user_required
+def reverse_session_view(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpResponseRedirect]:
+    session = get_object_or_404(CashdeskSession, pk=pk)
+
+    if request.method == 'POST':
+        try:
+            reverse_session(session)
+        except FlowError as e:
+            messages.error(request, str(e))
+        else:
+            messages.success(request, 'Alle Buchungen in der Session wurden storniert.')
+        return redirect('backoffice:session-detail', pk=pk)
+
+    elif request.method == 'GET':
+        return render(request, 'backoffice/reverse_session.html', {
+            'session': session,
+        })
 
 
 @backoffice_user_required
