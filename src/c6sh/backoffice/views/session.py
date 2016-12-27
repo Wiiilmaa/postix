@@ -167,9 +167,9 @@ def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespons
             if session.end:
                 # This is not optimal, but our data model does not have a way of tracking
                 # cash movement over time.
-                # TODO: Maybe we should at least adjust the backoffice user responsible.
                 session.cash_after = form.cleaned_data.get('cash_before')
-                session.save(update_fields=['cash_after'])
+                session.backoffice_user_after = form.cleaned_data.get('backoffice_user')
+                session.save(update_fields=['cash_after', 'backoffice_user_after'])
             else:
                 session.end = now()
                 session.backoffice_user_after = request.user
