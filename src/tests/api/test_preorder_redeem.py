@@ -54,13 +54,10 @@ def test_unpaid(api_with_session):
 
 @pytest.mark.django_db
 def test_already_redeemed(api_with_session):
-    assert help_test_for_error(api_with_session, preorder_position_factory(paid=True, redeemed=True).secret) == {
-        'success': False,
-        'message': 'This ticket has already been redeemed.',
-        'type': 'error',
-        'missing_field': None,
-        'bypass_price': None,
-    }
+    d = help_test_for_error(api_with_session, preorder_position_factory(paid=True, redeemed=True).secret)
+    assert d['success'] == False
+    assert 'already been redeemd' in d['message']
+    assert d['type'] == 'error'
 
 
 @pytest.mark.django_db

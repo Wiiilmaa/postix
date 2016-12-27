@@ -15,9 +15,9 @@ from c6sh.core.models import (
 )
 from c6sh.core.utils.checks import is_redeemed
 from c6sh.core.utils.flow import (
-    FlowError, redeem_preorder_ticket, reverse_transaction,
+    FlowError, redeem_preorder_ticket, reverse_session, reverse_transaction,
     reverse_transaction_position, sell_ticket,
-    reverse_session)
+)
 
 
 @pytest.mark.django_db
@@ -38,7 +38,7 @@ def test_unpaid():
 def test_already_redeemed():
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=preorder_position_factory(paid=True, redeemed=True).secret)
-    assert excinfo.value.message == 'This ticket has already been redeemed.'
+    assert 'already been redeemed' in excinfo.value.message
 
 
 @pytest.mark.django_db

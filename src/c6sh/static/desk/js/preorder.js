@@ -24,7 +24,7 @@ var preorder = {
                 }
                 var res = data.results[0];
                 if (res.is_redeemed) {
-                    dialog.show_error(gettext('This ticket has already been redeemed.'));
+                    dialog.show_error(res.redemption_message);
                     return;
                 } else if (!res.is_paid) {
                     dialog.show_error(gettext('Ticket has not been paid.'));

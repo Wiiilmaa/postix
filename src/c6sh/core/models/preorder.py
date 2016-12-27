@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 
 class Preorder(models.Model):
@@ -35,3 +37,16 @@ class PreorderPosition(models.Model):
     @property
     def pack_list(self) -> str:
         return self.product.pack_list
+
+    @property
+    def redemption_message(self) -> str:
+        from . import TransactionPosition
+
+        if self.is_redeemed:
+            last_r = TransactionPosition.objects.filter(preorder_position=self, type='redeem').last()
+            tz = timezone.get_current_timezone()
+
+            return _('This ticket ({secret}…) has already been redeemed at {datetime}.').format(
+                datetime=last_r.transaction.datetime.astimezone(tz).strftime('%Y-%m-%d %H:%M:%S'),
+                secret=self.secret[:6]
+            )

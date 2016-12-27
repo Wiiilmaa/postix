@@ -1,6 +1,7 @@
 import copy
 from decimal import Decimal
 
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from ..models import (
@@ -51,7 +52,13 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
         raise FlowError(_('This ticket has not been paid for.'))
 
     if is_redeemed(pp):
-        raise FlowError(_('This ticket has already been redeemed.'))
+        last_r = TransactionPosition.objects.filter(preorder_position=pp, type='redeem').last()
+        tz = timezone.get_current_timezone()
+
+        raise FlowError(_('This ticket ({secret}…) has already been redeemed at {datetime}.').format(
+            datetime=last_r.transaction.datetime.astimezone(tz).strftime('%Y-%m-%d %H:%M:%S'),
+            secret=pp.secret[:6]
+        ))
 
     if pp.preorder.warning_text and 'warning_acknowledged' not in kwargs:
         raise FlowError(pp.preorder.warning_text, type='confirmation',
