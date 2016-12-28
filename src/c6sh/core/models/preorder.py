@@ -16,6 +16,8 @@ class PreorderPosition(models.Model):
     preorder = models.ForeignKey(Preorder, related_name='positions')
     secret = models.CharField(max_length=254, db_index=True, unique=True)
     product = models.ForeignKey('Product', related_name='preorder_positions')
+    # The following field is only used for locking purposes, do not use it otherwise.
+    # Please see comment in redeem_preorder_ticket for more information
     last_transaction = models.IntegerField(null=True, blank=True)
 
     def __str__(self) -> str:

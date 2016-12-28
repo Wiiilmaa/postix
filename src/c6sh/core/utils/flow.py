@@ -45,6 +45,16 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
         raise FlowError(_('No secret has been given.'))
 
     try:
+        # To prevent double redemptions of a preorder, we need to play around with
+        # database locking here. SELECT FOR UPDATE alone does not help here, as we
+        # do not actually update the PreorderPosition object. Therefore, we use the
+        # transaction ID as a flag that we actually update.
+        # In the scenario that a different transaction runs concurrently with this and
+        # tries to redeem this ticket, both will get the same last_trans_id but the
+        # second transactions blocks at the select_for_update call until the first one
+        # is finished. Once the lock is released, it continues -- but with the updated
+        # PreorderPosition that now has a different last_transaction. In this case,
+        # we fail loudly.
         trans_id = kwargs.get('transaction_id', None)
         pp = PreorderPosition.objects.get(secret=kwargs.get('secret'))
         last_trans_id = pp.last_transaction
