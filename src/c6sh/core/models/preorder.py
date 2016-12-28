@@ -16,6 +16,7 @@ class PreorderPosition(models.Model):
     preorder = models.ForeignKey(Preorder, related_name='positions')
     secret = models.CharField(max_length=254, db_index=True, unique=True)
     product = models.ForeignKey('Product', related_name='preorder_positions')
+    last_transaction = models.IntegerField(null=True, blank=True)
 
     def __str__(self) -> str:
         return "{}-{}".format(self.preorder.order_code, self.secret[:10])

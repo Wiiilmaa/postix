@@ -2,6 +2,7 @@ import copy
 from decimal import Decimal
 
 from django.utils import timezone
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from ..models import (
@@ -44,7 +45,16 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
         raise FlowError(_('No secret has been given.'))
 
     try:
+        trans_id = kwargs.get('transaction_id', None)
+        pp = PreorderPosition.objects.get(secret=kwargs.get('secret'))
+        last_trans_id = pp.last_transaction
+
         pp = PreorderPosition.objects.select_for_update().get(secret=kwargs.get('secret'))
+        if pp.last_transaction != last_trans_id:
+            raise FlowError(_('Race condition. Please try again.'))
+
+        pp.last_transaction = trans_id
+        pp.save()
     except PreorderPosition.DoesNotExist:
         raise FlowError(_('No ticket could be found with the given secret.'))
 
