@@ -271,21 +271,17 @@ body.has-modal #main-container {
     height: 52px;
     transition: height 1s;
 }
-.post-sale #cart {
-    opacity: 0.5;
-}
 .post-sale .panel {
-    border-color: #d6e9c6 !important;
+    border-color: #3e8f3e !important;
+}
+.post-sale .panel-body {
+    background: #3e8f3e !important;
+    color: #ffffff;
 }
 .post-sale .panel>.panel-heading {
-    background-image: -webkit-linear-gradient(top,#dff0d8 0,#d0e9c6 100%);
-    background-image: -o-linear-gradient(top,#dff0d8 0,#d0e9c6 100%);
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#dff0d8),to(#d0e9c6));
-    background-image: linear-gradient(to bottom,#dff0d8 0,#d0e9c6 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdff0d8', endColorstr='#ffd0e9c6', GradientType=0);
-    color: #3c763d;
-    background-color: #dff0d8 !important;
-    border-color: #d6e9c6 !important;
+    color: #ffffff;
+    background: #3e8f3e !important;
+    border-color: #3e8f3e !important;
 }
 
 .post-sale .btn-delete {
@@ -306,6 +302,9 @@ body.has-modal #main-container {
 }
 #post-sale-buttons button:last-child {
     margin-right: 0;
+}
+#btn-reverse {
+    color: #b92c28;
 }
 #post-sale-reversed {
     display: none;
