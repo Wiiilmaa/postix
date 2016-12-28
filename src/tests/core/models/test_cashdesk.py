@@ -97,7 +97,7 @@ def test_product_sales():
     for i in range(3):
         transaction_position_factory(transaction_factory(session), prod_full)
     trans = transaction_position_factory(transaction_factory(session), prod_full)
-    reverse_transaction(trans_id=trans.pk, current_session=session)
+    reverse_transaction(trans_id=trans.transaction_id, current_session=session)
 
     TransactionPosition.objects.create(
         type='redeem', value=10, tax_rate=19, product=prod_full, transaction=transaction_factory(session),

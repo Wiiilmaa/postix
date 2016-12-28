@@ -204,4 +204,4 @@ class TransactionPositionItem(models.Model):
                                  related_name='transaction_position_items')
     item = models.ForeignKey('Item', on_delete=models.PROTECT,
                              related_name='transaction_position_items')
-    amount = models.PositiveIntegerField()
+    amount = models.IntegerField()
