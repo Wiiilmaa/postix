@@ -94,7 +94,12 @@ class CashdeskSession(models.Model):
 
     def get_item_set(self) -> List[Item]:
         return [Item.objects.get(pk=pk)
-                for pk in self.item_movements.order_by().values_list('item', flat=True).distinct()]
+                for pk in TransactionPositionItem.objects
+                    .filter(position__transaction__session=self)
+                    .order_by()
+                    .values_list('item', flat=True)
+                    .distinct()
+                ]
 
     def get_current_items(self) -> List[Dict]:
         transactions = TransactionPositionItem.objects\
