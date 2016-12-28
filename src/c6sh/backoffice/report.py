@@ -138,9 +138,9 @@ def generate_report(session: CashdeskSession) -> str:
     )
 
     story = [
-        header, Spacer(1, 15 * mm),
+        header, Spacer(1, 10 * mm),
         sales_heading, sales, Spacer(1, 10 * mm),
-        items_heading, items, Spacer(1, 30 * mm),
+        items_heading, items, Spacer(1, 10 * mm),
         signatures,
     ]
     doc.build(story)
