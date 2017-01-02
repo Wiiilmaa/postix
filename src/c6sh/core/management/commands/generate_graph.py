@@ -1,19 +1,19 @@
-import uuid
-import os, sys
-import tempfile
-import subprocess
-import numpy as np
 import math
+import os
+import subprocess
+import sys
+import tempfile
+import uuid
+from datetime import datetime, time, timedelta
 
-from django.conf import settings
-from datetime import datetime, timedelta, time
+import numpy as np
 import pylab as plt
-
-from django.utils.timezone import now, get_current_timezone
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db.models import Count
+from django.utils.timezone import get_current_timezone, now
 
-from c6sh.core.models import TransactionPosition, CashdeskSession
+from c6sh.core.models import CashdeskSession, TransactionPosition
 
 
 def dtf(d):

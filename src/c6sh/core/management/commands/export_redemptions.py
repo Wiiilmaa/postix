@@ -1,7 +1,8 @@
 import json
 
-from c6sh.core.models import TransactionPosition
 from django.core.management.base import BaseCommand
+
+from c6sh.core.models import TransactionPosition
 
 
 class Command(BaseCommand):
