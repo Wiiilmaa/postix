@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.utils.translation import ugettext as _
 from django.views.generic import FormView, ListView
 
 from ...core.models import User
@@ -22,10 +23,10 @@ def create_user_view(request: HttpRequest) -> Union[HttpResponseRedirect, HttpRe
         form = CreateUserForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(**form.cleaned_data)
-            messages.success(request, '{} {} wurde angelegt.'.format(
-                'Hinterzimmer-User' if user.is_backoffice_user else 'User',
-                user.username,
-            ))
+            if user.is_backoffice_user:
+                messages.success(request, _('Backoffice user {user} has been created.').format(user.username))
+            else:
+                messages.success(request, _('User {user} has been created.').format(user.username))
             return redirect('backoffice:create-user')
     else:
         form = get_normal_user_form()
@@ -53,14 +54,13 @@ class ResetPasswordView(BackofficeUserRequiredMixin, FormView):
         pk = self.kwargs['pk']
         user = User.objects.get(pk=pk)
         if user.is_superuser and not request.user.is_superuser:
-            messages.error(self.request, 'Du kannst das Passwort eines Admins nur ändern, wenn du selbst '
-                                         'Admin-Rechte hast.')
+            messages.error(self.request, _('You can only change administrator passwords if you are an admin yourself.'))
             return self.form_valid(form)
 
         if form.is_valid():
             user.set_password(form.cleaned_data.get('password1'))
             user.save()
-            messages.success(self.request, 'Passwort wurde geändert.')
+            messages.success(self.request, _('Passwort has been changed.'))
             return self.form_valid(form)
 
     def get_success_url(self):

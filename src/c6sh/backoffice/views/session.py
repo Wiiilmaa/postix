@@ -48,11 +48,11 @@ def new_session(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirec
                         amount=amount,
                         backoffice_user=form.cleaned_data['backoffice_user'],
                     )
-            messages.success(request, 'Session wurde angelegt.'.format(session.pk, session.cashdesk))
+            messages.success(request, _('Session has been created.'))
             return redirect('backoffice:main')
 
         else:
-            messages.error(request, 'Session konnte nicht angelegt werden: Bitte Daten korrigieren.')
+            messages.error(request, _('Session could not be created. Please review the data.'))
 
     elif request.method == 'GET':
         param = request.GET.get('desk')
@@ -76,7 +76,7 @@ def new_session(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirec
 
 
 class SessionListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView):
-    """ implements only a list of active sessions for now. Ended sessions will
+    """ Implements only a list of active sessions for now. Ended sessions will
     be visible in the reports view """
     model = CashdeskSession
     template_name = 'backoffice/session_list.html'
@@ -92,7 +92,7 @@ class SessionListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView)
 
 
 class ReportListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView):
-    """ list of old sessions """
+    """ List of old sessions """
     model = CashdeskSession
     template_name = 'backoffice/report_list.html'
     context_object_name = 'sessions'
@@ -139,11 +139,11 @@ def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpR
                         amount=amount,
                         backoffice_user=form.cleaned_data['backoffice_user'],
                     )
-            messages.success(request, 'Produkte wurden der Kasse hinzugefügt.')
+            messages.success(request, _('Products have been added to the cashdesk.'))
             return redirect('backoffice:session-detail', pk=pk)
 
         elif formset.errors:
-            messages.error(request, 'Fehler: Bitte Daten prüfen und korrigieren.')
+            messages.error(request, _('Error: Please review the data.'))
 
     form.fields['user'].widget.attrs['readonly'] = True
     form.fields['cashdesk'].widget.attrs['readonly'] = True
@@ -167,7 +167,7 @@ def reverse_session_view(request: HttpRequest, pk: int) -> Union[HttpRequest, Ht
         except FlowError as e:
             messages.error(request, str(e))
         else:
-            messages.success(request, 'Alle Buchungen in der Session wurden storniert.')
+            messages.success(request, _('All transactions in the session have been cancelled.'))
         return redirect('backoffice:session-detail', pk=pk)
 
     elif request.method == 'GET':
@@ -232,12 +232,11 @@ def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespons
             generate_report(session)
             return redirect('backoffice:session-report', pk=pk)
         else:
-            messages.error(request, 'Session konnte nicht beendet werden: Bitte Daten korrigieren.')
+            messages.error(request, _('Session could not be ended: Please review the data.'))
 
     elif request.method == 'GET':
         if session.end:
-            msg = 'Diese Session wurde bereits ausgezählt und abgeschlossen. '\
-                  'Wenn du dieses Formular ausfüllst, wird der bestehende Report korrigiert.'
+            msg = _('This session has ended already. Filling out this form will produce a corrected report. ')
             messages.warning(request, msg)
 
         form, formset = get_form_and_formset(

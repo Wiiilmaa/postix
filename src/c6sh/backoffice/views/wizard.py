@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
+from django.utils.translation import ugettext as _
 from django.views.generic import FormView, TemplateView
 
 from c6sh.backoffice.forms import EventSettingsForm
@@ -53,7 +54,7 @@ class WizardUsersView(SuperuserRequiredMixin, TemplateView):
         user.save()
 
         if target[-1] == 'y':
-            messages.success(request, 'Userrechte wurden erweitert.')
+            messages.success(request, _('User rights have been expanded'))
         else:
-            messages.success(request, 'Userrechte wurden beschnitten.')
+            messages.success(request, _('User rights have been curtailed.'))
         return redirect('backoffice:wizard-users')

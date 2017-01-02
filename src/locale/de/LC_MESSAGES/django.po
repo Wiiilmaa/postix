@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-02 11:37+0100\n"
-"PO-Revision-Date: 2017-01-02 11:40+0100\n"
+"POT-Creation-Date: 2017-01-02 19:40+0100\n"
+"PO-Revision-Date: 2017-01-02 19:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -152,17 +152,78 @@ msgstr "Dein Account wurde deaktiviert."
 msgid "User does not have permission to access backoffice data."
 msgstr "Du darfst leider nicht auf Hinterzimmer-Daten zugreifen."
 
-#: backoffice/views/session.py:280
+#: backoffice/views/session.py:51
+msgid "Session has been created."
+msgstr "Die Session wurde angelegt."
+
+#: backoffice/views/session.py:55
+msgid "Session could not be created. Please review the data."
+msgstr "Die Session konnte nicht angelegt werden. Bitte prüfe die Daten."
+
+#: backoffice/views/session.py:142
+msgid "Products have been added to the cashdesk."
+msgstr "Die Produkte wurden der Kasse hinzugefügt."
+
+#: backoffice/views/session.py:146
+msgid "Error: Please review the data."
+msgstr "Fehler: Bitte prüfe die Eingabedaten."
+
+#: backoffice/views/session.py:170
+msgid "All transactions in the session have been cancelled."
+msgstr "Alle Buchungen in der Session wurden storniert."
+
+#: backoffice/views/session.py:235
+msgid "Session could not be ended: Please review the data."
+msgstr "Die Session konnte nicht beendet werden: Bitte prüfe die Eingabedaten."
+
+#: backoffice/views/session.py:239
+msgid ""
+"This session has ended already. Filling out this form will produce a "
+"corrected report. "
+msgstr ""
+"Die Session wurde bereits beendet. Wenn du dieses Formular ausfüllst, wird "
+"der bestehende Report korrigiert."
+
+#: backoffice/views/session.py:279
 msgid "Session has already ended and cannot be moved."
 msgstr "Die Session wurde bereits beendet und kann nicht mehr verlegt werden."
 
-#: backoffice/views/session.py:288
+#: backoffice/views/session.py:287
 msgid "Session has been moved."
 msgstr "Die Session wurde verlegt."
 
-#: backoffice/views/session.py:290
+#: backoffice/views/session.py:289
 msgid "Session could not be moved!"
 msgstr "Die Session konnte nicht verlegt werden."
+
+#: backoffice/views/user_management.py:27
+#, python-brace-format
+msgid "Backoffice user {user} has been created."
+msgstr "Hinterzimmer-User {user} wurde erstellt."
+
+#: backoffice/views/user_management.py:29
+#, python-brace-format
+msgid "User {user} has been created."
+msgstr "User {user} wurde erstellt."
+
+#: backoffice/views/user_management.py:57
+msgid ""
+"You can only change administrator passwords if you are an admin yourself."
+msgstr ""
+"Du kannst das Passwort eines Admins nur ändern, wenn du selbst Admin-Rechte "
+"hast."
+
+#: backoffice/views/user_management.py:63
+msgid "Passwort has been changed."
+msgstr "Das Passwort wurde geändert."
+
+#: backoffice/views/wizard.py:57
+msgid "User rights have been expanded"
+msgstr "Nutzerrechte wurden erweitert."
+
+#: backoffice/views/wizard.py:59
+msgid "User rights have been curtailed."
+msgstr "Nutzerrechte wurden beschnitten."
 
 #: core/models/preorder.py:52 core/utils/flow.py:78
 #, python-brace-format
@@ -537,8 +598,6 @@ msgid "Printable Information"
 msgstr "Druckbare Infos"
 
 #: troubleshooter/templates/troubleshooter/information_list.html:10
-#, fuzzy
-#| msgid "No entries found."
 msgid "No snippets found."
 msgstr "Keine Einträge gefunden."
 
