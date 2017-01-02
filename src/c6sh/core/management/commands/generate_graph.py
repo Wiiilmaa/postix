@@ -1,17 +1,10 @@
 import math
-import os
-import subprocess
-import sys
-import tempfile
-import uuid
 from datetime import datetime, time, timedelta
 
 import numpy as np
 import pylab as plt
-from django.conf import settings
 from django.core.management.base import BaseCommand
-from django.db.models import Count
-from django.utils.timezone import get_current_timezone, now
+from django.utils.timezone import get_current_timezone
 
 from c6sh.core.models import CashdeskSession, TransactionPosition
 
@@ -49,7 +42,7 @@ class Command(BaseCommand):
                 transaction__datetime__lt=firststart + timedelta(days=i + 1),
                 transaction__datetime__gt=firststart + timedelta(days=i)
             ).values('transaction__datetime', 'preorder_position')
-            h = sp.hist([
+            sp.hist([
                 [dtf(p['transaction__datetime'].astimezone(tz)) for p in d if p['preorder_position']],
                 [dtf(p['transaction__datetime'].astimezone(tz)) for p in d if not p['preorder_position']]
             ], label=[

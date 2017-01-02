@@ -2,7 +2,6 @@ import copy
 from decimal import Decimal
 
 from django.utils import timezone
-from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from ..models import (

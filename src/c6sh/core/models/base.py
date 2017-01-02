@@ -5,7 +5,7 @@ from typing import Union
 from django.core.files.storage import default_storage
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Max, Q, Sum
+from django.db.models import Max, Sum
 from django.utils import timezone
 
 from ..utils import round_decimal
