@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-02 20:19+0100\n"
-"PO-Revision-Date: 2017-01-02 20:20+0100\n"
+"POT-Creation-Date: 2017-01-02 20:27+0100\n"
+"PO-Revision-Date: 2017-01-02 20:28+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -66,6 +66,7 @@ msgid "Backoffice angel"
 msgstr "Hinterzimmer-Engel"
 
 #: backoffice/forms/session.py:15
+#: backoffice/templates/backoffice/end_session.html:46
 msgid "Cash"
 msgstr "Bargeld"
 
@@ -77,7 +78,9 @@ msgstr "Engel nicht gefunden."
 msgid "Angel does not exist or is no backoffice angel."
 msgstr "Diesen Engel gibt es nicht oder er ist kein Hinterzimmerengel."
 
-#: backoffice/forms/session.py:41 troubleshooter/invoicing.py:54
+#: backoffice/forms/session.py:41
+#: backoffice/templates/backoffice/end_session.html:36
+#: troubleshooter/invoicing.py:54
 msgid "Product"
 msgstr "Ticket"
 
@@ -180,6 +183,52 @@ msgstr "Benutzer anlegen"
 #: backoffice/templates/backoffice/end_session.html:18
 msgid "Session Report"
 msgstr "Kassenbericht"
+
+#: backoffice/templates/backoffice/end_session.html:26
+msgid "Session ID"
+msgstr "Session-Nr."
+
+#: backoffice/templates/backoffice/end_session.html:28
+msgid "Start:"
+msgstr "Beginn"
+
+#: backoffice/templates/backoffice/end_session.html:37
+msgid "Initial"
+msgstr "Eingezählt"
+
+#: backoffice/templates/backoffice/end_session.html:38
+msgid "Sales"
+msgstr "Umsatz"
+
+#: backoffice/templates/backoffice/end_session.html:39
+msgid "Final"
+msgstr "Endstand"
+
+#: backoffice/templates/backoffice/end_session.html:40
+msgid "Result"
+msgstr "Abschluss"
+
+#: backoffice/templates/backoffice/end_session.html:41
+msgid "Discrepancy"
+msgstr "Diskrepanz"
+
+#: backoffice/templates/backoffice/end_session.html:73
+msgid "This session did not contain any products."
+msgstr "Diese Session enthielt keine Produkte."
+
+#: backoffice/templates/backoffice/end_session.html:80
+msgid "Create report"
+msgstr "Auszählung abschließen"
+
+#: backoffice/templates/backoffice/end_session.html:84
+#: troubleshooter/templates/troubleshooter/preorders.html:34
+#: troubleshooter/templates/troubleshooter/transaction_list.html:58
+msgid "Details"
+msgstr "Details"
+
+#: backoffice/templates/backoffice/main.html:5
+msgid "Products handed out"
+msgstr "Ausgegebene Produkte"
 
 #: backoffice/templates/backoffice/reset_password.html:6
 msgid "Password reset"
@@ -707,11 +756,6 @@ msgstr "Bestellnummer"
 #: troubleshooter/templates/troubleshooter/preorders.html:21
 msgid "No matching orders found."
 msgstr "Keine passenden Bestellungen gefunden."
-
-#: troubleshooter/templates/troubleshooter/preorders.html:34
-#: troubleshooter/templates/troubleshooter/transaction_list.html:58
-msgid "Details"
-msgstr "Details"
 
 #: troubleshooter/templates/troubleshooter/preorders.html:39
 msgid "Yes"

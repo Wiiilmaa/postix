@@ -23,9 +23,9 @@
 <form method="post">
     {% csrf_token %}
 
-    <h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}</h4>
+    <h4> {{ session.cashdesk }}, {% trans "Session ID" %} {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}</h4>
     {% language "de" %}
-    <h4> <b>Beginn:</b> {{ session.start }} </h4>
+    <h4> <b>{% trans "Start:" %}:</b> {{ session.start }} </h4>
     {% endlanguage %}
     <h4>
         {{ form.backoffice_user|as_crispy_field }}
@@ -33,17 +33,17 @@
 
     <table class="table" id="end-sessions-table">
 	<thead>
-		<th>Produkt</th>
-		<th>eingezählt</th>
-		<th>Umsatz</th>
-		<th class="end-column">Endstand</th>
-        <th>Abschluss</th>
-		<th>Differenz</th>
+        <th>{% trans "Product" %}</th>
+        <th>{% trans "Initial" %}</th>
+        <th>{% trans "Sales" %}</th>
+        <th class="end-column">{% trans "Final" %}</th>
+        <th>{% trans "Result" %}</th>
+        <th>{% trans "Discrepancy" %}</th>
 	</thead>
         <tbody>
             <tr id="cash">
                 <td>
-                    Bargeld
+                    {% trans "Cash" %}
                     <div class="hide">{{ form.user }} {{ form.cashdesk }}</div>
                 </td>
                 <td class="before-value">{{ cash.initial }}</td>
@@ -70,32 +70,18 @@
             {% empty %}
                 <tr>
                     <th colspan="42" class="empty-row active">
-                        Die Session enthielt keine Produkte.
+                        {% trans "This session did not contain any products." %}
                     </th>
                 <tr>
             {% endfor %}
         </tbody>
     </table>
     <div class="form-actions">
-        <input type="submit" name="submit" value="Auszählung abschließen" class="btn btn-primary btn-block" id="submit-save">
+        <input type="submit" name="submit" value="{% trans "Create report" %}" class="btn btn-primary btn-block" id="submit-save">
     </div>
 <form>
 
-<h3 class="show-hide-heading">Details</h3>
-<div class="show-hide-div" style="display: none">
-	<h4 class="show-hide-heading">Presale-Tickets</h4>
-	<div class="show-hide-div" style="display: none">
-	</div>
-	<h4 class="show-hide-heading">Abendkasse</h4>
-	<div class="show-hide-div" style="display: none">
-	</div>
-	<h4 class="show-hide-heading">Stornos</h4>
-	<div class="show-hide-div" style="display: none">
-	</div>
-	<h4 class="show-hide-heading">Kassenzugriffe</h4>
-	<div class="show-hide-div" style="display: none">
-	</div>
-</div>
+    <h3 class="show-hide-heading">{% trans "Details" %}</h3>
 
 {% endblock %}
 {% block scripts %}
