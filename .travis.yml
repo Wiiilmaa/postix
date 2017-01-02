@@ -1,0 +1,16 @@
+language: python
+sudo: false
+python:
+    - "3.6"
+install:
+    - pip install -U pip wheel setuptools coveralls
+    - pip install -r src/requirements.txt
+script:
+    - cd src
+    - flake8 .
+    - isort -rc -c .
+    - python manage.py check
+    - coverage run -m py.test tests && coveralls
+cache:
+    directories:
+        - $HOME/.cache/pip
