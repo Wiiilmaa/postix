@@ -8,7 +8,7 @@ You will need to have python3 and some kind of virtual env helper installed. I'l
 First, clone the repository, set up your virtual environment and install the dependencies:
 
 ```bash
-git clone git@git.gibtesnochcongresstickets.de:c6sh/c6sh.git
+git clone git@github.com:c3cashdesk/c6sh.git
 cd c6sh/src
 mkvirtualenv -p /usr/bin/python3 c6sh
 pip install -r requirements.txt
