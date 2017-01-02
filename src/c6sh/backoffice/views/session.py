@@ -62,7 +62,7 @@ def new_session(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirec
                     'cashdesk': Cashdesk.objects.get(pk=int(param)),
                     'backoffice_user': request.user,
                 }
-                form, _ = get_form_and_formset(initial_form=initial_form)
+                form, _ignored = get_form_and_formset(initial_form=initial_form)
             except:
                 pass
 
