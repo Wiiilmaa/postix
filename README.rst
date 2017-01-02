@@ -29,6 +29,15 @@ Run development server::
 
   python manage.py runserver
 
+Open your browser at one of the following URLs:
+
+* http://localhost:8000/admin/ for the Django admin
+
+* http://localhost:8000/troubleshooter/ for the troubleshooter interface
+
+* http://localhost:8000/backoffice/ for the backoffice interface
+
+* http://localhost:8000/ for the cashdesk interface (requires an active cashdesk and session)
 
 Configuration
 -------------
