@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-02 20:27+0100\n"
-"PO-Revision-Date: 2017-01-02 20:28+0100\n"
+"POT-Creation-Date: 2017-01-02 22:47+0100\n"
+"PO-Revision-Date: 2017-01-02 22:50+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -53,11 +53,15 @@ msgstr ""
 "folgenden Produkten beträgt der Steuersatz 0%: {products}"
 
 #: backoffice/forms/session.py:12
+#: backoffice/templates/backoffice/report_list.html:27
+#: backoffice/templates/backoffice/session_list.html:11
 #: troubleshooter/templates/troubleshooter/transaction_list.html:47
 msgid "Cashdesk"
 msgstr "Kasse"
 
 #: backoffice/forms/session.py:13
+#: backoffice/templates/backoffice/report_list.html:28
+#: backoffice/templates/backoffice/session_list.html:8
 msgid "Angel"
 msgstr "Engel"
 
@@ -67,6 +71,7 @@ msgstr "Hinterzimmer-Engel"
 
 #: backoffice/forms/session.py:15
 #: backoffice/templates/backoffice/end_session.html:46
+#: backoffice/templates/backoffice/session_detail.html:81
 msgid "Cash"
 msgstr "Bargeld"
 
@@ -185,6 +190,9 @@ msgid "Session Report"
 msgstr "Kassenbericht"
 
 #: backoffice/templates/backoffice/end_session.html:26
+#: backoffice/templates/backoffice/move_session.html:23
+#: backoffice/templates/backoffice/reverse_session.html:26
+#: backoffice/templates/backoffice/session_detail.html:40
 msgid "Session ID"
 msgstr "Session-Nr."
 
@@ -193,14 +201,18 @@ msgid "Start:"
 msgstr "Beginn"
 
 #: backoffice/templates/backoffice/end_session.html:37
+#: backoffice/templates/backoffice/session_detail.html:76
 msgid "Initial"
 msgstr "Eingezählt"
 
 #: backoffice/templates/backoffice/end_session.html:38
+#: backoffice/templates/backoffice/session_detail.html:54
+#: backoffice/templates/backoffice/session_detail.html:77
 msgid "Sales"
 msgstr "Umsatz"
 
 #: backoffice/templates/backoffice/end_session.html:39
+#: backoffice/templates/backoffice/session_detail.html:78
 msgid "Final"
 msgstr "Endstand"
 
@@ -221,6 +233,8 @@ msgid "Create report"
 msgstr "Auszählung abschließen"
 
 #: backoffice/templates/backoffice/end_session.html:84
+#: backoffice/templates/backoffice/report_list.html:38
+#: backoffice/templates/backoffice/session_list.html:19
 #: troubleshooter/templates/troubleshooter/preorders.html:34
 #: troubleshooter/templates/troubleshooter/transaction_list.html:58
 msgid "Details"
@@ -230,13 +244,172 @@ msgstr "Details"
 msgid "Products handed out"
 msgstr "Ausgegebene Produkte"
 
+#: backoffice/templates/backoffice/move_session.html:19
+#: backoffice/templates/backoffice/session_detail.html:25
+msgid "Active session at"
+msgstr "Laufende Session an"
+
+#: backoffice/templates/backoffice/move_session.html:24
+#: backoffice/templates/backoffice/report_list.html:29
+#: backoffice/templates/backoffice/reverse_session.html:28
+#: backoffice/templates/backoffice/session_detail.html:43
+#: backoffice/templates/backoffice/session_detail.html:46
+msgid "Start"
+msgstr "Beginn"
+
+#: backoffice/templates/backoffice/move_session.html:26
+msgid ""
+"Please don't move an active session without talking to the user at the "
+"cashdesk."
+msgstr "Bitte Sessions nicht unabgesprochen im laufenden Betrieb verschieben!"
+
+#: backoffice/templates/backoffice/move_session.html:36
+msgid "Move session"
+msgstr "Session verschieben"
+
+#: backoffice/templates/backoffice/new_session.html:25
+msgid "Create session"
+msgstr "Session anlegen"
+
+#: backoffice/templates/backoffice/report_list.html:14
+#: troubleshooter/templates/troubleshooter/information_list.html:32
+#: troubleshooter/templates/troubleshooter/preorders.html:55
+#: troubleshooter/templates/troubleshooter/transaction_list.html:95
+msgid "Page"
+msgstr "Seite"
+
+#: backoffice/templates/backoffice/report_list.html:14
+#: troubleshooter/templates/troubleshooter/information_list.html:32
+#: troubleshooter/templates/troubleshooter/preorders.html:55
+#: troubleshooter/templates/troubleshooter/transaction_list.html:95
+msgid "of"
+msgstr "von"
+
+#: backoffice/templates/backoffice/report_list.html:30
+#: backoffice/templates/backoffice/session_detail.html:44
+#: backoffice/templates/backoffice/session_list.html:28
+msgid "End"
+msgstr "Ende"
+
+#: backoffice/templates/backoffice/report_list.html:31
+#: backoffice/templates/backoffice/session_detail.html:50
+msgid "Sold products"
+msgstr "Verkaufte Produkte"
+
+#: backoffice/templates/backoffice/report_list.html:41
+msgid "Edit"
+msgstr "Editieren"
+
+#: backoffice/templates/backoffice/report_list.html:44
+msgid "Report"
+msgstr "Report"
+
+#: backoffice/templates/backoffice/report_list.html:64
+msgid "No reports yet, get going!"
+msgstr "Noch keine Kassenabschlüsse, es kann losgehen!"
+
 #: backoffice/templates/backoffice/reset_password.html:6
 msgid "Password reset"
 msgstr "Passwort zurücksetzen"
 
+#: backoffice/templates/backoffice/resupply_session.html:17
+msgid ""
+"Please enter a negative number when removing products from the cashdesk."
+msgstr ""
+"Bitte gib eine negative Zahl an, wenn du Dinge aus der Kasse entnimmst."
+
+#: backoffice/templates/backoffice/resupply_session.html:28
+msgid "Add products"
+msgstr "Produkte hinzufügen"
+
+#: backoffice/templates/backoffice/reverse_session.html:18
+msgid "Reverse all transactions in session"
+msgstr "Alle Transaktionen in der Session stornieren"
+
+#: backoffice/templates/backoffice/reverse_session.html:32
+msgid "Do you really want to reverse all transactions in this session?"
+msgstr "Willst du wirklich alle Transaktionen in dieser Session stornieren?"
+
+#: backoffice/templates/backoffice/reverse_session.html:33
+#: desk/templates/desk/main.html:91
+msgid "Reverse"
+msgstr "Storno"
+
+#: backoffice/templates/backoffice/session_detail.html:27
+msgid "Ended session"
+msgstr "Beendete Session"
+
+#: backoffice/templates/backoffice/session_detail.html:55
+#: troubleshooter/templates/troubleshooter/transaction_list.html:72
+msgid "Presale"
+msgstr "Vorverkauf"
+
+#: backoffice/templates/backoffice/session_detail.html:56
+msgid "Reversals"
+msgstr "Stornos"
+
+#: backoffice/templates/backoffice/session_detail.html:72
+msgid "Items"
+msgstr "Produkte"
+
+#: backoffice/templates/backoffice/session_list.html:9
+msgid "Duration"
+msgstr "Dauer"
+
+#: backoffice/templates/backoffice/session_list.html:10
+#: troubleshooter/templates/troubleshooter/constraint_detail.html:12
+#: troubleshooter/templates/troubleshooter/constraints_list.html:16
+msgid "Products"
+msgstr "Tickets"
+
+#: backoffice/templates/backoffice/session_list.html:22
+#: troubleshooter/templates/troubleshooter/main.html:25
+msgid "Resupply"
+msgstr "Nachschub"
+
+#: backoffice/templates/backoffice/session_list.html:25
+msgid "Move"
+msgstr "Verschieben"
+
+#: backoffice/templates/backoffice/session_list.html:56
+msgid "initialization"
+msgstr "einzählen"
+
 #: backoffice/templates/backoffice/user_list.html:5
 msgid "User List"
 msgstr "Nutzerliste"
+
+#: backoffice/templates/backoffice/wizard_settings.html:6
+msgid "Initialize settings"
+msgstr "Settings anlegen"
+
+#: backoffice/templates/backoffice/wizard_users.html:5
+msgid "User rights"
+msgstr "Nutzerrechte"
+
+#: backoffice/templates/backoffice/wizard_users.html:19
+msgid "Remove troubleshooter"
+msgstr "Troubleshooter entfernen"
+
+#: backoffice/templates/backoffice/wizard_users.html:23
+msgid "Make troubleshooter"
+msgstr "Troubleshooter hinzufügen"
+
+#: backoffice/templates/backoffice/wizard_users.html:28
+msgid "Remove backoffice user"
+msgstr "Hinterzimmerrechte entfernen"
+
+#: backoffice/templates/backoffice/wizard_users.html:32
+msgid "Make backoffice user"
+msgstr "Hinterzimmerrechte hinzufügen"
+
+#: backoffice/templates/backoffice/wizard_users.html:37
+msgid "Remove superuser"
+msgstr "Adminrechte entfernen"
+
+#: backoffice/templates/backoffice/wizard_users.html:41
+msgid "Make superuser"
+msgstr "Adminrechte hinzufügen"
 
 #: backoffice/views/auth.py:22 desk/views.py:53 troubleshooter/views/auth.py:20
 msgid "No user account matches the entered credentials."
@@ -515,10 +688,6 @@ msgstr "Wechselgeld:"
 msgid "REVERSED"
 msgstr "STORNIERT"
 
-#: desk/templates/desk/main.html:91
-msgid "Reverse"
-msgstr "Storno"
-
 #: desk/templates/desk/main.html:95
 msgid "Reprint"
 msgstr "Nachbon"
@@ -651,11 +820,6 @@ msgstr ""
 msgid "Liste"
 msgstr "Liste"
 
-#: troubleshooter/templates/troubleshooter/constraint_detail.html:12
-#: troubleshooter/templates/troubleshooter/constraints_list.html:16
-msgid "Products"
-msgstr "Tickets"
-
 #: troubleshooter/templates/troubleshooter/constraint_detail.html:18
 #: troubleshooter/templates/troubleshooter/constraints_list.html:22
 #, python-format
@@ -699,18 +863,6 @@ msgstr "Druckbare Infos"
 msgid "No snippets found."
 msgstr "Keine Einträge gefunden."
 
-#: troubleshooter/templates/troubleshooter/information_list.html:32
-#: troubleshooter/templates/troubleshooter/preorders.html:55
-#: troubleshooter/templates/troubleshooter/transaction_list.html:95
-msgid "Page"
-msgstr "Seite"
-
-#: troubleshooter/templates/troubleshooter/information_list.html:32
-#: troubleshooter/templates/troubleshooter/preorders.html:55
-#: troubleshooter/templates/troubleshooter/transaction_list.html:95
-msgid "of"
-msgstr "von"
-
 #: troubleshooter/templates/troubleshooter/invoice.html:10
 msgid "Generate invoice"
 msgstr "Rechnung erstellen"
@@ -722,10 +874,6 @@ msgstr "Benutzername"
 #: troubleshooter/templates/troubleshooter/login.html:16
 msgid "Sign in"
 msgstr "Einloggen"
-
-#: troubleshooter/templates/troubleshooter/main.html:25
-msgid "Resupply"
-msgstr "Nachschub"
 
 #: troubleshooter/templates/troubleshooter/main.html:35
 msgid "Session time"
@@ -814,10 +962,6 @@ msgstr "Transaktionsbetrag"
 #: troubleshooter/templates/troubleshooter/transaction_list.html:70
 msgid "Sale"
 msgstr "Verkauf"
-
-#: troubleshooter/templates/troubleshooter/transaction_list.html:72
-msgid "Presale"
-msgstr "Vorverkauf"
 
 #: troubleshooter/templates/troubleshooter/transaction_list.html:74
 msgid "Cancelation"

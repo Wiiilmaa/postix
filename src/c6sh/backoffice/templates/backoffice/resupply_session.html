@@ -1,6 +1,7 @@
 {% extends 'backoffice/base.html' %}
-{% load staticfiles %}
 {% load crispy_forms_tags %}
+{% load i18n %}
+{% load staticfiles %}
 
 {% block stylesheets %}
 	<link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
@@ -13,7 +14,7 @@
 <div class="col-md-2"></div>
 <div class="col-md-8">
     <div class="alert alert-warning">
-        Wenn Produkte aus der Kasse entnommen werden, bitte negative Anzahl eintragen.
+        {% trans "Please enter a negative number when removing products from the cashdesk." %}
     </div>
 	<form method="post" action="">
 		{% csrf_token %}
@@ -24,7 +25,7 @@
 			{% crispy formset helper %}
 		</table>
 		<div class="form-actions">
-			<input type="submit" name="submit" value="Produkte hinzufügen" class="btn btn-primary btn-block" id="submit-save">
+            <input type="submit" name="submit" value="{% trans "Add products" %}" class="btn btn-primary btn-block" id="submit-save">
 		</div>
 	</form>
 </div>

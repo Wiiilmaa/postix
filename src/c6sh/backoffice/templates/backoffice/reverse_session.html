@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block headline %}
-    Stornieren aller Buchungen in Session #{{session.pk}}
+    {% trans "Reverse all transactions in session" %} #{{session.pk}}
 {% endblock %}
 
 
@@ -23,14 +23,14 @@
 <form method="post">
     {% csrf_token %}
 
-    <h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}</h4>
+    <h4> {{ session.cashdesk }}, {% trans "Session ID" %} {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}</h4>
     {% language "de" %}
-    <h4> <b>Beginn:</b> {{ session.start }} </h4>
+    <h4> <b>{% trans "Start" %}:</b> {{ session.start }} </h4>
     {% endlanguage %}
 
     <div class="alert alert-warning">
-        Möchtest du wirklich alle Buchungen in dieser Session stornieren?
-        <button type="submit" class="btn btn-danger pull-right">Stornieren</button>
+        {% trans "Do you really want to reverse all transactions in this session?" %}
+        <button type="submit" class="btn btn-danger pull-right">{% trans "Reverse" %}</button>
         <div style="clear: both"></div>
     </div>
 </form>

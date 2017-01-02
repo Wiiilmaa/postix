@@ -22,9 +22,9 @@
         <a href="{% url "backoffice:end-session" pk=session.pk %}">
             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
         </a>
-        Laufende Session an {{ session.cashdesk }}
+        {% trans "Active session at" %} {{ session.cashdesk }}
     {% else %}
-        Abgeschlossene Session #{{ session.pk }}
+        {% trans "Ended session" %} #{{ session.pk }}
     {% endif %}
 {% endblock %}
 
@@ -37,23 +37,23 @@
     }
     </script>
 
-<h4> {{ session.cashdesk }}, Session-Nr. {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }} ({{ session.user.username }})</h4>
+    <h4> {{ session.cashdesk }}, {% trans "Session ID" %} {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }} ({{ session.user.username }})</h4>
 {% language "de" %}
 {% if session.end %}
-    <h4> Beginn: {{ session.start }} </h4>
-    <h4> Ende: {{ session.ende }} </h4>
+<h4> {% trans "Start" %}: {{ session.start }} </h4>
+<h4> {% trans "End" %}: {{ session.ende }} </h4>
 {% else %}
-    <h4> Beginn: vor {{ session.start|timesince }} </h4>
+<h4> {% trans "Start" %}: {{ session.start|timesince }} </h4>
 {% endif %}
 
 
-<h3 style="clear:both"> Verkaufte Produkte </h3>
+<h3 style="clear:both"> {% trans "Sold products" %} </h3>
 <table class="table" id="session-detail-table">
 	<thead>
 		<th></th>
-		<th>Verkäufe</th>
-		<th>Presale</th>
-		<th>Stornos</th>
+        <th>{% trans "Sales" %}</th>
+        <th>{% trans "Presale" %}</th>
+        <th>{% trans "Reversals" %}</th>
     </thead>
     <tbody>
         {% for product in session.get_product_sales %}
@@ -69,16 +69,16 @@
     </tbody>
 </table>
 
-<h3> Items </h3>
+<h3> {% trans "Items" %} </h3>
 <table class="table" id="session-detail-table">
 	<thead>
 		<th></th>
-		<th>eingezählt</th>
-		<th>Umsatz</th>
-        <th class='end-column'>Abschluss</th>
+        <th>{% trans "Initial" %}</th>
+        <th>{% trans "Sales" %}</th>
+        <th class='end-column'>{% trans "Final" %}</th>
     <tbody>
         <tr>
-            <td> Bargeld </td>
+            <td> {% trans "Cash" %} </td>
             <td> {{ session.cash_before }} </td>
             <td> {{ session.get_cash_transaction_total }} </td>
             <td class='end-column'> {{ session.cash_after }} </td>
