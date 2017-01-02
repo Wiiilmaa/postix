@@ -25,6 +25,40 @@ Optionally, import data::
   python manage.py import_presale pretix.json
   python manage.py import_member global.csv local.csv BLN
 
+Run development server::
+
+  python manage.py runserver
+
+
+Configuration
+-------------
+
+You can configure some aspects of your installation by setting the following
+environment variables:
+
+* ``C6SH_SECRET`` -- Secret key used for signing purposes
+
+* ``C6SH_DEBUG`` -- Turns on Django's debug mode if set to ``"True"``
+
+* ``C6SH_DB_TYPE`` -- Database backend, defaults to ``sqlite3``. Other options
+  are ``mysql`` and ``postgres``
+
+* ``C6SH_DB_NAME`` -- Database name (or filename in case of SQLite). Defaults
+  to ``db.sqlite3``
+  
+* ``C6SH_DB_USER`` -- Database user
+
+* ``C6SH_DB_PASS`` -- Database password
+
+* ``C6SH_DB_HOST`` -- Database host
+
+* ``C6SH_DB_HOST`` -- Database host
+
+* ``C6SH_DB_PORT`` -- Database port
+
+* ``C6SH_STATIC_URL`` -- Base URL for static files
+
+* ``C6SH_STATIC_ROOT`` -- Filesystem directory to plstore static files
 
 Development
 -----------
