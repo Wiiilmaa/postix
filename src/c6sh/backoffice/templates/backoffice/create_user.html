@@ -1,8 +1,9 @@
 {% extends 'backoffice/base.html' %}
-{% load staticfiles %}
 {% load crispy_forms_tags %}
+{% load i18n %}
+{% load staticfiles %}
 
-{% block headline %} User anlegen {% endblock %}
+{% block headline %} {% trans "Create user" %} {% endblock %}
 
 {% block content %}
 

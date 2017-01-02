@@ -22,22 +22,22 @@
     <nav class="navbar navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{% url "backoffice:main" %}">Hinterzimmer</a>
+            <a class="navbar-brand" href="{% url "backoffice:main" %}">{% trans "Backoffice" %}</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           {% if user.is_authenticated %}
 			  <ul class="nav navbar-nav">
-                <li><a href="{% url "backoffice:new-session" %}">Kasse einzählen</a></li>
-                <li><a href="{% url "backoffice:session-list" %}">Sessions</a></li>
-                <li><a href="{% url "backoffice:report-list" %}">Reports</a></li>
+                  <li><a href="{% url "backoffice:new-session" %}">{% trans "New session" %}</a></li>
+                  <li><a href="{% url "backoffice:session-list" %}">{% trans "Sessions" %}</a></li>
+                  <li><a href="{% url "backoffice:report-list" %}">{% trans "Reports" %}</a></li>
 			  </ul>
 			  <ul class="nav navbar-nav navbar-right">
-                  <li><a href="{% url "backoffice:create-user" %}"><span class="glyphicon glyphicon-plus-sign"></span> User</a></li>
-                  <li><a href="{% url "backoffice:user-list" %}"><span class="glyphicon glyphicon-list"></span> Users</a></li>
+                  <li><a href="{% url "backoffice:create-user" %}"><span class="glyphicon glyphicon-plus-sign"></span>{% trans "User" %}</a></li>
+                  <li><a href="{% url "backoffice:user-list" %}"><span class="glyphicon glyphicon-list"></span>{% trans "Users" %}</a></li>
                   <li><a href="{% url "backoffice:logout" %}"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a></li>
 
                   {% if user.is_superuser %}
-                    <li><a href="{% url "backoffice:wizard-users" %}">Rights</a></li>
+                  <li><a href="{% url "backoffice:wizard-users" %}">{% trans "Rights" %}</a></li>
                     {% if not settings.initialized %}
                         <li><a href="{% url "backoffice:wizard-settings" %}"><span class="text-danger glyphicon glyphicon-alert"></span></a></li>
                     {% else %}
@@ -64,9 +64,9 @@
           {% if not settings.initialized %}
             <div class="alert alert-warning">
                 {% if user.is_superuser %}
-                    Please <a href="{% url "backoffice:wizard-settings" %}">initialize</a> this event's settings.
+                {% trans "Please initialize this event's settings:" %} <a href="{% url "backoffice:wizard-settings" %}">{% trans "here" %}</a>
                 {% else %}
-                    Please call a superuser to initialize this event's settings.
+                    {% trans "Please call a superuser to initialize this event's settings." %}
                 {% endif %}
             </div>
           {% endif %}
