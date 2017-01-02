@@ -28,3 +28,9 @@ Regenerate translation files::
   pip install django_extensions pytest
   python manage.py makemessages
   python manage.py makemessages --all -d djangojs
+
+Run linters and tests::
+
+  isort -rc .
+  flake8
+  pytest
