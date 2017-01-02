@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.http import is_safe_url
+from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 
 from .utils import is_backoffice_user
@@ -18,15 +19,15 @@ class LoginView(TemplateView):
         user = authenticate(username=username, password=password)
 
         if user is None:
-            messages.error(request, 'No user account matches the entered credentials.')
+            messages.error(request, _('No user account matches the entered credentials.'))
             return redirect('backoffice:login')
 
         if not user.is_active:
-            messages.error(request, 'User account is deactivated.')
+            messages.error(request, _('User account is deactivated.'))
             return redirect('backoffice:login')
 
         if not is_backoffice_user(user):
-            messages.error(request, 'User does not have permission to access backoffice data.')
+            messages.error(request, _('User does not have permission to access backoffice data.'))
             return redirect('backoffice:login')
 
         login(request, user)
