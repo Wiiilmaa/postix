@@ -7,7 +7,10 @@ c6sh
 .. image:: https://coveralls.io/repos/github/c3cashdesk/c6sh/badge.svg?branch=master
    :target: https://coveralls.io/github/c3cashdesk/c6sh?branch=master
 
-c6sh is the cashdesk system used at 33C3 to redeem preorder tickets and sell tickets.
+c6sh is the cashdesk system used at various events to redeem preorder tickets and sell tickets:
+
+- MRMCD16
+- 33C3
 
 
 Setup
