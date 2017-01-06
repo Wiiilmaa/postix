@@ -61,8 +61,6 @@ environment variables:
 
 * ``C6SH_DB_HOST`` -- Database host
 
-* ``C6SH_DB_HOST`` -- Database host
-
 * ``C6SH_DB_PORT`` -- Database port
 
 * ``C6SH_STATIC_URL`` -- Base URL for static files
