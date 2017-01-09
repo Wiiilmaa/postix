@@ -26,8 +26,6 @@ class Cashdesk(models.Model):
     ip_address = models.GenericIPAddressField(verbose_name='IP address')
     printer_queue_name = models.CharField(max_length=254, null=True, blank=True,
                                           verbose_name='Printer queue name')
-    display_address = models.GenericIPAddressField(null=True, blank=True,
-                                                   verbose_name='Display IP address')
     is_active = models.BooleanField(default=True)
     printer_handles_drawer = models.BooleanField(default=True)
 
