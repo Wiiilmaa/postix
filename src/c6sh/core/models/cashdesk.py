@@ -69,6 +69,23 @@ class CashdeskDevice(models.Model):
                               verbose_name='Device endpoint',
                               help_text='Address of any kind under which to reach the device.')
 
+    DEVICE_MAP = {
+        CashdeskDeviceVariantChoices.DISPLAY: OverheadDisplay,
+        CashdeskDeviceVariantChoices.DUMMY: DummyDevice,
+    }
+
+    def open(self):
+        DeviceClass = self.DEVICE_MAP[self.variant]
+        return DeviceClass(self.target).open()
+
+    def next(self):
+        DeviceClass = self.DEVICE_MAP[self.variant]
+        return DeviceClass(self.target).next()
+
+    def close(self):
+        DeviceClass = self.DEVICE_MAP[self.variant]
+        return DeviceClass(self.target).close()
+
 
 class ActiveCashdeskSessionManager(models.Manager):
     def get_queryset(self):
