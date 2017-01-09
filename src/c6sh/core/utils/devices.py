@@ -40,7 +40,7 @@ class OverheadDisplay:
         return self._request('close')
 
 
-class DummyDisplay:
+class DummyDevice:
     def __init__(self, *args, **kwargs) -> None:
         self.logger = logging.getLogger('django')
 

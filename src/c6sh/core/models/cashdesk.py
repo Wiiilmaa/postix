@@ -11,7 +11,7 @@ from django.db import models
 from django.db.models import Sum
 from django.utils.timezone import now
 
-from ..utils.displays import DummyDisplay, OverheadDisplay
+from ..utils.devices import DummyDevice, OverheadDisplay
 from ..utils.printing import CashdeskPrinter, DummyPrinter
 from .base import Item, Product, TransactionPosition, TransactionPositionItem
 from .settings import EventSettings
