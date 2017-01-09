@@ -50,6 +50,26 @@ class Cashdesk(models.Model):
         return [session for session in self.sessions.filter(end__isnull=True) if session.is_active()]
 
 
+class CashdeskDeviceVariantChoices:
+    DISPLAY = 'display'
+    DUMMY = 'dummy'
+
+    _choices = (
+        (val, val) for val in [DISPLAY, DUMMY]
+    )
+
+
+class CashdeskDevice(models.Model):
+    variant = models.CharField(max_length=10,
+                               choices=CashdeskDeviceVariantChoices._choices)
+    cashdesk = models.ForeignKey(to='Cashdesk',
+                                 on_delete=models.CASCADE,
+                                 related_name='devices')
+    target = models.CharField(max_length=100,
+                              verbose_name='Device endpoint',
+                              help_text='Address of any kind under which to reach the device.')
+
+
 class ActiveCashdeskSessionManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset()\
