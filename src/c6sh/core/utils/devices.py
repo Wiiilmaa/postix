@@ -1,12 +1,30 @@
 import json
 import logging
+from abc import ABCMeta, abstractmethod
 
 import requests
 
 logger = logging.getLogger('django')
 
 
-class OverheadDisplay:
+class AbstractDevice(metaclass=ABCMeta):
+    """
+    Ensure that every device class implements open(), next() and close().
+    """
+    @abstractmethod
+    def open(self):
+        pass
+
+    @abstractmethod
+    def next(self):
+        pass
+
+    @abstractmethod
+    def close(self):
+        pass
+
+
+class OverheadDisplay(AbstractDevice):
     def __init__(self, ip_address, *args, **kwargs) -> None:
         self.ip_address = ip_address
 
@@ -40,7 +58,7 @@ class OverheadDisplay:
         return self._request('close')
 
 
-class DummyDevice:
+class DummyDevice(AbstractDevice):
     def __init__(self, *args, **kwargs) -> None:
         self.logger = logging.getLogger('django')
 
