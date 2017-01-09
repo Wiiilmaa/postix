@@ -40,11 +40,17 @@ class Cashdesk(models.Model):
             return CashdeskPrinter(self.printer_queue_name, self)
         return DummyPrinter()
 
-    @property
-    def display(self) -> Union[OverheadDisplay, DummyDisplay]:
-        if self.display_address:
-            return OverheadDisplay(self.display_address)
-        return DummyDisplay()
+    def signal_open(self):
+        for device in self.devices.all():
+            device.open()
+
+    def signal_next(self):
+        for device in self.devices.all():
+            device.next()
+
+    def signal_close(self):
+        for device in self.devices.all():
+            device.close()
 
     def get_active_sessions(self) -> List:
         return [session for session in self.sessions.filter(end__isnull=True) if session.is_active()]
