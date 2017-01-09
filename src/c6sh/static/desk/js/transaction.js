@@ -116,7 +116,7 @@ var transaction = {
                 transaction.post_sale = true;
                 transaction.last_id = data.id;
                 dialog.flash_success(gettext('Transaction complete'));
-                displayNext();
+                signalNext();
             },
             headers: {
                 'Content-Type': 'application/json'

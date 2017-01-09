@@ -19,9 +19,9 @@ function reprintReceipt() {
     })
 }
 
-function displayNext() {
+function signalNext() {
     $.ajax({
-       url: '/api/cashdesk/display-next/',
+       url: '/api/cashdesk/signal-next/',
        method: 'POST',
    })
 }
