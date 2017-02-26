@@ -1,8 +1,28 @@
+@import "../../shared/scss/_variables";
+$icon-font-path: "/static/postix/shared/fonts/";
+@import "../../shared/scss/_bootstrap";
+@import "../../shared/scss/bootstrap/_theme";
+
 body {
     font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 body.login, body.error {
     background: #eee;
+}
+
+.navbar-inverse, .navbar-inverse .navbar-collapse {
+    background: $brand-inverse;
+}
+
+.navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
+    color: white;
+}
+
+.navbar-brand img {
+    height: 24px;
+    position: relative;
+    top: -3px;
+    display: inline;
 }
 
 .panel-login {
@@ -53,7 +73,7 @@ tbody th {
 .glyphicon-off {
     color: #a22;
 }
-.glyphicon-log-out {
+.backoffice-content .glyphicon-log-out {
     color: #777;
 }
 h1 a:hover {

@@ -9,10 +9,10 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg8"
    version="1.1"
-   viewBox="0 0 263.31104 119.92635"
-   height="119.92635mm"
-   width="263.31104mm"
-   sodipodi:docname="logo.svg"
+   viewBox="0 0 137.06946 81.02226"
+   height="81.022263mm"
+   width="137.06946mm"
+   sodipodi:docname="logo_white.svg"
    inkscape:version="0.92.0 r">
   <metadata
      id="metadata4493">
@@ -22,6 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -41,20 +42,19 @@
      id="namedview4489"
      showgrid="false"
      inkscape:zoom="0.57024212"
-     inkscape:cx="-14.536299"
-     inkscape:cy="206.98216"
+     inkscape:cx="167.77081"
+     inkscape:cy="-6.8286706"
      inkscape:window-x="0"
      inkscape:window-y="72"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg8" />
-  <path
-     inkscape:connector-curvature="0"
-     style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#c00032;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.7333498;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
-     d="M 4.4919277e-6,2.5989461e-6 H 263.31103 V 119.92635 H 4.4919277e-6 Z"
-     id="rect4599" />
+     inkscape:current-layer="svg8"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
   <g
      id="g4638"
-     transform="translate(33.032841,1.025597)">
+     transform="translate(-30.087944,-18.426449)">
     <path
        id="path4581"
        transform="scale(0.26458334)"

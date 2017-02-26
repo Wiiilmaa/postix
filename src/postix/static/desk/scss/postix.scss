@@ -1,3 +1,8 @@
+@import "../../shared/scss/_variables";
+$icon-font-path: "/static/postix/shared/fonts/";
+@import "../../shared/scss/_bootstrap";
+@import "../../shared/scss/bootstrap/_theme";
+
 body {
     font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
     -webkit-touch-callout: none;
@@ -13,7 +18,7 @@ body.login, body.error {
 
 .panel-login {
     width: 400px;
-    margin: 60px auto 0 auto;
+    margin: 20px auto 0 auto;
 }
 
 .error-page {
@@ -409,4 +414,14 @@ body.has-modal #main-container {
 }
 #info-view dd {
     text-align: left;
+}
+
+.login .logo {
+    margin: auto;
+    text-align: center;
+}
+.login .logo img {
+    max-height: 100px;
+    width: auto;
+    margin: 60px auto 0 auto;
 }

@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'rest_framework',
     'solo',
+    'compressor',
     'postix.core',
     'postix.desk',
     'postix.api',
@@ -111,10 +112,15 @@ LOCALE_PATHS = [
 ]
 
 STATIC_URL = os.getenv('POSTIX_STATIC_URL', '/static/postix/')
-STATIC_ROOT = os.getenv('POSTIX_STATIC_ROOT', '/srv/static/postix/')
+STATIC_ROOT = os.getenv('POSTIX_STATIC_ROOT', 'static.dist')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'postix', 'static'),
 ]
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'postix', 'media')
 
 AUTH_USER_MODEL = 'core.User'
@@ -126,6 +132,14 @@ MESSAGE_TAGS = {
     50: 'critical',
 }
 
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
+
+COMPRESS_CSS_FILTERS = (
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSCompressorFilter',
+)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

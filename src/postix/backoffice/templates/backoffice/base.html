@@ -1,6 +1,7 @@
 {% load staticfiles %}
 {% load solo_tags %}
 {% load i18n %}
+{% load compress %}
 {% get_solo 'core.EventSettings' as settings %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,20 +10,23 @@
 
     <title>postix {% block title %}{% endblock %}</title>
 
-    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap-theme.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "backoffice/css/postix.css" %}">
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
+        <link rel="stylesheet" type="text/x-scss" href="{% static "backoffice/scss/postix.scss" %}">
+    {% endcompress %}
     {% block stylesheets %}
     {% endblock %}
 
 </head>
 <body class="">
 
-    <nav class="navbar navbar-default navbar-static-top">
+    <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{% url "backoffice:main" %}">{% trans "Backoffice" %}</a>
+            <a class="navbar-brand" href="{% url "backoffice:main" %}">
+                <img src="{% static "shared/img/icon_white.svg" %}">
+                {% trans "Backoffice" %}
+            </a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           {% if user.is_authenticated %}
@@ -32,9 +36,9 @@
                   <li><a href="{% url "backoffice:report-list" %}">{% trans "Reports" %}</a></li>
 			  </ul>
 			  <ul class="nav navbar-nav navbar-right">
-                  <li><a href="{% url "backoffice:create-user" %}"><span class="glyphicon glyphicon-plus-sign"></span>{% trans "User" %}</a></li>
-                  <li><a href="{% url "backoffice:user-list" %}"><span class="glyphicon glyphicon-list"></span>{% trans "Users" %}</a></li>
-                  <li><a href="{% url "backoffice:logout" %}"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a></li>
+                  <li><a href="{% url "backoffice:create-user" %}"><span class="glyphicon glyphicon-plus-sign"></span> {% trans "User" %}</a></li>
+                  <li><a href="{% url "backoffice:user-list" %}"><span class="glyphicon glyphicon-list"></span> {% trans "Users" %}</a></li>
+                  <li><a href="{% url "backoffice:logout" %}"><span class="glyphicon glyphicon-log-out"></span> {{ user }}</a></li>
 
                   {% if user.is_superuser %}
                   <li><a href="{% url "backoffice:wizard-users" %}">{% trans "Rights" %}</a></li>

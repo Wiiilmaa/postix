@@ -1,15 +1,16 @@
 {% load staticfiles %}
 {% load i18n %}
+{% load compress %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>postix</title>
-    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap-theme.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "desk/css/postix.css" %}">
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
+        <link rel="stylesheet" type="text/x-scss" href="{% static "desk/scss/postix.scss" %}">
+    {% endcompress %}
 </head>
 <body class="">
 
