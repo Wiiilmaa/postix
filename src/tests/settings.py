@@ -1,3 +1,3 @@
-from c6sh.settings import *  # noqa
+from postix.settings import *  # noqa
 
 LANGUAGE_CODE = 'en-us'

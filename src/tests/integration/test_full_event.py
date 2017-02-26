@@ -4,11 +4,11 @@ import pytest
 from django.utils.crypto import get_random_string
 from tests.factories import cashdesk_session_before_factory, user_factory
 
-from c6sh.core.models import (
+from postix.core.models import (
     Cashdesk, CashdeskSession, EventSettings, Item, Preorder, Product,
     ProductItem,
 )
-from c6sh.core.utils.printing import DummyPrinter
+from postix.core.utils.printing import DummyPrinter
 
 DUMMY_PRINTER_COUNT = 0
 
@@ -220,8 +220,8 @@ class TestFullEvent:
         assert sorted(session.get_product_sales(), key=keyfunc) == sorted(sales, key=keyfunc)
 
     def test_full(self, client, monkeypatch):
-        monkeypatch.setattr('c6sh.core.utils.printing.DummyPrinter', DummyPrinterTesting)
-        monkeypatch.setattr('c6sh.core.models.cashdesk.DummyPrinter', DummyPrinterTesting)
+        monkeypatch.setattr('postix.core.utils.printing.DummyPrinter', DummyPrinterTesting)
+        monkeypatch.setattr('postix.core.models.cashdesk.DummyPrinter', DummyPrinterTesting)
         self._setup_base()
         self._simulate_session(full_sales=20, full_preorders=60, full_reversals=3, full_preorder_reversals=2,
                                d1_sales=5, d1_preorders=10, d1_reversals=0, d1_preorder_reversals=1,

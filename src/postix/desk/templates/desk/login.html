@@ -1,0 +1,45 @@
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>postix</title>
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap-theme.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "desk/css/postix.css" %}">
+</head>
+<body class="login">
+<div class="panel panel-primary panel-login">
+    <div class="panel-heading">
+        <h3 class="panel-title">postix</h3>
+    </div>
+    <div class="panel-body">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <form action="" method="post" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="username" placeholder="{% trans "User name" %}" class="form-control"
+                       id="username" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="{% trans "Password" %}" class="form-control"
+                       id="password" autocomplete="off">
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                {% trans "Log In" %}
+            </button>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/login.js" %}"></script>
+</body>
+</html>

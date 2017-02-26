@@ -1,0 +1,166 @@
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>postix</title>
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap-theme.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "desk/css/postix.css" %}">
+</head>
+<body class="">
+
+<div id="main-container">
+    <div id="left-side">
+        <div id="product-view">
+            <div id="success-flash">
+                <div>{% trans "Transaction complete" %}</div>
+            </div>
+            <div id="info-view">
+                <div>
+                    <div class="content"></div>
+                    <button class="btn btn-default btn-lg btn-close">{% trans "Close" %}</button>
+                </div>
+            </div>
+            <div id="product-view-inner"></div>
+            <div class="upfade"></div>
+            <div class="downfade"></div>
+        </div>
+        <div id="button-row">
+            <a href="{% url "desk:logout" %}"><button class="btn btn-danger" id="btn-logout">
+                <span class="glyphicon glyphicon-log-out"></span>
+                {% trans "Logout" %}
+            </button></a>
+            <button class="btn btn-default" id="btn-open-drawer">
+                <span class="glyphicon glyphicon-inbox"></span>
+                {% trans "Open drawer" %}
+            </button>
+            <button class="btn btn-info" id="btn-resupply">
+                <span class="glyphicon glyphicon-bell"></span>
+                {% trans "Request resupply" %}
+            </button>
+        </div>
+    </div>
+    <div id="right-side">
+        <div id="redeem-presale">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {% trans "Redeem preordered ticket" %}
+                </div>
+                <div class="panel-body">
+                    <input type="text" id="preorder-input" class="typeahead form-control">
+                </div>
+            </div>
+        </div>
+        <div id="lower-right">
+            <div class="panel panel-primary panel-sale">
+                <div class="panel-heading">
+                    <span>{% trans "Current transaction" %}</span>
+                    <button class="btn btn-sm btn-default pull-right" id="btn-clear">
+                        {% trans "clear" %}
+                    </button>
+                </div>
+                <div class="panel-body">
+                    <div id="cart">
+                        <div id="cart-inner"></div>
+                        <div class="upfade"></div>
+                         <div class="downfade"></div>
+                    </div>
+                    <div id="post-sale">
+                        <div id="post-sale-total" class="total">
+                            {% trans "Total:" %}
+                            <span>267.40</span>
+                        </div>
+                        <div id="post-sale-given" class="total">
+                            {% trans "Given:" %}
+                            <input type="text" value="" class="form-control">
+                        </div>
+                        <div id="post-sale-change" class="total">
+                            {% trans "Change:" %}
+                            <span>0.00</span>
+                        </div>
+                        <div id="post-sale-reversed" class="total">
+                            {% trans "REVERSED" %}
+                        </div>
+                        <div id="post-sale-buttons">
+                            <button class="btn btn-block btn-default" id="btn-reverse">
+                                <span class="glyphicon glyphicon-backward"></span>
+                                {% trans "Reverse" %}
+                            </button>
+                            <button class="btn btn-block btn-default" id="btn-reprint">
+                                <span class="glyphicon glyphicon-duplicate"></span>
+                                {% trans "Reprint" %}
+                            </button>
+                        </div>
+                    </div>
+                    <div id="checkout">
+                        <div id="checkout-total" class="total">
+                            {% trans "Total:" %}
+                            <span>267.40</span>
+                        </div>
+                        <button class="btn btn-block btn-success" id="btn-checkout">
+                            <span class="glyphicon glyphicon-shopping-cart"></span>
+                            {% trans "CHECKOUT" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-container">
+    <div id="modal">
+        <div class="panel">
+            <div class="panel-heading" id="modal-title">
+                {% trans "Redeem preordered ticket" %}
+            </div>
+            <div class="panel-body">
+                <p id="modal-text">
+                </p>
+                <p id="modal-input-wrapper">
+                    <input type="text" id="modal-input" class="form-control"
+                        autocomplete="dearchromeyoureallyshouldnotautocomplete">
+                </p>
+
+                <div id="modal-buttons">
+                    <button class="btn btn-lg btn-primary" id="btn-dismiss">
+                        {% trans "OK" %}
+                    </button>
+                    <button class="btn btn-lg btn-danger" id="btn-cancel">
+                        {% trans "Cancel" %}
+                    </button>
+                    <button class="btn btn-lg btn-primary" id="btn-bypass">
+                        {% trans "Upgrade" %}
+                    </button>
+                    <button class="btn btn-lg btn-success" id="btn-continue">
+                        {% trans "Continue" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loading">
+    <div>
+        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/loading.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/productlist.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/preorder.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/transaction.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/dialog.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/actions.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/keyboard.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/commands.js" %}"></script>
+<script type="text/javascript" src="{% static "desk/js/postix.js" %}"></script>
+<script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
+</body>
+</html>

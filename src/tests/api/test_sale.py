@@ -2,8 +2,8 @@ import json
 
 import pytest
 
-from c6sh.core.models import ListConstraintProduct, WarningConstraintProduct
-from c6sh.core.utils.checks import is_redeemed
+from postix.core.models import ListConstraintProduct, WarningConstraintProduct
+from postix.core.utils.checks import is_redeemed
 
 from ..factories import (
     list_constraint_entry_factory, list_constraint_factory, product_factory,

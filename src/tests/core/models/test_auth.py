@@ -1,6 +1,6 @@
 import pytest
 
-from c6sh.core.models import User
+from postix.core.models import User
 
 from ...factories import user_factory
 

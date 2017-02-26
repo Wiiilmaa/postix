@@ -1,7 +1,7 @@
 import pytest
 from django.test import RequestFactory
 
-from c6sh.core.utils.iputils import detect_cashdesk, get_ip_address
+from postix.core.utils.iputils import detect_cashdesk, get_ip_address
 
 from ...factories import cashdesk_factory
 

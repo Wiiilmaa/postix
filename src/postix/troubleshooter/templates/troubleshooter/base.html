@@ -1,0 +1,76 @@
+{% load staticfiles %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>postix {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/bootstrap-theme.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "troubleshooter/css/postix.css" %}">
+    {% block stylesheets %}
+    {% endblock %}
+    {% block meta %}
+    {% endblock %}
+
+</head>
+<body class="">
+
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url "troubleshooter:main" %}">{% trans "Troubleshooter" %}</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            {% if user.is_authenticated %}
+                <ul class="nav navbar-nav">
+                    <li id="nav-sessions" {% if has_request %}class="has-request"{% endif %}><a href="{% url "troubleshooter:main" %}">{% trans "Current sessions" %}</a></li>
+                    <li><a href="{% url "troubleshooter:transaction-list" %}">{% trans "Transactions" %}</a></li>
+                    <li><a href="{% url "troubleshooter:constraint-list" %}">{% trans "Lists" %}</a></li>
+                    <li><a href="{% url "troubleshooter:preorder-list" %}">{% trans "Preorder" %}</a></li>
+                    <li><a href="{% url "troubleshooter:ping" %}">{% trans "Ping" %}</a></li>
+                    <li><a href="{% url "troubleshooter:information-list" %}">{% trans "Print" %}</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url "troubleshooter:logout" %}"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="backoffice-main">
+        <h1>{% block headline %}{% endblock %}</h1>
+        <div class="backoffice-content">
+            <p>
+                {% block content %}
+                {% endblock %}
+            </p>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{% static "troubleshooter/js/requests.js" %}"></script>
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>

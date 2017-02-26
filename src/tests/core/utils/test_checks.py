@@ -2,8 +2,8 @@ from decimal import Decimal
 
 import pytest
 
-from c6sh.core.models import TransactionPosition
-from c6sh.core.utils.checks import is_redeemed
+from postix.core.models import TransactionPosition
+from postix.core.utils.checks import is_redeemed
 
 from ...factories import (
     list_constraint_entry_factory, list_constraint_factory,

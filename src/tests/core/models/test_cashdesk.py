@@ -8,10 +8,10 @@ from tests.factories import (
     transaction_position_factory, user_factory,
 )
 
-from c6sh.core.models import (
+from postix.core.models import (
     Item, ItemMovement, Product, ProductItem, TransactionPosition,
 )
-from c6sh.core.utils.flow import reverse_transaction
+from postix.core.utils.flow import reverse_transaction
 
 
 @pytest.mark.django_db

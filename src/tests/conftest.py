@@ -1,6 +1,6 @@
 import pytest
 
-from c6sh.core.models import EventSettings
+from postix.core.models import EventSettings
 
 
 @pytest.fixture

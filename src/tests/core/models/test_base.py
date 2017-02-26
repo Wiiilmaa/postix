@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from c6sh.core.models import Item, ProductItem, TransactionPosition
+from postix.core.models import Item, ProductItem, TransactionPosition
 
 from ...factories import (
     product_factory, quota_factory, time_constraint_factory,

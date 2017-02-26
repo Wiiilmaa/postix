@@ -18,78 +18,78 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.11\n"
 
-#: c6sh/static/desk/js/commands.js:9
+#: postix/static/desk/js/commands.js:9
 msgid "Supported commands:"
 msgstr "Unterstützte Befehle:"
 
-#: c6sh/static/desk/js/commands.js:11
+#: postix/static/desk/js/commands.js:11
 msgid "Show reset codes for the barcode scanner"
 msgstr "Zeigt Reset-Codes für den Barcode-Scanner"
 
-#: c6sh/static/desk/js/commands.js:16
+#: postix/static/desk/js/commands.js:16
 msgid "Scan the following, in order:"
 msgstr "Scanne die folgenden Codes in dieser Reihenfolge:"
 
-#: c6sh/static/desk/js/dialog.js:36
+#: postix/static/desk/js/dialog.js:36
 msgid "Input required"
 msgstr "Eingabe erforderlich"
 
-#: c6sh/static/desk/js/dialog.js:43 c6sh/static/desk/js/dialog.js:107
+#: postix/static/desk/js/dialog.js:43 postix/static/desk/js/dialog.js:107
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: c6sh/static/desk/js/dialog.js:62
+#: postix/static/desk/js/dialog.js:62
 msgid "Error"
 msgstr "Fehler"
 
-#: c6sh/static/desk/js/dialog.js:100
+#: postix/static/desk/js/dialog.js:100
 msgid "Confirmation required"
 msgstr "Bestätigung erforderlich"
 
-#: c6sh/static/desk/js/preorder.js:18
+#: postix/static/desk/js/preorder.js:18
 msgid "Secret is not unique."
 msgstr "Es gibt mehrere Bestellungen zu diesem Code."
 
-#: c6sh/static/desk/js/preorder.js:21
+#: postix/static/desk/js/preorder.js:21
 msgid "Unknown secret."
 msgstr "Unbekannter Code."
 
-#: c6sh/static/desk/js/preorder.js:27
+#: postix/static/desk/js/preorder.js:27
 msgid "This ticket has already been redeemed."
 msgstr "Das Ticket wurde bereits eingelöst."
 
-#: c6sh/static/desk/js/preorder.js:30
+#: postix/static/desk/js/preorder.js:30
 msgid "Ticket has not been paid."
 msgstr "Dieses Ticket wurde nicht bezahlt."
 
-#: c6sh/static/desk/js/transaction.js:18
+#: postix/static/desk/js/transaction.js:18
 msgid "This preorder alread is in your cart."
 msgstr "Dieses Ticket befindet sich bereits auf dem Bon."
 
-#: c6sh/static/desk/js/transaction.js:91
+#: postix/static/desk/js/transaction.js:91
 msgid "Cart is empty."
 msgstr "Bon ist leer."
 
-#: c6sh/static/desk/js/transaction.js:105
+#: postix/static/desk/js/transaction.js:105
 msgid "Last transaction"
 msgstr "Letzte Transaktion"
 
-#: c6sh/static/desk/js/transaction.js:118
+#: postix/static/desk/js/transaction.js:118
 msgid "Transaction complete"
 msgstr "Transaktion erfolgreich"
 
-#: c6sh/static/desk/js/transaction.js:158
+#: postix/static/desk/js/transaction.js:158
 msgid "Do you really want to reverse the last transaction?"
 msgstr "Soll der letzte Bon wirklich storniert werden?"
 
-#: c6sh/static/desk/js/transaction.js:164
+#: postix/static/desk/js/transaction.js:164
 msgid "The last transaction is not known."
 msgstr "Letzter Bon ist unbekannt."
 
-#: c6sh/static/desk/js/transaction.js:176
+#: postix/static/desk/js/transaction.js:176
 msgid "The transaction has been reversed."
 msgstr "Bon storniert"
 
-#: c6sh/static/desk/js/transaction.js:202
+#: postix/static/desk/js/transaction.js:202
 msgid "Current transaction"
 msgstr "Aktueller Bon"

@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from faker import Factory
 
-from c6sh.core.models import (
+from postix.core.models import (
     Cashdesk, CashdeskSession, Item, ItemMovement, ListConstraint,
     ListConstraintEntry, ListConstraintProduct, Preorder, PreorderPosition,
     Product, ProductItem, Quota, TimeConstraint, Transaction,

@@ -9,12 +9,12 @@ from tests.factories import (
     user_factory, warning_constraint_factory,
 )
 
-from c6sh.core.models import (
+from postix.core.models import (
     ListConstraintProduct, Transaction, TransactionPosition,
     TransactionPositionItem, WarningConstraintProduct,
 )
-from c6sh.core.utils.checks import is_redeemed
-from c6sh.core.utils.flow import (
+from postix.core.utils.checks import is_redeemed
+from postix.core.utils.flow import (
     FlowError, redeem_preorder_ticket, reverse_session, reverse_transaction,
     reverse_transaction_position, sell_ticket,
 )
