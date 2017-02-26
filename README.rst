@@ -4,8 +4,8 @@ postix
 .. image:: https://travis-ci.org/c3cashdesk/postix.svg?branch=master
    :target: https://travis-ci.org/c3cashdesk/postix
 
-.. image:: https://coveralls.io/repos/github/c3cashdesk/postix/badge.svg?branch=master
-   :target: https://coveralls.io/github/c3cashdesk/postix?branch=master
+.. image:: https://codecov.io/gh/c3cashdesk/postix/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/c3cashdesk/postix
 
 postix (formerly c6sh) is the cashdesk system used at various events to redeem preorder tickets and sell tickets:
 
