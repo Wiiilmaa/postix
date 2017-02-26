@@ -112,7 +112,7 @@ LOCALE_PATHS = [
 ]
 
 STATIC_URL = os.getenv('POSTIX_STATIC_URL', '/static/postix/')
-STATIC_ROOT = os.getenv('POSTIX_STATIC_ROOT', 'static.dist')
+STATIC_ROOT = os.getenv('POSTIX_STATIC_ROOT', '/srv/static/postix/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'postix', 'static'),
 ]
