@@ -1,7 +1,7 @@
 [run]
-source=c6sh
+source=pretalx
 branch=True
-omit = */migrations/*,*/urls.py,*/tests/*,*/admin.py,c6sh/wsgi.py,c6sh/settings.py
+omit = */migrations/*,*/urls.py,*/tests/*,*/admin.py,pretalx/wsgi.py,pretalx/settings.py
 
 [report]
 exclude_lines =
