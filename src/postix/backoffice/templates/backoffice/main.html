@@ -8,6 +8,8 @@
     <ul>
         {% for item, value in data.items %}
         <li> {{ item }}: {{ value }}</li>
+        {% empty %}
+            {% trans "Nothing handed out yet, sit tight!" %}
         {% endfor %}
     </ul>
 {% endblock %}
