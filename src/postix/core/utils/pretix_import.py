@@ -4,9 +4,10 @@ from decimal import Decimal
 from postix.core.models import Cashdesk, Preorder, PreorderPosition, Product
 
 
-def fake_style(string):
-    return string
+class FakeStyle:
 
+    def __getattribute__(self, name):
+        return lambda x: print(x)
 
 class FakeLog:
     def write(self, string):
@@ -39,9 +40,13 @@ def _build_product_dict(data, log, style):
     return product_dict
 
 
-def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=fake_style):
+def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle()):
 
-    presale_export = json.load(data)['event']
+    if isinstance(data, str):
+        presale_export = json.loads(data)['event']
+    else:
+        presale_export = json.load(data)['event']
+
     log.write(style.NOTICE(
         'Importing data from event "{}".'.format(presale_export['name'])
     ))
