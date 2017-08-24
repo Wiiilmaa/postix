@@ -1,0 +1,22 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block headline %}{% trans "Item List" %}{% endblock %}
+
+{% block content %}
+
+<ul>
+    {% for item in object_list %}
+        <li>
+            {{ item.name }}
+            <a href="{% url "backoffice:wizard-items-edit" pk=item.pk %}" class="btn btn-default btn-xs">
+                {% trans "Edit item" %}
+            </a>
+        </li>
+    {% endfor %}
+
+</ul>
+
+{% endblock %}
+

@@ -9,6 +9,7 @@ class FakeStyle:
     def __getattribute__(self, name):
         return lambda x: print(x)
 
+
 class FakeLog:
     def write(self, string):
         print(string)
