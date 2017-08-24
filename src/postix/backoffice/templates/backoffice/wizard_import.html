@@ -1,0 +1,8 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block headline %} {% trans "Import Presale Data" %} (JSON){% endblock %}
+
+{% block content %}{% crispy form %}{% endblock %}
