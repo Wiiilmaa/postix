@@ -36,7 +36,6 @@
             {% endif %}
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_superuser %}
-                    <li><a href="{% url "backoffice:wizard-users" %}">{% trans "Rights" %}</a></li>
                     {% if not settings.initialized %}
                         <li><a href="{% url "backoffice:wizard-settings" %}"><span class="text-danger glyphicon glyphicon-alert"></span></a></li>
                     {% else %}
@@ -54,39 +53,82 @@
     <div id="page-wrapper">
         <nav class="nav flex-column sidebar">
             {% if user.is_backoffice_user or user.is_superuser %}
-                <a class="nav-link" href="{% url "backoffice:new-session" %}">
-                    {% trans "New session" %}
-                </a>
-                <a class="nav-link" href="{% url "backoffice:session-list" %}">
+                <span class="nav-link">
+                    <span class="fa fa-handshake-o"></span>
                     {% trans "Sessions" %}
-                </a>
-                <a class="nav-link" href="{% url "backoffice:report-list" %}">
-                    {% trans "Reports" %}
-                </a>
-                <a class="nav-link" href="{% url "backoffice:create-user" %}">
-                    <span class="glyphicon glyphicon-plus-sign"></span> {% trans "User" %}
-                </a>
-                <a class="nav-link" href="{% url "backoffice:user-list" %}">
-                    <span class="glyphicon glyphicon-list"></span> {% trans "Users" %}
-                </a>
+                </span>
+                    <a class="nav-link" href="{% url "backoffice:new-session" %}">
+                        <span class="fa fa-handshake-o"></span>
+                        <span class="fa fa-plus-circle"></span>
+                        {% trans "New session" %}
+                    </a>
+                    <a class="nav-link" href="{% url "backoffice:session-list" %}">
+                        <span class="fa fa-handshake-o"></span>
+                        <span class="fa fa-list"></span>
+                        {% trans "List of sessions" %}
+                    </a>
+                    <a class="nav-link" href="{% url "backoffice:report-list" %}">
+                        <span class="fa fa-handshake-o"></span>
+                        <span class="fa fa-book"></span>
+                        {% trans "Reports" %}
+                    </a>
+                <span class="nav-link">
+                    <span class="fa fa-users"></span>
+                    {% trans "Users" %}
+                </span>
+                    <a class="nav-link" href="{% url "backoffice:create-user" %}">
+                        <span class="fa fa-users"></span>
+                        <span class="fa fa-plus-circle"></span>
+                        {% trans "New user" %}
+                    </a>
+                    <a class="nav-link" href="{% url "backoffice:user-list" %}">
+                        <span class="fa fa-users"></span>
+                        <span class="fa fa-list"></span>
+                        {% trans "User list" %}
+                    </a>
+                    {% if user.is_superuser %}
+                    <a class="nav-link" href="{% url "backoffice:wizard-users" %}">
+                        <span class="fa fa-users"></span>
+                        <span class="fa fa-star-o"></span>
+                        {% trans "Rights" %}
+                    </a>
+                    {% endif %}
             {% endif %}
             {% if user.is_troubleshooter or user.is_superuser %}
+                {% if user.is_superuser or user.is_backoffice_user %}
+                    <span class="nav-link">
+                        <span class="fa fa-user-secret"></span>
+                        {% trans "Troubleshooting" %}
+                    </span>
+                {% endif %}
                 <a href="{% url "troubleshooter:main" %} "id="nav-sessions" class="nav-link{% if has_request %} has-request{% endif %}">
+                    <span class="fa fa-user-secret"></span>
+                    <span class="fa fa-user"></span>
                     {% trans "Current sessions" %}
                 </a>
                 <a class="nav-link" href="{% url "troubleshooter:transaction-list" %}">
+                    <span class="fa fa-user-secret"></span>
+                    <span class="fa fa-book"></span>
                     {% trans "Transactions" %}
                 </a>
                 <a class="nav-link" href="{% url "troubleshooter:constraint-list" %}">
+                    <span class="fa fa-user-secret"></span>
+                    <span class="fa fa-list"></span>
                     {% trans "Lists" %}
                 </a>
                 <a class="nav-link" href="{% url "troubleshooter:preorder-list" %}">
+                    <span class="fa fa-user-secret"></span>
+                    <span class="fa fa-shopping-cart"></span>
                     {% trans "Preorder" %}
                 </a>
                 <a class="nav-link" href="{% url "troubleshooter:ping" %}">
+                    <span class="fa fa-user-secret"></span>
+                    <span class="fa fa-terminal"></span>
                     {% trans "Ping" %}
                 </a>
                 <a class="nav-link" href="{% url "troubleshooter:information-list" %}">
+                    <span class="fa fa-user-secret"></span>
+                    <span class="fa fa-print"></span>
                     {% trans "Print" %}
                 </a>
             {% endif %}
