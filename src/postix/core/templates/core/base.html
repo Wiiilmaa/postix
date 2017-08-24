@@ -1,0 +1,90 @@
+{% load staticfiles %}
+{% load solo_tags %}
+{% load i18n %}
+{% load compress %}
+{% get_solo 'core.EventSettings' as settings %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>postix {% block title %}{% endblock %}</title>
+
+    {% compress css %}
+        <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
+    {% endcompress %}
+    {% block area_stylesheets %}
+    {% endblock %}
+    <link rel="shortcut icon" href="{% static "shared/img/favicon.png" %}">
+
+</head>
+<body class="">
+
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% block area_url %}{% endblock %}">
+                <img src="{% static "shared/img/icon_white.svg" %}">
+                {% block area %}{% endblock %}
+            </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          {% if user.is_backoffice_user or user.is_superuser %}
+			  <ul class="nav navbar-nav">
+                  <li><a href="{% url "backoffice:new-session" %}">{% trans "New session" %}</a></li>
+                  <li><a href="{% url "backoffice:session-list" %}">{% trans "Sessions" %}</a></li>
+                  <li><a href="{% url "backoffice:report-list" %}">{% trans "Reports" %}</a></li>
+			  </ul>
+			  <ul class="nav navbar-nav navbar-right">
+                  <li><a href="{% url "backoffice:create-user" %}"><span class="glyphicon glyphicon-plus-sign"></span> {% trans "User" %}</a></li>
+                  <li><a href="{% url "backoffice:user-list" %}"><span class="glyphicon glyphicon-list"></span> {% trans "Users" %}</a></li>
+                  <li><a href="{% url "backoffice:logout" %}"><span class="glyphicon glyphicon-log-out"></span> {{ user }}</a></li>
+
+                  {% if user.is_superuser %}
+                  <li><a href="{% url "backoffice:wizard-users" %}">{% trans "Rights" %}</a></li>
+                    {% if not settings.initialized %}
+                        <li><a href="{% url "backoffice:wizard-settings" %}"><span class="text-danger glyphicon glyphicon-alert"></span></a></li>
+                    {% else %}
+                        <li><a href="{% url "backoffice:wizard-settings" %}"><span class="glyphicon glyphicon-wrench"></span></a></li>
+                    {% endif %}
+                  {% endif %}
+
+          {% endif %}
+            {% if user.is_troubleshooter or user.is_superuser %}
+                <ul class="nav navbar-nav">
+                    <li id="nav-sessions" {% if has_request %}class="has-request"{% endif %}><a href="{% url "troubleshooter:main" %}">{% trans "Current sessions" %}</a></li>
+                    <li><a href="{% url "troubleshooter:transaction-list" %}">{% trans "Transactions" %}</a></li>
+                    <li><a href="{% url "troubleshooter:constraint-list" %}">{% trans "Lists" %}</a></li>
+                    <li><a href="{% url "troubleshooter:preorder-list" %}">{% trans "Preorder" %}</a></li>
+                    <li><a href="{% url "troubleshooter:ping" %}">{% trans "Ping" %}</a></li>
+                    <li><a href="{% url "troubleshooter:information-list" %}">{% trans "Print" %}</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url "troubleshooter:logout" %}"><span class="glyphicon glyphicon-log-out"></span>{{ user }}</a>
+                </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block area_content %}
+        {% endblock %}
+
+    <script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
+    {% block area_scripts %}
+    {% endblock %}
+
+</body>
+</html>
