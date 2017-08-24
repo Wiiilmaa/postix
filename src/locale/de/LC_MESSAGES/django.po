@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-24 03:57+0200\n"
-"PO-Revision-Date: 2017-08-24 03:58+0200\n"
+"POT-Creation-Date: 2017-08-24 23:06+0200\n"
+"PO-Revision-Date: 2017-08-24 23:13+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -128,9 +128,33 @@ msgstr "Passwort zurücksetzen"
 msgid "Passwords do not match!"
 msgstr "Passwörter stimmen nicht überein!"
 
-#: postix/backoffice/forms/wizard.py:26
+#: postix/backoffice/forms/wizard.py:28
 msgid "Set up settings"
 msgstr "Einstellungen anlegen"
+
+#: postix/backoffice/forms/wizard.py:45
+msgid "Add Cashdesk"
+msgstr "Kasse hinzufügen"
+
+#: postix/backoffice/forms/wizard.py:52
+msgid "JSON File"
+msgstr "JSON-Datei"
+
+#: postix/backoffice/forms/wizard.py:53
+msgid "Create cashdesks"
+msgstr "Kassen anlegen"
+
+#: postix/backoffice/forms/wizard.py:53
+msgid "If you do not have any cashdesks yet, create them"
+msgstr "Wenn du noch keine Kassen hast, kannst du sie hier generieren lassen"
+
+#: postix/backoffice/forms/wizard.py:59
+msgid "Import presale export"
+msgstr "Presale-Export importieren"
+
+#: postix/backoffice/forms/wizard.py:83
+msgid "Save Item"
+msgstr "Produkt speichern"
 
 #: postix/backoffice/templates/backoffice/base.html:19
 msgid "Backoffice"
@@ -363,9 +387,28 @@ msgstr "Noch keine Sessions, es kann losgehen!"
 msgid "User List"
 msgstr "Nutzerliste"
 
+#: postix/backoffice/templates/backoffice/wizard_cashdesks.html:6
+msgid "Add a new cashdesk"
+msgstr "Neue Kasse erstellen"
+
+#: postix/backoffice/templates/backoffice/wizard_import.html:6
+#: postix/core/templates/core/base.html:150
+msgid "Import Presale Data"
+msgstr "Presale-Daten importieren"
+
+#: postix/backoffice/templates/backoffice/wizard_item_edit.html:6
+#: postix/backoffice/templates/backoffice/wizard_item_list.html:14
+msgid "Edit item"
+msgstr "Produkt bearbeiten"
+
+#: postix/backoffice/templates/backoffice/wizard_item_list.html:5
+#: postix/core/templates/core/base.html:155
+msgid "Item List"
+msgstr "Produkte"
+
 #: postix/backoffice/templates/backoffice/wizard_settings.html:6
-msgid "Initialize settings"
-msgstr "Settings anlegen"
+msgid "General settings"
+msgstr "Allgemeine Einstellungen"
 
 #: postix/backoffice/templates/backoffice/wizard_users.html:5
 msgid "User rights"
@@ -409,31 +452,31 @@ msgstr "Dein Account wurde deaktiviert."
 msgid "User does not have permission to access backoffice data."
 msgstr "Du darfst leider nicht auf Hinterzimmer-Daten zugreifen."
 
-#: postix/backoffice/views/session.py:51
+#: postix/backoffice/views/session.py:52
 msgid "Session has been created."
 msgstr "Die Session wurde angelegt."
 
-#: postix/backoffice/views/session.py:55
+#: postix/backoffice/views/session.py:56
 msgid "Session could not be created. Please review the data."
 msgstr "Die Session konnte nicht angelegt werden. Bitte prüfe die Daten."
 
-#: postix/backoffice/views/session.py:142
+#: postix/backoffice/views/session.py:141
 msgid "Products have been added to the cashdesk."
 msgstr "Die Produkte wurden der Kasse hinzugefügt."
 
-#: postix/backoffice/views/session.py:146
+#: postix/backoffice/views/session.py:145
 msgid "Error: Please review the data."
 msgstr "Fehler: Bitte prüfe die Eingabedaten."
 
-#: postix/backoffice/views/session.py:170
+#: postix/backoffice/views/session.py:169
 msgid "All transactions in the session have been cancelled."
 msgstr "Alle Buchungen in der Session wurden storniert."
 
-#: postix/backoffice/views/session.py:235
+#: postix/backoffice/views/session.py:234
 msgid "Session could not be ended: Please review the data."
 msgstr "Die Session konnte nicht beendet werden: Bitte prüfe die Eingabedaten."
 
-#: postix/backoffice/views/session.py:239
+#: postix/backoffice/views/session.py:238
 msgid ""
 "This session has ended already. Filling out this form will produce a "
 "corrected report. "
@@ -441,15 +484,15 @@ msgstr ""
 "Die Session wurde bereits beendet. Wenn du dieses Formular ausfüllst, wird "
 "der bestehende Report korrigiert."
 
-#: postix/backoffice/views/session.py:279
+#: postix/backoffice/views/session.py:278
 msgid "Session has already ended and cannot be moved."
 msgstr "Die Session wurde bereits beendet und kann nicht mehr verlegt werden."
 
-#: postix/backoffice/views/session.py:287
+#: postix/backoffice/views/session.py:286
 msgid "Session has been moved."
 msgstr "Die Session wurde verlegt."
 
-#: postix/backoffice/views/session.py:289
+#: postix/backoffice/views/session.py:288
 msgid "Session could not be moved!"
 msgstr "Die Session konnte nicht verlegt werden."
 
@@ -474,88 +517,144 @@ msgstr ""
 msgid "Passwort has been changed."
 msgstr "Das Passwort wurde geändert."
 
-#: postix/backoffice/views/wizard.py:57
+#: postix/backoffice/views/wizard.py:22
+msgid "The settings have been updated \\o/"
+msgstr "Die Einstellungen wurden gespeichert \\o/"
+
+#: postix/backoffice/views/wizard.py:46
+msgid "The cashdesk has been created \\o/"
+msgstr "Die Kasse wurde angelegt. \\o/"
+
+#: postix/backoffice/views/wizard.py:84
 msgid "User rights have been expanded"
 msgstr "Nutzerrechte wurden erweitert."
 
-#: postix/backoffice/views/wizard.py:59
+#: postix/backoffice/views/wizard.py:86
 msgid "User rights have been curtailed."
 msgstr "Nutzerrechte wurden beschnitten."
+
+#: postix/backoffice/views/wizard.py:101
+msgid "The import has been processed \\o/"
+msgstr "Der Import wurde durchgeführt – danke für deine Geduld :)"
+
+#: postix/backoffice/views/wizard.py:103
+msgid "The import could not be processed: "
+msgstr "Der Import konnte nicht verarbeitet werden: "
+
+#: postix/backoffice/views/wizard.py:132
+msgid "The item has been saved \\o/"
+msgstr "Das Produkt wurde gespeichert \\o/"
+
+#: postix/backoffice/views/wizard.py:146
+msgid "The item has been updated \\o/"
+msgstr "Das Produkt wurde gespeichert \\o/"
+
+#: postix/core/models/cashdesk.py:27
+msgid "IP address"
+msgstr "IP-Adresse"
+
+#: postix/core/models/cashdesk.py:29
+msgid "Printer queue name"
+msgstr "Drucker-Name"
+
+#: postix/core/models/cashdesk.py:30
+msgid "The name configured in CUPS"
+msgstr "Der Name, der im CUPS konfiguriert wurde"
+
+#: postix/core/models/cashdesk.py:34
+msgid "Printer handles drawer"
+msgstr "Drucker steuert Schublade"
+
+#: postix/core/models/cashdesk.py:35
+msgid "Unset if the printer or drawer are broken."
+msgstr "Ausschalten, wenn Drucker oder Schublade kaputt sind"
 
 #: postix/core/models/preorder.py:52 postix/core/utils/flow.py:77
 #, python-brace-format
 msgid "This ticket ({secret}…) has already been redeemed at {datetime}."
 msgstr "Dieses Ticket ({secret}…) wurde bereits eingelöst ({datetime})."
 
-#: postix/core/templates/core/base.html:58
+#: postix/core/templates/core/base.html:57
 msgid "Sessions"
 msgstr "Sessions"
 
-#: postix/core/templates/core/base.html:63
+#: postix/core/templates/core/base.html:62
 msgid "New session"
 msgstr "Kasse einzählen"
 
-#: postix/core/templates/core/base.html:68
+#: postix/core/templates/core/base.html:67
 msgid "List of sessions"
 msgstr "Liste von Sessions"
 
-#: postix/core/templates/core/base.html:73
+#: postix/core/templates/core/base.html:72
 msgid "Reports"
 msgstr "Reports"
 
-#: postix/core/templates/core/base.html:77
+#: postix/core/templates/core/base.html:76
 msgid "Users"
 msgstr "Benutzer"
 
-#: postix/core/templates/core/base.html:82
-#, fuzzy
-#| msgid "Create user"
+#: postix/core/templates/core/base.html:81
 msgid "New user"
 msgstr "Benutzer anlegen"
 
-#: postix/core/templates/core/base.html:87
-#, fuzzy
-#| msgid "User List"
+#: postix/core/templates/core/base.html:86
 msgid "User list"
 msgstr "Nutzerliste"
 
 #: postix/core/templates/core/base.html:93
-msgid "Rights"
-msgstr "Rechte"
-
-#: postix/core/templates/core/base.html:101
 msgid "Troubleshooting"
 msgstr "Troubleshooter-Ecke"
 
-#: postix/core/templates/core/base.html:107
+#: postix/core/templates/core/base.html:99
 #: postix/troubleshooter/templates/troubleshooter/main.html:5
 msgid "Current sessions"
 msgstr "Laufende Schichten"
 
-#: postix/core/templates/core/base.html:112
+#: postix/core/templates/core/base.html:104
 #: postix/troubleshooter/templates/troubleshooter/transaction_list.html:5
 msgid "Transactions"
 msgstr "Transaktionen"
 
-#: postix/core/templates/core/base.html:117
+#: postix/core/templates/core/base.html:109
 #: postix/troubleshooter/templates/troubleshooter/constraints_list.html:5
 msgid "Lists"
 msgstr "Listen"
 
-#: postix/core/templates/core/base.html:122
+#: postix/core/templates/core/base.html:114
 #: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:6
 msgid "Preorder"
 msgstr "VVK"
 
-#: postix/core/templates/core/base.html:127
+#: postix/core/templates/core/base.html:119
 msgid "Ping"
 msgstr "Ping"
 
-#: postix/core/templates/core/base.html:132
+#: postix/core/templates/core/base.html:124
 #: postix/troubleshooter/templates/troubleshooter/information_detail.html:16
 #: postix/troubleshooter/templates/troubleshooter/information_detail.html:20
 msgid "Print"
 msgstr "Drucken"
+
+#: postix/core/templates/core/base.html:130
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: postix/core/templates/core/base.html:135
+msgid "General Settings"
+msgstr "Allgemeine Einstellungen"
+
+#: postix/core/templates/core/base.html:140
+msgid "User Permissions"
+msgstr "Berechtigungen"
+
+#: postix/core/templates/core/base.html:145
+msgid "New Cashdesks"
+msgstr "Neue Kassen"
+
+#: postix/core/templates/core/base.html:160
+msgid "Add an Item"
+msgstr "Produkt hinzufügen"
 
 #: postix/core/utils/flow.py:44
 msgid "No secret has been given."
@@ -1052,6 +1151,9 @@ msgstr "Der Bon wurde an {} nachgedruckt."
 #: postix/troubleshooter/views/transactions.py:103
 msgid "Unknwon transaction."
 msgstr "Transation nicht bekannt."
+
+#~ msgid "Rights"
+#~ msgstr "Rechte"
 
 #~ msgid "Invoice"
 #~ msgstr "Rechnung"
