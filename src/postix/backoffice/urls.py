@@ -25,6 +25,9 @@ urlpatterns = [
     url('^wizard/settings/$', views.WizardSettingsView.as_view(), name='wizard-settings'),
     url('^wizard/cashdesks/$', views.WizardCashdesksView.as_view(), name='wizard-cashdesks'),
     url('^wizard/import/$', views.WizardPretixImportView.as_view(), name='wizard-import'),
+    url('^wizard/items/$', views.WizardItemListView.as_view(), name='wizard-items-list'),
+    url('^wizard/items/new$', views.WizardItemCreateView.as_view(), name='wizard-items-create'),
+    url('^wizard/items/(?P<pk>[0-9]+)/$', views.WizardItemEditView.as_view(), name='wizard-items-edit'),
 
     url('^$', views.MainView.as_view(), name='main'),
 ]

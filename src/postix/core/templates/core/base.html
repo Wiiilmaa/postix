@@ -149,6 +149,16 @@
                     <span class="fa fa-download"></span>
                     {% trans "Import Presale Data" %}
                 </a>
+                <a class="nav-link" href="{% url "backoffice:wizard-items-list" %}">
+                    <span class="fa fa-cog"></span>
+                    <span class="fa fa-list"></span>
+                    {% trans "Item List" %}
+                </a>
+                <a class="nav-link" href="{% url "backoffice:wizard-items-create" %}">
+                    <span class="fa fa-cog"></span>
+                    <span class="fa fa-plus-circle"></span>
+                    {% trans "Add an Item" %}
+                </a>
             {% endif %}
         </nav>
         {% endif %}

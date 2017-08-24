@@ -2,11 +2,11 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, ListView, TemplateView, UpdateView
 
-from postix.backoffice.forms import CashdeskForm, EventSettingsForm, ImportForm
+from postix.backoffice.forms import CashdeskForm, EventSettingsForm, ImportForm, ItemForm
 from postix.backoffice.views.utils import SuperuserRequiredMixin
-from postix.core.models import EventSettings, User
+from postix.core.models import EventSettings, Item, User
 
 
 class WizardSettingsView(SuperuserRequiredMixin, FormView):
@@ -112,3 +112,37 @@ class WizardPretixImportView(SuperuserRequiredMixin, FormView):
 
     def get_success_url(self):
         return reverse('backoffice:wizard-import')
+
+
+class WizardItemListView(SuperuserRequiredMixin, ListView):
+    template_name = 'backoffice/wizard_item_list.html'
+    model = Item
+
+
+class WizardItemCreateView(SuperuserRequiredMixin, FormView):
+    template_name = 'backoffice/wizard_item_edit.html'
+    form_class = ItemForm
+
+    def post(self, request):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('The item has been saved \o/'))
+            return self.form_valid(form)
+
+    def get_success_url(self):
+        return reverse('backoffice:wizard-items-list')
+
+
+class WizardItemEditView(SuperuserRequiredMixin, UpdateView):
+    template_name = 'backoffice/wizard_item_edit.html'
+    model = Item
+    form_class = ItemForm
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, _('The item has been updated \o/'))
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('backoffice:wizard-items-list')
