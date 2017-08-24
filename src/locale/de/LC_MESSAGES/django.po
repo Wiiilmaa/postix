@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-24 02:19+0200\n"
-"PO-Revision-Date: 2017-08-24 02:20+0200\n"
+"POT-Creation-Date: 2017-08-24 03:57+0200\n"
+"PO-Revision-Date: 2017-08-24 03:58+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -132,48 +132,23 @@ msgstr "Passwörter stimmen nicht überein!"
 msgid "Set up settings"
 msgstr "Einstellungen anlegen"
 
-#: postix/backoffice/templates/backoffice/base.html:29
+#: postix/backoffice/templates/backoffice/base.html:19
 msgid "Backoffice"
 msgstr "Hinterzimmer"
 
-#: postix/backoffice/templates/backoffice/base.html:35
-msgid "New session"
-msgstr "Kasse einzählen"
-
-#: postix/backoffice/templates/backoffice/base.html:36
-msgid "Sessions"
-msgstr "Sessions"
-
-#: postix/backoffice/templates/backoffice/base.html:37
-msgid "Reports"
-msgstr "Reports"
-
-#: postix/backoffice/templates/backoffice/base.html:40
-#: postix/troubleshooter/templates/troubleshooter/main.html:19
-msgid "User"
-msgstr "Benutzer"
-
-#: postix/backoffice/templates/backoffice/base.html:41
-msgid "Users"
-msgstr "Benutzer"
-
-#: postix/backoffice/templates/backoffice/base.html:45
-msgid "Rights"
-msgstr "Rechte"
-
-#: postix/backoffice/templates/backoffice/base.html:72
+#: postix/backoffice/templates/backoffice/base.html:27
 msgid "Please initialize this event's settings:"
 msgstr "Bitte leg die Eventeinstellungen an:"
 
-#: postix/backoffice/templates/backoffice/base.html:72
+#: postix/backoffice/templates/backoffice/base.html:27
 msgid "here"
 msgstr "hier"
 
-#: postix/backoffice/templates/backoffice/base.html:74
+#: postix/backoffice/templates/backoffice/base.html:29
 msgid "Please call a superuser to initialize this event's settings."
 msgstr "Bitte rufe einen Admin, um die Eventeinstellungen anzulegen."
 
-#: postix/backoffice/templates/backoffice/base.html:84
+#: postix/backoffice/templates/backoffice/base.html:39
 msgid ""
 "We found some settings in your installation that are probably incorrect. We "
 "recommend that you check them again :)"
@@ -512,6 +487,76 @@ msgstr "Nutzerrechte wurden beschnitten."
 msgid "This ticket ({secret}…) has already been redeemed at {datetime}."
 msgstr "Dieses Ticket ({secret}…) wurde bereits eingelöst ({datetime})."
 
+#: postix/core/templates/core/base.html:58
+msgid "Sessions"
+msgstr "Sessions"
+
+#: postix/core/templates/core/base.html:63
+msgid "New session"
+msgstr "Kasse einzählen"
+
+#: postix/core/templates/core/base.html:68
+msgid "List of sessions"
+msgstr "Liste von Sessions"
+
+#: postix/core/templates/core/base.html:73
+msgid "Reports"
+msgstr "Reports"
+
+#: postix/core/templates/core/base.html:77
+msgid "Users"
+msgstr "Benutzer"
+
+#: postix/core/templates/core/base.html:82
+#, fuzzy
+#| msgid "Create user"
+msgid "New user"
+msgstr "Benutzer anlegen"
+
+#: postix/core/templates/core/base.html:87
+#, fuzzy
+#| msgid "User List"
+msgid "User list"
+msgstr "Nutzerliste"
+
+#: postix/core/templates/core/base.html:93
+msgid "Rights"
+msgstr "Rechte"
+
+#: postix/core/templates/core/base.html:101
+msgid "Troubleshooting"
+msgstr "Troubleshooter-Ecke"
+
+#: postix/core/templates/core/base.html:107
+#: postix/troubleshooter/templates/troubleshooter/main.html:5
+msgid "Current sessions"
+msgstr "Laufende Schichten"
+
+#: postix/core/templates/core/base.html:112
+#: postix/troubleshooter/templates/troubleshooter/transaction_list.html:5
+msgid "Transactions"
+msgstr "Transaktionen"
+
+#: postix/core/templates/core/base.html:117
+#: postix/troubleshooter/templates/troubleshooter/constraints_list.html:5
+msgid "Lists"
+msgstr "Listen"
+
+#: postix/core/templates/core/base.html:122
+#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:6
+msgid "Preorder"
+msgstr "VVK"
+
+#: postix/core/templates/core/base.html:127
+msgid "Ping"
+msgstr "Ping"
+
+#: postix/core/templates/core/base.html:132
+#: postix/troubleshooter/templates/troubleshooter/information_detail.html:16
+#: postix/troubleshooter/templates/troubleshooter/information_detail.html:20
+msgid "Print"
+msgstr "Drucken"
+
 #: postix/core/utils/flow.py:44
 msgid "No secret has been given."
 msgstr "Es wurde kein Code eingegeben."
@@ -787,39 +832,9 @@ msgstr "Diese Rechnung ist nur mit Bon Nr {} gültig."
 msgid "The invoice total has already been paid."
 msgstr "Der Rechnungsbetrag wurde bereits beglichen."
 
-#: postix/troubleshooter/templates/troubleshooter/base.html:29
+#: postix/troubleshooter/templates/troubleshooter/base.html:18
 msgid "Troubleshooter"
 msgstr "Troubleshooter"
-
-#: postix/troubleshooter/templates/troubleshooter/base.html:35
-#: postix/troubleshooter/templates/troubleshooter/main.html:5
-msgid "Current sessions"
-msgstr "Laufende Schichten"
-
-#: postix/troubleshooter/templates/troubleshooter/base.html:36
-#: postix/troubleshooter/templates/troubleshooter/transaction_list.html:5
-msgid "Transactions"
-msgstr "Transaktionen"
-
-#: postix/troubleshooter/templates/troubleshooter/base.html:37
-#: postix/troubleshooter/templates/troubleshooter/constraints_list.html:5
-msgid "Lists"
-msgstr "Listen"
-
-#: postix/troubleshooter/templates/troubleshooter/base.html:38
-#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:6
-msgid "Preorder"
-msgstr "VVK"
-
-#: postix/troubleshooter/templates/troubleshooter/base.html:39
-msgid "Ping"
-msgstr "Ping"
-
-#: postix/troubleshooter/templates/troubleshooter/base.html:40
-#: postix/troubleshooter/templates/troubleshooter/information_detail.html:16
-#: postix/troubleshooter/templates/troubleshooter/information_detail.html:20
-msgid "Print"
-msgstr "Drucken"
 
 #: postix/troubleshooter/templates/troubleshooter/constraint_detail.html:8
 msgid ""
@@ -895,6 +910,10 @@ msgstr "Benutzername"
 #: postix/troubleshooter/templates/troubleshooter/login.html:22
 msgid "Sign in"
 msgstr "Einloggen"
+
+#: postix/troubleshooter/templates/troubleshooter/main.html:19
+msgid "User"
+msgstr "Benutzer"
 
 #: postix/troubleshooter/templates/troubleshooter/main.html:35
 msgid "Session time"
