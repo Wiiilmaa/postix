@@ -53,11 +53,11 @@ class Transaction(models.Model):
         try:
             self.receipt_id = 1 + (Transaction.objects.aggregate(m=Max('receipt_id'))['m'] or 0)
             self.save(update_fields=['receipt_id'])
-        except:
+        except Exception as e:
             if retry > 0:
                 self.set_receipt_id(retry=retry - 1)
             else:
-                raise
+                raise e
 
 
 class TransactionPosition(models.Model):

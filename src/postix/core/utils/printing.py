@@ -161,8 +161,8 @@ class CashdeskPrinter:
                 # self.send(image_tools.get_imagedata(settings.STATIC_ROOT + '/' + settings.EVENT_RECIPE_HEADER))
                 self.send(receipt)
                 self.cut_tape()
-            except:
-                logging.getLogger('django').exception('Printing at {} failed'.format(self.printer))
+            except Exception as e:
+                logging.getLogger('django').exception('Printing at {} failed: {}'.format(self.printer, str(e)))
 
     def print_text(self, text: str) -> None:
         center = bytearray([self.ESC, 0x61, 1]).decode()  # center text

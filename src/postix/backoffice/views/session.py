@@ -1,3 +1,4 @@
+from contextlib import suppress
 from typing import Union
 
 from django import forms
@@ -57,14 +58,12 @@ def new_session(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirec
     elif request.method == 'GET':
         param = request.GET.get('desk')
         if param:
-            try:
+            with suppress(Exception):
                 initial_form = {
                     'cashdesk': Cashdesk.objects.get(pk=int(param)),
                     'backoffice_user': request.user,
                 }
                 form, _ignored = get_form_and_formset(initial_form=initial_form)
-            except:
-                pass
 
     return render(request, 'backoffice/new_session.html', {
         'form': form,
