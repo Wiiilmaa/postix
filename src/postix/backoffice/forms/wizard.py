@@ -47,7 +47,8 @@ class CashdeskForm(forms.ModelForm):
 
 class ImportForm(forms.Form):
 
-    _file = forms.FileField()
+    _file = forms.FileField(label=_('JSON File'))
+    cashdesks = forms.IntegerField(min_value=0, required=False, label=_('Create cashdesks'), help_text=_('If you do not have any cashdesks yet, create them'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -95,7 +95,7 @@ class WizardPretixImportView(SuperuserRequiredMixin, FormView):
             from postix.core.utils.pretix_import import import_pretix_data
             try:
                 pretix_import = request.FILES['_file']
-                import_pretix_data(pretix_import.read().decode())
+                import_pretix_data(pretix_import.read().decode(), add_cashdesks=form.cleaned_data['cashdesks'])
                 messages.success(request, _('The import has been processed \o/'))
             except Exception as e:
                 messages.error(request, _('The import could not be processed: ') + str(e))

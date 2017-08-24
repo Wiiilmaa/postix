@@ -91,13 +91,14 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
     ))
 
     if add_cashdesks:
-        for cashdesk_number in range(5):
+        cashdesk_count = add_cashdesks if isinstance(add_cashdesks, int) else 5
+        for cashdesk_number in range(cashdesk_count):
             Cashdesk.objects.get_or_create(
                 name='Cashdesk {}'.format(cashdesk_number + 1),
                 ip_address='127.0.0.{}'.format(cashdesk_number + 1),
             )
         log.write(style.SUCCESS(
-            'Added 5 cashdesks.'
+            'Added {} cashdesks.'.format(cashdesk_count)
         ))
     log.write(style.SUCCESS(
         'Import done.'
