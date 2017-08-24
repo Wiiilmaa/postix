@@ -24,11 +24,16 @@ def generate_key() -> str:
 
 class Cashdesk(models.Model):
     name = models.CharField(max_length=254)
-    ip_address = models.GenericIPAddressField(verbose_name='IP address')
+    ip_address = models.GenericIPAddressField(verbose_name=_('IP address'))
     printer_queue_name = models.CharField(max_length=254, null=True, blank=True,
-                                          verbose_name='Printer queue name')
+                                          verbose_name=_('Printer queue name'),
+                                          help_text=_('The name configured in CUPS'),
+                                          )
     is_active = models.BooleanField(default=True)
-    printer_handles_drawer = models.BooleanField(default=True)
+    printer_handles_drawer = models.BooleanField(default=True,
+                                                 verbose_name=_('Printer handles drawer'),
+                                                 help_text=_('Unset if the printer or drawer are broken.'),
+                                                 )
 
     def __str__(self) -> str:
         return self.name
