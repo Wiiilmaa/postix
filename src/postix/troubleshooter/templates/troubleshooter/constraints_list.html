@@ -29,6 +29,8 @@
                     </li>
                 </ul>
             </li>
+        {% empty %}
+            {% trans "No list constraints can be displayed at the moment. Please call an administrator if you think this is wrong." %}
         {% endfor %}
     </ul>
 {% endblock content %}

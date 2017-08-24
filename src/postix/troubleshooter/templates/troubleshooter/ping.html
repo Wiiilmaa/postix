@@ -37,6 +37,10 @@
             </span>
         {% endif %}
         <br>
+    {% empty %}
+        <span class="ping-tooltip" data-toggle="tooltip" data-placement="right" title="empty ping">
+            ERROR: 0 bytes from end.queue: icmp_seq=-1 ttl=64 duration=∞
+        </span>
     {% endfor %}
     {% endlanguage %}
 
