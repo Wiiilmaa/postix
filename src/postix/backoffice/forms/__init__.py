@@ -3,7 +3,7 @@ from .session import (
     get_form_and_formset,
 )
 from .user import CreateUserForm, ResetPasswordForm, get_normal_user_form
-from .wizard import EventSettingsForm, CashdeskForm
+from .wizard import CashdeskForm, EventSettingsForm
 
 __all__ = [
     'CashdeskForm',
