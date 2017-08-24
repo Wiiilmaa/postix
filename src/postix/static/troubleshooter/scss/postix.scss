@@ -6,46 +6,18 @@ $icon-font-path: "/static/postix/shared/fonts/";
 body {
     font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
 }
-body.login, body.error {
-    background: #eee;
-}
 
 .navbar-inverse, .navbar-inverse .navbar-collapse {
     background: $brand-inverse;
 }
-
-.navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
-    color: white;
-}
-
 .navbar-brand img {
     height: 24px;
     position: relative;
     top: -3px;
     display: inline;
 }
-
-.panel-login {
-    width: 400px;
-    margin: 60px auto 0 auto;
-}
-
-.error-page {
-    width: 400px;
-    margin: 60px auto 0 auto;
-    text-align: center;
-}
-.error-page h2 {
-    font-size: 30px;
-}
-.error-page .glyphicon {
-    font-size: 200px;
-}
-.navbar .glyphicon-log-out {
-    margin-right: 0.5em;
-}
-.glyphicon-plus-sign {
-    margin-right: 0.1em;
+.navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
+    color: white;
 }
 /* Until crispy-forms master has merged PR #545, we need to correct this here. */
 tbody th {
@@ -75,13 +47,6 @@ tbody th {
 }
 .backoffice-content .glyphicon-log-out {
     color: #777;
-}
-h1 a:hover {
-    text-decoration: none;
-}
-h1 .glyphicon {
-    font-size: 2rem;
-    margin-right: 1em
 }
 #end-sessions-table .control-label {
     display: none;

@@ -1,0 +1,83 @@
+body.login, body.error {
+    background: #eee;
+}
+.panel-login {
+    width: 400px;
+    margin: 60px auto 0 auto;
+}
+
+.error-page {
+    width: 400px;
+    margin: 60px auto 0 auto;
+    text-align: center;
+}
+.error-page h2 {
+    font-size: 30px;
+}
+.error-page .glyphicon {
+    font-size: 200px;
+}
+.navbar .glyphicon-log-out {
+    margin-right: 0.5em;
+}
+.glyphicon-plus-sign {
+    margin-right: 0.1em;
+}
+h1 a:hover {
+    text-decoration: none;
+}
+h1 .glyphicon {
+    font-size: 2rem;
+    margin-right: 1em
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+#page-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+#page-content {
+  background: white;
+  flex-grow: 1;
+  padding: 20px;
+}
+.flex-row {
+  flex-direction:row !important
+}
+.flex-column {
+  flex-direction:column !important
+}
+.sidebar {
+  width: 250px;
+  font-size: 14px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  border-right: 2px solid #c00032;
+
+}
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+}
+.navbar {
+  margin-bottom: 0 !important;
+}
+.sidebar .nav-link {
+  border-bottom: 1px solid #c00032;
+  padding: 10px 15px;
+}
+
+.sidebar .nav-link .fa {
+  margin-right: 5px;
+}
+
+.sidebar .nav-link:hover, .nav-link.active {
+  background: #c00032;
+  color: white;
+  text-decoration: none;
+}
