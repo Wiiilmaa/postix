@@ -66,7 +66,7 @@
             {% endfor %}
         {% endif %}
         <div class="backoffice-main">
-          {% if not settings.initialized %}
+          {% if not settings.initialized and not user.is_anonymous %}
             <div class="alert alert-warning">
                 {% if user.is_superuser %}
                 {% trans "Please initialize this event's settings:" %} <a href="{% url "backoffice:wizard-settings" %}">{% trans "here" %}</a>
@@ -76,7 +76,7 @@
             </div>
           {% endif %}
 
-          {% if settings.initialized or user.is_superuser %}
+          {% if settings.initialized or user.is_superuser or user.is_anonymous %}
             <h1>{% block headline %}{% endblock %}</h1>
             <div class="backoffice-content">
                 {% if check_errors %}
