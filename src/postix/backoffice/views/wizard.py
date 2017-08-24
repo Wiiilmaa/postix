@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView, TemplateView
 
-from postix.backoffice.forms import CashdeskForm, EventSettingsForm
+from postix.backoffice.forms import CashdeskForm, EventSettingsForm, ImportForm
 from postix.backoffice.views.utils import SuperuserRequiredMixin
 from postix.core.models import EventSettings, User
 
@@ -83,3 +83,32 @@ class WizardUsersView(SuperuserRequiredMixin, TemplateView):
         else:
             messages.success(request, _('User rights have been curtailed.'))
         return redirect('backoffice:wizard-users')
+
+
+class WizardPretixImportView(SuperuserRequiredMixin, FormView):
+    template_name = 'backoffice/wizard_import.html'
+    form_class = ImportForm
+
+    def post(self, request):
+        form = self.get_form()
+        if form.is_valid():
+            from postix.core.utils.pretix_import import import_pretix_data
+            try:
+                pretix_import = request.FILES['_file']
+                import_pretix_data(pretix_import.read().decode())
+                messages.success(request, _('The import has been processed \o/'))
+            except Exception as e:
+                messages.error(request, _('The import could not be processed: ') + str(e))
+            return self.form_valid(form)
+
+    def get_initial(self):
+        settings = EventSettings.get_solo()
+        attrs = {
+            attr: getattr(settings, attr)
+            for attr in EventSettingsForm().fields
+        }
+        attrs.update({'initialized': True})
+        return attrs
+
+    def get_success_url(self):
+        return reverse('backoffice:wizard-import')

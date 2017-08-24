@@ -144,6 +144,11 @@
                     <span class="fa fa-plus-circle"></span>
                     {% trans "New Cashdesks" %}
                 </a>
+                <a class="nav-link" href="{% url "backoffice:wizard-import" %}">
+                    <span class="fa fa-cog"></span>
+                    <span class="fa fa-download"></span>
+                    {% trans "Import Presale Data" %}
+                </a>
             {% endif %}
         </nav>
         {% endif %}

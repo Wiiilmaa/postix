@@ -43,3 +43,16 @@ class CashdeskForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', _('Add Cashdesk')))
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-8'
+
+
+class ImportForm(forms.Form):
+
+    _file = forms.FileField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.add_input(Submit('submit', _('Import presale export')))
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
