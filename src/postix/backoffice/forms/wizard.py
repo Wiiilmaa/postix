@@ -3,7 +3,9 @@ from crispy_forms.layout import Submit
 from django import forms
 from django.utils.translation import ugettext as _
 
-from postix.core.models import Cashdesk, EventSettings, Item, Product, ProductItem
+from postix.core.models import (
+    Cashdesk, EventSettings, Item, Product, ProductItem,
+)
 
 
 class EventSettingsForm(forms.ModelForm):

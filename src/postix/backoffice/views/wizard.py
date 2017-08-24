@@ -4,7 +4,9 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView, ListView, TemplateView, UpdateView
 
-from postix.backoffice.forms import CashdeskForm, EventSettingsForm, ImportForm, ItemForm
+from postix.backoffice.forms import (
+    CashdeskForm, EventSettingsForm, ImportForm, ItemForm,
+)
 from postix.backoffice.views.utils import SuperuserRequiredMixin
 from postix.core.models import EventSettings, Item, User
 
