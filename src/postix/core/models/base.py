@@ -164,14 +164,14 @@ class Product(models.Model):
 
     @property
     def pack_list(self) -> str:
-        l = []
-        for pi in self.product_items.all():
-            if pi.is_visible:
-                if pi.amount != 1:
-                    l.append("{}x {}".format(pi.amount, pi.item.name))
+        result = []
+        for item in self.product_items.all():
+            if item.is_visible:
+                if item.amount != 1:
+                    result.append("{}x {}".format(item.amount, item.item.name))
                 else:
-                    l.append(pi.item.name)
-        return ", ".join(l)
+                    result.append(item.item.name)
+        return ", ".join(result)
 
     def __str__(self) -> str:
         return self.name
