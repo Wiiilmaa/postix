@@ -30,7 +30,7 @@ Optionally, import data::
 
 Run development server::
 
-  python manage.py runserver
+  POSTIX_STATIC_ROOT=_static python manage.py runserver
 
 Open your browser at one of the following URLs:
 
