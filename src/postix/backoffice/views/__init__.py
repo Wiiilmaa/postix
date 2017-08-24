@@ -7,7 +7,7 @@ from .session import (
 )
 from .user_management import ResetPasswordView, UserListView, create_user_view
 from .utils import backoffice_user_required
-from .wizard import WizardSettingsView, WizardUsersView
+from .wizard import WizardSettingsView, WizardUsersView, WizardCashdesksView
 
 __all__ = [
     'backoffice_user_required',
@@ -27,6 +27,7 @@ __all__ = [
     'SessionDetailView',
     'SessionListView',
     'UserListView',
+    'WizardCashdesksView',
     'WizardSettingsView',
     'WizardUsersView',
 ]

@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView, TemplateView
 
-from postix.backoffice.forms import EventSettingsForm
+from postix.backoffice.forms import CashdeskForm, EventSettingsForm
 from postix.backoffice.views.utils import SuperuserRequiredMixin
 from postix.core.models import EventSettings, User
 
@@ -17,6 +17,7 @@ class WizardSettingsView(SuperuserRequiredMixin, FormView):
         form = self.get_form()
         if form.is_valid():
             form.save()
+            messages.success(request, _('The settings have been updated \o/'))
             return self.form_valid(form)
 
     def get_initial(self):
@@ -29,7 +30,31 @@ class WizardSettingsView(SuperuserRequiredMixin, FormView):
         return attrs
 
     def get_success_url(self):
-        return reverse('backoffice:main')
+        return reverse('backoffice:wizard-settings')
+
+
+class WizardCashdesksView(SuperuserRequiredMixin, FormView):
+    template_name = 'backoffice/wizard_cashdesks.html'
+    form_class = CashdeskForm
+
+    def post(self, request):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('The cashdesk has been created \o/'))
+            return self.form_valid(form)
+
+    def get_initial(self):
+        settings = EventSettings.get_solo()
+        attrs = {
+            attr: getattr(settings, attr)
+            for attr in EventSettingsForm().fields
+        }
+        attrs.update({'initialized': True})
+        return attrs
+
+    def get_success_url(self):
+        return reverse('backoffice:wizard-cashdesks')
 
 
 class WizardUsersView(SuperuserRequiredMixin, TemplateView):

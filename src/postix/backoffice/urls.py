@@ -23,6 +23,7 @@ urlpatterns = [
 
     url('^wizard/users/$', views.WizardUsersView.as_view(), name='wizard-users'),
     url('^wizard/settings/$', views.WizardSettingsView.as_view(), name='wizard-settings'),
+    url('^wizard/cashdesks/$', views.WizardCashdesksView.as_view(), name='wizard-cashdesks'),
 
     url('^$', views.MainView.as_view(), name='main'),
 ]
