@@ -51,6 +51,7 @@
         </div>
     </nav>
     <div id="page-wrapper">
+        {% if not user.is_anonymous %}
         <nav class="nav flex-column sidebar">
             {% if user.is_backoffice_user or user.is_superuser %}
                 <span class="nav-link">
@@ -133,6 +134,7 @@
                 </a>
             {% endif %}
         </nav>
+        {% endif %}
 
     <div class="container" id="page-content">
 
