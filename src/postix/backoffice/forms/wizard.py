@@ -50,7 +50,24 @@ class CashdeskForm(forms.ModelForm):
 class ImportForm(forms.Form):
 
     _file = forms.FileField(label=_('JSON File'))
-    cashdesks = forms.IntegerField(min_value=0, required=False, label=_('Create cashdesks'), help_text=_('If you do not have any cashdesks yet, create them'))
+    cashdesks = forms.IntegerField(
+        min_value=0,
+        required=False,
+        label=_('Create cashdesks'),
+        help_text=_('If you do not have any cashdesks yet, create them'),
+    )
+    questions = forms.CharField(
+        required=False,
+        label=_('Questions to import'),
+        help_text=_('Please enter comma separated question IDs that you wish to import'),
+    )
+
+    def clean_questions(self):
+        value = self.cleaned_data['questions']
+        if not value:
+            return []
+        values = value.split(',')
+        return [v.strip() for v in values if v.strip().isdigit()]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
