@@ -12,7 +12,7 @@ script:
     - flake8 .
     - isort -rc -c .
     - python manage.py check
-    - py.test --cov=pretalx tests/ && codecov
+    - py.test --cov=postix tests/ && codecov
 cache:
     directories:
         - $HOME/.cache/pip
