@@ -16,6 +16,7 @@ htmlcov/
 .ropeproject
 __pycache__/
 _static/
+static.dist/
 .idea
 .secret
 media/
