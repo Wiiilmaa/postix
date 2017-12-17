@@ -19,6 +19,7 @@ class PreorderPosition(models.Model):
     # The following field is only used for locking purposes, do not use it otherwise.
     # Please see comment in redeem_preorder_ticket for more information
     last_transaction = models.IntegerField(null=True, blank=True)
+    information = models.CharField(max_length=1000, null=True, blank=True)
 
     def __str__(self) -> str:
         return "{}-{}".format(self.preorder.order_code, self.secret[:10])
