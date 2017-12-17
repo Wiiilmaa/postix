@@ -12,6 +12,7 @@ router.register(r'listconstraintentries', views.ListConstraintEntryViewSet)
 router.register(r'products', views.ProductViewSet)
 router.register(r'cashdesk', views.CashdeskActionViewSet)
 
+app_name = 'api'
 urlpatterns = [
     url(r'', include(router.urls, namespace='api'))
 ]

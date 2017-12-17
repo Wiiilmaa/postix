@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.http import is_safe_url

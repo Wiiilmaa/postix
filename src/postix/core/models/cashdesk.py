@@ -279,11 +279,11 @@ class TroubleshooterNotification(models.Model):
         (STATUS_NEW, STATUS_NEW),
     ]
 
-    session = models.ForeignKey('CashdeskSession', verbose_name='Cashdesk session initiating the notification')
+    session = models.ForeignKey('CashdeskSession', verbose_name='Cashdesk session initiating the notification', on_delete=models.PROTECT)
     message = models.CharField(max_length=500)
     created = models.DateTimeField(default=now, editable=False)
     modified = models.DateTimeField(default=now)
-    modified_by = models.ForeignKey('User')
+    modified_by = models.ForeignKey('User', on_delete=models.PROTECT)
     status = models.CharField(choices=STATUS_CHOICES, default=STATUS_NEW, max_length=3)
 
     objects = NotificationsManager()

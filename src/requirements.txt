@@ -1,5 +1,5 @@
 # Basic and production requirements
-Django==1.10.*
+Django==1.11.*
 djangorestframework==3.7.*
 django-crispy-forms==1.7.*
 django-filter==1.1.*
