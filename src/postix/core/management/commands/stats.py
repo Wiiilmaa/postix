@@ -16,8 +16,8 @@ class Command(BaseCommand):
 
         for line in agg:
             count = line['total'] - line['reverses']
-            self.stdout.write("{l[product__name]:30} {l[product__price]:>20} EUR       {count}".format(
-                l=line, count=count)
+            self.stdout.write("{line[product__name]:30} {line[product__price]:>20} EUR       {count}".format(
+                line=line, count=count)
             )
             if 'ticket' in line['product__name']:
                 total += count

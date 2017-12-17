@@ -1,9 +1,9 @@
 from typing import Union
 
 from django.contrib import messages
-from django.urls import reverse
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView, ListView
 
