@@ -49,7 +49,7 @@ class PreorderPositionViewSet(ReadOnlyModelViewSet):
     match the *beginning* of secrets and only if the search query has more than
     6 characters.
     """
-    queryset = PreorderPosition.objects.all()
+    queryset = PreorderPosition.objects.all().order_by('id')
     serializer_class = PreorderPositionSerializer
 
     def get_queryset(self) -> QuerySet:
@@ -91,7 +91,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             ]
         }
     """
-    queryset = Transaction.objects.all().prefetch_related('positions')
+    queryset = Transaction.objects.all().prefetch_related('positions').order_by('id')
     serializer_class = TransactionSerializer
 
     def create(self, request: HttpRequest, *args, **kwargs) -> Response:
@@ -195,7 +195,7 @@ class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
     serializer_class = ListConstraintEntrySerializer
 
     def get_queryset(self) -> QuerySet:
-        queryset = ListConstraintEntry.objects.all()
+        queryset = ListConstraintEntry.objects.all().order_by('id')
         listid_param = self.request.query_params.get('listid', None)
         if listid_param is not None:
             queryset = queryset.filter(list_id=listid_param)
