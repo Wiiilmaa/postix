@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 def troubleshooter_user(user):
-    if user.is_authenticated():
+    if user.is_authenticated:
         return user.is_troubleshooter
     return False
 

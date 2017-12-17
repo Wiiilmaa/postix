@@ -23,7 +23,7 @@ class LoginView(TemplateView):
                 'message': _('This is not a registered cashdesk.'),
                 'detail': _('Your IP address is {0}').format(get_ip_address(request))
             })
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return redirect('/')
         return super().dispatch(request, *args, **kwargs)
 
