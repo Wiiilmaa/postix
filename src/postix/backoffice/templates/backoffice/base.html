@@ -24,7 +24,9 @@
           {% if not settings.initialized and not user.is_anonymous %}
             <div class="alert alert-warning">
                 {% if user.is_superuser %}
-                {% trans "Please initialize this event's settings:" %} <a href="{% url "backoffice:wizard-settings" %}">{% trans "here" %}</a>
+                    {% if request.path != '/backoffice/wizard/settings/' %}<a href="{% url "backoffice:wizard-settings" %}">{% endif %}
+                    {% trans "Please initialize the event settings. postix will not be usable otherwise." %}
+                    {% if request.path != '/backoffice/wizard/settings/' %}</a>{% endif %}
                 {% else %}
                     {% trans "Please call a superuser to initialize this event's settings." %}
                 {% endif %}
