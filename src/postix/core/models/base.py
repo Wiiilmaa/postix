@@ -47,7 +47,7 @@ class Transaction(models.Model):
             path = os.path.join(base, 'invoice_{:04d}.pdf'.format(self.receipt_id))
             if allow_nonexistent or os.path.exists(path):
                 return path
-        return None
+        return ''
 
     def set_receipt_id(self, retry: int=0) -> None:
         try:

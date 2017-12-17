@@ -5,7 +5,10 @@ from postix.core.models import EventSettings
 
 @pytest.fixture
 def event_settings():
-    return EventSettings.objects.get_or_create()
+    settings = EventSettings.get_solo()
+    settings.invoice_address = 'Foo Conferences\n42 Bar St\nBaz City'
+    settings.save()
+    return settings
 
 
 @pytest.fixture

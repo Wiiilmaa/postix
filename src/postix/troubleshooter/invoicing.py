@@ -20,7 +20,7 @@ def generate_invoice(transaction: Transaction, address: str) -> str:
         return path
 
     _buffer = BytesIO()
-    settings = EventSettings.objects.get()
+    settings = EventSettings.get_solo()
     doc = get_default_document(_buffer, footer=settings.invoice_footer)
     style = get_paragraph_style()
 

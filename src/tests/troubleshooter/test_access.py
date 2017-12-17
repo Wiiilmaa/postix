@@ -16,4 +16,3 @@ def test_can_access_pages(troubleshooter_client, url, expected):
     assert response.status_code == expected
     if expected == 200:
         assert 'Troubleshooter' in response.content.decode()
-
