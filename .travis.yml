@@ -5,14 +5,14 @@ python:
 env:
     - POSTIX_STATIC_ROOT=`pwd`/src/static.dist
 install:
-    - pip install -U pip wheel setuptools codecov
+    - pip install -U pip wheel setuptools codecov coverage
     - pip install -r src/requirements.txt
 script:
     - cd src
     - flake8 .
     - isort -rc -c .
     - python manage.py check
-    - coverage run -m py.test tests && codecov
+    - py.test --cov=pretalx tests/ && codecov
 cache:
     directories:
         - $HOME/.cache/pip
