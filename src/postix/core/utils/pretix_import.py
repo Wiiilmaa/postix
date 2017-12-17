@@ -42,12 +42,11 @@ def _build_product_dict(data, log, style):
 
 
 def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle(), questions=None):
-    questions = questions or list()
 
     if isinstance(data, str):
         presale_export = json.loads(data)['event']
     elif isinstance(data, (dict, list)):
-        pass
+        presale_export = data['event']
     else:
         presale_export = json.load(data)['event']
 
@@ -57,6 +56,8 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
 
     orders = presale_export['orders']
     product_dict = _build_product_dict(presale_export, log=log, style=style)
+    questions = [int(q) for q in questions] if questions else list()
+    questions = {element['id']: element for element in presale_export.get('questions', []) if element['id'] in questions}
 
     created_orders = 0
     loaded_orders = 0
@@ -80,11 +81,12 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
                 del preorder_positions[position['secret']]
             else:
                 pp = PreorderPosition(preorder=preorder, secret=position['secret'])
+            information = ''
             if questions and 'answers' in position:
-                information = ''
-                for answer in position:
+                for answer in position['answers']:
                     if answer['question'] in questions:
-                        information += answer['answer'] + '\n\n'
+                        information += questions[answer['question']]['question'] + ' – ' + answer['answer'] + '\n\n'
+            pp.information = information
             pp.product = product_dict[position['item']]
             pp.save()
 
