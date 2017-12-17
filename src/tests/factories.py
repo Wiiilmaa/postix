@@ -144,7 +144,7 @@ def list_constraint_factory(product=None, price=None):
 def list_constraint_entry_factory(list_constraint, redeemed=False):
     fake = Faker('en-US')
     e = ListConstraintEntry.objects.create(
-        list=list_constraint, name=fake.name(), identifier=str(random.randint(0, 100000))
+        list=list_constraint, name=fake.name(), identifier='foobar' + str(random.randint(0, 100000))
     )
     if redeemed:
         TransactionPosition.objects.create(
