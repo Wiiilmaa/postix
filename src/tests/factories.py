@@ -5,7 +5,7 @@ from decimal import Decimal
 
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
-from faker import Factory
+from faker import Faker
 
 from postix.core.models import (
     Cashdesk, CashdeskSession, Item, ItemMovement, ListConstraint,
@@ -16,7 +16,7 @@ from postix.core.models import (
 
 
 def user_factory(troubleshooter=False, superuser=False, backoffice=False, password=None):
-    fake = Factory.create('en-US')
+    fake = Faker('en-US')
     u = User(username=fake.user_name(),
              firstname=fake.first_name(),
              lastname=fake.last_name(),
@@ -32,14 +32,14 @@ def user_factory(troubleshooter=False, superuser=False, backoffice=False, passwo
 
 
 def item_factory():
-    fake = Factory.create('en-US')
+    fake = Faker('en-US')
     return Item.objects.create(name=fake.state(),
                                description=fake.bs(),
                                initial_stock=random.randint(50, 1000))
 
 
 def cashdesk_factory(ip=None, active=None):
-    fake = Factory.create('en-US')
+    fake = Faker('en-US')
     return Cashdesk.objects.create(name='Cashdesk {}'.format(random.randint(0, 10)),
                                    ip_address=ip or fake.ipv4(),
                                    is_active=active if active is not None else True)
@@ -68,7 +68,7 @@ def quota_factory(size=None):
 
 
 def time_constraint_factory(active=True):
-    fake = Factory.create('en-US')
+    fake = Faker('en-US')
     if active:
         start = fake.date_time_between(start_date='-23h', end_date='-1h')
         end = fake.date_time_between(start_date='+1h', end_date='+23h')
@@ -81,7 +81,7 @@ def time_constraint_factory(active=True):
 
 
 def product_factory(items=False):
-    fake = Factory.create('en-US')
+    fake = Faker('en-US')
     p = Product.objects.create(name=fake.catch_phrase(),
                                price=random.choice([50 * i for i in range(5)]),
                                tax_rate=19)
@@ -142,7 +142,7 @@ def list_constraint_factory(product=None, price=None):
 
 
 def list_constraint_entry_factory(list_constraint, redeemed=False):
-    fake = Factory.create('en-US')
+    fake = Faker('en-US')
     e = ListConstraintEntry.objects.create(
         list=list_constraint, name=fake.name(), identifier=str(random.randint(0, 100000))
     )

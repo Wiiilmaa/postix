@@ -31,7 +31,7 @@ class User(AbstractBaseUser):
     is_troubleshooter = models.BooleanField(default=False)
     auth_token = models.CharField(max_length=254, null=True, blank=True, unique=True)
 
-    USERNAME_FIELD = 'username'
+    USERNAME_FIELD = EMAIL_FIELD = 'username'
     objects = UserManager()
 
     def has_perm(self, perm, obj=None) -> bool:  # noqa
