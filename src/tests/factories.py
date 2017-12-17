@@ -9,8 +9,8 @@ from faker import Faker
 
 from postix.core.models import (
     Cashdesk, CashdeskSession, Item, ItemMovement, ListConstraint,
-    ListConstraintEntry, ListConstraintProduct, Preorder, PreorderPosition,
-    Product, ProductItem, Quota, TimeConstraint, Transaction,
+    ListConstraintEntry, ListConstraintProduct, Ping, Preorder,
+    PreorderPosition, Product, ProductItem, Quota, TimeConstraint, Transaction,
     TransactionPosition, User, WarningConstraint,
 )
 
@@ -153,3 +153,7 @@ def list_constraint_entry_factory(list_constraint, redeemed=False):
             product=product_factory(), transaction=transaction_factory()
         )
     return e
+
+
+def ping_factory():
+    return Ping.objects.create(secret='verysecret')
