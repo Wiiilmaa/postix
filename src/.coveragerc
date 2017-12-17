@@ -1,7 +1,7 @@
 [run]
-source=pretalx
+source=prostix
 branch=True
-omit = */migrations/*,*/urls.py,*/tests/*,*/admin.py,pretalx/wsgi.py,pretalx/settings.py
+omit = */migrations/*,*/urls.py,*/tests/*,*/admin.py,postix/wsgi.py,postix/settings.py
 
 [report]
 exclude_lines =
