@@ -35,7 +35,7 @@ class PreorderViewSet(ReadOnlyModelViewSet):
     """
     This is a read-only list of all preorders.
     """
-    queryset = Preorder.objects.all()
+    queryset = Preorder.objects.all().order_by('id')
     serializer_class = PreorderSerializer
     permission_classes = (IsAdminUser,)
 
@@ -53,7 +53,7 @@ class PreorderPositionViewSet(ReadOnlyModelViewSet):
     serializer_class = PreorderPositionSerializer
 
     def get_queryset(self) -> QuerySet:
-        queryset = PreorderPosition.objects.all()
+        queryset = PreorderPosition.objects.all().order_by('id')
         exact_param = self.request.GET.get('secret', None)
         search_param = self.request.GET.get('search', None)
         if exact_param is not None:
@@ -179,19 +179,19 @@ class TransactionViewSet(ReadOnlyModelViewSet):
 
 class ProductViewSet(ReadOnlyModelViewSet):
 
-    queryset = Product.objects.prefetch_related('product_items', 'product_items__item').all()
+    queryset = Product.objects.prefetch_related('product_items', 'product_items__item').all().order_by('id')
     serializer_class = ProductSerializer
 
 
 class ListConstraintViewSet(ReadOnlyModelViewSet):
 
-    queryset = ListConstraint.objects.all()
+    queryset = ListConstraint.objects.all().order_by('id')
     serializer_class = ListConstraintSerializer
 
 
 class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
 
-    queryset = ListConstraintEntry.objects.all()
+    queryset = ListConstraintEntry.objects.all().order_by('id')
     serializer_class = ListConstraintEntrySerializer
 
     def get_queryset(self) -> QuerySet:
