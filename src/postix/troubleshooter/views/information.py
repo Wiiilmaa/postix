@@ -13,6 +13,7 @@ class InformationListView(TroubleshooterUserRequiredMixin, ListView):
     context_object_name = 'information'
     paginate_by = 50
     model = Info
+    queryset = Info.objects.all().order_by('id')
 
 
 class InformationDetailView(TroubleshooterUserRequiredMixin, FormView):
