@@ -117,7 +117,7 @@ def test_product_pack_list():
 def test_has_invoice():
     trans = transaction_factory()
     assert not trans.has_invoice
-    assert trans.get_invoice_path() is None
+    assert trans.get_invoice_path() == ''
 
 
 @pytest.mark.django_db
