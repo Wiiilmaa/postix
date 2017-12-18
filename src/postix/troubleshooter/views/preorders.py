@@ -1,10 +1,12 @@
 from django.contrib import messages
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, ListView
 
-from ...core.models import Preorder
+from ...core.models import Preorder, PreorderPosition
+from ..forms import CashdeskForm
 from .utils import TroubleshooterUserRequiredMixin
 
 
@@ -30,6 +32,30 @@ class PreorderListView(TroubleshooterUserRequiredMixin, ListView):
         else:
             qs = qs.none()
         return qs
+
+
+class PreorderInformationListView(TroubleshooterUserRequiredMixin, ListView):
+    template_name = 'troubleshooter/preorder_information.html'
+    context_object_name = 'positions'
+    model = PreorderPosition
+    queryset = PreorderPosition.objects.all().exclude(information__isnull=True).exclude(information='')
+
+    def get_context_data(self):
+        ctx = super().get_context_data()
+        ctx['form'] = CashdeskForm()
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        form = CashdeskForm(request.POST)
+        if form.is_valid():
+            form.cleaned_data['cashdesk'].printer.print_attendance(
+                arrived=[position for position in self.queryset if position.is_redeemed],
+                not_arrived=[position for position in self.queryset if not position.is_redeemed],
+            )
+            messages.success(request, _('Attendance print in progress.'))
+        else:
+            messages.error(request, _('Please specify a cashdesk.'))
+        return redirect(request.path)
 
 
 class PreorderDetailView(TroubleshooterUserRequiredMixin, DetailView):

@@ -1,0 +1,75 @@
+{% extends 'troubleshooter/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block headline %}{% trans "Preorders" %}
+{% endblock %}
+{% block content %}
+
+    <div>
+    {% blocktrans trimmed %}
+        These are preorder positions with special information attached, and their current status.
+    {% endblocktrans %}
+    <form class="form form-inline pull-right" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="btn btn-primary">{% trans "Print list" %}</button>
+    </form>
+    </div>
+
+
+    <div class="transaction-list table-responsive col-md-12">
+        {% if not positions %}
+            {% trans "No matching orders found." %}
+        {% else %}
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th> {% trans "Arrived" %} </th>
+                    <th> {% trans "Information" %} </th>
+                    <th> {% trans "Order code" %} </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for position in positions %}
+                    <tr>
+                        <td>
+                            {% if position.is_redeemed %}
+                                <span class="fa fa-check-circle text-success"></span>
+                            {% else %}
+                                <span class="fa fa-times-circle text-danger"></span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ position.information }}
+                        </td>
+                        <td class="session-action-column">
+                            <a href="{% url "troubleshooter:preorder-detail" pk=position.preorder.pk %}" title="{% trans "Details" %}">
+                                {{ position.preorder.order_code }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.previous_page_number }}">
+                    <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+                </a>
+            {% endif %}
+            <span class="page-current">
+            {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.
+		</span>
+            {% if page_obj.has_next %}
+                <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.next_page_number }}">
+                    <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock content %}

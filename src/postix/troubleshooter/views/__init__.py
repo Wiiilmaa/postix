@@ -4,7 +4,9 @@ from .desk import check_requests, confirm_resupply
 from .information import InformationDetailView, InformationListView
 from .main import main_view
 from .ping import PingView
-from .preorders import PreorderDetailView, PreorderListView
+from .preorders import (
+    PreorderDetailView, PreorderInformationListView, PreorderListView,
+)
 from .transactions import (
     TransactionDetailView, TransactionListView, transaction_invoice,
     transaction_reprint,
@@ -26,5 +28,6 @@ __all__ = [
     'transaction_reprint',
     'PingView',
     'PreorderDetailView',
-    'PreorderListView'
+    'PreorderInformationListView',
+    'PreorderListView',
 ]

@@ -10,6 +10,7 @@ urlpatterns = [
     url('^ping/$', views.PingView.as_view(), name='ping'),
 
     url('^preorders/$', views.PreorderListView.as_view(), name='preorder-list'),
+    url('^preorders/information/$', views.PreorderInformationListView.as_view(), name='preorder-information-list'),
     url('^preorders/(?P<pk>[0-9]+)/$', views.PreorderDetailView.as_view(), name='preorder-detail'),
 
     url('^constraints/(?P<pk>[0-9]+)/$', views.ListConstraintDetailView.as_view(), name='constraint-detail'),
@@ -24,7 +25,7 @@ urlpatterns = [
     url('^transactions/$', views.TransactionListView.as_view(), name='transaction-list'),
 
     url('^session/(?P<pk>[0-9]+)/resupply/$', views.confirm_resupply, name='confirm-resupply'),
-
     url('^session/check_requests$', views.check_requests, name='check-requests'),
+
     url('^$', views.main_view, name='main'),
 ]
