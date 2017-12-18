@@ -12,7 +12,8 @@ class FakeStyle:
 
 class FakeLog:
     def write(self, string):
-        print(string)
+        if string is not None:
+            print(string)
 
 
 def _build_product_dict(data, log, style):
