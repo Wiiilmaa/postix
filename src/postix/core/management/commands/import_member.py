@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         constraints, _ = ListConstraint.objects.get_or_create(confidential=True, name='Mitglieder')
-        import_count= import_known= 0
+        import_count = import_known = 0
         local_prefix = kwargs.get('prefix')
 
         with open(kwargs['member_list'], 'r') as member_list:
@@ -40,5 +40,5 @@ class Command(BaseCommand):
                     if created:
                         import_count += 1
                     else:
-                        import_known+= 1
+                        import_known += 1
         self.stdout.write(self.style.SUCCESS('Imported {} entries of the dataset, {} were already known.').format(import_count, import_known))
