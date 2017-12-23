@@ -11,16 +11,16 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('member_list')
-        parser.add_argument('local_prefix', default='')
+        parser.add_argument('--prefix')
 
     def handle(self, *args, **kwargs):
         constraints, _ = ListConstraint.objects.get_or_create(confidential=True, name='Mitglieder')
         import_count= import_known= 0
-        local_prefix = kwargs['local_prefix']
+        local_prefix = kwargs.get('prefix')
 
         with open(kwargs['member_list'], 'r') as member_list:
             if not local_prefix:
-                reader = csv.DictReader(member_list)
+                reader = csv.DictReader(member_list, delimiter='\t')
             else:
                 reader = csv.DictReader(member_list, delimiter=';')
             with transaction.atomic():
