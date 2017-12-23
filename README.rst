@@ -80,7 +80,7 @@ environment variables:
 * ``POSTIX_DEBUG`` -- Turns on Django's debug mode if set to ``"True"``
 
 * ``POSTIX_DB_TYPE`` -- Database backend, defaults to ``sqlite3``. Other options
-  are ``mysql`` and ``postgres``
+  are ``mysql`` and ``postgresql``
 
 * ``POSTIX_DB_NAME`` -- Database name (or filename in case of SQLite). Defaults
   to ``db.sqlite3``
