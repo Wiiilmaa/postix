@@ -57,6 +57,8 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
 
     orders = presale_export['orders']
     product_dict = _build_product_dict(presale_export, log=log, style=style)
+    if isinstance(questions, str):
+        questions = questions.split(',')
     questions = [int(q) for q in questions] if questions else list()
     questions = {element['id']: element for element in presale_export.get('questions', []) if element['id'] in questions}
 
