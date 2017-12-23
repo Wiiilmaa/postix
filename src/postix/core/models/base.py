@@ -164,6 +164,12 @@ class Product(models.Model):
         negative = self.positions.filter(type='reverse').exclude(preorder_position__isnull=False).count()
         return positive - negative
 
+    @cached_property
+    def amount_redeemed(self) -> int:
+        positive = self.positions.filter(type='redeem').count()
+        negative = self.positions.filter(type='reverse').exclude(preorder_position__isnull=True).count()
+        return positive - negative
+
     @property
     def pack_list(self) -> str:
         result = []
@@ -189,6 +195,18 @@ class Item(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    @cached_property
+    def amount_sold(self) -> int:
+        positive = self.transaction_position_items.filter(position__type='sell').count()
+        negative = self.transaction_position_items.filter(position__type='reverse').exclude(position__preorder_position__isnull=False).count()
+        return positive - negative
+
+    @cached_property
+    def amount_redeemed(self) -> int:
+        positive = self.transaction_position_items.filter(position__type='redeem').count()
+        negative = self.transaction_position_items.filter(position__type='reverse').exclude(position__preorder_position__isnull=True).count()
+        return positive - negative
 
 
 class ProductItem(models.Model):
