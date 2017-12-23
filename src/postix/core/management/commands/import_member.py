@@ -1,6 +1,7 @@
 import csv
 
 from django.core.management.base import BaseCommand
+from django.db import transaction
 
 from postix.core.models import ListConstraint, ListConstraintEntry
 
@@ -21,22 +22,23 @@ class Command(BaseCommand):
             if not local_prefix:
                 reader = csv.DictReader(member_list)
             else:
-                reader = csv.DictReader(member_list)
-            for row in reader:
-                if not local_prefix:
-                    _, created = ListConstraintEntry.objects.get_or_create(
-                        list=constraints,
-                        name='{} {}'.format(row['VORNAME'], row['NACHNAME']),
-                        identifier=row['CHAOSNR'],
-                    )
-                else:
-                    _, created = ListConstraintEntry.objects.get_or_create(
-                        list=constraints,
-                        name=row['NAME'].strip(),
-                        identifier='{}-{}'.format(local_prefix, row['CHAOSNR']),
-                    )
-                if created:
-                    import_count += 1
-                else:
-                    import_known+= 1
+                reader = csv.DictReader(member_list, delimiter=';')
+            with transaction.atomic():
+                for row in reader:
+                    if not local_prefix:
+                        _, created = ListConstraintEntry.objects.get_or_create(
+                            list=constraints,
+                            name='{} {}'.format(row['VORNAME'], row['NACHNAME']),
+                            identifier=row['CHAOSNR'],
+                        )
+                    else:
+                        _, created = ListConstraintEntry.objects.get_or_create(
+                            list=constraints,
+                            name=row['NAME'].strip(),
+                            identifier='{}-{}'.format(local_prefix, row['CHAOSNR']),
+                        )
+                    if created:
+                        import_count += 1
+                    else:
+                        import_known+= 1
         self.stdout.write(self.style.SUCCESS('Imported {} entries of the dataset, {} were already known.').format(import_count, import_known))
