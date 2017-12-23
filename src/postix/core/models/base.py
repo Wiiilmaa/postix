@@ -7,6 +7,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Max, Sum
 from django.utils import timezone
+from django.utils.functional import cached_property
 
 from ..utils import round_decimal
 
@@ -157,6 +158,7 @@ class Product(models.Model):
 
         return self.is_visible
 
+    @cached_property
     def amount_sold(self) -> int:
         positive = self.positions.filter(type='sell').count()
         negative = self.positions.filter(type='reverse').exclude(preorder_position__isnull=False).count()

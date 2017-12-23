@@ -17,7 +17,7 @@ class Quota(AbstractConstraint):
                                       blank=True)
 
     def is_available(self) -> bool:
-        total = sum([product.amount_sold() for product in self.products.all()])
+        total = sum([product.amount_sold for product in self.products.all()])
         return total < self.size
 
     def __str__(self) -> str:
