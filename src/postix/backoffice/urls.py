@@ -22,6 +22,7 @@ urlpatterns = [
     url('^session/$', views.SessionListView.as_view(), name='session-list'),
     url('^reports/$', views.ReportListView.as_view(), name='report-list'),
 
+    # These are called 'wizard' cause they're only for wizards (erm, superusers)
     url('^wizard/users/$', views.WizardUsersView.as_view(), name='wizard-users'),
     url('^wizard/settings/$', views.WizardSettingsView.as_view(), name='wizard-settings'),
     url('^wizard/cashdesks/$', views.WizardCashdesksView.as_view(), name='wizard-cashdesks'),
@@ -29,6 +30,7 @@ urlpatterns = [
     url('^wizard/items/$', views.WizardItemListView.as_view(), name='wizard-items-list'),
     url('^wizard/items/new$', views.WizardItemCreateView.as_view(), name='wizard-items-create'),
     url('^wizard/items/(?P<pk>[0-9]+)/$', views.WizardItemEditView.as_view(), name='wizard-items-edit'),
+    url('^wizard/stats/$', views.WizardStatsView.as_view(), name='wizard-stats'),
 
     url('^$', views.MainView.as_view(), name='main'),
 ]

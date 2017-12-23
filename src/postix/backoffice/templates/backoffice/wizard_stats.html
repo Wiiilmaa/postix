@@ -1,0 +1,36 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block headline %} {% trans "Statistics" %}{% endblock %}
+
+{% block content %}
+
+<h3>{% trans "Products" %}</h3>
+
+<ul>
+    {% for product in products %}
+    <li>
+        {% blocktrans with redeemed=product.amount_redeemed sold=product.amount_sold name=product.name trimmed %}
+        <strong>{{ name }}</strong> was sold {{ sold }} times and redeemed {{ redeemed }} times.
+        {% endblocktrans %}
+
+    </li>
+    {% endfor %}
+</ul>
+
+<h3>{% trans "Items" %}</h3>
+
+<ul>
+    {% for item in items %}
+    <li>
+        {% blocktrans with redeemed=item.amount_redeemed sold=item.amount_sold name=item.name trimmed %}
+        <strong>{{ name }}</strong> was sold {{ sold }} times and redeemed {{ redeemed }} times.
+        {% endblocktrans %}
+
+    </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
