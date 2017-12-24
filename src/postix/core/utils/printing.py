@@ -182,9 +182,9 @@ class CashdeskPrinter:
             return line[:39] + '...'
 
         def build_lines(position):
+            information_lines = ['  ' + l.strip() for l in position.information.split('\n') if l.strip()]
+            information_lines = [info.split('–', maxsplit=1)[-1].strip() for info in information_lines]
             information_lines = ['  ' + shorten(l.strip()) for l in position.information.split('\n') if l.strip()]
-            if information_lines:
-                information_lines[0] = '-' + information_lines[0][1:]
             return information_lines
 
         from postix.core.models import EventSettings
@@ -205,7 +205,7 @@ class CashdeskPrinter:
             count = '{count} '.format(count=len(arrived))
             seplen = (40 - len(count + _('Arrived'))) // 2
             attendance += SEPARATOR_CHAR * seplen + ' ' + count + _('Arrived') + ' ' + SEPARATOR_CHAR * seplen + '\r\n'
-            attendance += bytearray([self.ESC, 0x61, 2]).decode()  # right-align text (0 would be left-align)
+            attendance += bytearray([self.ESC, 0x61, 0]).decode()  # right-align text (2 would be left-align)
             attendance += '\r\n'.join(arrived_lines)
             attendance += '\r\n'
 
