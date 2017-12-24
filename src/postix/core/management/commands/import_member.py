@@ -46,7 +46,7 @@ class Command(BaseCommand):
                         # Ignore or remove unpaid member
                         if identifier in entries:
                             le = entries.get(identifier)
-                            if not le.positions.exists(): # If positions exist, the person already got in, cannot remove, we don't care
+                            if not le.positions.exists():  # If positions exist, the person already got in, cannot remove, we don't care
                                 le.delete()
                         continue
 
