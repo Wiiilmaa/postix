@@ -181,6 +181,10 @@ class Product(models.Model):
                     result.append(item.item.name)
         return ", ".join(result)
 
+    @property
+    def needs_receipt(self) -> bool:
+        return not self.product_items.filter(item__is_receipt=True).exists()
+
     def __str__(self) -> str:
         return self.name
 
@@ -192,6 +196,7 @@ class Item(models.Model):
     name = models.CharField(max_length=254)
     description = models.TextField(blank=True)
     initial_stock = models.PositiveIntegerField()
+    is_receipt = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.name

@@ -78,6 +78,8 @@ class CashdeskPrinter:
         for position in transaction.positions.all():
             if position.value == 0:
                 continue
+            if not position.product.needs_receipt:
+                continue
             total_sum += position.value
             tax_sums[position.tax_rate] += position.tax_value
             if position.tax_rate not in tax_symbols:
