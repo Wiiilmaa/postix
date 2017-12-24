@@ -8,8 +8,8 @@ from django.utils.timezone import now
 from faker import Faker
 
 from postix.core.models import (
-    Cashdesk, CashdeskSession, Item, ItemMovement, ListConstraint,
-    ListConstraintEntry, ListConstraintProduct, Ping, Preorder,
+    Cashdesk, CashdeskSession, CashMovement, Item, ItemMovement,
+    ListConstraint, ListConstraintEntry, ListConstraintProduct, Ping, Preorder,
     PreorderPosition, Product, ProductItem, Quota, TimeConstraint, Transaction,
     TransactionPosition, User, WarningConstraint,
 )
@@ -49,8 +49,9 @@ def cashdesk_session_before_factory(ip=None, user=None, create_items=True):
     cd = CashdeskSession.objects.create(cashdesk=cashdesk_factory(ip=ip),
                                         user=user or user_factory(),
                                         start=now() - timedelta(hours=2),
-                                        cash_before=random.choice([50 * i for i in range(6)]),
                                         backoffice_user_before=user_factory(superuser=True))
+    CashMovement.objects.create(session=cd, backoffice_user=cd.backoffice_user_before,
+                                cash=random.choice([50 * i for i in range(6)]),)
 
     if create_items:
         items = [item_factory() for _ in range(3)]

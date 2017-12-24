@@ -113,8 +113,6 @@ class CashdeskSession(models.Model):
     end = models.DateTimeField(null=True, blank=True,
                                verbose_name='End of session',
                                help_text='Only set if session has ended')
-    cash_before = models.DecimalField(max_digits=10, decimal_places=2,
-                                      verbose_name='Cash in drawer before session')
     cash_after = models.DecimalField(max_digits=10, decimal_places=2,
                                      null=True, blank=True,
                                      verbose_name='Cash in drawer after session')
@@ -180,6 +178,10 @@ class CashdeskSession(models.Model):
             }
             for item in self.get_item_set()
         ]
+
+    @property
+    def cash_before(self) -> Decimal:
+        return self.cash_movements.all().aggregate(total=Sum('cash'))['total'] or Decimal('0.00')
 
     def get_cash_transaction_total(self) -> Decimal:
         return TransactionPosition.objects\
@@ -254,6 +256,22 @@ class ItemMovement(models.Model):
                                            'Mostly used when counting items after ending a session.')
     backoffice_user = models.ForeignKey('User', on_delete=models.PROTECT,
                                         related_name='supervised_item_movements',
+                                        verbose_name='Backoffice operator issuing movement')
+    timestamp = models.DateTimeField(default=now, editable=False)
+
+    def __str__(self) -> str:
+        return 'ItemMovement ({} {} at {})'.format(self.amount, self.item, self.session.cashdesk.name)
+
+
+class CashMovement(models.Model):
+    """ Similar to ItemMovement """
+    session = models.ForeignKey('CashdeskSession', on_delete=models.PROTECT,
+                                related_name='cash_movements',
+                                verbose_name='Session the item was involved in')
+    cash = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'),
+                               verbose_name='Cash moved. Negative means taking it out of the session.')
+    backoffice_user = models.ForeignKey('User', on_delete=models.PROTECT,
+                                        related_name='supervised_cash_movements',
                                         verbose_name='Backoffice operator issuing movement')
     timestamp = models.DateTimeField(default=now, editable=False)
 

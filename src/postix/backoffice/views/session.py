@@ -16,7 +16,9 @@ from django.views.generic.list import ListView
 from postix.core.utils.flow import FlowError, reverse_session
 
 from .. import checks
-from ...core.models import Cashdesk, CashdeskSession, ItemMovement, User
+from ...core.models import (
+    Cashdesk, CashdeskSession, CashMovement, ItemMovement, User,
+)
 from ..forms import (
     ItemMovementFormSetHelper, SessionBaseForm, get_form_and_formset,
 )
@@ -36,8 +38,12 @@ def new_session(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirec
                 cashdesk=form.cleaned_data['cashdesk'],
                 user=form.cleaned_data['user'],
                 start=now(),
-                cash_before=form.cleaned_data['cash_before'],
                 backoffice_user_before=form.cleaned_data['backoffice_user'],
+            )
+            CashMovement.objects.create(
+                session=session,
+                cash=form.cleaned_data['cash_before'],
+                backoffice_user=form.cleaned_data['backoffice_user'],
             )
             for f in formset:
                 item = f.cleaned_data.get('item')
@@ -128,6 +134,12 @@ def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpR
         form, formset = get_form_and_formset(request=request)
 
         if formset.is_valid() and form.is_valid():
+            if form.cleaned_data.get('cash_before'):
+                CashMovement.objects.create(
+                    cash=form.cleaned_data.get('cash_before'),
+                    session=session,
+                    backoffice_user=form.cleaned_data['backoffice_user'],
+                )
             for f in formset:
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
@@ -146,7 +158,7 @@ def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpR
 
     form.fields['user'].widget.attrs['readonly'] = True
     form.fields['cashdesk'].widget.attrs['readonly'] = True
-    form.fields['cash_before'].widget = forms.HiddenInput()
+    # form.fields['cash_before'].widget = forms.HiddenInput()
 
     return render(request, 'backoffice/resupply_session.html', {
         'formset': formset,
