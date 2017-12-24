@@ -8,7 +8,7 @@ from postix.backoffice.forms import (
     CashdeskForm, EventSettingsForm, ImportForm, ItemForm,
 )
 from postix.backoffice.views.utils import SuperuserRequiredMixin
-from postix.core.models import EventSettings, Item, User
+from postix.core.models import CashdeskSession, EventSettings, Item, User
 
 
 class WizardSettingsView(SuperuserRequiredMixin, FormView):
@@ -162,4 +162,5 @@ class WizardStatsView(SuperuserRequiredMixin, TemplateView):
         ctx = super().get_context_data()
         ctx['products'] = Product.objects.all()
         ctx['items'] = Item.objects.all()
+        ctx['money'] = sum(c.cash_before for c in CashdeskSession.active.all())
         return ctx
