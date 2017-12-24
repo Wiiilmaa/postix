@@ -62,14 +62,24 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
     questions = [int(q) for q in questions] if questions else list()
     questions = {element['id']: element for element in presale_export.get('questions', []) if element['id'] in questions}
 
+    existing = {
+        p.order_code: p for p in Preorder.objects.prefetch_related('positions')
+    }
+
     created_orders = 0
     loaded_orders = 0
+    to_insert = []
     for order in orders:
-        preorder, created = Preorder.objects.get_or_create(
-            order_code=order['code']
-        )
-        preorder.is_paid = (order['status'] == 'p')
-        preorder.save()
+        if order['code'] in existing:
+            preorder = existing[order['code']]
+            created = False
+
+            if preorder.is_paid != (order['status'] == 'p'):
+                preorder.is_paid = (order['status'] == 'p')
+                preorder.save()
+        else:
+            preorder = Preorder.objects.create(order_code=order['code'], is_paid=(order['status'] == 'p'))
+            created = True
 
         if not created:
             preorder_positions = {
@@ -84,14 +94,21 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
                 del preorder_positions[position['secret']]
             else:
                 pp = PreorderPosition(preorder=preorder, secret=position['secret'])
+
             information = ''
             if questions and 'answers' in position:
                 for answer in position['answers']:
                     if answer['question'] in questions:
                         information += questions[answer['question']]['question'] + ' – ' + answer['answer'] + '\n\n'
-            pp.information = information
-            pp.product = product_dict[position['item']]
-            pp.save()
+
+            if not pp.pk:
+                pp.information = information
+                pp.product = product_dict[position['item']]
+                to_insert.append(pp)
+            elif pp.information != information or pp.product_id != product_dict[position['item']].pk:
+                pp.information = information
+                pp.product = product_dict[position['item']]
+                pp.save()
 
         if preorder_positions:
             for pp in preorder_positions.values():
@@ -100,6 +117,7 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
         created_orders += int(created)
         loaded_orders += int(not created)
 
+    PreorderPosition.objects.bulk_create(to_insert)
     log.write(style.SUCCESS(
         'Found {} new and {} known orders in file.'.format(created_orders, loaded_orders)
     ))
