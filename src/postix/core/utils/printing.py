@@ -37,7 +37,7 @@ class CashdeskPrinter:
             try:
                 data = data.encode('cp437')
             except UnicodeEncodeError:
-                new_data = ''
+                new_data = b''
                 for char in data:
                     with suppress(UnicodeEncodeError):
                         new_data += char.encode('cp437')
