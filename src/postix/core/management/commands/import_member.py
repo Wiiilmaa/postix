@@ -17,6 +17,10 @@ class Command(BaseCommand):
         constraints, _ = ListConstraint.objects.get_or_create(confidential=True, name='Mitglieder')
         import_count = import_known = 0
         local_prefix = kwargs.get('prefix')
+        entries = {
+            e.identifier: e for e in constraints.entries.all()
+        }
+        to_create = []
 
         with open(kwargs['member_list'], 'r') as member_list:
             if not local_prefix:
@@ -40,25 +44,25 @@ class Command(BaseCommand):
 
                     if 'state' in row and row.get('state') != 'bezahlt':
                         # Ignore or remove unpaid member
-                        try:
-                            le = constraints.entries.get(identifier=identifier)
-                            if not le.positions.exists():
+                        if identifier in entries:
+                            le = entries.get(identifier)
+                            if not le.positions.exists(): # If positions exist, the person already got in, cannot remove, we don't care
                                 le.delete()
-                            # If positions exist, the person already got in, cannot remove, we don't care
-                        except ListConstraintEntry.DoesNotExist:
-                            pass
                         continue
 
-                    _, created = constraints.entries.get_or_create(
-                        identifier=identifier,
-                        defaults={
-                            'name': name
-                        }
-                    )
-                    if created:
-                        import_count += 1
-                    else:
+                    if identifier in entries:
                         import_known += 1
+                        le = entries[identifier]
+                        if le.name != name:
+                            le.name = name
+                            le.save()
+                    else:
+                        import_count += 1
+                        le = ListConstraintEntry(identifier=identifier, list=constraints, name=name)
+                        entries[identifier] = le
+                        to_create.append(le)
+
+                ListConstraintEntry.objects.bulk_create(to_create)
         self.stdout.write(
             self.style.SUCCESS('Imported {} entries of the dataset, {} were already known.').format(import_count,
                                                                                                     import_known))
