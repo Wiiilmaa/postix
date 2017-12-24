@@ -77,7 +77,7 @@
                         </td>
                         <td> {{ transaction_position.value }} </td>
                         <td> {{ transaction_position.transaction.value }} </td>
-                        <td> {{ transaction_position.transaction.receipt_id }} </td>
+                        <td> {% if transaction_position.transaction.receipt_id %}{{ transaction_position.transaction.receipt_id }} {% endif %}</td>
                 {% endfor %}
             </tbody>
         </table>
