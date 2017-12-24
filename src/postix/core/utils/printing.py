@@ -3,6 +3,7 @@ import math
 import subprocess
 import time
 from collections import defaultdict
+from contextlib import suppress
 from decimal import Decimal
 from string import ascii_uppercase
 from typing import List, Union
