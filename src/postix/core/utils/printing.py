@@ -184,7 +184,6 @@ class CashdeskPrinter:
         def build_lines(position):
             information_lines = ['  ' + l.strip() for l in position.information.split('\n') if l.strip()]
             information_lines = [info.split('–', maxsplit=1)[-1].strip() for info in information_lines]
-            information_lines = ['  ' + shorten(l.strip()) for l in position.information.split('\n') if l.strip()]
             return information_lines
 
         from postix.core.models import EventSettings
