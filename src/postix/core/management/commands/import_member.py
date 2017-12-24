@@ -27,25 +27,39 @@ class Command(BaseCommand):
                 for row in reader:
                     if not any(row.values()):
                         continue  # empty line
-                    if 'state' in row and row.get('state') != 'bezahlt':
-                        continue  # unpaid member
-                    if not local_prefix:
-                        _, created = ListConstraintEntry.objects.get_or_create(
-                            list=constraints,
-                            name='{} {}'.format(
-                                row.get('VORNAME', '') or row.get('first_name', ''),
-                                row.get('NACHNAME', '') or row.get('last_name', ''),
-                            ),
-                            identifier=row.get('CHAOSNR') or row.get('chaos_number', ''),
-                        )
+
+                    if local_prefix:
+                        identifier = '{}-{}'.format(local_prefix, row['CHAOSNR'])
+                        name = row['NAME'].strip()
                     else:
-                        _, created = ListConstraintEntry.objects.get_or_create(
-                            list=constraints,
-                            name=row['NAME'].strip(),
-                            identifier='{}-{}'.format(local_prefix, row['CHAOSNR']),
+                        identifier = row.get('CHAOSNR') or row.get('chaos_number', '')
+                        name = '{} {}'.format(
+                            row.get('VORNAME', '') or row.get('first_name', ''),
+                            row.get('NACHNAME', '') or row.get('last_name', ''),
                         )
+
+                    if 'state' in row and row.get('state') != 'bezahlt':
+                        # Ignore or remove unpaid member
+                        try:
+                            le = constraints.objects.get(identifier=identifier)
+                            if not le.positions.exists():
+                                le.delete()
+                            # If positions exist, the person already got in, cannot remove, we don't care
+                        except ListConstraintEntry.DoesNotExist:
+                            pass
+                        continue
+
+                    _, created = ListConstraintEntry.objects.get_or_create(
+                        list=constraints,
+                        identifier=identifier,
+                        defaults={
+                            'name': name
+                        }
+                    )
                     if created:
                         import_count += 1
                     else:
                         import_known += 1
-        self.stdout.write(self.style.SUCCESS('Imported {} entries of the dataset, {} were already known.').format(import_count, import_known))
+        self.stdout.write(
+            self.style.SUCCESS('Imported {} entries of the dataset, {} were already known.').format(import_count,
+                                                                                                    import_known))

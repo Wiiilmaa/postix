@@ -27,7 +27,7 @@ def sample_member_file_incremental_update_ccc():
     with tempfile.NamedTemporaryFile() as t:
         t.write(b"""chaos_number	first_name	last_name	state
 2			bezahlt
-4	A	B	bezahlt
+4	A	B	Verzug
 8	E	F	bezahlt
 11	G	H	ruhend
 14	I	J	ruhend
@@ -57,9 +57,7 @@ def test_member_import_ccc_update(sample_member_file_ccc, sample_member_file_inc
     call_command('import_member', sample_member_file_incremental_update_ccc)
     assert set((e.identifier, e.name) for e in lc.entries.all()) == {
         ('2', ' '),
-        ('4', 'A B'),
-        ('5', 'C D'),
+        ('5', 'C D'),  # got removed from the file, but we don't detect that so we can apply partial lists as well
         ('8', 'E F'),
-        ('23', 'K L'),
         ('42', 'M N'),
     }
