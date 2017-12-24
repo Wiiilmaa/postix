@@ -28,10 +28,7 @@ def test_member_import_ccc(sample_member_file_ccc):
     lc = ListConstraint.objects.get(confidential=True, name='Mitglieder')
     assert set((e.identifier, e.name) for e in lc.entries.all()) == {
         ('2', ' '),
-        ('4', 'A B'),
         ('5', 'C D'),
         ('8', 'E F'),
-        ('11', 'G H'),
-        ('14', 'I J'),
         ('23', 'K L'),
     }

@@ -27,6 +27,8 @@ class Command(BaseCommand):
                 for row in reader:
                     if not any(row.values()):
                         continue  # empty line
+                    if 'state' in row and row.get('state') != 'bezahlt':
+                        continue  # unpaid member
                     if not local_prefix:
                         _, created = ListConstraintEntry.objects.get_or_create(
                             list=constraints,
