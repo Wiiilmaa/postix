@@ -33,7 +33,14 @@ class CashdeskPrinter:
     def send(self, data: Union[str, bytes]) -> None:
         lpr = subprocess.Popen(['/usr/bin/lpr', '-l', '-P', self.printer], stdin=subprocess.PIPE)
         if isinstance(data, str):
-            data = data.encode('cp437')
+            try:
+                data = data.encode('cp437')
+            except UnicodeEncodeError:
+                new_data = ''
+                for char in data:
+                    with suppress(UnicodeEncodeError):
+                        new_data += char.encode('cp437')
+                data = new_data
         lpr.stdin.write(data)
         lpr.stdin.close()
         time.sleep(0.1)
