@@ -41,7 +41,7 @@ class Command(BaseCommand):
                     if 'state' in row and row.get('state') != 'bezahlt':
                         # Ignore or remove unpaid member
                         try:
-                            le = constraints.objects.get(identifier=identifier)
+                            le = constraints.entries.get(identifier=identifier)
                             if not le.positions.exists():
                                 le.delete()
                             # If positions exist, the person already got in, cannot remove, we don't care
@@ -49,8 +49,7 @@ class Command(BaseCommand):
                             pass
                         continue
 
-                    _, created = ListConstraintEntry.objects.get_or_create(
-                        list=constraints,
+                    _, created = constraints.entries.get_or_create(
                         identifier=identifier,
                         defaults={
                             'name': name

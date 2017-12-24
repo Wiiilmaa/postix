@@ -61,3 +61,24 @@ def test_member_import_ccc_update(sample_member_file_ccc, sample_member_file_inc
         ('8', 'E F'),
         ('42', 'M N'),
     }
+
+
+@pytest.yield_fixture
+def sample_member_file_local():
+    with tempfile.NamedTemporaryFile() as t:
+        t.write(b"""CHAOSNR;NAME
+1;foo
+2;bar
+""")
+        t.seek(0)
+        yield t.name
+
+
+@pytest.mark.django_db
+def test_member_import_local(sample_member_file_local):
+    call_command('import_member', sample_member_file_local, prefix='BLN')
+    lc = ListConstraint.objects.get(confidential=True, name='Mitglieder')
+    assert set((e.identifier, e.name) for e in lc.entries.all()) == {
+        ('BLN-1', 'foo'),
+        ('BLN-2', 'bar'),
+    }
