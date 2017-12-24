@@ -25,11 +25,16 @@ class Command(BaseCommand):
                 reader = csv.DictReader(member_list, delimiter=';')
             with transaction.atomic():
                 for row in reader:
+                    if not any(row.values()):
+                        continue  # empty line
                     if not local_prefix:
                         _, created = ListConstraintEntry.objects.get_or_create(
                             list=constraints,
-                            name='{} {}'.format(row['VORNAME'], row['NACHNAME']),
-                            identifier=row['CHAOSNR'],
+                            name='{} {}'.format(
+                                row.get('VORNAME', '') or row.get('first_name', ''),
+                                row.get('NACHNAME', '') or row.get('last_name', ''),
+                            ),
+                            identifier=row.get('CHAOSNR') or row.get('chaos_number', ''),
                         )
                     else:
                         _, created = ListConstraintEntry.objects.get_or_create(
