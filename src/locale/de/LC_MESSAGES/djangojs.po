@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-21 13:05+0100\n"
+"POT-Creation-Date: 2017-12-24 23:35+0100\n"
 "PO-Revision-Date: 2016-12-21 13:05+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -26,7 +26,23 @@ msgstr "Unterstützte Befehle:"
 msgid "Show reset codes for the barcode scanner"
 msgstr "Zeigt Reset-Codes für den Barcode-Scanner"
 
-#: postix/static/desk/js/commands.js:16
+#: postix/static/desk/js/commands.js:12
+msgid "Initiate a ping"
+msgstr ""
+
+#: postix/static/desk/js/commands.js:13
+msgid "Save a response to a ping"
+msgstr ""
+
+#: postix/static/desk/js/commands.js:30
+msgid "Pong. Thanks!"
+msgstr ""
+
+#: postix/static/desk/js/commands.js:43
+msgid "Ping printed!"
+msgstr ""
+
+#: postix/static/desk/js/commands.js:50
 msgid "Scan the following, in order:"
 msgstr "Scanne die folgenden Codes in dieser Reihenfolge:"
 
@@ -53,10 +69,6 @@ msgstr "Es gibt mehrere Bestellungen zu diesem Code."
 #: postix/static/desk/js/preorder.js:21
 msgid "Unknown secret."
 msgstr "Unbekannter Code."
-
-#: postix/static/desk/js/preorder.js:27
-msgid "This ticket has already been redeemed."
-msgstr "Das Ticket wurde bereits eingelöst."
 
 #: postix/static/desk/js/preorder.js:30
 msgid "Ticket has not been paid."
@@ -86,10 +98,13 @@ msgstr "Soll der letzte Bon wirklich storniert werden?"
 msgid "The last transaction is not known."
 msgstr "Letzter Bon ist unbekannt."
 
-#: postix/static/desk/js/transaction.js:176
+#: postix/static/desk/js/transaction.js:177
 msgid "The transaction has been reversed."
 msgstr "Bon storniert"
 
-#: postix/static/desk/js/transaction.js:202
+#: postix/static/desk/js/transaction.js:203
 msgid "Current transaction"
 msgstr "Aktueller Bon"
+
+#~ msgid "This ticket has already been redeemed."
+#~ msgstr "Das Ticket wurde bereits eingelöst."
