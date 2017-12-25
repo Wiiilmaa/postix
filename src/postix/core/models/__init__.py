@@ -4,8 +4,8 @@ from .base import (
     TransactionPositionItem,
 )
 from .cashdesk import (
-    Cashdesk, CashdeskSession, ItemMovement, TroubleshooterNotification,
-    generate_key,
+    Cashdesk, CashdeskSession, CashMovement, ItemMovement,
+    TroubleshooterNotification, generate_key,
 )
 from .constraints import (
     AbstractConstraint, ListConstraint, ListConstraintEntry,
@@ -18,8 +18,8 @@ from .preorder import Preorder, PreorderPosition
 from .settings import EventSettings
 
 __all__ = [
-    'AbstractConstraint', 'Cashdesk', 'CashdeskSession', 'EventSettings',
-    'generate_key', 'Item', 'ItemMovement', 'ListConstraint',
+    'AbstractConstraint', 'Cashdesk', 'CashMovement', 'CashdeskSession',
+    'EventSettings', 'generate_key', 'Item', 'ItemMovement', 'ListConstraint',
     'ListConstraintEntry', 'ListConstraintProduct', 'Info', 'Ping', 'Preorder',
     'PreorderPosition', 'Product', 'ProductItem', 'Quota', 'Transaction',
     'TransactionPosition', 'TransactionPositionItem', 'User', 'TimeConstraint',
