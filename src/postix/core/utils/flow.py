@@ -70,6 +70,9 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
     if not pp.preorder.is_paid:
         raise FlowError(_('This ticket has not been paid for.'))
 
+    if not pp.product.is_availably_by_time:
+        raise FlowError(_('This product is currently not available.'))
+
     if is_redeemed(pp):
         last_r = TransactionPosition.objects.filter(preorder_position=pp, type='redeem').last()
         tz = timezone.get_current_timezone()

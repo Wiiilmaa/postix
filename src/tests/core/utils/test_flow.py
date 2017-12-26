@@ -109,6 +109,23 @@ def test_preorder_warning_constraint_bypass_to_low():
 
 
 @pytest.mark.django_db
+def test_preorder_time_constraint_inactive():
+    pp = preorder_position_factory(paid=True)
+    time_constraint = time_constraint_factory(active=False)
+    time_constraint.products.add(pp.product)
+    with pytest.raises(FlowError):
+        redeem_preorder_ticket(secret=pp.secret)
+
+
+@pytest.mark.django_db
+def test_preorder_time_constraint_active():
+    pp = preorder_position_factory(paid=True)
+    time_constraint = time_constraint_factory(active=True)
+    time_constraint.products.add(pp.product)
+    redeem_preorder_ticket(secret=pp.secret)
+
+
+@pytest.mark.django_db
 def test_preorder_warning_constraint_bypass_price_paid():
     pp = preorder_position_factory(paid=True)
     warning_constraint = warning_constraint_factory()

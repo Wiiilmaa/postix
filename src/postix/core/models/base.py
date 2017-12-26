@@ -141,7 +141,7 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     @property
-    def is_available(self) -> bool:
+    def is_availably_by_time(self) -> bool:
         from . import Quota, TimeConstraint
         timeframes = TimeConstraint.objects.filter(products=self)
         if timeframes.exists():
@@ -150,13 +150,18 @@ class Product(models.Model):
             if not current_timeframes.exists():
                 return False
 
+        return True
+
+    @property
+    def is_available(self) -> bool:
+        from . import Quota, TimeConstraint
         quotas = Quota.objects.filter(products=self)
         if quotas.exists():
             all_quotas_available = all([quota.is_available() for quota in quotas])
             if not all_quotas_available:
                 return False
 
-        return self.is_visible
+        return self.is_visible and self.is_availably_by_time
 
     @cached_property
     def amount_sold(self) -> int:
