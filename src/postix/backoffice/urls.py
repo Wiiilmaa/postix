@@ -30,7 +30,6 @@ urlpatterns = [
     url('^wizard/items/$', views.WizardItemListView.as_view(), name='wizard-items-list'),
     url('^wizard/items/new$', views.WizardItemCreateView.as_view(), name='wizard-items-create'),
     url('^wizard/items/(?P<pk>[0-9]+)/$', views.WizardItemEditView.as_view(), name='wizard-items-edit'),
-    url('^wizard/stats/$', views.WizardStatsView.as_view(), name='wizard-stats'),
 
     url('^$', views.MainView.as_view(), name='main'),
 ]

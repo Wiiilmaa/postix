@@ -10,7 +10,7 @@ from .utils import backoffice_user_required
 from .wizard import (
     WizardCashdesksView, WizardItemCreateView, WizardItemEditView,
     WizardItemListView, WizardPretixImportView, WizardSettingsView,
-    WizardStatsView, WizardUsersView,
+    WizardUsersView,
 )
 
 __all__ = [
@@ -37,6 +37,5 @@ __all__ = [
     'WizardItemListView',
     'WizardPretixImportView',
     'WizardSettingsView',
-    'WizardStatsView',
     'WizardUsersView',
 ]
