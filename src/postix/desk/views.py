@@ -59,7 +59,10 @@ class LoginView(TemplateView):
 
 
 def logout_view(request: HttpRequest) -> HttpResponseRedirect:
-    session = request.user.get_current_session()
+    if request.user.is_authenticated:
+        session = request.user.get_current_session()
+    else:
+        session = None
     logout(request)
     if session:
         session.cashdesk.signal_close()
