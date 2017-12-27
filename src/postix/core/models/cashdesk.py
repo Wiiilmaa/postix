@@ -241,6 +241,9 @@ class CashdeskSession(models.Model):
     def has_open_requests(self) -> bool:
         return TroubleshooterNotification.objects.active(session=self).exists()
 
+    def is_latest_session(self) -> bool:
+        return not self.cashdesk.sessions.filter(start__gt=self.start).exists()
+
 
 class ItemMovement(models.Model):
     """ Instead of a through-table. Negative amounts indicate items moved out
