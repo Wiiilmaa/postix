@@ -8,7 +8,7 @@ var get_difference = function(numberinput) {
     var end = parseFloat(row.find(".end-column").text()) || 0;
 
     if (row[0].id == 'cash') {
-        var difference = (before + transaction) - after;
+        var difference = Number.parseInt(((before + transaction) - after) * 100) / 100;
     } else {
         var difference = (before - transaction) - after;
     }
