@@ -24,7 +24,7 @@
                 <tr class="{% if position.is_redeemed %}active{% else %}info{% endif %}">
                     <td> {{ position.product }} </td>
                     <td> {{ position.information }} </td>
-                    <td> {{ position.secret|slice:":14" }}… </td>
+                    <td> <a href="#" class="secret" data-data="{{ position.secret }}">{{ position.secret|slice:":14" }}…</a> </td>
                     <td>
                         {% if position.is_redeemed %}
                             {% trans "redeemed" %}
@@ -37,5 +37,13 @@
             </tbody>
         </table>
     </div>
+    <p>
+       {% trans "Click on one of the secrets to get a QR code for it:" %}
+    </p>
+    <div id="qrcode" style="float: none;"></div>
 
+    {% block scripts %}
+        <script type="text/javascript" src="{% static "shared/js/qrcode.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "troubleshooter/js/secrets.js" %}"></script>
+    {% endblock %}
 {% endblock content %}
