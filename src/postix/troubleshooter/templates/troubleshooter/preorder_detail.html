@@ -23,6 +23,7 @@
             {% for position in preorder.positions.all %}
                 <tr class="{% if position.is_redeemed %}active{% else %}info{% endif %}">
                     <td> {{ position.product }} </td>
+                    <td> {{ position.information }} </td>
                     <td> {{ position.secret|slice:":14" }}… </td>
                     <td>
                         {% if position.is_redeemed %}
