@@ -52,19 +52,19 @@
                 <td>{{ form.cash_before|as_crispy_field }}</td>
                 <td class="after-value danger"></td>
             </tr>
-            {{ formset.management_form|crispy  }}
             {% for form in formset %}
             {% with counter=forloop.counter0 product=products.counter %}
                 <tr>
-                    <th>
+                {{ formset.management_form|crispy  }}
+                    <td>
                         {{ form.product_label.item }}
                         <div class="hide">{{ form.item }}</div>
-                    </th>
-                    <th class="before-value"> {{ form.product_label.movements }} </th>
-                    <th class="transaction-value"> {{ form.product_label.transactions }} </th>
-                    <th class="end-column"> {{ form.product_label.final_movements }} </th>
-                    <th > {{ form.amount|as_crispy_field }} </th>
-                    <th class="after-value danger"></th>
+                    </td>
+                    <td class="before-value"> {{ form.product_label.movements }} </td>
+                    <td class="transaction-value"> {{ form.product_label.transactions }} </td>
+                    <td class="end-column"> {{ form.product_label.final_movements }} </td>
+                    {{ form.amount|as_crispy_field }}
+                    <td class="after-value danger"></td>
                 </tr>
             {% endwith %}
             {% empty %}
