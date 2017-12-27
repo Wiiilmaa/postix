@@ -83,6 +83,19 @@
 
     <h3 class="show-hide-heading">{% trans "Details" %}</h3>
 
+    <ul>
+    {% for stat in session.get_product_sales %}
+        <li>
+            {{ stat.product.name }} ({{ stat.product.price }} €)
+            <ul>
+                <li>{% trans "Sales" %}: {{ stat.sales }}</li>
+                <li>{% trans "Presales" %}: {{ stat.presales }}</li>
+                <li>{% trans "Reversals" %}: {{ stat.reversals }}</li>
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript">
