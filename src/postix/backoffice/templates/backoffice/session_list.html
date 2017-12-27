@@ -3,52 +3,43 @@
 
 {% block content %}
 <table class="table" id="active-sessions-table">
-	<thead>
-		<th></th>
+    <thead>
+        <th></th>
         <th>{% trans "Angel" %}</th>
         <th>{% trans "Duration" %}</th>
         <th>{% trans "Products" %}</th>
         <th>{% trans "Cashdesk" %}</th>
-	</thead>
-	<tbody>
+    </thead>
+    <tbody>
         {% language "de" %}
-		{% for cashdesk in cashdesks %}
-			{% for session in cashdesk.get_active_sessions %}
-				<tr>
-					<th class="session-action-column">
+                {% for cashdesk in cashdesks %}
+                    {% for session in cashdesk.get_active_sessions %}
+                        <tr>
+                                <th class="session-action-column">
                         <a href="{% url "backoffice:session-detail" pk=session.pk %}" title="{% trans "Details" %}">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                         </a>
                         <a href="{% url "backoffice:resupply-session" pk=session.pk %}" title="{% trans "Resupply" %}">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-						</a>
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </a>
                         <a href="{% url "backoffice:move-session" pk=session.pk %}" title="{% trans "Move" %}">
                             <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
                         </a>
                         <a href="{% url "backoffice:end-session" pk=session.pk %}" title="{% trans "End" %}">
-                        	<span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-						</a>
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                        </a>
                     </th>
-					<th> {{ session.user }} </th>
-					<th>seit {{ session.start|timesince }} </th>
-					<th>
+                    <th> {{ session.user }} </th>
+                    <th>seit {{ session.start|timesince }} </th>
+                    <th>
                         <ul>
                         {% for product in session.get_current_items %}
                             <li>{{ product.item }}: {{ product.transactions }}</li>
                         {% endfor %}
                         </ul>
                     </th>
-                    {% with session_count=cashdesk.get_active_sessions|length %}
-                        {% if session_count > 1 %}
-                            {% if forloop.first %}
-                                <th rowspan="{{ session_count }}">{{ session.cashdesk }}</th>
-                            {% endif %}
-                        {% else %}
-                            <th>{{ session.cashdesk }}</th>
-                        {% endif %}
-                    {% endwith %}
-
-				</tr>
+                    <th>{{ session.cashdesk }}</th>
+                </tr>
             {% empty %}
                 <tr>
                     <th colspan="42" class="empty-row active">
@@ -56,16 +47,16 @@
                         <a href="{% url "backoffice:new-session" %}?desk={{ cashdesk.pk }}">{% trans "initialization" %}.</a>
                     </th>
                 <tr>
-			{% endfor %}
-                {% empty %}
+            {% endfor %}
+        {% empty %}
             <tr>
                 <th colspan="42" class="empty-row active">
                     {% trans "No sessions yet, get going!" %}
                 </th>
             <tr>
-		{% endfor %}
+        {% endfor %}
         {% endlanguage %}
-	</tbody>
+        </tbody>
 </table>
 
 {% endblock %}
