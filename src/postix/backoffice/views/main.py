@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView
 
+from postix.core.models import Quota
 from postix.core.models.base import Item, Product
 from postix.core.models.cashdesk import CashdeskSession
 
@@ -14,6 +15,7 @@ class MainView(BackofficeUserRequiredMixin, TemplateView):
         ctx = super().get_context_data()
         ctx['products'] = Product.objects.all()
         ctx['items'] = Item.objects.all()
+        ctx['quotas'] = Quota.objects.all()
         ctx['money'] = sum(c.cash_before for c in CashdeskSession.active.all())
         ctx['check_errors'] = checks.all_errors()
         return ctx

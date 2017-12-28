@@ -20,6 +20,10 @@ class Quota(AbstractConstraint):
         total = sum([product.amount_sold for product in self.products.all()])
         return total < self.size
 
+    def amount_available(self) -> int:
+        total = sum([product.amount_sold for product in self.products.all()])
+        return max(0, self.size - total)
+
     def __str__(self) -> str:
         return "{} ({})".format(self.name, self.size)
 
