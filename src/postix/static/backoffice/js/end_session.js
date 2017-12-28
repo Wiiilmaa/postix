@@ -6,12 +6,13 @@ var get_difference = function(numberinput) {
     var before = parseFloat(row.find(".before-value").text().replace(",", "."));
 	var transaction = parseFloat(row.find(".transaction-value").text().replace(",", "."));
     var end = parseFloat(row.find(".end-column").text().replace(",", ".")) || 0;
-    var difference = (before - transaction) - after;
-    console.log(after, before, transaction, end, difference)
+    var difference;
 
     if (row[0].id === 'cash') {
+        difference = before + transaction - after;
         difference = difference.toFixed(2);
     } else {
+        difference = before - transaction - after;
         difference = difference.toFixed(0);
     }
 
