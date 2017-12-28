@@ -31,6 +31,7 @@
         {{ form.backoffice_user|as_crispy_field }}
     </h4>
 
+    {{ formset.management_form|crispy  }}
     <table class="table" id="end-sessions-table">
 	<thead>
         <th>{% trans "Product" %}</th>
@@ -55,7 +56,6 @@
             {% for form in formset %}
             {% with counter=forloop.counter0 product=products.counter %}
                 <tr>
-                {{ formset.management_form|crispy  }}
                     <td>
                         {{ form.product_label.item }}
                         <div class="hide">{{ form.item }}</div>
