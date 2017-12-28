@@ -2,15 +2,17 @@ var table_body = $('#session-items_table tbody');
 
 var get_difference = function(numberinput) {
 	var row = $(numberinput).closest("tr");
-    var after = parseFloat($(numberinput).val()) || 0;
-    var before = parseFloat(row.find(".before-value").text());
-	var transaction = parseFloat(row.find(".transaction-value").text());
-    var end = parseFloat(row.find(".end-column").text()) || 0;
+    var after = parseFloat($(numberinput).val().replace(",", ".")) || 0;
+    var before = parseFloat(row.find(".before-value").text().replace(",", "."));
+	var transaction = parseFloat(row.find(".transaction-value").text().replace(",", "."));
+    var end = parseFloat(row.find(".end-column").text().replace(",", ".")) || 0;
+    var difference = (before - transaction) - after;
+    console.log(after, before, transaction, end, difference)
 
-    if (row[0].id == 'cash') {
-        var difference = Number.parseInt(((before + transaction) - after) * 100) / 100;
+    if (row[0].id === 'cash') {
+        difference = difference.toFixed(2);
     } else {
-        var difference = (before - transaction) - after;
+        difference = difference.toFixed(0);
     }
 
 	result_cell = row.find(".after-value");

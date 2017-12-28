@@ -8,11 +8,20 @@ from django.utils.translation import ugettext as _
 from postix.core.models import Cashdesk, Item, User
 
 
+class RelaxedDecimalField(forms.DecimalField):
+    def to_python(self, value):
+        return super().to_python(value.replace(",", ".") if isinstance(value, str) else value)
+
+    def validate(self, value):
+        return super().validate(value.replace(",", ".") if isinstance(value, str) else value)
+
+
 class SessionBaseForm(forms.Form):
     cashdesk = forms.ModelChoiceField(queryset=Cashdesk.objects.filter(is_active=True).order_by('name'), label=_('Cashdesk'))
     user = forms.CharField(max_length=254, label=_('Angel'))
     backoffice_user = forms.CharField(max_length=254, label=_('Backoffice angel'))
-    cash_before = forms.DecimalField(max_digits=10, decimal_places=2, label=_('Cash'))
+    cash_before = RelaxedDecimalField(max_digits=10, decimal_places=2, label=_('Cash'),
+                                      widget=forms.NumberInput(attrs={'type': 'text'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
