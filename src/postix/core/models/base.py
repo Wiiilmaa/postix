@@ -142,7 +142,7 @@ class Product(models.Model):
 
     @property
     def is_availably_by_time(self) -> bool:
-        from . import Quota, TimeConstraint
+        from . import TimeConstraint
         timeframes = TimeConstraint.objects.filter(products=self)
         if timeframes.exists():
             now = timezone.now()
@@ -154,7 +154,7 @@ class Product(models.Model):
 
     @property
     def is_available(self) -> bool:
-        from . import Quota, TimeConstraint
+        from . import Quota
         quotas = Quota.objects.filter(products=self)
         if quotas.exists():
             all_quotas_available = all([quota.is_available() for quota in quotas])
