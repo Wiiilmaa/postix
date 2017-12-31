@@ -22,18 +22,11 @@
 </head>
 <body><div id="wrapper">
     <nav class="navbar navbar-inverse navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{% block area_url %}{% endblock %}">
-                <img src="{% static "shared/img/icon_white.svg" %}">
-                {% block area %}{% endblock %}
-            </a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            {% if request.user.is_troubleshooter and request.user.is_backoffice_user %}
-                <ul class="nav navbar-nav">
-                </ul>
-            {% endif %}
+        <a class="navbar-brand" href="{% block area_url %}{% endblock %}">
+            <img src="{% static "shared/img/icon_white.svg" %}">
+            {% block area %}{% endblock %}
+        </a>
+        <div id="navbar" class="">
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_superuser %}
                     {% if not settings.initialized %}
@@ -41,11 +34,11 @@
                     {% endif %}
                 {% endif %}
                 {% if not request.user.is_anonymous %}
-                <li>
-                    <a href="{% if request.user.is_backoffice_user or request.user.is_superuser %}{% url "backoffice:logout" %}{% else %}{% url "troubleshooter:logout" %}{% endif %}">
-                        <span class="glyphicon glyphicon-log-out"></span>{{ user }}
-                    </a>
-                </li>
+                    <li>
+                        <a href="{% if request.user.is_backoffice_user or request.user.is_superuser %}{% url "backoffice:logout" %}{% else %}{% url "troubleshooter:logout" %}{% endif %}">
+                            <span class="glyphicon glyphicon-log-out"></span>{{ user }}
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </div>

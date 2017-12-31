@@ -87,3 +87,6 @@ h1 .glyphicon {
 .sidebar .nav-link.subnav {
     padding-left: 40px;
 }
+.navbar-right {
+    margin-right: 0 !important;
+}
