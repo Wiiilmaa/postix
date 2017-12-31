@@ -36,6 +36,7 @@ var dialog = {
         $("#modal-title").text(pos_id !== null ? transaction.positions[pos_id]._title : gettext('Input required'));
         $("#modal-text").text(message);
         $("#modal-input-wrapper").show();
+        $("#modal").addClass("modal-input");
         $("#btn-continue").show();
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
@@ -63,6 +64,7 @@ var dialog = {
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
         $("#btn-continue").hide();
+        $("#modal").removeClass("modal-input");
         $("#btn-cancel").show();
         $("#btn-dismiss").hide();
         $("#btn-bypass").hide();
@@ -78,6 +80,7 @@ var dialog = {
         $("#modal-title").text("Success");
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
+        $("#modal").removeClass("modal-input");
         $("#btn-continue").hide();
         $("#btn-cancel").hide();
         $("#btn-dismiss").show();
@@ -100,6 +103,7 @@ var dialog = {
             pos_id !== null ? transaction.positions[pos_id]._title : gettext('Confirmation required'));
         $("#modal-text").text(message);
         $("#modal-input-wrapper").hide();
+        $("#modal").removeClass("modal-input");
         $("#btn-continue").show();
         $("#btn-dismiss").hide();
         $("#btn-cancel").show();

@@ -236,6 +236,9 @@ body.has-modal #main-container {
     background: rgba(255, 255, 255, 0.7);
     align-items: center;
     justify-content: center;
+    padding: 40px 0;
+    box-sizing: border-box;
+    flex-direction: column;
 }
 .has-modal #modal-container {
     display: flex;
@@ -257,6 +260,25 @@ body.has-modal #main-container {
 }
 #modal-buttons button:last-child {
     margin-right: 0px;
+}
+.modal-input {
+    flex-grow: 1;
+}
+.modal-input .panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.modal-input .panel-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+#modal-text, #modal-buttons {
+    flex: 0 0;
+}
+#modal-input-wrapper {
+    flex: 1 1;
 }
 .panel-sale .panel-heading {
     line-height: 40px;
