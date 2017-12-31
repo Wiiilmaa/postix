@@ -1,7 +1,7 @@
 $(function() {
     new QRCode(document.getElementById("qrcode"), {
-        'width': 128,
-        'height': 128,
+        'width': 256,
+        'height': 256,
         'text': $("#qrcodedata").html()
     });
 });
