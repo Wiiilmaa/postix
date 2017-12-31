@@ -81,3 +81,9 @@ h1 .glyphicon {
   color: white;
   text-decoration: none;
 }
+.sidebar span.nav-link {
+    background: #ddd;
+}
+.sidebar .nav-link.subnav {
+    padding-left: 40px;
+}

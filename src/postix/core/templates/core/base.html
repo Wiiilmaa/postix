@@ -55,115 +55,97 @@
         <nav class="nav flex-column sidebar">
             {% if user.is_backoffice_user or user.is_superuser %}
                 <span class="nav-link">
-                    <span class="fa fa-handshake-o"></span>
+                    <span class="fa fa-fw fa-handshake-o"></span>
                     {% trans "Sessions" %}
                 </span>
-                    <a class="nav-link" href="{% url "backoffice:new-session" %}">
-                        <span class="fa fa-handshake-o"></span>
-                        <span class="fa fa-plus-circle"></span>
+                    <a class="nav-link subnav" href="{% url "backoffice:new-session" %}">
+                        <span class="fa fa-fw fa-plus-circle"></span>
                         {% trans "New session" %}
                     </a>
-                    <a class="nav-link" href="{% url "backoffice:session-list" %}">
-                        <span class="fa fa-handshake-o"></span>
-                        <span class="fa fa-list"></span>
+                    <a class="nav-link subnav" href="{% url "backoffice:session-list" %}">
+                        <span class="fa fa-fw fa-list"></span>
                         {% trans "List of sessions" %}
                     </a>
-                    <a class="nav-link" href="{% url "backoffice:report-list" %}">
-                        <span class="fa fa-handshake-o"></span>
-                        <span class="fa fa-book"></span>
+                    <a class="nav-link subnav" href="{% url "backoffice:report-list" %}">
+                        <span class="fa fa-fw fa-book"></span>
                         {% trans "Reports" %}
                     </a>
                 <span class="nav-link">
-                    <span class="fa fa-users"></span>
+                    <span class="fa fa-fw fa-users"></span>
                     {% trans "Users" %}
                 </span>
-                    <a class="nav-link" href="{% url "backoffice:create-user" %}">
-                        <span class="fa fa-users"></span>
-                        <span class="fa fa-plus-circle"></span>
+                    <a class="nav-link subnav" href="{% url "backoffice:create-user" %}">
+                        <span class="fa fa-fw fa-plus-circle"></span>
                         {% trans "New user" %}
                     </a>
-                    <a class="nav-link" href="{% url "backoffice:user-list" %}">
-                        <span class="fa fa-users"></span>
-                        <span class="fa fa-list"></span>
+                    <a class="nav-link subnav" href="{% url "backoffice:user-list" %}">
+                        <span class="fa fa-fw fa-list"></span>
                         {% trans "User list" %}
                     </a>
             {% endif %}
             {% if user.is_troubleshooter or user.is_superuser %}
                 {% if user.is_superuser or user.is_backoffice_user %}
                     <span class="nav-link">
-                        <span class="fa fa-user-secret"></span>
+                        <span class="fa fa-fw fa-user-secret"></span>
                         {% trans "Troubleshooting" %}
                     </span>
                 {% endif %}
-                <a href="{% url "troubleshooter:main" %} "id="nav-sessions" class="nav-link{% if has_request %} has-request{% endif %}">
-                    <span class="fa fa-user-secret"></span>
-                    <span class="fa fa-user"></span>
+                <a href="{% url "troubleshooter:main" %} "id="nav-sessions" class="nav-link subnav{% if has_request %} has-request{% endif %}">
+                    <span class="fa fa-fw fa-user"></span>
                     {% trans "Current sessions" %}
                 </a>
-                <a class="nav-link" href="{% url "troubleshooter:transaction-list" %}">
-                    <span class="fa fa-user-secret"></span>
-                    <span class="fa fa-book"></span>
+                <a class="nav-link subnav" href="{% url "troubleshooter:transaction-list" %}">
+                    <span class="fa fa-fw fa-book"></span>
                     {% trans "Transactions" %}
                 </a>
-                <a class="nav-link" href="{% url "troubleshooter:constraint-list" %}">
-                    <span class="fa fa-user-secret"></span>
-                    <span class="fa fa-list"></span>
+                <a class="nav-link subnav" href="{% url "troubleshooter:constraint-list" %}">
+                    <span class="fa fa-fw fa-list"></span>
                     {% trans "Lists" %}
                 </a>
-                <a class="nav-link" href="{% url "troubleshooter:preorder-list" %}">
-                    <span class="fa fa-user-secret"></span>
-                    <span class="fa fa-shopping-cart"></span>
+                <a class="nav-link subnav" href="{% url "troubleshooter:preorder-list" %}">
+                    <span class="fa fa-fw fa-shopping-cart"></span>
                     {% trans "Preorder" %}
                 </a>
-                <a class="nav-link" href="{% url "troubleshooter:preorder-information-list" %}">
-                    <span class="fa fa-user-secret"></span>
-                    <span class="fa fa-shopping-cart"></span>
+                <a class="nav-link subnav" href="{% url "troubleshooter:preorder-information-list" %}">
+                    <span class="fa fa-fw fa-shopping-cart"></span>
                     {% trans "Preorder Specials" %}
                 </a>
-                <a class="nav-link" href="{% url "troubleshooter:ping" %}">
-                    <span class="fa fa-user-secret"></span>
-                    <span class="fa fa-terminal"></span>
+                <a class="nav-link subnav" href="{% url "troubleshooter:ping" %}">
+                    <span class="fa fa-fw fa-terminal"></span>
                     {% trans "Ping" %}
                 </a>
-                <a class="nav-link" href="{% url "troubleshooter:information-list" %}">
-                    <span class="fa fa-user-secret"></span>
-                    <span class="fa fa-print"></span>
+                <a class="nav-link subnav" href="{% url "troubleshooter:information-list" %}">
+                    <span class="fa fa-fw fa-print"></span>
                     {% trans "Print" %}
                 </a>
             {% endif %}
             {% if user.is_superuser %}
                 <span class="nav-link" href="{% url "backoffice:wizard-settings" %}">
-                    <span class="fa fa-cog"></span>
+                    <span class="fa fa-fw fa-cog"></span>
                     {% trans "Settings" %}
                 </span>
-                <a class="nav-link" href="{% url "backoffice:wizard-settings" %}">
-                    <span class="fa fa-cog"></span>
-                    <span class="fa fa-cogs"></span>
+                <a class="nav-link subnav" href="{% url "backoffice:wizard-settings" %}">
+                    <span class="fa fa-fw fa-cogs"></span>
                     {% trans "General Settings" %}
                 </a>
-                <a class="nav-link" href="{% url "backoffice:wizard-users" %}">
-                    <span class="fa fa-cog"></span>
-                    <span class="fa fa-users"></span>
+                <a class="nav-link subnav" href="{% url "backoffice:wizard-users" %}">
+                    <span class="fa fa-fw fa-users"></span>
                     {% trans "User Permissions" %}
                 </a>
-                <a class="nav-link" href="{% url "backoffice:wizard-cashdesks" %}">
-                    <span class="fa fa-cog"></span>
-                    <span class="fa fa-plus-circle"></span>
+                <a class="nav-link subnav" href="{% url "backoffice:wizard-cashdesks" %}">
+                    <span class="fa fa-fw fa-plus-circle"></span>
                     {% trans "New Cashdesks" %}
                 </a>
-                <a class="nav-link" href="{% url "backoffice:wizard-import" %}">
-                    <span class="fa fa-cog"></span>
-                    <span class="fa fa-download"></span>
+                <a class="nav-link subnav" href="{% url "backoffice:wizard-import" %}">
+                    <span class="fa fa-fw fa-download"></span>
                     {% trans "Import Presale Data" %}
                 </a>
-                <a class="nav-link" href="{% url "backoffice:wizard-items-list" %}">
-                    <span class="fa fa-cog"></span>
-                    <span class="fa fa-list"></span>
+                <a class="nav-link subnav" href="{% url "backoffice:wizard-items-list" %}">
+                    <span class="fa fa-fw fa-list"></span>
                     {% trans "Item List" %}
                 </a>
-                <a class="nav-link" href="{% url "backoffice:wizard-items-create" %}">
-                    <span class="fa fa-cog"></span>
-                    <span class="fa fa-plus-circle"></span>
+                <a class="nav-link subnav" href="{% url "backoffice:wizard-items-create" %}">
+                    <span class="fa fa-fw fa-plus-circle"></span>
                     {% trans "Add an Item" %}
                 </a>
             {% endif %}
