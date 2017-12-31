@@ -261,6 +261,9 @@ class ItemMovement(models.Model):
                                         verbose_name='Backoffice operator issuing movement')
     timestamp = models.DateTimeField(default=now, editable=False)
 
+    class Meta:
+        ordering = ('timestamp',)
+
     def __str__(self) -> str:
         return 'ItemMovement ({} {} at {})'.format(self.amount, self.item, self.session.cashdesk.name)
 

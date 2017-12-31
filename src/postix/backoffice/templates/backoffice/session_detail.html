@@ -38,6 +38,7 @@
         "key": "{{ session.api_token }}"
     }
 
+
     </script>
 
     <h4> {{ session.cashdesk }}, {% trans "Session ID" %} {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}
@@ -85,6 +86,7 @@
             <th>{% trans "Initial" %}</th>
             <th>{% trans "Sales" %}</th>
             <th class='end-column'>{% trans "Final" %}</th>
+            </thead>
             <tbody>
             <tr>
                 <td> {% trans "Cash" %} </td>
@@ -98,6 +100,44 @@
                     <td> {{ item.movements }} </td>
                     <td> {{ item.transactions }} </td>
                     <td class='end-column'> {{ item.final_movements }} </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h3> {% trans "Item movement log" %} </h3>
+        <table class="table" id="session-detail-table">
+            <thead>
+            <th>{% trans "Time" %}</th>
+            <th>{% trans "Item" %}</th>
+            <th>{% trans "Amount added" %}</th>
+            <th>{% trans "User" %}</th>
+            </thead>
+            <tbody>
+            {% for move in session.item_movements.all %}
+                <tr>
+                    <td> {{ move.timestamp|date:"SHORT_DATETIME_FORMAT" }} </td>
+                    <td> {{ move.item }} </td>
+                    <td> {{ move.amount }} </td>
+                    <td> {{ move.backoffice_user }} </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h3> {% trans "Cash movement log" %} </h3>
+        <table class="table" id="session-detail-table">
+            <thead>
+            <th>{% trans "Time" %}</th>
+            <th>{% trans "Amount added" %}</th>
+            <th>{% trans "User" %}</th>
+            </thead>
+            <tbody>
+            {% for move in session.cash_movements.all %}
+                <tr>
+                    <td> {{ move.timestamp|date:"SHORT_DATETIME_FORMAT" }} </td>
+                    <td> {{ move.cash }} </td>
+                    <td> {{ move.backoffice_user }} </td>
                 </tr>
             {% endfor %}
             </tbody>
