@@ -17,11 +17,8 @@ body.login, body.error {
 .error-page .glyphicon {
     font-size: 200px;
 }
-.navbar .glyphicon-log-out {
+.navbar .fa-sign-off {
     margin-right: 0.5em;
-}
-.glyphicon-plus-sign {
-    margin-right: 0.1em;
 }
 h1 a:hover {
     text-decoration: none;
@@ -89,4 +86,15 @@ h1 .glyphicon {
 }
 .navbar-right {
     margin-right: 0 !important;
+}
+
+/* Icon colors */
+.fa-plus {
+    color: #00c036;
+}
+.fa-print {
+    color: #537ca6;
+}
+.fa-pencil {
+    color: #666;
 }

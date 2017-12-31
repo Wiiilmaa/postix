@@ -48,7 +48,7 @@
         <div class="pagination">
             {% if page_obj.has_previous %}
                 <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.previous_page_number }}">
-                    <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+                    <span class="fa fa-arrow-left" aria-hidden="true"></span>
                 </a>
             {% endif %}
             <span class="page-current">
@@ -56,7 +56,7 @@
 		</span>
             {% if page_obj.has_next %}
                 <a href="{% url "troubleshooter:transaction-list" %}?page={{ page_obj.next_page_number }}">
-                    <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+                    <span class="fa fa-arrow-right" aria-hidden="true"></span>
                 </a>
             {% endif %}
         </div>

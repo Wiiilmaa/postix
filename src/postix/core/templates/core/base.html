@@ -30,13 +30,13 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_superuser %}
                     {% if not settings.initialized %}
-                        <li><a href="{% url "backoffice:wizard-settings" %}"><span class="text-danger glyphicon glyphicon-alert"></span></a></li>
+                        <li><a href="{% url "backoffice:wizard-settings" %}"><span class="text-danger fa fa-bell"></span></a></li>
                     {% endif %}
                 {% endif %}
                 {% if not request.user.is_anonymous %}
                     <li>
                         <a href="{% if request.user.is_backoffice_user or request.user.is_superuser %}{% url "backoffice:logout" %}{% else %}{% url "troubleshooter:logout" %}{% endif %}">
-                            <span class="glyphicon glyphicon-log-out"></span>{{ user }}
+                            <span class="fa fa-sign-out"></span> {{ user }}
                         </a>
                     </li>
                 {% endif %}

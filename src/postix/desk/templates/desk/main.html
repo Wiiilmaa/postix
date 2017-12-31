@@ -9,6 +9,7 @@
     {% compress css %}
         <link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
         <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
+        <link rel="stylesheet" type="text/x-scss" href="{% static "shared/fontawesome/scss/font-awesome.scss" %}">
         <link rel="stylesheet" type="text/x-scss" href="{% static "desk/scss/postix.scss" %}">
     {% endcompress %}
     <link rel="shortcut icon" href="{% static "shared/img/favicon.png" %}">
@@ -33,15 +34,15 @@
         </div>
         <div id="button-row">
             <a href="{% url "desk:logout" %}"><button class="btn btn-danger" id="btn-logout">
-                <span class="glyphicon glyphicon-log-out"></span>
+                <span class="fa fa-sign-out"></span>
                 {% trans "Logout" %}
             </button></a>
             <button class="btn btn-default" id="btn-open-drawer">
-                <span class="glyphicon glyphicon-inbox"></span>
+                <span class="fa fa-inbox"></span>
                 {% trans "Open drawer" %}
             </button>
             <button class="btn btn-info" id="btn-resupply">
-                <span class="glyphicon glyphicon-bell"></span>
+                <span class="fa fa-bell"></span>
                 {% trans "Request resupply" %}
             </button>
         </div>
@@ -89,11 +90,11 @@
                         </div>
                         <div id="post-sale-buttons">
                             <button class="btn btn-block btn-default" id="btn-reverse">
-                                <span class="glyphicon glyphicon-backward"></span>
+                                <span class="fa fa-fast-backward"></span>
                                 {% trans "Reverse" %}
                             </button>
                             <button class="btn btn-block btn-default" id="btn-reprint">
-                                <span class="glyphicon glyphicon-duplicate"></span>
+                                <span class="fa fa-files-o"></span>
                                 {% trans "Reprint" %}
                             </button>
                         </div>
@@ -104,7 +105,7 @@
                             <span>267.40</span>
                         </div>
                         <button class="btn btn-block btn-success" id="btn-checkout">
-                            <span class="glyphicon glyphicon-shopping-cart"></span>
+                            <span class="fa fa-shopping-cart"></span>
                             {% trans "CHECKOUT" %}
                         </button>
                     </div>
@@ -148,7 +149,7 @@
 </div>
 <div id="loading">
     <div>
-        <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+        <span class="fa fa-spinner fa-spin"></span>
     </div>
 </div>
 

@@ -21,12 +21,12 @@
 
                         {% if requests %}
                             <span class="badge">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                <span class="fa fa-exclamation-circle"></span>
                                 {% trans "Resupply" %}<br />
                                 <form action="{% url "troubleshooter:confirm-resupply" pk=sess.pk %}" method="post">
                                     {% csrf_token %}
                                     <button class="btn btn-xs btn-success" type="submit" style="margin-top: 5px;"href="{% url "troubleshooter:confirm-resupply" pk=sess.pk %}" method="post">
-                                        <span class="glyphicon glyphicon-ok-sign"></span>
+                                        <span class="fa fa-check-circle"></span>
                                     </button>
                                 </form>
                             </span>

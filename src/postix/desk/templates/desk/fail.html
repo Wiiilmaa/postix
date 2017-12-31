@@ -8,6 +8,7 @@
     <title>postix</title>
     {% compress css %}
         <link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+        <link rel="stylesheet" type="text/x-scss" href="{% static "shared/fontawesome/scss/font-awesome.scss" %}">
         <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
         <link rel="stylesheet" type="text/x-scss" href="{% static "desk/scss/postix.scss" %}">
     {% endcompress %}
@@ -15,7 +16,7 @@
 </head>
 <body class="error">
 <div class="error-page">
-<span class="glyphicon glyphicon-fire">
+<span class="fa fa-power-off">
 </span>
 
     <h2>{{ message }}</h2>

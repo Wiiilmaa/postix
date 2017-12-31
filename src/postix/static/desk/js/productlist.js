@@ -23,7 +23,7 @@ var productlist = {
                             $("<strong>").text(product.name)
                         ).append($("<br>")).append(product.price + ' €');
                     if (product.requires_authorization) {
-                        btn.append(" ").append($("<span>").addClass("glyphicon glyphicon-lock"))
+                        btn.append(" ").append($("<span>").addClass("fa fa-lock"))
                     }
                     $("<div>").addClass("product").append(btn).appendTo($("#product-view-inner"));
                 }

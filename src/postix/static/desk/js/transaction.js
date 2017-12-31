@@ -75,7 +75,7 @@ var transaction = {
         ).append(
             $("<span>").addClass("cart-delete").html(
                 "<button class='btn-delete btn btn-sm btn-danger'>"
-                + "<span class='glyphicon glyphicon-remove'></span>"
+                + "<span class='fa fa-remove'></span>"
                 + "</button>"
             )
         ).appendTo($("#cart-inner"));

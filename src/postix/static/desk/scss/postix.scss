@@ -364,25 +364,17 @@ body.has-modal #main-container {
     height: 100%;
     background: rgba(255, 255, 255, 0.7);
     display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#loading.visible {
+    display: flex;
 }
 #loading div {
     text-align: center;
-    padding-top: 40px;
     font-size: 100px;
     color: rgba(0, 0, 0, 0.7);
-}
-.glyphicon-refresh-animate {
-    -animation: spin 1.4s infinite linear;
-    -webkit-animation: spin2 1.4s infinite linear;
-}
-@-webkit-keyframes spin2 {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
-}
-
-@keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
 }
 .upfade, .downfade {
     width:100%;
