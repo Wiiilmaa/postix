@@ -23,10 +23,15 @@ def opensessions(x, sessions, dt):
 class Command(BaseCommand):
     help = 'Generate time graphs'
 
+    def add_arguments(self, parser):
+        parser.add_argument('--ignore-sessions')
+
     def handle(self, *args, **kwargs):
         tz = get_current_timezone()
-        sessions = CashdeskSession.objects.filter(
-            cashdesk__name__startswith="Kasse"
+        sessions = CashdeskSession.objects.exclude(
+            cashdesk__name__icontains="handkasse"
+        ).exclude(
+                id__in=[int(a) for a in kwargs.get('ignore_sessions', '').split(',')]
         ).values('id', 'start', 'end', 'cashdesk')
         firststart = CashdeskSession.objects.order_by('start').first().start.date()
         lastend = CashdeskSession.objects.order_by('-end').first().end.date()
@@ -53,7 +58,7 @@ class Command(BaseCommand):
             ax2 = sp.twinx()
             ax2.plot(x, [opensessions(x, sessions, firststart + timedelta(days=i)) for x in x],
                      label='Open cashdesks', color='r')
-            ax2.set_ylim(0, 6)
+            ax2.set_ylim(0, 8)
             if i == 0:
                 ax2.legend(loc='upper left')
             elif i == 3:
@@ -62,9 +67,9 @@ class Command(BaseCommand):
             sp.set_xticks(range(0, 25, 2))
 
         axs[1, 1].legend(loc='upper left')
-        axs[1, 0].set_ylabel(u'Number of Transactions')
+        axs[1, 0].set_ylabel(u'Number of Transactions per 30 minutes')
         axs[2, 0].set_xlabel(u'Time of day')
         fig.tight_layout()
-        fig.suptitle('Cashdesk transactions 33c3')
+        fig.suptitle('Cashdesk transactions 34c3')
         plt.savefig('transactions.svg')
         plt.savefig('transactions.png')
