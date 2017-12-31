@@ -31,15 +31,15 @@
 {% endblock %}
 
 {% block content %}
-    <div id="qrcode"></div>
-    <script type="text/json" id="qrcodedata">
-    {
-        "url": "{{ url }}",
-        "key": "{{ session.api_token }}"
-    }
-
-
-    </script>
+    {% if not session.end %}
+        <div id="qrcode"></div>
+        <script type="text/json" id="qrcodedata">
+        {
+            "url": "{{ url }}",
+            "key": "{{ session.api_token }}"
+        }
+        </script>
+    {% endif %}
 
     <h4> {{ session.cashdesk }}, {% trans "Session ID" %} {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}
         ({{ session.user.username }})</h4>
