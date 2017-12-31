@@ -5,6 +5,7 @@ var preorder = {
 
     redeem: function (secret) {
         loading.start();
+        dialog.reset();
         $.ajax({
             url: '/api/preorderpositions/?secret=' + secret,
             method: 'GET',
@@ -15,19 +16,23 @@ var preorder = {
 
                 if (data.count !== 1) {
                     if (data.count > 1) {
+                        preorder.take_focus();
                         dialog.show_error(gettext('Secret is not unique.'));
                         return;
                     } else {
                         dialog.show_error(gettext('Unknown secret.'));
+                        preorder.take_focus();
                         return;
                     }
                 }
                 var res = data.results[0];
                 if (res.is_redeemed) {
                     dialog.show_error(res.redemption_message);
+                    preorder.take_focus();
                     return;
                 } else if (!res.is_paid) {
                     dialog.show_error(gettext('Ticket has not been paid.'));
+                    preorder.take_focus();
                     return;
                 }
 
