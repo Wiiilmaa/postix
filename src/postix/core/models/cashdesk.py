@@ -179,6 +179,10 @@ class CashdeskSession(models.Model):
         ]
 
     @property
+    def cash_remaining(self) -> Decimal:
+        return self.cash_before + self.get_cash_transaction_total()
+
+    @property
     def cash_before(self) -> Decimal:
         return self.cash_movements.all().aggregate(total=Sum('cash'))['total'] or Decimal('0.00')
 

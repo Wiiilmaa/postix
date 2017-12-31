@@ -2,16 +2,6 @@
 {% load i18n %}
 {% load static %}
 
-{% block stylesheets %}
-    {% if not session.end %}
-        <style>
-            .end-column {
-                display: None
-            }
-        </style>
-    {% endif %}
-{% endblock %}
-
 
 {% block headline %}
     {% if not session.end %}
@@ -85,21 +75,21 @@
             <th></th>
             <th>{% trans "Initial" %}</th>
             <th>{% trans "Sales" %}</th>
-            <th class='end-column'>{% trans "Final" %}</th>
+            <th>{% if session.end %}{% trans "Final" %}{% else %}{% trans "Currently remaining" %}{% endif %}</th>
             </thead>
             <tbody>
             <tr>
                 <td> {% trans "Cash" %} </td>
                 <td> {{ session.cash_before }} </td>
                 <td> {{ session.get_cash_transaction_total }} </td>
-                <td class='end-column'> {{ session.cash_after }} </td>
+                <td> {% if session.end %}{{ session.cash_after }}{% else %}{{ session.cash_remaining }}{% endif %} </td>
             </tr>
             {% for item in session.get_current_items %}
                 <tr>
                     <td> {{ item.item.name }} </td>
                     <td> {{ item.movements }} </td>
                     <td> {{ item.transactions }} </td>
-                    <td class='end-column'> {{ item.final_movements }} </td>
+                    <td> {% if session.end %}{{ item.final_movements }}{% else %}{{ item.total }}{% endif %} </td>
                 </tr>
             {% endfor %}
             </tbody>

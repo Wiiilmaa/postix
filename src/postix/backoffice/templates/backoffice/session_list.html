@@ -7,7 +7,8 @@
         <th></th>
         <th>{% trans "Angel" %}</th>
         <th>{% trans "Duration" %}</th>
-        <th>{% trans "Products" %}</th>
+        <th>{% trans "Products sold" %}</th>
+        <th>{% trans "Current items" %}</th>
         <th>{% trans "Cashdesk" %}</th>
     </thead>
     <tbody>
@@ -15,7 +16,7 @@
                 {% for cashdesk in cashdesks %}
                     {% for session in cashdesk.get_active_sessions %}
                     <tr{% if session.is_latest_session %} class="success"{% endif %}>
-                     <th class="session-action-column">
+                     <td class="session-action-column">
                         <a href="{% url "backoffice:session-detail" pk=session.pk %}" title="{% trans "Details" %}">
                             <span class="fa fa-eye fa-fw fa-2x" aria-hidden="true"></span>
                         </a>
@@ -28,17 +29,24 @@
                         <a href="{% url "backoffice:end-session" pk=session.pk %}" title="{% trans "End" %}">
                         <span class="fa fa-power-off fa-fw fa-2x" aria-hidden="true"></span>
                         </a>
-                    </th>
-                    <th> {{ session.user }} </th>
-                    <th>seit {{ session.start|timesince }} </th>
-                    <th>
+                    </td>
+                    <td> {{ session.user }} </td>
+                    <td>seit {{ session.start|timesince }} </td>
+                    <td>
                         <ul>
                         {% for product in session.get_current_items %}
                             <li>{{ product.item }}: {{ product.transactions }}</li>
                         {% endfor %}
                         </ul>
-                    </th>
-                    <th>{{ session.cashdesk }}</th>
+                    </td>
+                    <td>
+                        <ul>
+                            {% for i in session.get_current_items %}
+                                <li>{{ i.item }}: {{ i.total }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ session.cashdesk }}</td>
                 </tr>
             {% empty %}
                 <tr>
