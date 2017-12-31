@@ -15,6 +15,7 @@ $(function () {
     preorder.init();
     keyboard.init();
     commands.init();
+    clock.init();
     init_actions();
 });
 

@@ -79,6 +79,7 @@ var transaction = {
                 + "</button>"
             )
         ).appendTo($("#cart-inner"));
+        $("#cart-empty").hide();
 
         transaction._render();
         transaction._scroll(-9000000);
@@ -196,6 +197,7 @@ var transaction = {
         // Remove all positions from the cart
         transaction.positions = [];
         $("#cart-inner").html("");
+        $("#cart-empty").toggle(transaction.positions.length < 1);
         transaction._render();
         transaction.post_sale = false;
         transaction.last_id = null;
@@ -214,6 +216,7 @@ var transaction = {
         $("#post-sale-given input").val("");
         $("#post-sale-change span").text("0.00");
         transaction._scroll();
+        $("#cart-empty").toggle(transaction.positions.length < 1);
     },
 
     _calculate_change: function (e) {
@@ -280,6 +283,7 @@ var transaction = {
         $("#btn-clear").mousedown(transaction.clear);
         $("#btn-checkout").mousedown(transaction.perform);
         $("#btn-reverse").mousedown(transaction.reverse_last);
+        $("#cart-empty").show();
         $("#cart-inner").html("").on("mousedown", ".cart-delete button", function () {
             var $row = $(this).parent().parent();
             transaction.remove($row.index());
