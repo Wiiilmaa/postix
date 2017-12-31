@@ -5,7 +5,9 @@
 {% block stylesheets %}
     {% if not session.end %}
         <style>
-            .end-column {display: None}
+            .end-column {
+                display: None
+            }
         </style>
     {% endif %}
 {% endblock %}
@@ -35,66 +37,74 @@
         "url": "{{ url }}",
         "key": "{{ session.api_token }}"
     }
+
     </script>
 
-    <h4> {{ session.cashdesk }}, {% trans "Session ID" %} {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }} ({{ session.user.username }})</h4>
-{% language "de" %}
-{% if session.end %}
-<h4> {% trans "Start" %}: {{ session.start }} </h4>
-<h4> {% trans "End" %}: {{ session.ende }} </h4>
-{% else %}
-<h4> {% trans "Start" %}: {{ session.start|timesince }} </h4>
-{% endif %}
+    <h4> {{ session.cashdesk }}, {% trans "Session ID" %} {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}
+        ({{ session.user.username }})</h4>
+    {% language "de" %}
+        {% if session.end %}
+            <h4> {% trans "Start" %}: {{ session.start }} </h4>
+            <h4> {% trans "End" %}: {{ session.ende }} </h4>
+        {% else %}
+            <h4> {% trans "Start" %}: {{ session.start|timesince }} </h4>
+        {% endif %}
 
 
-<h3 style="clear:both"> {% trans "Sold products" %} </h3>
-<table class="table" id="session-detail-table">
-	<thead>
-		<th></th>
-        <th>{% trans "Sales" %}</th>
-        <th>{% trans "Presale" %}</th>
-        <th>{% trans "Reversals" %}</th>
-    </thead>
-    <tbody>
-        {% for product in session.get_product_sales %}
+        <h3 style="clear:both"> {% trans "Sold products" %} </h3>
+        <table class="table" id="session-detail-table">
+            <thead>
+            <th></th>
+            <th>{% trans "Sales" %}</th>
+            <th>{% trans "Presale" %}</th>
+            <th>{% trans "Reversals" %}</th>
+            </thead>
+            <tbody>
+            {% for product in session.get_product_sales %}
+                <tr>
+                    <th>{{ product.product.name }}</th>
+                    <th>{{ product.sales }}</th>
+                    <th>{{ product.presales }}</th>
+                    <th>{{ product.reversals }}</th>
+                </tr>
+            {% empty %}
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h3> {% trans "Items" %} </h3>
+        <table class="table" id="session-detail-table">
+            <thead>
+            <th></th>
+            <th>{% trans "Initial" %}</th>
+            <th>{% trans "Sales" %}</th>
+            <th class='end-column'>{% trans "Final" %}</th>
+            <tbody>
             <tr>
-                <th>{{ product.product.name }}</th>
-                <th>{{ product.sales }}</th>
-                <th>{{ product.presales }}</th>
-                <th>{{ product.reversals }}</th>
+                <td> {% trans "Cash" %} </td>
+                <td> {{ session.cash_before }} </td>
+                <td> {{ session.get_cash_transaction_total }} </td>
+                <td class='end-column'> {{ session.cash_after }} </td>
             </tr>
-        {% empty %}
-        <tr><th></th><th></th><th></th><th></th></tr>
-        {% endfor %}
-    </tbody>
-</table>
+            {% for item in session.get_current_items %}
+                <tr>
+                    <td> {{ item.item.name }} </td>
+                    <td> {{ item.movements }} </td>
+                    <td> {{ item.transactions }} </td>
+                    <td class='end-column'> {{ item.final_movements }} </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-<h3> {% trans "Items" %} </h3>
-<table class="table" id="session-detail-table">
-	<thead>
-		<th></th>
-        <th>{% trans "Initial" %}</th>
-        <th>{% trans "Sales" %}</th>
-        <th class='end-column'>{% trans "Final" %}</th>
-    <tbody>
-        <tr>
-            <td> {% trans "Cash" %} </td>
-            <td> {{ session.cash_before }} </td>
-            <td> {{ session.get_cash_transaction_total }} </td>
-            <td class='end-column'> {{ session.cash_after }} </td>
-        </tr>
-        {% for item in session.get_current_items %}
-            <tr>
-                <td> {{ item.item.name }} </td>
-                <td> {{ item.movements }} </td>
-                <td> {{ item.transactions }} </td>
-                <td class='end-column'> {{ item.final_movements }} </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
 
-    {% comment %}
+        {% comment %}
     {% if not session.end %}
         <h3>Komplette Session stornieren</h3>
         <div class="alert alert-warning">
@@ -106,7 +116,7 @@
         </div>
     {% endif %}
     {% endcomment %}
-{% endlanguage %}
+    {% endlanguage %}
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript" src="{% static "shared/js/qrcode.min.js" %}"></script>
