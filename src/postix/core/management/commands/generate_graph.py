@@ -31,7 +31,7 @@ class Command(BaseCommand):
         sessions = CashdeskSession.objects.exclude(
             cashdesk__name__icontains="handkasse"
         ).exclude(
-                id__in=[int(a) for a in kwargs.get('ignore_sessions', '').split(',')]
+            id__in=[int(a) for a in kwargs.get('ignore_sessions', '').split(',')]
         ).values('id', 'start', 'end', 'cashdesk')
         firststart = CashdeskSession.objects.order_by('start').first().start.date()
         lastend = CashdeskSession.objects.order_by('-end').first().end.date()
