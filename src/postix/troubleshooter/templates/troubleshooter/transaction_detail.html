@@ -12,25 +12,27 @@
 <p>{% trans "Receipt ID" %}: {{ transaction.receipt_id }}</p>
 {% endif %}
 
-<div class="row">
-    <form class="form form-inline col-md-9" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
-        {% csrf_token %}
-        <select name="session" class="form-control">
-            {% for session in sessions %}
-                <option value="{{ session.pk }}">
-                {{ session.user }} {% trans "at" %} {{ session.cashdesk }}
-                </option>
-            {% endfor %}
-        </select>
-        <button class="btn btn-primary" type="submit">{% trans "Print receipt" %}</button>
-    </form>
-    <form class="form form-inline col-md-3" method="post" action="{% url "troubleshooter:transaction-invoice" pk=transaction.pk %}">
-        {% csrf_token %}
-        <div class="input group">
-        <button class="btn btn-default btn-block" type="submit">{% trans "Print invoice" %}</button>
-        </div>
-    </form>
-</div>
+{% if transaction.receipt_id %}
+    <div class="row">
+        <form class="form form-inline col-md-9" method="post" action="{% url "troubleshooter:transaction-reprint" pk=transaction.pk %}">
+            {% csrf_token %}
+            <select name="session" class="form-control">
+                {% for session in sessions %}
+                    <option value="{{ session.pk }}">
+                    {{ session.user }} {% trans "at" %} {{ session.cashdesk }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">{% trans "Print receipt" %}</button>
+        </form>
+        <form class="form form-inline col-md-3" method="post" action="{% url "troubleshooter:transaction-invoice" pk=transaction.pk %}">
+            {% csrf_token %}
+            <div class="input group">
+            <button class="btn btn-default btn-block" type="submit">{% trans "Print invoice" %}</button>
+            </div>
+        </form>
+    </div>
+{% endif %}
 <p></p>
 <div class="table-responsive">
     <table class="table table-condensed table-hover">
