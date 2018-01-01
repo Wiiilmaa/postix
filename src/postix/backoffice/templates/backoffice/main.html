@@ -46,7 +46,7 @@
     <ul>
         {% for quota in quotas %}
         <li>
-            {% blocktrans with name=quota.name available=quota.amount_available size=quota.size %}
+            {% blocktrans with name=quota.name available=quota.amount_available size=quota.size trimmed %}
             <strong>{{ name }}</strong> is still available {{ available }} of {{ size }} times.
             {% endblocktrans %}
 

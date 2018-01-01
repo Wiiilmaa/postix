@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-01 15:26+0100\n"
-"PO-Revision-Date: 2018-01-01 15:31+0100\n"
+"POT-Creation-Date: 2018-01-01 15:33+0100\n"
+"PO-Revision-Date: 2018-01-01 15:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -24,7 +24,7 @@ msgstr "Dieses Token gilt nur an einer anderen Kasse. Deine IP ist: {}"
 
 #: postix/api/views.py:131
 msgid "Type {} is not yet implemented"
-msgstr "Typ {} ist noch nicht implementiert."
+msgstr "Typ {} ist noch nicht implementiert"
 
 #: postix/backoffice/checks.py:30
 #, python-brace-format
@@ -202,11 +202,11 @@ msgstr "Kassenbericht"
 #: postix/backoffice/templates/backoffice/reverse_session.html:26
 #: postix/backoffice/templates/backoffice/session_detail.html:34
 msgid "Session ID"
-msgstr "Session-Nr."
+msgstr "Session"
 
 #: postix/backoffice/templates/backoffice/end_session.html:28
 msgid "Start:"
-msgstr "Beginn"
+msgstr "Beginn:"
 
 #: postix/backoffice/templates/backoffice/end_session.html:38
 #: postix/backoffice/templates/backoffice/session_detail.html:76
@@ -298,11 +298,9 @@ msgstr "Quotas"
 #: postix/backoffice/templates/backoffice/main.html:49
 #, python-format
 msgid ""
-"\n"
-"            <strong>%(name)s</strong> is still available %(available)s of "
-"%(size)s times.\n"
-"            "
+"<strong>%(name)s</strong> is still available %(available)s of %(size)s times."
 msgstr ""
+"<strong>%(name)s</strong> ist noch %(available)s von %(size)s mal verfügbar."
 
 #: postix/backoffice/templates/backoffice/move_session.html:19
 #: postix/backoffice/templates/backoffice/session_detail.html:17
@@ -321,7 +319,7 @@ msgstr "Beginn"
 msgid ""
 "Please don't move an active session without talking to the user at the "
 "cashdesk."
-msgstr "Bitte Sessions nicht unabgesprochen im laufenden Betrieb verschieben!"
+msgstr "Bitte Sessions nicht unabgesprochen im laufenden Betrieb verschieben."
 
 #: postix/backoffice/templates/backoffice/move_session.html:36
 msgid "Move session"
@@ -550,7 +548,7 @@ msgid ""
 "corrected report. "
 msgstr ""
 "Die Session wurde bereits beendet. Wenn du dieses Formular ausfüllst, wird "
-"der bestehende Report korrigiert."
+"der bestehende Report korrigiert. "
 
 #: postix/backoffice/views/session.py:290
 msgid "Session has already ended and cannot be moved."
@@ -562,7 +560,7 @@ msgstr "Die Session wurde verlegt."
 
 #: postix/backoffice/views/session.py:300
 msgid "Session could not be moved!"
-msgstr "Die Session konnte nicht verlegt werden."
+msgstr "Die Session konnte nicht verlegt werden!"
 
 #: postix/backoffice/views/user_management.py:27
 #, python-brace-format
@@ -595,7 +593,7 @@ msgstr "Die Kasse wurde angelegt. \\o/"
 
 #: postix/backoffice/views/wizard.py:84
 msgid "User rights have been expanded"
-msgstr "Nutzerrechte wurden erweitert."
+msgstr "Nutzerrechte wurden erweitert"
 
 #: postix/backoffice/views/wizard.py:86
 msgid "User rights have been curtailed."
@@ -635,7 +633,7 @@ msgstr "Drucker steuert Schublade"
 
 #: postix/core/models/cashdesk.py:35
 msgid "Unset if the printer or drawer are broken."
-msgstr "Ausschalten, wenn Drucker oder Schublade kaputt sind"
+msgstr "Ausschalten, wenn Drucker oder Schublade kaputt sind."
 
 #: postix/core/models/preorder.py:53 postix/core/utils/flow.py:80
 #, python-brace-format
@@ -927,11 +925,8 @@ msgstr "leeren"
 
 #: postix/desk/templates/desk/main.html:73
 #, python-format
-msgid ""
-"\n"
-"                                    Welcome %(name)s, have a nice day!\n"
-"                                "
-msgstr ""
+msgid "Welcome %(name)s, have a nice day!"
+msgstr "Hi %(name)s, viel Spaß mit der Kasse!"
 
 #: postix/desk/templates/desk/main.html:85
 #: postix/desk/templates/desk/main.html:112
@@ -1251,7 +1246,7 @@ msgstr "Session nicht bekannt."
 
 #: postix/troubleshooter/views/desk.py:29
 msgid "{} has been resupplied."
-msgstr "{} hat dringend notwendigen Nachschub erhalten! Yay!"
+msgstr "{} hat den Nachschub erhalten."
 
 #: postix/troubleshooter/views/preorders.py:23
 msgid "You need to enter at least four characters of the order code."

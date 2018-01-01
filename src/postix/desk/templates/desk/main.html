@@ -70,7 +70,7 @@
                     <div id="cart">
                         <div id="cart-empty">
                             <p id="greeting">
-                                {% blocktrans with name=request.user.username %}
+                                {% blocktrans with name=request.user.username trimmed %}
                                     Welcome {{ name }}, have a nice day!
                                 {% endblocktrans %}
                             </p>
