@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils.timezone import now
 
 
 class RecordEntity(models.Model):
@@ -16,7 +17,7 @@ class Record(models.Model):
         ('outflow', 'outflow'),
     )
     type = models.CharField(max_length=20, choices=TYPES)
-    datetime = models.DateTimeField(auto_now_add=True)
+    datetime = models.DateTimeField()
     entity = models.ForeignKey(RecordEntity, on_delete=models.PROTECT, related_name='records')
     carrier = models.CharField(max_length=200, null=True, blank=True)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
@@ -25,3 +26,8 @@ class Record(models.Model):
 
     def __str__(self):
         return self.datetime.strftime('Day %d %X') + " " + str(self.entity) + " " + str(self.amount) + " EUR"
+        
+    def save(self, *args, **kwargs):
+        if not self.datetime:
+            self.datetime = now()
+        super().save(*args, **kwargs)
