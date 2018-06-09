@@ -15,9 +15,10 @@ from .constraints import (
 from .info import Info
 from .ping import Ping
 from .preorder import Preorder, PreorderPosition
+from .record import Record, RecordEntity
 from .settings import EventSettings
 
-__all__ = [
+__all__ = (
     'AbstractConstraint', 'Cashdesk', 'CashMovement', 'CashdeskSession',
     'EventSettings', 'generate_key', 'Item', 'ItemMovement', 'ListConstraint',
     'ListConstraintEntry', 'ListConstraintProduct', 'Info', 'Ping', 'Preorder',
@@ -25,4 +26,4 @@ __all__ = [
     'TransactionPosition', 'TransactionPositionItem', 'User', 'TimeConstraint',
     'TroubleshooterNotification', 'WarningConstraint',
     'WarningConstraintProduct',
-]
+)
