@@ -46,6 +46,16 @@ $('#id_session-backoffice_user').typeahead({
     source: backoffice_users
 
 });
+$('#id_backoffice_user').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+},
+{
+    name: 'backoffice_users',
+    source: backoffice_users
+
+});
 
 if ($("#id_data-cashdesk").find(":selected").text() == "---------") {
     $("#id_data-cashdesk").focus();

@@ -1,0 +1,36 @@
+{% extends 'backoffice/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "backoffice/css/sessionform.css" %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="col-md-2"></div>
+<div class="col-md-8">
+	<input type="submit" value="Add More" id="add_more" style="display: None">
+
+	<form method="post" action="">
+	{% language "de" %}
+	    {% csrf_token %}
+        {% crispy form form.helper %}
+        <input type="submit" name="submit" value="{% trans "Create record" %}" class="btn btn-primary btn-block" id="submit-save">
+	{% endlanguage %}
+	</form>
+</div>
+<div class="col-md-2"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        var backoffice_users = [ {% for user in backoffice_users %} '{{ user }}', {% endfor %} ];
+    </script>
+
+    <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "backoffice/js/sessionform.js" %}"></script>
+{% endblock %}
