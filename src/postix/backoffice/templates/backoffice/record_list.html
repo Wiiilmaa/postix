@@ -1,0 +1,48 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+
+{% block content %}
+<table class="table" id="active-sessions-table">
+    <thead>
+        <th>{% trans "Date" %}</th>
+        <th>{% trans "Direction" %}</th>
+        <th>{% trans "Amount" %}</th>
+        <th>{% trans "Entity" %}</th>
+        <th>{% trans "User" %}</th>
+        <th>{% trans "Carrier" %}</th>
+    </thead>
+    <tbody>
+    {% language "de" %}
+        {% for record in records %}
+            <tr>
+                <td>
+                    {{ record.datetime.isoformat }}
+                </td>
+                <td>
+                    {{ record.type }}
+                </td>
+                <td>
+                    {{ record.amount }}
+                </td>
+                <td>
+                    {{ record.entity }}
+                </td>
+                <td>
+                    {{ record.backoffice_user }}
+                </td>
+                <td>
+                    {{ record.carrier }}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <th colspan="42" class="empty-row active">
+                    {% trans "No records yet, get going!" %}
+                </th>
+            <tr>
+        {% endfor %}
+        {% endlanguage %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,5 +1,10 @@
 from .auth import LoginView, logout_view, switch_user
 from .main import MainView
+from .record import (
+    RecordCreateView, RecordDetailView, RecordEntityCreateView,
+    RecordEntityDeleteView, RecordEntityDetailView, RecordEntityListView,
+    RecordListView,
+)
 from .session import (
     ReportListView, SessionDetailView, SessionListView, end_session,
     move_session, new_session, resupply_session, reverse_session_view,
@@ -13,7 +18,7 @@ from .wizard import (
     WizardUsersView,
 )
 
-__all__ = [
+__all__ = (
     'backoffice_user_required',
     'create_user_view',
     'end_session',
@@ -38,4 +43,4 @@ __all__ = [
     'WizardPretixImportView',
     'WizardSettingsView',
     'WizardUsersView',
-]
+)

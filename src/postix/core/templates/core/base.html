@@ -64,6 +64,18 @@
                         {% trans "Reports" %}
                     </a>
                 <span class="nav-link">
+                    <span class="fa fa-fw fa-handshake-o"></span>
+                    {% trans "Records" %}
+                </span>
+                    <a class="nav-link subnav" href="{% url "backoffice:new-record" %}">
+                        <span class="fa fa-fw fa-plus-circle"></span>
+                        {% trans "New record" %}
+                    </a>
+                    <a class="nav-link subnav" href="{% url "backoffice:record-list" %}">
+                        <span class="fa fa-fw fa-list"></span>
+                        {% trans "List of records" %}
+                    </a>
+                <span class="nav-link">
                     <span class="fa fa-fw fa-users"></span>
                     {% trans "Users" %}
                 </span>
