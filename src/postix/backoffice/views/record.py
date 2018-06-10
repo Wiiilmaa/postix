@@ -37,7 +37,7 @@ class RecordCreateView(BackofficeUserRequiredMixin, CreateView):
         return ctx
 
     def get_success_url(self):
-        return reverse('backoffice:record-list')
+        return reverse('backoffice:record-print', kwargs={'pk': self.get_form().instance.pk})
 
 
 class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
@@ -57,7 +57,7 @@ class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
         return kwargs
 
     def get_success_url(self):
-        return reverse('backoffice:record-list')
+        return reverse('backoffice:record-print', kwargs={'pk': self.kwargs['pk']})
 
 
 @backoffice_user_required
