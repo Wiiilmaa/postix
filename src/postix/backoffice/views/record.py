@@ -1,13 +1,20 @@
 from django.contrib.auth import get_user_model
+from django.core.files.storage import default_storage
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from postix.backoffice.forms.record import (
     RecordCreateForm, RecordEntityForm, RecordUpdateForm,
 )
+from postix.backoffice.report import generate_record
 from postix.core.models import Record, RecordEntity
 
-from .utils import BackofficeUserRequiredMixin, SuperuserRequiredMixin
+from .utils import (
+    BackofficeUserRequiredMixin, SuperuserRequiredMixin,
+    backoffice_user_required,
+)
 
 User = get_user_model()
 
@@ -53,10 +60,18 @@ class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
         return reverse('backoffice:record-list')
 
 
-class RecordPrintView(BackofficeUserRequiredMixin, UpdateView):
-    model = Record
-    form_class = RecordEntityForm
+@backoffice_user_required
+def record_print(request, pk: int):
+    record = get_object_or_404(Record, pk=pk)
+    record_path = record.get_record_path()
 
+    if not record_path or 'cached' not in request.GET:  # TODO: don't regenerate pdf always
+        record_path = generate_record(record)
+
+    response = HttpResponse(content=default_storage.open(record_path, 'rb'))
+    response['Content-Type'] = 'application/pdf'
+    response['Content-Disposition'] = 'inline; filename=record-{}.pdf'.format(record.pk)
+    return response
 
 class RecordEntityListView(SuperuserRequiredMixin, ListView):
     model = RecordEntity

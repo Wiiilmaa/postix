@@ -1,11 +1,18 @@
+import glob
+import os
+
 from django.conf import settings
+from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
+from .settings import EventSettings
+
 
 class RecordEntity(models.Model):
-    """ This class is the source or destination for records, for example "Bar 1", or "Unnamed Supplier" """
+    """This class is the source or destination for records, for example "Bar 1", or "Unnamed Supplier"."""
+
     name = models.CharField(max_length=200, help_text='For example "Bar", or "Vereinstisch", …')
     detail = models.CharField(max_length=200, help_text='For example the name of the bar, …')
 
@@ -34,8 +41,30 @@ class Record(models.Model):
 
     def __str__(self):
         return self.datetime.strftime('Day %d %X') + " " + str(self.entity) + " " + str(self.amount) + " EUR"
-        
+
     def save(self, *args, **kwargs):
         if not self.datetime:
             self.datetime = now()
         super().save(*args, **kwargs)
+
+    def get_record_path(self):
+        base = default_storage.path('records')
+        search = os.path.join(base, '{}_record_{}-*.pdf'.format(
+            EventSettings.objects.get().short_name,
+            self.pk)
+        )
+        all_records = sorted(glob.glob(search))
+
+        if all_records:
+            return all_records[-1]
+        return None
+
+    def get_new_record_path(self) -> str:
+        return os.path.join(
+            'records',
+            '{}_record_{}-{}.pdf'.format(
+                EventSettings.objects.get().short_name,
+                self.pk,
+                now().strftime('%Y%m%d-%H%M')
+            ),
+        )

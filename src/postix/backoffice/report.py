@@ -9,7 +9,7 @@ from reportlab.lib import colors
 from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
-from postix.core.models import CashdeskSession, EventSettings
+from postix.core.models import CashdeskSession, EventSettings, Record
 from postix.core.utils.pdf import (
     CURRENCY, FONTSIZE, get_default_document, get_paragraph_style, scale_image,
 )
@@ -24,13 +24,23 @@ def get_qr_image(session: CashdeskSession) -> TemporaryFile:
         border=4,
     )
     tz = timezone.get_current_timezone()
-    data = '{end}\tEinnahme\t{total}\tKassensession\t#{pk}\t{supervisor}\t{user}'.format(
-        end=session.end.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
-        total='{0:,.2f}'.format(session.get_cash_transaction_total()).translate(str.maketrans(',.', '.,')),
-        pk=session.pk,
-        supervisor=session.backoffice_user_after.get_full_name(),
-        user=session.user.get_full_name(),
-    )
+    if isinstance(session, CashdeskSession):
+        data = '{end}\tEinnahme\t{total}\tKassensession\t#{pk}\t{supervisor}\t{user}'.format(
+            end=session.end.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
+            total='{0:,.2f}'.format(session.get_cash_transaction_total()).translate(str.maketrans(',.', '.,')),
+            pk=session.pk,
+            supervisor=session.backoffice_user_after.get_full_name(),
+            user=session.user.get_full_name(),
+        )
+    else:
+        data = '{end}\t{direction}\t{total}\t{entity}\t{supervisor}\t{user}'.format(
+            end=session.datetime.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
+            direction='Einnahme' if session.type == 'inflow' else 'Ausgabe',
+            total='{0:,.2f}'.format(session.amount).translate(str.maketrans(',.', '.,')),
+            entity='{e.name}\t{e.detail}'.format(e=session.entity),
+            supervisor=session.backoffice_user.get_full_name(),
+            user=session.carrier or '',
+        )
     qr.add_data(data)
     qr.make()
 
@@ -147,4 +157,81 @@ def generate_report(session: CashdeskSession) -> str:
 
     _buffer.seek(0)
     stored_name = default_storage.save(session.get_new_report_path(), ContentFile(_buffer.read()))
+    return stored_name
+
+
+def generate_record(record: Record) -> str:
+    """
+    Generates the PDF for a given record; returns the path to the record PDF.
+    """
+    _buffer = BytesIO()
+    doc = get_default_document(_buffer, footer=EventSettings.objects.get().report_footer)
+    style = get_paragraph_style()
+
+    # Header: info text and qr code
+    title_str = '[{}] {}beleg'.format(EventSettings.objects.get().short_name, 'Einnahme' if record.type == 'inflow' else 'Ausgabe')
+    title = Paragraph(title_str, style['Heading1'])
+    tz = timezone.get_current_timezone()
+    datetime = record.datetime.astimezone(tz)
+    logo = scale_image(get_qr_image(record), 100)
+    header = Table(
+        data=[[[title, ], logo], ],
+        colWidths=[doc.width / 2] * 2,
+        style=TableStyle([
+            ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+            ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
+            ('VALIGN', (0, 0), (1, 0), 'TOP'),
+        ]),
+    )
+    info = [
+        ['Datum', datetime.strftime('%Y-%m-%d, %H:%M')],
+        ['Von' if record.type == 'inflow' else 'Nach', str(record.entity)],
+        ['Betrag', CURRENCY.format(record.amount)]
+    ]
+    info = [
+        [Paragraph(line[0], style['Heading3']), Paragraph(line[1], style['Normal'])]
+        for line in info
+    ]
+
+    info_table = Table(
+        data=info,
+        colWidths=[90, doc.width - 90],
+        style=TableStyle([
+        ]),
+    )
+
+    # Signatures
+    col_width = (doc.width - 35) / 2
+    signature1 = Table(
+        data=[['Bearbeiter/in: {}'.format(record.backoffice_user.get_full_name()), '', '']],
+        colWidths=[col_width, 35, col_width],
+        style=TableStyle([
+            ('FONTSIZE', (0, 0), (0, 0), FONTSIZE),
+            ('LINEABOVE', (0, 0), (0, 0), 1.2, colors.black),
+            ('VALIGN', (0, 0), (0, 0), 'TOP'),
+        ]),
+    )
+    if record.carrier:
+        signature2 = Table(
+            data=[['{}: {}'.format('Einlieferer/in' if record.type == 'inflow' else 'Emfpänger/in', record.carrier), '', '']],
+            colWidths=[col_width, 35, col_width],
+            style=TableStyle([
+                ('FONTSIZE', (0, 0), (0, 0), FONTSIZE),
+                ('LINEABOVE', (0, 0), (0, 0), 1.2, colors.black),
+                ('VALIGN', (0, 0), (0, 0), 'TOP'),
+            ]),
+        )
+
+    story = [
+        header, Spacer(1, 15 * mm),
+        info_table, Spacer(1, 40 * mm),
+        signature1,
+    ]
+    if record.carrier:
+        story.append(Spacer(1, 40*mm))
+        story.append(signature2)
+    doc.build(story)
+
+    _buffer.seek(0)
+    stored_name = default_storage.save(record.get_new_record_path(), ContentFile(_buffer.read()))
     return stored_name
