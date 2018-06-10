@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-24 23:35+0100\n"
-"PO-Revision-Date: 2016-12-21 13:05+0100\n"
+"PO-Revision-Date: 2018-06-10 13:11+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.7\n"
 
 #: postix/static/desk/js/commands.js:9
 msgid "Supported commands:"
@@ -28,19 +28,19 @@ msgstr "Zeigt Reset-Codes für den Barcode-Scanner"
 
 #: postix/static/desk/js/commands.js:12
 msgid "Initiate a ping"
-msgstr ""
+msgstr "Ping losschicken"
 
 #: postix/static/desk/js/commands.js:13
 msgid "Save a response to a ping"
-msgstr ""
+msgstr "Ping als beantwortet markieren"
 
 #: postix/static/desk/js/commands.js:30
 msgid "Pong. Thanks!"
-msgstr ""
+msgstr "Pong. Danke!"
 
 #: postix/static/desk/js/commands.js:43
 msgid "Ping printed!"
-msgstr ""
+msgstr "Ping wurde gedruckt."
 
 #: postix/static/desk/js/commands.js:50
 msgid "Scan the following, in order:"
