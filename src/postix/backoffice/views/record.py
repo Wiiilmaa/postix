@@ -2,7 +2,9 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from postix.backoffice.forms.record import RecordCreateForm, RecordEntityForm
+from postix.backoffice.forms.record import (
+    RecordCreateForm, RecordEntityForm, RecordUpdateForm,
+)
 from postix.core.models import Record, RecordEntity
 
 from .utils import BackofficeUserRequiredMixin, SuperuserRequiredMixin
@@ -33,6 +35,27 @@ class RecordCreateView(BackofficeUserRequiredMixin, CreateView):
 
 class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
     model = Record
+    form_class = RecordUpdateForm
+    template_name = 'backoffice/record_detail.html'
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx['backoffice_users'] = User.objects.filter(is_backoffice_user=True)
+        ctx['carriers'] = set(Record.objects.all().values_list('carrier', flat=True))
+        return ctx
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super().get_form_kwargs(*args, **kwargs)
+        kwargs['editable'] = 'edit' in self.request.GET
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('backoffice:record-list')
+
+
+class RecordPrintView(BackofficeUserRequiredMixin, UpdateView):
+    model = Record
+    form_class = RecordEntityForm
 
 
 class RecordEntityListView(SuperuserRequiredMixin, ListView):

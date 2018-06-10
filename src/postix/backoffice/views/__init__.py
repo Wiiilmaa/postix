@@ -3,7 +3,7 @@ from .main import MainView
 from .record import (
     RecordCreateView, RecordDetailView, RecordEntityCreateView,
     RecordEntityDeleteView, RecordEntityDetailView, RecordEntityListView,
-    RecordListView,
+    RecordListView, RecordPrintView,
 )
 from .session import (
     ReportListView, SessionDetailView, SessionListView, end_session,

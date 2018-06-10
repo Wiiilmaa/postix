@@ -2,27 +2,29 @@
 {% load i18n %}
 
 {% block content %}
+<a href="{% url "backoffice:new-record" %}" class="btn btn-primary pull-right">{% trans "New record" %}</a>
 <table class="table" id="active-sessions-table">
     <thead>
         <th>{% trans "Date" %}</th>
-        <th>{% trans "Direction" %}</th>
-        <th>{% trans "Amount" %}</th>
+        <th>{% trans "Inflow" %}</th>
+        <th>{% trans "Outflow" %}</th>
         <th>{% trans "Entity" %}</th>
         <th>{% trans "User" %}</th>
         <th>{% trans "Carrier" %}</th>
+        <th></th>
     </thead>
     <tbody>
     {% language "de" %}
         {% for record in records %}
             <tr>
                 <td>
-                    {{ record.datetime.isoformat }}
+                    {{ record.datetime|date:"Y-m-d H:i:s" }}
                 </td>
                 <td>
-                    {{ record.type }}
+                    {% if record.type == 'inflow' %}{{ record.amount }}{% endif %}
                 </td>
                 <td>
-                    {{ record.amount }}
+                    {% if record.type == 'outflow' %}{{ record.amount }}{% endif %}
                 </td>
                 <td>
                     {{ record.entity }}
@@ -31,7 +33,15 @@
                     {{ record.backoffice_user }}
                 </td>
                 <td>
-                    {{ record.carrier }}
+                    {% if record.carrier %}{{ record.carrier }}{% else %}-{% endif %}
+                </td>
+                <td>
+                    <a href="{% url "backoffice:record-detail" pk=record.pk %}" title="{% trans "Details" %}">
+                        <span class="fa fa-2x fa-fw fa-pencil" aria-hidden="true"></span>
+                    </a>
+                    <a href="{% url "backoffice:record-print" pk=record.pk %}" title="{% trans "Print" %}">
+                        <span class="fa fa-2x fa-fw fa-print" aria-hidden="true"></span>
+                    </a>
                 </td>
             </tr>
         {% empty %}

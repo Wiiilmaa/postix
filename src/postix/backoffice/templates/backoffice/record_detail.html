@@ -1,0 +1,39 @@
+{% extends 'backoffice/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "backoffice/css/sessionform.css" %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="col-md-2"></div>
+<div class="col-md-8">
+	<form method="post" action="">
+	{% language "de" %}
+	    {% csrf_token %}
+        {% crispy form form.helper %}
+		{% if form.editable %}
+        	<input type="submit" name="submit" value="{% trans "Save record" %}" class="btn btn-primary btn-block" id="submit-save">
+		{% else %}
+			<a href="?edit" class="btn btn-primary btn-block">{% trans "Edit record" %}</a>
+		{% endif %}
+	{% endlanguage %}
+	</form>
+</div>
+<div class="col-md-2"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        var backoffice_users = [ {% for user in backoffice_users %} '{{ user }}', {% endfor %} ];
+        var carriers = [ {% for carrier in carriers %} '{{ carrier }}', {% endfor %} ];
+    </script>
+
+    <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "backoffice/js/sessionform.js" %}"></script>
+{% endblock %}

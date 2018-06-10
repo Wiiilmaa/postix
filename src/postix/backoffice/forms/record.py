@@ -28,9 +28,36 @@ class RecordCreateForm(forms.ModelForm):
         except User.DoesNotExist:
             raise forms.ValidationError(_('Angel does not exist or is no backoffice angel.'))
 
+    def clean_amount(self) -> User:
+        amount = self.cleaned_data['amount']
+        if amount is None:
+            raise forms.ValidationError(_('"Amount" is a required field.'))
+        if amount < 0:
+            raise forms.ValidationError(_('No negative values allowed!'))
+        return amount
+
     def clean_datetime(self) -> datetime:
         value = self.cleaned_data['datetime']
         return value or now()
+
+    class Meta:
+        model = Record
+        fields = ('type', 'datetime', 'entity', 'carrier', 'amount', 'backoffice_user', )
+
+
+class RecordUpdateForm(RecordCreateForm):
+    backoffice_user = forms.CharField(max_length=254, label=_('Backoffice angel'))
+
+    def __init__(self, *args, **kwargs):
+        self.editable = kwargs.pop('editable', False)
+        initial = kwargs.get('initial', dict())
+        initial['backoffice_user'] = str(kwargs['instance'].backoffice_user)
+        super().__init__(*args, **kwargs)
+        if not self.editable:
+            for field_name, field in self.fields.items():
+                field.disabled = True
+        self.helper = FormHelper()
+        self.helper.form_tag = False
 
     class Meta:
         model = Record
