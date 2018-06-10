@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-10 13:17+0200\n"
-"PO-Revision-Date: 2018-06-10 13:17+0200\n"
+"POT-Creation-Date: 2018-06-10 15:47+0200\n"
+"PO-Revision-Date: 2018-06-10 15:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -52,13 +52,22 @@ msgstr ""
 "Du hast manche Produkte mit einem Steuersatz eingestellt, aber bei den "
 "folgenden Produkten beträgt der Steuersatz 0%: {products}"
 
-#: postix/backoffice/forms/record.py:12 postix/backoffice/forms/session.py:22
+#: postix/backoffice/forms/record.py:15 postix/backoffice/forms/record.py:49
+#: postix/backoffice/forms/session.py:22
 msgid "Backoffice angel"
 msgstr "Hinterzimmer-Engel"
 
-#: postix/backoffice/forms/record.py:24 postix/backoffice/forms/session.py:43
+#: postix/backoffice/forms/record.py:29 postix/backoffice/forms/session.py:43
 msgid "Angel does not exist or is no backoffice angel."
 msgstr "Diesen Engel gibt es nicht oder er ist kein Hinterzimmerengel."
+
+#: postix/backoffice/forms/record.py:34
+msgid "\"Amount\" is a required field."
+msgstr "Bitte gib einen Betrag ein."
+
+#: postix/backoffice/forms/record.py:36
+msgid "No negative values allowed!"
+msgstr "Der Betrag darf nicht negativ sein."
 
 #: postix/backoffice/forms/session.py:20
 #: postix/backoffice/templates/backoffice/report_list.html:10
@@ -193,6 +202,10 @@ msgstr ""
 msgid "Create user"
 msgstr "Benutzer anlegen"
 
+#: postix/backoffice/templates/backoffice/delete_record_entity.html:14
+msgid "Yes, delete this entity"
+msgstr "Ja, lösche diese Quelle/dieses Ziel."
+
 #: postix/backoffice/templates/backoffice/end_session.html:18
 msgid "Session Report"
 msgstr "Kassenbericht"
@@ -242,6 +255,8 @@ msgid "Create report"
 msgstr "Auszählung abschließen"
 
 #: postix/backoffice/templates/backoffice/end_session.html:84
+#: postix/backoffice/templates/backoffice/record_entity_list.html:23
+#: postix/backoffice/templates/backoffice/record_list.html:39
 #: postix/backoffice/templates/backoffice/report_list.html:21
 #: postix/backoffice/templates/backoffice/session_list.html:20
 #: postix/troubleshooter/templates/troubleshooter/preorder_information.html:47
@@ -329,44 +344,91 @@ msgstr "Session verschieben"
 msgid "Create record"
 msgstr "Beleg erstellen"
 
+#: postix/backoffice/templates/backoffice/new_record_entity.html:14
+msgid "Save entity"
+msgstr "Quelle/Ziel speichern"
+
+#: postix/backoffice/templates/backoffice/new_record_entity.html:14
+msgid "Create entity"
+msgstr "Quelle/Ziel erstellen"
+
 #: postix/backoffice/templates/backoffice/new_session.html:25
 msgid "Create session"
 msgstr "Session anlegen"
 
-#: postix/backoffice/templates/backoffice/record_list.html:7
-#: postix/core/models/record.py:22
+#: postix/backoffice/templates/backoffice/record_detail.html:21
+msgid "Save record"
+msgstr "Beleg speichern"
+
+#: postix/backoffice/templates/backoffice/record_detail.html:23
+msgid "Edit record"
+msgstr "Beleg editieren"
+
+#: postix/backoffice/templates/backoffice/record_entity_list.html:5
+msgid "New record entity"
+msgstr "Neue Quelle/neues Ziel"
+
+#: postix/backoffice/templates/backoffice/record_entity_list.html:8
+msgid "Name"
+msgstr "Name"
+
+#: postix/backoffice/templates/backoffice/record_entity_list.html:9
+msgid "Detail"
+msgstr "Detail"
+
+#: postix/backoffice/templates/backoffice/record_entity_list.html:26
+msgid "Delete"
+msgstr "Löschen"
+
+#: postix/backoffice/templates/backoffice/record_entity_list.html:34
+msgid "No entities yet, get going!"
+msgstr "Noch keine Ziele/Quellen, leg welche an!"
+
+#: postix/backoffice/templates/backoffice/record_list.html:5
+#: postix/core/templates/core/base.html:72
+msgid "New record"
+msgstr "Neuer Beleg"
+
+#: postix/backoffice/templates/backoffice/record_list.html:8
+#: postix/core/models/record.py:32
 msgid "Date"
 msgstr "Datum"
 
-#: postix/backoffice/templates/backoffice/record_list.html:8
-#: postix/core/models/record.py:21
-msgid "Direction"
-msgstr "Richtung"
-
 #: postix/backoffice/templates/backoffice/record_list.html:9
-#: postix/core/models/record.py:25
-#: postix/troubleshooter/templates/troubleshooter/transaction_list.html:50
-msgid "Amount"
-msgstr "Betrag"
+#: postix/core/models/record.py:28
+msgid "Inflow"
+msgstr "Einnahme"
 
 #: postix/backoffice/templates/backoffice/record_list.html:10
-#: postix/core/models/record.py:23
+#: postix/core/models/record.py:29
+msgid "Outflow"
+msgstr "Ausgabe"
+
+#: postix/backoffice/templates/backoffice/record_list.html:11
+#: postix/core/models/record.py:33
 msgid "Entity"
 msgstr "Quelle/Ziel"
 
-#: postix/backoffice/templates/backoffice/record_list.html:11
+#: postix/backoffice/templates/backoffice/record_list.html:12
 #: postix/backoffice/templates/backoffice/session_detail.html:104
 #: postix/backoffice/templates/backoffice/session_detail.html:123
 #: postix/troubleshooter/templates/troubleshooter/main.html:19
 msgid "User"
 msgstr "Benutzer"
 
-#: postix/backoffice/templates/backoffice/record_list.html:12
-#: postix/core/models/record.py:24
+#: postix/backoffice/templates/backoffice/record_list.html:13
+#: postix/core/models/record.py:34
 msgid "Carrier"
 msgstr "Einlieferer/Empfänger"
 
-#: postix/backoffice/templates/backoffice/record_list.html:40
+#: postix/backoffice/templates/backoffice/record_list.html:42
+#: postix/core/templates/core/base.html:124
+#: postix/troubleshooter/templates/troubleshooter/information_detail.html:16
+#: postix/troubleshooter/templates/troubleshooter/information_detail.html:20
+msgid "Print"
+msgstr "Drucken"
+
+#: postix/backoffice/templates/backoffice/record_list.html:50
 msgid "No records yet, get going!"
 msgstr "Noch keine Belege, es kann losgehen!"
 
@@ -675,19 +737,24 @@ msgstr "Ausschalten, wenn Drucker oder Schublade kaputt sind."
 msgid "This ticket ({secret}…) has already been redeemed at {datetime}."
 msgstr "Dieses Ticket ({secret}…) wurde bereits eingelöst ({datetime})."
 
-#: postix/core/models/record.py:18
-msgid "Inflow"
-msgstr "Einnahme"
+#: postix/core/models/record.py:31
+msgid "Direction"
+msgstr "Richtung"
 
-#: postix/core/models/record.py:19
-msgid "Outflow"
-msgstr "Ausgabe"
+#: postix/core/models/record.py:32
+msgid "Leave empty to use the current date and time."
+msgstr "Leerlassen, um die aktuelle Zeit zu nutzen."
 
-#: postix/core/models/record.py:26
+#: postix/core/models/record.py:35
+#: postix/troubleshooter/templates/troubleshooter/transaction_list.html:50
+msgid "Amount"
+msgstr "Betrag"
+
+#: postix/core/models/record.py:36
 msgid "Backoffice user"
 msgstr "Hinterzimmer-Engel"
 
-#: postix/core/models/record.py:27
+#: postix/core/models/record.py:37
 msgid "Is a balancing record"
 msgstr "Ist ein Abschluss-Beleg"
 
@@ -710,10 +777,6 @@ msgstr "Reports"
 #: postix/core/templates/core/base.html:68
 msgid "Records"
 msgstr "Belege"
-
-#: postix/core/templates/core/base.html:72
-msgid "New record"
-msgstr "Neuer Beleg"
 
 #: postix/core/templates/core/base.html:76
 msgid "List of records"
@@ -763,12 +826,6 @@ msgstr "Vorbestellungs-Listen"
 msgid "Ping"
 msgstr "Ping"
 
-#: postix/core/templates/core/base.html:124
-#: postix/troubleshooter/templates/troubleshooter/information_detail.html:16
-#: postix/troubleshooter/templates/troubleshooter/information_detail.html:20
-msgid "Print"
-msgstr "Drucken"
-
 #: postix/core/templates/core/base.html:130
 msgid "Settings"
 msgstr "Einstellungen"
@@ -788,6 +845,10 @@ msgstr "Neue Kassen"
 #: postix/core/templates/core/base.html:154
 msgid "Add an Item"
 msgstr "Produkt hinzufügen"
+
+#: postix/core/templates/core/base.html:158
+msgid "Record Entities"
+msgstr "Quellen/Ziele"
 
 #: postix/core/templates/core/pagination.html:11
 msgid "Page"
