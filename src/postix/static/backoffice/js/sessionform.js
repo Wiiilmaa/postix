@@ -36,6 +36,7 @@ var backoffice_users = new Bloodhound({
     local: backoffice_users
 });
 
+
 $('#id_session-backoffice_user').typeahead({
     hint: true,
     highlight: true,
@@ -56,6 +57,26 @@ $('#id_backoffice_user').typeahead({
     source: backoffice_users
 
 });
+
+if (carriers) {
+    var carriers = new Bloodhound({
+	datumTokenizer: Bloodhound.tokenizers.whitespace,
+	queryTokenizer: Bloodhound.tokenizers.whitespace,
+	local: carriers
+    });
+
+
+    $('#id_carrier').typeahead({
+	hint: true,
+	highlight: true,
+	minLength: 1
+    },
+    {
+	name: 'carrier',
+	source: carriers
+
+    });
+}
 
 if ($("#id_data-cashdesk").find(":selected").text() == "---------") {
     $("#id_data-cashdesk").focus();

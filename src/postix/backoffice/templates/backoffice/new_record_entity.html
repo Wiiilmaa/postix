@@ -1,0 +1,19 @@
+{% extends 'backoffice/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="col-md-2"></div>
+<div class="col-md-8">
+	<form method="post" action="">
+	{% language "de" %}
+	    {% csrf_token %}
+        {% crispy form form.helper %}
+        <input type="submit" name="submit" value="{% if form.instance.pk %}{% trans "Save entity" %}{% else %}{% trans "Create entity" %}{% endif %}" class="btn btn-primary btn-block" id="submit-save">
+	{% endlanguage %}
+	</form>
+</div>
+<div class="col-md-2"></div>
+{% endblock %}

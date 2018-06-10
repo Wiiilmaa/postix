@@ -1,0 +1,42 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+
+{% block content %}
+<a href="{% url "backoffice:new-record-entity" %}" class="btn btn-primary pull-right">{% trans "New record entity" %}</a>
+<table class="table" id="active-sessions-table">
+    <thead>
+        <th>{% trans "Name" %}</th>
+        <th>{% trans "Detail" %}</th>
+        <th></th>
+    </thead>
+    <tbody>
+    {% language "de" %}
+        {% for entity in entities %}
+            <tr>
+                <td>
+                    {{ entity.name }}
+                </td>
+                <td>
+                    {{ entity.detail }}
+                </td>
+                <td>
+                    <a href="{% url "backoffice:record-entity-detail" pk=entity.pk %}" title="{% trans "Details" %}">
+                        <span class="fa fa-2x fa-fw fa-pencil" aria-hidden="true"></span>
+                    </a>
+                    <a href="{% url "backoffice:record-entity-delete" pk=entity.pk %}" title="{% trans "Delete" %}">
+                        <span class="fa fa-2x fa-fw fa-trash" aria-hidden="true"></span>
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <th colspan="42" class="empty-row active">
+                    {% trans "No entities yet, get going!" %}
+                </th>
+            <tr>
+        {% endfor %}
+        {% endlanguage %}
+    </tbody>
+</table>
+
+{% endblock %}

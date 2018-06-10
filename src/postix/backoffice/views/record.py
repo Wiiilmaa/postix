@@ -1,19 +1,22 @@
 from django.contrib.auth import get_user_model
-from django.views.generic import CreateView, DeleteView, DetailView, ListView
+from django.urls import reverse
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from postix.backoffice.forms.record import RecordCreateForm
+from postix.backoffice.forms.record import RecordCreateForm, RecordEntityForm
 from postix.core.models import Record, RecordEntity
+
+from .utils import BackofficeUserRequiredMixin, SuperuserRequiredMixin
 
 User = get_user_model()
 
 
-class RecordListView(ListView):
+class RecordListView(BackofficeUserRequiredMixin, ListView):
     model = Record
     template_name = 'backoffice/record_list.html'
     context_object_name = 'records'
 
 
-class RecordCreateView(CreateView):
+class RecordCreateView(BackofficeUserRequiredMixin, CreateView):
     model = Record
     form_class = RecordCreateForm
     template_name = 'backoffice/new_record.html'
@@ -21,24 +24,45 @@ class RecordCreateView(CreateView):
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
         ctx['backoffice_users'] = User.objects.filter(is_backoffice_user=True)
+        ctx['carriers'] = set(Record.objects.all().values_list('carrier', flat=True))
         return ctx
 
+    def get_success_url(self):
+        return reverse('backoffice:record-list')
 
-class RecordDetailView(DetailView):
+
+class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
     model = Record
 
 
-class RecordEntityListView(ListView):
+class RecordEntityListView(SuperuserRequiredMixin, ListView):
     model = RecordEntity
+    template_name = 'backoffice/record_entity_list.html'
+    context_object_name = 'entities'
 
 
-class RecordEntityCreateView(CreateView):
+class RecordEntityCreateView(SuperuserRequiredMixin, CreateView):
     model = RecordEntity
+    form_class = RecordEntityForm
+    template_name = 'backoffice/new_record_entity.html'
+
+    def get_success_url(self):
+        return reverse('backoffice:record-entity-list')
 
 
-class RecordEntityDetailView(DetailView):
+class RecordEntityDetailView(SuperuserRequiredMixin, UpdateView):
     model = RecordEntity
+    form_class = RecordEntityForm
+    template_name = 'backoffice/new_record_entity.html'
+
+    def get_success_url(self):
+        return reverse('backoffice:record-entity-list')
 
 
-class RecordEntityDeleteView(DeleteView):
+class RecordEntityDeleteView(SuperuserRequiredMixin, DeleteView):
     model = RecordEntity
+    template_name = 'backoffice/delete_record_entity.html'
+    context_object_name = 'record'
+
+    def get_success_url(self):
+        return reverse('backoffice:record-entity-list')
