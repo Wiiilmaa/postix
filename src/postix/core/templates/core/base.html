@@ -153,6 +153,10 @@
                     <span class="fa fa-fw fa-plus-circle"></span>
                     {% trans "Add an Item" %}
                 </a>
+                <a class="nav-link subnav" href="{% url "backoffice:record-entity-list" %}">
+                    <span class="fa fa-fw fa-list"></span>
+                    {% trans "Record Entities" %}
+                </a>
             {% endif %}
         </nav>
         {% endif %}
