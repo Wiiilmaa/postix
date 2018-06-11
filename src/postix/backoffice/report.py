@@ -228,7 +228,7 @@ def generate_record(record: Record) -> str:
         signature1,
     ]
     if record.carrier:
-        story.append(Spacer(1, 40*mm))
+        story.append(Spacer(1, 40 * mm))
         story.append(signature2)
     doc.build(story)
 

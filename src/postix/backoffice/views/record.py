@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView,
@@ -92,6 +92,7 @@ def record_print(request, pk: int):
     response['Content-Type'] = 'application/pdf'
     response['Content-Disposition'] = 'inline; filename=record-{}.pdf'.format(record.pk)
     return response
+
 
 class RecordEntityListView(SuperuserRequiredMixin, ListView):
     model = RecordEntity

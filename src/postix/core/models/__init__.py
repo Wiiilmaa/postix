@@ -22,8 +22,9 @@ __all__ = (
     'AbstractConstraint', 'Cashdesk', 'CashMovement', 'CashdeskSession',
     'EventSettings', 'generate_key', 'Item', 'ItemMovement', 'ListConstraint',
     'ListConstraintEntry', 'ListConstraintProduct', 'Info', 'Ping', 'Preorder',
-    'PreorderPosition', 'Product', 'ProductItem', 'Quota', 'Transaction',
-    'TransactionPosition', 'TransactionPositionItem', 'User', 'TimeConstraint',
+    'PreorderPosition', 'Product', 'ProductItem', 'Quota', 'Record',
+    'RecordEntity', 'Transaction', 'TransactionPosition',
+    'TransactionPositionItem', 'User', 'TimeConstraint',
     'TroubleshooterNotification', 'WarningConstraint',
     'WarningConstraintProduct',
 )
