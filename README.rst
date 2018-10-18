@@ -12,6 +12,7 @@ postix (formerly c6sh) is the cashdesk system used at various events to redeem p
 - MRMCD16
 - 33C3
 - 34C3
+- 35C3
 
 Features
 --------
@@ -62,11 +63,8 @@ Run development server::
 Open your browser at one of the following URLs:
 
 * http://localhost:8000/admin/ for the Django admin
-
 * http://localhost:8000/troubleshooter/ for the troubleshooter interface
-
 * http://localhost:8000/backoffice/ for the backoffice interface
-
 * http://localhost:8000/ for the cashdesk interface (requires an active cashdesk and session)
 
 Configuration
