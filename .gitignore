@@ -4,6 +4,7 @@ htmlcov/
 .ropeproject
 .cache
 *.sqlite3
+*.sqlite3.*
 *.db
 *.sql
 *.py[cod]
