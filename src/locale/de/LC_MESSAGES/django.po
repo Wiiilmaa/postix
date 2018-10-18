@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-10 15:47+0200\n"
+"POT-Creation-Date: 2018-10-19 00:16+0200\n"
 "PO-Revision-Date: 2018-06-10 15:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -256,7 +256,8 @@ msgstr "Auszählung abschließen"
 
 #: postix/backoffice/templates/backoffice/end_session.html:84
 #: postix/backoffice/templates/backoffice/record_entity_list.html:23
-#: postix/backoffice/templates/backoffice/record_list.html:39
+#: postix/backoffice/templates/backoffice/record_list.html:68
+#: postix/backoffice/templates/backoffice/record_list.html:75
 #: postix/backoffice/templates/backoffice/report_list.html:21
 #: postix/backoffice/templates/backoffice/session_list.html:20
 #: postix/troubleshooter/templates/troubleshooter/preorder_information.html:47
@@ -395,40 +396,60 @@ msgid "Date"
 msgstr "Datum"
 
 #: postix/backoffice/templates/backoffice/record_list.html:9
-#: postix/core/models/record.py:28
-msgid "Inflow"
-msgstr "Einnahme"
-
-#: postix/backoffice/templates/backoffice/record_list.html:10
-#: postix/core/models/record.py:29
-msgid "Outflow"
-msgstr "Ausgabe"
-
-#: postix/backoffice/templates/backoffice/record_list.html:11
 #: postix/core/models/record.py:33
 msgid "Entity"
 msgstr "Quelle/Ziel"
 
-#: postix/backoffice/templates/backoffice/record_list.html:12
+#: postix/backoffice/templates/backoffice/record_list.html:10
 #: postix/backoffice/templates/backoffice/session_detail.html:104
 #: postix/backoffice/templates/backoffice/session_detail.html:123
 #: postix/troubleshooter/templates/troubleshooter/main.html:19
 msgid "User"
 msgstr "Benutzer"
 
-#: postix/backoffice/templates/backoffice/record_list.html:13
+#: postix/backoffice/templates/backoffice/record_list.html:11
 #: postix/core/models/record.py:34
 msgid "Carrier"
 msgstr "Einlieferer/Empfänger"
 
-#: postix/backoffice/templates/backoffice/record_list.html:42
+#: postix/backoffice/templates/backoffice/record_list.html:12
+#: postix/core/models/record.py:28
+msgid "Inflow"
+msgstr "Einnahme"
+
+#: postix/backoffice/templates/backoffice/record_list.html:13
+#: postix/core/models/record.py:29
+msgid "Outflow"
+msgstr "Ausgabe"
+
+#: postix/backoffice/templates/backoffice/record_list.html:14
+msgid "Saldo"
+msgstr ""
+
+#: postix/backoffice/templates/backoffice/record_list.html:32
+#, fuzzy
+#| msgid "Create session"
+msgid "Cashdesk session"
+msgstr "Session anlegen"
+
+#: postix/backoffice/templates/backoffice/record_list.html:71
 #: postix/core/templates/core/base.html:124
 #: postix/troubleshooter/templates/troubleshooter/information_detail.html:16
 #: postix/troubleshooter/templates/troubleshooter/information_detail.html:20
 msgid "Print"
 msgstr "Drucken"
 
-#: postix/backoffice/templates/backoffice/record_list.html:50
+#: postix/backoffice/templates/backoffice/record_list.html:78
+#: postix/backoffice/templates/backoffice/report_list.html:24
+msgid "Edit"
+msgstr "Editieren"
+
+#: postix/backoffice/templates/backoffice/record_list.html:81
+#: postix/backoffice/templates/backoffice/report_list.html:27
+msgid "Report"
+msgstr "Report"
+
+#: postix/backoffice/templates/backoffice/record_list.html:90
 msgid "No records yet, get going!"
 msgstr "Noch keine Belege, es kann losgehen!"
 
@@ -442,14 +463,6 @@ msgstr "Ende"
 #: postix/backoffice/templates/backoffice/session_detail.html:45
 msgid "Sold products"
 msgstr "Verkaufte Produkte"
-
-#: postix/backoffice/templates/backoffice/report_list.html:24
-msgid "Edit"
-msgstr "Editieren"
-
-#: postix/backoffice/templates/backoffice/report_list.html:27
-msgid "Report"
-msgstr "Report"
 
 #: postix/backoffice/templates/backoffice/report_list.html:47
 msgid "No reports yet, get going!"
