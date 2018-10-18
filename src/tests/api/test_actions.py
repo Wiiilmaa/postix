@@ -15,7 +15,9 @@ def test_open_drawer(api_with_session):
 @pytest.mark.django_db
 def test_reprint_receipt(api_with_session):
     transaction = transaction_factory()
-    response = api_with_session.post('/api/cashdesk/reprint-receipt/', {'transaction': transaction.id})
+    response = api_with_session.post(
+        '/api/cashdesk/reprint-receipt/', {'transaction': transaction.id}
+    )
     content = json.loads(response.content.decode())
     assert content == {'success': True}
 
@@ -23,7 +25,9 @@ def test_reprint_receipt(api_with_session):
 @pytest.mark.django_db
 def test_reprint_receipt_fail(api_with_session):
     transaction = transaction_factory()
-    response = api_with_session.post('/api/cashdesk/reprint-receipt/', {'transaction': transaction.id + 1337})
+    response = api_with_session.post(
+        '/api/cashdesk/reprint-receipt/', {'transaction': transaction.id + 1337}
+    )
     content = json.loads(response.content.decode())
     assert content == {'success': False, 'error': 'Transaction not found.'}
 
@@ -50,3 +54,22 @@ def test_pong_ping(api_with_session):
     assert content == {'success': True}
     p.refresh_from_db()
     assert p.ponged
+
+
+@pytest.mark.django_db
+def test_pong_ping_broken_code(api_with_session):
+    p = ping_factory()
+    response = api_with_session.post(
+        '/api/cashdesk/pong/', {'pong': p.secret + 'lolol'}
+    )
+    content = json.loads(response.content.decode())
+    assert content == {'success': True}
+    p.refresh_from_db()
+    assert not p.ponged
+
+
+@pytest.mark.django_db
+def test_request_resupply(api_with_session):
+    response = api_with_session.post('/api/cashdesk/request-resupply/')
+    content = json.loads(response.content.decode())
+    assert content == {'success': True}

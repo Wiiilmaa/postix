@@ -1,5 +1,5 @@
 # Basic and production requirements
-Django==2.*
+Django==2.1.*
 djangorestframework==3.7.*
 django-compressor==2.2.*
 django-crispy-forms==1.7.*
