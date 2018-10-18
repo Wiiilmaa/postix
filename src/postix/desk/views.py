@@ -32,10 +32,6 @@ class LoginView(TemplateView):
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
-            if not user.is_active:
-                messages.error(request, _('User account is deactivated.'))
-                return redirect('desk:login')
-
             session = user.get_current_session()
             if session is None:
                 messages.error(request, _('You do not have an active session.'))
