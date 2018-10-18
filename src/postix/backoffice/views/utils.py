@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.shortcuts import redirect
 
 from postix.core.models import User
 
@@ -16,6 +17,9 @@ class BackofficeUserRequiredMixin(UserPassesTestMixin):
     def test_func(self) -> bool:
         return is_backoffice_user(self.request.user)
 
+    def handle_no_permission(self):
+        return redirect('backoffice:login')
+
 
 backoffice_user_required = user_passes_test(is_backoffice_user, login_url='backoffice:login')
 
@@ -31,6 +35,9 @@ class SuperuserRequiredMixin(UserPassesTestMixin):
 
     def test_func(self) -> bool:
         return is_superuser(self.request.user)
+
+    def handle_no_permission(self):
+        return redirect('backoffice:login')
 
 
 superuser_required = user_passes_test(is_superuser, login_url='backoffice:login')
