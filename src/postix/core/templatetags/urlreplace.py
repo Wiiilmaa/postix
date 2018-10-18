@@ -3,9 +3,7 @@ from django import template
 register = template.Library()
 
 
-@register.simple_tag
-def urlreplace(request, *pairs):
-    dict_ = request.GET.copy()
+def _urlreplace(dict_, *pairs):
     key = None
     for p in pairs:
         if key is None:
@@ -17,4 +15,9 @@ def urlreplace(request, *pairs):
             else:
                 dict_[key] = p
             key = None
-    return dict_.urlencode(safe='[]')
+    return dict_
+
+
+@register.simple_tag
+def urlreplace(request, *pairs):
+    return _urlreplace(request.GET.copy(), *pairs).urlencode(safe='[]')

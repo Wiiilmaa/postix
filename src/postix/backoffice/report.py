@@ -55,12 +55,16 @@ def generate_report(session: CashdeskSession) -> str:
     Generates a closing report for a CashdeskSession; returns the path to the
     report PDF.
     """
+    if not session.end:
+        return
+
     _buffer = BytesIO()
-    doc = get_default_document(_buffer, footer=EventSettings.objects.get().report_footer)
+    settings = EventSettings.get_solo()
+    doc = get_default_document(_buffer, footer=settings.report_footer)
     style = get_paragraph_style()
 
     # Header: info text and qr code
-    title_str = '[{}] Kassenbericht #{}'.format(EventSettings.objects.get().short_name, session.pk)
+    title_str = '[{}] Kassenbericht #{}'.format(settings.short_name, session.pk)
     title = Paragraph(title_str, style['Heading1'])
     tz = timezone.get_current_timezone()
     text = """{user} an {cashdesk}<br/>{start} – {end}""".format(
@@ -165,11 +169,12 @@ def generate_record(record: Record) -> str:
     Generates the PDF for a given record; returns the path to the record PDF.
     """
     _buffer = BytesIO()
-    doc = get_default_document(_buffer, footer=EventSettings.objects.get().report_footer)
+    settings = EventSettings.get_solo()
+    doc = get_default_document(_buffer, footer=settings.report_footer)
     style = get_paragraph_style()
 
     # Header: info text and qr code
-    title_str = '[{}] {}beleg'.format(EventSettings.objects.get().short_name, 'Einnahme' if record.type == 'inflow' else 'Ausgabe')
+    title_str = '[{}] {}beleg'.format(settings.short_name, 'Einnahme' if record.type == 'inflow' else 'Ausgabe')
     title = Paragraph(title_str, style['Heading1'])
     tz = timezone.get_current_timezone()
     datetime = record.datetime.astimezone(tz)

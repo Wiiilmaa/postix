@@ -63,6 +63,15 @@ def cashdesk_session_before_factory(ip=None, user=None, create_items=True):
     return cd
 
 
+def cashdesk_session_after_factory(ip=None, user=None, create_items=True):
+    cd = cashdesk_session_before_factory(ip=ip, user=user, create_items=create_items)
+    cd.end = now()
+    cd.backoffice_user_after = cd.backoffice_user_before
+    cd.cash_after = cd.cash_before
+    cd.save()
+    return cd
+
+
 def quota_factory(size=None):
     return Quota.objects.create(name='Day {} Quota'.format(random.randint(0, 4)),
                                 size=random.randint(50, 300) if size is None else size)

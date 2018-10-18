@@ -12,6 +12,7 @@ def sample_member_file_ccc():
         t.write(b"""chaos_number	first_name	last_name	state
 2			bezahlt
 4	A	B	Verzug
+
 5	C	D	bezahlt
 8	E	F	bezahlt
 11	G	H	ruhend
@@ -33,6 +34,7 @@ def sample_member_file_incremental_update_ccc():
 14	I	J	ruhend
 23	K	L	ruhend
 42	M	N	bezahlt
+43      O       P       Verzug
 """)
         t.seek(0)
         yield t.name
