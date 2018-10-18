@@ -33,7 +33,7 @@ class Record(models.Model):
     entity = models.ForeignKey(RecordEntity, on_delete=models.PROTECT, related_name='records', verbose_name=_('Entity'), null=True, blank=True)
     carrier = models.CharField(max_length=200, null=True, blank=True, verbose_name=_('Carrier'))
     amount = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('Amount'))
-    backoffice_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='records', verbose_name=_('Backoffice user'))
+    backoffice_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='records', verbose_name=_('Backoffice user'), on_delete=models.PROTECT)
     is_balancing = models.BooleanField(default=False, verbose_name=_('Is a balancing record'))
 
     class Meta:

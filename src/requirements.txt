@@ -1,18 +1,18 @@
 # Basic and production requirements
-Django>=1.11.15,<2.*
+Django==2.*
 djangorestframework==3.7.*
+django-compressor==2.2.*
 django-crispy-forms==1.7.*
-django-filter==1.1.*
+django-filter==2.0.*
+django-libsass
 django-solo==1.1.*
 markdown==2.6.*
+qrcode==5.3
 reportlab==3.4.*
 requests==2.18.*
-qrcode==5.3
-django-compressor==2.2.*
-django-libsass
 
 # Testing and development requirements
-pytest-django==3.1.*
+pytest-django==3.4.*
 Faker==0.8.*
 pytest-cov==2.*
 PyYAML==3.12
