@@ -15,9 +15,8 @@ from postix.core.utils.pdf import (
 
 
 def generate_invoice(transaction: Transaction, address: str) -> str:
-    path = transaction.get_invoice_path()
-    if path:
-        return path
+    if transaction.has_invoice:
+        return transaction.get_invoice_path()
 
     _buffer = BytesIO()
     settings = EventSettings.get_solo()
