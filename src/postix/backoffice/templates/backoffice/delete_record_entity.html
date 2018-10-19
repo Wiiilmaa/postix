@@ -5,8 +5,7 @@
 
 {% block content %}
 
-<div class="col-md-2"></div>
-<div class="col-md-8">
+<div class="col-md-8 ml-auto mr-auto">
 	<h3>{{ record }}</h3>
 	<form method="post" action="">
 	{% csrf_token %}
@@ -15,5 +14,4 @@
 	{% endlanguage %}
 	</form>
 </div>
-<div class="col-md-2"></div>
 {% endblock %}

@@ -28,7 +28,7 @@
         <form class="form form-inline col-md-3" method="post" action="{% url "troubleshooter:transaction-invoice" pk=transaction.pk %}">
             {% csrf_token %}
             <div class="input group">
-            <button class="btn btn-default btn-block" type="submit">{% trans "Print invoice" %}</button>
+            <button class="btn btn-info btn-block" type="submit">{% trans "Print invoice" %}</button>
             </div>
         </form>
     </div>

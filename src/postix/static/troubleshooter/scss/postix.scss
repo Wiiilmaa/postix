@@ -1,7 +1,6 @@
 @import "../../shared/scss/_variables";
 $icon-font-path: "/static/postix/shared/fonts/";
-@import "../../shared/scss/_bootstrap";
-@import "../../shared/scss/bootstrap/_theme";
+@import "../../shared/scss/bootstrap/bootstrap";
 @import "../../shared/fontawesome/scss/font-awesome";
 
 body {
@@ -163,4 +162,12 @@ h1 .glyphicon {
     border: 1px solid grey;
     padding: 3em;
     width: 50%;
+}
+.transaction-filter-header {
+    margin-bottom: 8px;
+    form {
+        display: flex;
+        flex-direction: row;
+        flex: 1 0 auto;
+    }
 }

@@ -1,7 +1,6 @@
 @import "../../shared/scss/_variables";
 $icon-font-path: "/static/postix/shared/fonts/";
-@import "../../shared/scss/_bootstrap";
-@import "../../shared/scss/bootstrap/_theme";
+@import "../../shared/scss/bootstrap/bootstrap";
 @import "../../shared/fontawesome/scss/font-awesome";
 
 .navbar-inverse, .navbar-inverse .navbar-collapse {
