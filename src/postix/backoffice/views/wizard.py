@@ -46,15 +46,6 @@ class WizardCashdesksView(SuperuserRequiredMixin, FormView):
             messages.success(request, _('The cashdesk has been created \o/'))
             return self.form_valid(form)
 
-    def get_initial(self):
-        settings = EventSettings.get_solo()
-        attrs = {
-            attr: getattr(settings, attr)
-            for attr in EventSettingsForm().fields
-        }
-        attrs.update({'initialized': True})
-        return attrs
-
     def get_success_url(self):
         return reverse('backoffice:wizard-cashdesks')
 
@@ -106,15 +97,6 @@ class WizardPretixImportView(SuperuserRequiredMixin, FormView):
             except Exception as e:
                 messages.error(request, _('The import could not be processed: ') + str(e))
             return self.form_valid(form)
-
-    def get_initial(self):
-        settings = EventSettings.get_solo()
-        attrs = {
-            attr: getattr(settings, attr)
-            for attr in EventSettingsForm().fields
-        }
-        attrs.update({'initialized': True})
-        return attrs
 
     def get_success_url(self):
         return reverse('backoffice:wizard-import')
