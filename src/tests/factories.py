@@ -168,8 +168,8 @@ def warning_constraint_factory():
     )
 
 
-def list_constraint_factory(product=None, price=None):
-    lc = ListConstraint.objects.create(name='VIP members')
+def list_constraint_factory(product=None, price=None, confidential=False):
+    lc = ListConstraint.objects.create(name='VIP members', confidential=confidential)
     if product:
         tax_rate = Decimal('19.00') if price else None
         ListConstraintProduct.objects.create(
