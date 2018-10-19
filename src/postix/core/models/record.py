@@ -13,8 +13,12 @@ from .settings import EventSettings
 class RecordEntity(models.Model):
     """This class is the source or destination for records, for example "Bar 1", or "Unnamed Supplier"."""
 
-    name = models.CharField(max_length=200, help_text='For example "Bar", or "Vereinstisch", …')
-    detail = models.CharField(max_length=200, help_text='For example the name of the bar, …')
+    name = models.CharField(
+        max_length=200, help_text='For example "Bar", or "Vereinstisch", …'
+    )
+    detail = models.CharField(
+        max_length=200, help_text='For example the name of the bar, …'
+    )
 
     class Meta:
         ordering = ('name', 'detail')
@@ -24,40 +28,67 @@ class RecordEntity(models.Model):
 
 
 class Record(models.Model):
-    TYPES = (
-        ('inflow', _('Inflow')),
-        ('outflow', _('Outflow')),
-    )
+    TYPES = (('inflow', _('Inflow')), ('outflow', _('Outflow')))
     type = models.CharField(max_length=20, choices=TYPES, verbose_name=_('Direction'))
-    datetime = models.DateTimeField(verbose_name=_('Date'), help_text=_('Leave empty to use the current date and time.'))
-    entity = models.ForeignKey(RecordEntity, on_delete=models.PROTECT, related_name='records', verbose_name=_('Entity'), null=True, blank=True)
-    carrier = models.CharField(max_length=200, null=True, blank=True, verbose_name=_('Carrier'))
-    amount = models.DecimalField(decimal_places=2, max_digits=10, verbose_name=_('Amount'))
-    backoffice_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='records', verbose_name=_('Backoffice user'), on_delete=models.PROTECT)
-    is_balancing = models.BooleanField(default=False, verbose_name=_('Is a balancing record'))
+    datetime = models.DateTimeField(
+        verbose_name=_('Date'),
+        help_text=_('Leave empty to use the current date and time.'),
+    )
+    entity = models.ForeignKey(
+        RecordEntity,
+        on_delete=models.PROTECT,
+        related_name='records',
+        verbose_name=_('Entity'),
+        null=True,
+        blank=True,
+    )
+    carrier = models.CharField(
+        max_length=200, null=True, blank=True, verbose_name=_('Carrier')
+    )
+    amount = models.DecimalField(
+        decimal_places=2, max_digits=10, verbose_name=_('Amount')
+    )
+    backoffice_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='records',
+        verbose_name=_('Backoffice user'),
+        on_delete=models.PROTECT,
+    )
+    is_balancing = models.BooleanField(
+        default=False, verbose_name=_('Is a balancing record')
+    )
 
     class Meta:
-        ordering = ('datetime', )
+        ordering = ('datetime',)
 
     def __str__(self):
-        return self.datetime.strftime('Day %d %X') + " " + str(self.entity) + " " + str(self.amount) + " EUR"
+        return (
+            self.datetime.strftime('Day %d %X')
+            + " "
+            + str(self.entity)
+            + " "
+            + str(self.amount)
+            + " EUR"
+        )
 
     def save(self, *args, **kwargs):
         if not self.datetime:
             self.datetime = now()
         super().save(*args, **kwargs)
 
-    def get_record_path(self):
+    @property
+    def record_path(self):
         base = default_storage.path('records')
-        search = os.path.join(base, '{}_record_{}-*.pdf'.format(
-            EventSettings.objects.get().short_name,
-            self.pk)
+        search = os.path.join(
+            base,
+            '{}_record_{}-*.pdf'.format(
+                EventSettings.objects.get().short_name, self.pk
+            ),
         )
         all_records = sorted(glob.glob(search))
 
         if all_records:
             return all_records[-1]
-        return None
 
     def get_new_record_path(self) -> str:
         return os.path.join(
@@ -65,6 +96,6 @@ class Record(models.Model):
             '{}_record_{}-{}.pdf'.format(
                 EventSettings.objects.get().short_name,
                 self.pk,
-                now().strftime('%Y%m%d-%H%M')
+                now().strftime('%Y%m%d-%H%M'),
             ),
         )

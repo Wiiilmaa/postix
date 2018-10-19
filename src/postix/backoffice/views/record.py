@@ -30,7 +30,12 @@ class RecordListView(BackofficeUserRequiredMixin, TemplateView):
         records = Record.objects.all()
         sessions = CashdeskSession.objects.filter(end__isnull=False)
         running_total = 0
-        all_objects = sorted(list(records) + list(sessions), key=lambda element: getattr(element, 'datetime', (getattr(element, 'end', None))))
+        all_objects = sorted(
+            list(records) + list(sessions),
+            key=lambda element: getattr(
+                element, 'datetime', (getattr(element, 'end', None))
+            ),
+        )
         for obj in all_objects:
             if isinstance(obj, CashdeskSession):
                 amount = obj.get_cash_transaction_total()
@@ -57,7 +62,9 @@ class RecordCreateView(BackofficeUserRequiredMixin, CreateView):
         return ctx
 
     def get_success_url(self):
-        return reverse('backoffice:record-print', kwargs={'pk': self.get_form().instance.pk})
+        return reverse(
+            'backoffice:record-print', kwargs={'pk': self.get_form().instance.pk}
+        )
 
 
 class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
@@ -83,12 +90,13 @@ class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
 @backoffice_user_required
 def record_print(request, pk: int):
     record = get_object_or_404(Record, pk=pk)
-    record_path = record.get_record_path()
 
-    if not record_path or 'cached' not in request.GET:  # TODO: don't regenerate pdf always
-        record_path = generate_record(record)
+    if (
+        not record.record_path or 'cached' not in request.GET
+    ):  # TODO: don't regenerate pdf always
+        generate_record(record)
 
-    response = HttpResponse(content=default_storage.open(record_path, 'rb'))
+    response = HttpResponse(content=default_storage.open(record.record_path, 'rb'))
     response['Content-Type'] = 'application/pdf'
     response['Content-Disposition'] = 'inline; filename=record-{}.pdf'.format(record.pk)
     return response
