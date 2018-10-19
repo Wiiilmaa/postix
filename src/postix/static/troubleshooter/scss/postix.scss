@@ -2,79 +2,15 @@
 $icon-font-path: "/static/postix/shared/fonts/";
 @import "../../shared/scss/bootstrap/bootstrap";
 @import "../../shared/fontawesome/scss/font-awesome";
+@import "../../shared/scss/_postix";
 
-body {
-    font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
-}
-
-.navbar-inverse, .navbar-inverse .navbar-collapse {
-    background: $brand-inverse;
-}
-.navbar-brand img {
-    height: 24px;
-    position: relative;
-    top: -3px;
-    display: inline;
-}
-.navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
-    color: white;
-}
-/* Until crispy-forms master has merged PR #545, we need to correct this here. */
-tbody th {
-    font-weight: normal;
-}
-#active-sessions-table .empty-row {
-    text-align: center;
-}
-#active-sessions-table .session-action-column .glyphicon {
-    margin-left: 1.2rem;
-    font-size: 1.8rem;
-}
-.session-action-column a:hover {
-    text-decoration: none;
-}
-.glyphicon-print {
-    color: #a22;
-}
-.glyphicon-pencil {
-    color: #2a2;
-}
-.glyphicon-plus {
-    color: #2a2;
-}
-.glyphicon-off {
-    color: #a22;
-}
-.backoffice-content .glyphicon-log-out {
-    color: #777;
-}
-#end-sessions-table .control-label {
-    display: none;
-}
-.pseudo-column {
-    width: 20%;
-    display: inline-block;
-}
-.pseudo-column button {
-    width: 100%;
-    margin-bottom: 0.5em;
-}
-#qrcode {
-    float: right;
-    width: 128px;
-}
-body {
-    font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
-}
 body.login, body.error {
     background: #eee;
 }
-
 .panel-login {
     width: 400px;
     margin: 60px auto 0 auto;
 }
-
 .error-page {
     width: 400px;
     margin: 60px auto 0 auto;
@@ -92,18 +28,6 @@ body.login, body.error {
 /* Until crispy-forms master has merged PR #545, we need to correct this here. */
 tbody th {
     font-weight: normal;
-}
-.glyphicon-print {
-    color: #a22;
-}
-.glyphicon-pencil {
-    color: #2a2;
-}
-.glyphicon-plus {
-    color: #2a2;
-}
-.glyphicon-off {
-    color: #a22;
 }
 h1 a:hover {
     text-decoration: none;
