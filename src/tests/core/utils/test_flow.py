@@ -37,9 +37,11 @@ def test_unpaid():
 
 @pytest.mark.django_db
 def test_already_redeemed():
+    pos = preorder_position_factory(paid=True, redeemed=True)
     with pytest.raises(FlowError) as excinfo:
-        redeem_preorder_ticket(secret=preorder_position_factory(paid=True, redeemed=True).secret)
+        redeem_preorder_ticket(secret=pos.secret)
     assert 'already been redeemed' in excinfo.value.message
+    assert 'already been redeemed at' in pos.redemption_message
 
 
 @pytest.mark.django_db

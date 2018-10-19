@@ -25,9 +25,9 @@ def test_backoffice_quota_check():
 def test_backoffice_tax_rate_check():
     product_factory()
     list_constraint_factory(price='10.00', product=product_factory())
-    ListConstraintProduct.objects.update(tax_rate=9)
+    ListConstraintProduct.objects.update(tax_rate=7)
 
     with pytest.raises(CheckError) as error_info:
         check_tax_rates()
 
-    assert '9' in error_info
+    assert '7' in str(error_info.value)

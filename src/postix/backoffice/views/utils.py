@@ -6,7 +6,7 @@ from postix.core.models import User
 
 
 def is_backoffice_user(user: User) -> bool:
-    if user.is_authenticated:
+    if user.is_authenticated and not user.is_anonymous:
         return user.is_superuser or user.is_backoffice_user
     return False
 
@@ -25,7 +25,7 @@ backoffice_user_required = user_passes_test(is_backoffice_user, login_url='backo
 
 
 def is_superuser(user: User) -> bool:
-    if user.is_authenticated:
+    if user.is_authenticated and not user.is_anonymous:
         return user.is_superuser
     return False
 

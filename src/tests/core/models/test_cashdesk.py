@@ -28,6 +28,17 @@ def test_session_not_active():
 
 
 @pytest.mark.django_db
+def test_cashdesk_device_actions():
+    desk = cashdesk_session_before_factory(create_items=False).cashdesk
+    desk.signal_open()
+    desk.signal_next()
+    desk.signal_close()
+    assert 'Dummy' in str(desk.printer)
+    desk.printer_queue_name = 'printer1'
+    assert 'Dummy' not in str(desk.printer)
+
+
+@pytest.mark.django_db
 def test_current_items():
     session = cashdesk_session_before_factory(create_items=False)
     buser = user_factory(troubleshooter=True, superuser=True)
@@ -39,6 +50,8 @@ def test_current_items():
     ProductItem.objects.create(product=prod_1d, item=item_1d, amount=1)
     ItemMovement.objects.create(session=session, item=item_full, amount=20, backoffice_user=buser)
     ItemMovement.objects.create(session=session, item=item_1d, amount=10, backoffice_user=buser)
+    assert session.cash_remaining == session.cash_before
+    assert session.is_latest_session
 
     for i in range(3):
         transaction_position_factory(transaction_factory(session), prod_full)
