@@ -13,7 +13,6 @@
 
     {% compress css %}
         <link rel="stylesheet" type="text/css" href="{% static "shared/fonts/fonts.css" %}">
-        <link rel="stylesheet" type="text/css" href="{% static "shared/css/core.css" %}">
     {% endcompress %}
     {% block area_stylesheets %}
     {% endblock %}
@@ -21,9 +20,9 @@
 
 </head>
 <body><div id="wrapper">
-    <nav class="navbar navbar-inverse navbar-static-top">
+    <nav class="navbar navbar-inverse fixed-top">
         <a class="navbar-brand" href="{% block area_url %}{% endblock %}">
-            <img src="{% static "shared/img/icon_white.svg" %}">
+            <img src="{% static "shared/img/icon.svg" %}">
             {% block area %}{% endblock %}
         </a>
         <div id="navbar" class="">
@@ -45,120 +44,143 @@
     </nav>
     <div id="page-wrapper">
         {% if not user.is_anonymous %}
-        <nav class="nav flex-column sidebar">
+        <aside class="nav flex-column sidebar">
             {% if user.is_backoffice_user or user.is_superuser %}
-                <span class="nav-link">
-                    <span class="fa fa-fw fa-handshake-o"></span>
-                    {% trans "Sessions" %}
-                </span>
-                    <a class="nav-link subnav" href="{% url "backoffice:new-session" %}">
-                        <span class="fa fa-fw fa-plus-circle"></span>
-                        {% trans "New session" %}
-                    </a>
-                    <a class="nav-link subnav" href="{% url "backoffice:session-list" %}">
-                        <span class="fa fa-fw fa-list"></span>
-                        {% trans "List of sessions" %}
-                    </a>
-                    <a class="nav-link subnav" href="{% url "backoffice:report-list" %}">
-                        <span class="fa fa-fw fa-book"></span>
-                        {% trans "Reports" %}
-                    </a>
-                <span class="nav-link">
-                    <span class="fa fa-fw fa-handshake-o"></span>
-                    {% trans "Records" %}
-                </span>
-                    <a class="nav-link subnav" href="{% url "backoffice:new-record" %}">
-                        <span class="fa fa-fw fa-plus-circle"></span>
-                        {% trans "New record" %}
-                    </a>
-                    <a class="nav-link subnav" href="{% url "backoffice:record-list" %}">
-                        <span class="fa fa-fw fa-list"></span>
-                        {% trans "List of records" %}
-                    </a>
-                <span class="nav-link">
-                    <span class="fa fa-fw fa-users"></span>
-                    {% trans "Users" %}
-                </span>
-                    <a class="nav-link subnav" href="{% url "backoffice:create-user" %}">
-                        <span class="fa fa-fw fa-plus-circle"></span>
-                        {% trans "New user" %}
-                    </a>
-                    <a class="nav-link subnav" href="{% url "backoffice:user-list" %}">
-                        <span class="fa fa-fw fa-list"></span>
-                        {% trans "User list" %}
-                    </a>
+                <li class="nav-fold">
+                    <span class="has-children">
+                        <a href="{% url "backoffice:session-list" %}" class="nav-link nav-link-inner">
+                            <span class="fa fa-fw fa-list"></span>
+                            {% trans "Sessions" %}
+                        </a>
+                        <a class="arrow nav-link" data-toggle="collapse" href="#collapseSessions" aria-controls="collapseSessions">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </span>
+                    <div class="collapse in{% if "session" not in url_name %} show{% endif %}" aria-expand="true" id="collapseSessions">
+
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:new-session" %}">
+                            {% trans "New session" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:session-list" %}">
+                            {% trans "List of sessions" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:report-list" %}">
+                            {% trans "Reports" %}
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-fold">
+                    <span class="has-children">
+                        <a href="{% url "backoffice:record-list" %}" class="nav-link">
+                            <span class="fa fa-fw fa-book"></span>
+                            {% trans "List of records" %}
+                        </a>
+                        <a class="arrow nav-link" data-toggle="collapse" href="#collapseRecords" aria-controls="collapseRecords">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </span>
+                    <div class="collapse in{% if "record" not in url_name %} show{% endif %}" aria-expand="true" id="collapseRecords">
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:new-record" %}">
+                            {% trans "New record" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:record-list" %}">
+                            {% trans "List of records" %}
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-fold">
+                    <span class="has-children">
+                        <a class="nav-link" href="{% url "backoffice:user-list" %}">
+                            <span class="fa fa-fw fa-users"></span>
+                            {% trans "Users" %}
+                        </a>
+                        <a class="arrow nav-link" data-toggle="collapse" href="#collapseUsers" aria-controls="collapseUsers">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </span>
+                    <div class="collapse in{% if "user" not in url_name %} show{% endif %}" aria-expand="true" id="collapseUsers">
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:create-user" %}">
+                            {% trans "New user" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:user-list" %}">
+                            {% trans "User list" %}
+                        </a>
+                    </div>
+                </li>
             {% endif %}
             {% if user.is_troubleshooter or user.is_superuser %}
-                {% if user.is_superuser or user.is_backoffice_user %}
-                    <span class="nav-link">
-                        <span class="fa fa-fw fa-user-secret"></span>
-                        {% trans "Troubleshooting" %}
+                <li class="nav-fold">
+                    <span class="has-children">
+                        <a class="nav-link" href="{% url "troubleshooter:main" %}">
+                            <span class="fa fa-fw fa-user-secret"></span>
+                            {% trans "Troubleshooting" %}
+                        </a>
+                        <a class="arrow nav-link" data-toggle="collapse" href="#collapseTrouble" aria-controls="collapseTrouble">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
                     </span>
-                {% endif %}
-                <a href="{% url "troubleshooter:main" %} "id="nav-sessions" class="nav-link subnav{% if has_request %} has-request{% endif %}">
-                    <span class="fa fa-fw fa-user"></span>
-                    {% trans "Current sessions" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "troubleshooter:transaction-list" %}">
-                    <span class="fa fa-fw fa-book"></span>
-                    {% trans "Transactions" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "troubleshooter:constraint-list" %}">
-                    <span class="fa fa-fw fa-list"></span>
-                    {% trans "Lists" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "troubleshooter:preorder-list" %}">
-                    <span class="fa fa-fw fa-shopping-cart"></span>
-                    {% trans "Preorder" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "troubleshooter:preorder-information-list" %}">
-                    <span class="fa fa-fw fa-shopping-cart"></span>
-                    {% trans "Preorder Specials" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "troubleshooter:ping" %}">
-                    <span class="fa fa-fw fa-terminal"></span>
-                    {% trans "Ping" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "troubleshooter:information-list" %}">
-                    <span class="fa fa-fw fa-print"></span>
-                    {% trans "Print" %}
-                </a>
+                    <div class="collapse in{% if "troubleshooter" not in url_name %} show{% endif %}" aria-expand="true" id="collapseTrouble">
+                        <a href="{% url "troubleshooter:main" %} "id="nav-sessions" class="nav-link nav-link-second-level{% if has_request %} has-request{% endif %}">
+                            {% trans "Current sessions" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "troubleshooter:transaction-list" %}">
+                            {% trans "Transactions" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "troubleshooter:constraint-list" %}">
+                            {% trans "Lists" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "troubleshooter:preorder-list" %}">
+                            {% trans "Preorder" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "troubleshooter:preorder-information-list" %}">
+                            {% trans "Preorder Specials" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "troubleshooter:ping" %}">
+                            {% trans "Ping" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "troubleshooter:information-list" %}">
+                            {% trans "Print" %}
+                        </a>
+                    </div>
+                </li>
             {% endif %}
             {% if user.is_superuser %}
-                <span class="nav-link" href="{% url "backoffice:wizard-settings" %}">
-                    <span class="fa fa-fw fa-cog"></span>
-                    {% trans "Settings" %}
-                </span>
-                <a class="nav-link subnav" href="{% url "backoffice:wizard-settings" %}">
-                    <span class="fa fa-fw fa-cogs"></span>
-                    {% trans "General Settings" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "backoffice:wizard-users" %}">
-                    <span class="fa fa-fw fa-users"></span>
-                    {% trans "User Permissions" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "backoffice:wizard-cashdesks" %}">
-                    <span class="fa fa-fw fa-plus-circle"></span>
-                    {% trans "New Cashdesks" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "backoffice:wizard-import" %}">
-                    <span class="fa fa-fw fa-download"></span>
-                    {% trans "Import Presale Data" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "backoffice:wizard-items-list" %}">
-                    <span class="fa fa-fw fa-list"></span>
-                    {% trans "Item List" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "backoffice:wizard-items-create" %}">
-                    <span class="fa fa-fw fa-plus-circle"></span>
-                    {% trans "Add an Item" %}
-                </a>
-                <a class="nav-link subnav" href="{% url "backoffice:record-entity-list" %}">
-                    <span class="fa fa-fw fa-list"></span>
-                    {% trans "Record Entities" %}
-                </a>
+                <li class="nav-fold">
+                    <span class="has-children">
+                        <a class="nav-link" href="{% url "backoffice:wizard-settings" %}">
+                            <span class="fa fa-fw fa-cogs"></span>
+                            {% trans "Settings" %}
+                        </a>
+                        <a class="arrow nav-link" data-toggle="collapse" href="#collapseSettings" aria-controls="collapseSettings">
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </span>
+                    <div class="collapse in{% if "wizard" not in url_name %} show{% endif %}" aria-expand="true" id="collapseSettings">
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:wizard-settings" %}">
+                            {% trans "General Settings" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:wizard-users" %}">
+                            {% trans "User Permissions" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:wizard-cashdesks" %}">
+                            {% trans "New Cashdesks" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:wizard-import" %}">
+                            {% trans "Import Presale Data" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:wizard-items-list" %}">
+                            {% trans "Item List" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:wizard-items-create" %}">
+                            {% trans "Add an Item" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:record-entity-list" %}">
+                            {% trans "Record Entities" %}
+                        </a>
+                    </div>
+                </li>
             {% endif %}
-        </nav>
+        </aside>
         {% endif %}
 
     <div class="container" id="page-content">
@@ -175,6 +197,8 @@
         {% endblock %}
 
     <script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "shared/js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "shared/js/postix.js" %}"></script>
     {% block area_scripts %}
     {% endblock %}
 
