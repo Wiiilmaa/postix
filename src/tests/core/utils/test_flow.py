@@ -3,10 +3,11 @@ from decimal import Decimal
 import pytest
 from django.db.models import Sum
 from tests.factories import (
-    cashdesk_session_before_factory, list_constraint_entry_factory,
-    list_constraint_factory, preorder_position_factory, product_factory,
-    time_constraint_factory, transaction_factory, transaction_position_factory,
-    user_factory, warning_constraint_factory,
+    cashdesk_session_after_factory, cashdesk_session_before_factory,
+    list_constraint_entry_factory, list_constraint_factory,
+    preorder_position_factory, product_factory, time_constraint_factory,
+    transaction_factory, transaction_position_factory, user_factory,
+    warning_constraint_factory,
 )
 
 from postix.core.models import (
@@ -482,6 +483,18 @@ def test_reverse_double():
 
 
 @pytest.mark.django_db
+def test_reverse_reversal():
+    session = cashdesk_session_before_factory()
+    trans = transaction_factory(session)
+    transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    transaction_position_factory(transaction=trans)
+    trans = reverse_transaction(trans_id=trans.pk, current_session=session)
+    with pytest.raises(FlowError) as excinfo:
+        reverse_transaction(trans_id=trans, current_session=session)
+    assert excinfo.value.message == 'At least one position of this transaction is a reversal.'
+
+
+@pytest.mark.django_db
 def test_reverse_position_unknown():
     session = cashdesk_session_before_factory()
     with pytest.raises(FlowError) as excinfo:
@@ -547,6 +560,17 @@ def test_reverse_position_double():
 
 
 @pytest.mark.django_db
+def test_reverse_position_reversal():
+    session = cashdesk_session_before_factory()
+    trans = transaction_factory(session)
+    tpos = transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    pos = reverse_transaction_position(tpos.pk, current_session=session)
+    with pytest.raises(FlowError) as excinfo:
+        reverse_transaction_position(pos, current_session=session)
+    assert excinfo.value.message == 'This position is already a reversal.'
+
+
+@pytest.mark.django_db
 def test_reverse_whole_session_double():
     session = cashdesk_session_before_factory()
     pp = preorder_position_factory(paid=True)
@@ -559,6 +583,21 @@ def test_reverse_whole_session_double():
     reverse_session(session)
     with pytest.raises(FlowError):
         reverse_session(session)
+
+
+@pytest.mark.django_db
+def test_reverse_whole_session_inactive():
+    session = cashdesk_session_after_factory()
+    pp = preorder_position_factory(paid=True)
+    trans = transaction_factory(session)
+    transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    pos = redeem_preorder_ticket(secret=pp.secret)
+    pos.transaction = trans
+    pos.save()
+    assert is_redeemed(pp)
+    with pytest.raises(FlowError) as excinfo:
+        reverse_session(session)
+    assert excinfo.value.message == 'The session needs to be still active.'
 
 
 @pytest.mark.django_db
