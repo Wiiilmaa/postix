@@ -22,10 +22,6 @@ class LoginView(TemplateView):
             messages.error(request, _('No user account matches the entered credentials.'))
             return redirect('backoffice:login')
 
-        if not user.is_active:
-            messages.error(request, _('User account is deactivated.'))
-            return redirect('backoffice:login')
-
         if not is_backoffice_user(user):
             messages.error(request, _('User does not have permission to access backoffice data.'))
             return redirect('backoffice:login')
