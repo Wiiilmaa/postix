@@ -215,7 +215,7 @@ class CashdeskSession(models.Model):
     def get_report_path(self) -> Union[str, None]:
         base = default_storage.path('reports')
         search = os.path.join(base, '{}_sessionreport_{}-*.pdf'.format(
-            EventSettings.objects.get().short_name,
+            EventSettings.get_solo().short_name,
             self.pk)
         )
         all_reports = sorted(glob.glob(search))
@@ -228,7 +228,7 @@ class CashdeskSession(models.Model):
         return os.path.join(
             'reports',
             '{}_sessionreport_{}-{}.pdf'.format(
-                EventSettings.objects.get().short_name,
+                EventSettings.get_solo().short_name,
                 self.pk,
                 now().strftime('%Y%m%d-%H%M')
             ),
