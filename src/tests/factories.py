@@ -10,8 +10,8 @@ from faker import Faker
 from postix.core.models import (
     Cashdesk, CashdeskSession, CashMovement, Item, ItemMovement,
     ListConstraint, ListConstraintEntry, ListConstraintProduct, Ping, Preorder,
-    PreorderPosition, Product, ProductItem, Quota, TimeConstraint, Transaction,
-    TransactionPosition, User, WarningConstraint,
+    PreorderPosition, Product, ProductItem, Quota, Record, RecordEntity,
+    TimeConstraint, Transaction, TransactionPosition, User, WarningConstraint,
 )
 
 
@@ -167,3 +167,20 @@ def list_constraint_entry_factory(list_constraint, redeemed=False):
 
 def ping_factory():
     return Ping.objects.create(secret='verysecret')
+
+
+def record_entity_factory():
+    fake = Faker('en-US')
+    return RecordEntity.objects.create(name=fake.company(), detail='For testing')
+
+
+def record_factory(balancing=False, incoming=True):
+    fake = Faker('en-US')
+    return Record.objects.create(
+        backoffice_user=user_factory(backoffice=True),
+        type='inflow' if incoming else 'outflow',
+        entity=record_entity_factory(),
+        carrier=fake.name() if not balancing else None,
+        amount=Decimal('100.00'),
+        is_balancing=balancing,
+    )
