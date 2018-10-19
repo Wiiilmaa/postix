@@ -1,8 +1,80 @@
 body {
     font-family: 'opensans', 'Open Sans', Frutiger, 'Frutiger Linotype', 'Segoe UI', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
 }
-.navbar-inverse, .navbar-inverse .navbar-collapse {
-    background: $brand-inverse;
+body.login, body.error {
+    background: #eee;
+}
+.panel-login {
+    width: 400px;
+    margin: 60px auto 0 auto;
+}
+
+.fa-plus {
+    color: #00c036;
+}
+.fa-print {
+    color: #537ca6;
+}
+.fa-pencil {
+    color: #666;
+}
+.error-page {
+    width: 400px;
+    margin: 60px auto 0 auto;
+    text-align: center;
+}
+.error-page h2 {
+    font-size: 30px;
+}
+.error-page .glyphicon {
+    font-size: 200px;
+}
+.navbar .fa-sign-off {
+    margin-right: 0.5em;
+}
+h1 a:hover {
+    text-decoration: none;
+}
+h1 .glyphicon {
+    font-size: 2rem;
+    margin-right: 1em
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+#page-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+#page-content {
+  margin-top: 50px;
+  background: white;
+  flex-grow: 1;
+  padding: 20px;
+}
+.flex-row {
+  flex-direction:row !important
+}
+.flex-column {
+  flex-direction:column !important
+}
+.navbar {
+  height: 50px;
+  color: $brand-primary;
+  background-color: $offwhite;
+  border-bottom: 4px $brand-primary solid;
+  padding: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  &.navbar-inverse .navbar-nav > li > a, &.navbar-inverse .navbar-brand {
+      color: $brand-primary;
+  }
+  li {
+    margin-right: 8px;
+  }
 }
 
 .navbar-brand img {
@@ -15,6 +87,77 @@ body {
     color: white;
 }
 
+small {
+  color: $gray;
+}
+
+aside.sidebar {
+  background-color: $gray-lightest;
+  width: 250px;
+  height: 100vh;
+  margin-top: 50px;
+  font-size: 14px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  border-right: 1px solid $gray-lighter;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  z-index: 100;
+  position: fixed;
+  overflow-y: auto;
+
+  li span.has-children {
+    display: flex;
+    flex-direction: row;
+
+    a {
+      flex-grow: 1;
+    }
+
+    .arrow {
+      flex-grow: 0;
+      width: 50px;
+      border: none;
+      display: flex;
+      justify-content: center;
+
+      i {
+        padding-top: 4px;
+      }
+    }
+  }
+
+  .nav-link, li.nav-fold {
+    border-top: 1px solid $gray-light;
+  }
+
+  .nav-link {
+    padding: 10px 15px;
+
+    &:last-child {
+      border-bottom: 1px solid $gray-light;
+    }
+  }
+
+  .nav-link {
+    .fa {
+      margin-right: 5px;
+    }
+
+    &.nav-link-second-level {
+      margin-left: 28px;
+    }
+  }
+
+  .nav-link.nav-link-second-level, .nav-link.nav-link-inner, .nav-link.nav-link-inner.active {
+    border: none;
+  }
+
+  .nav-link.active, .nav-link:hover, .nav-link.nav-link-second-level.active, .nav-link.nav-link-second-level:hover {
+    background-color: $gray-lighter;
+    color: $brand-primary;
+  }
+}
 /* Until crispy-forms master has merged PR #545, we need to correct this here. */
 tbody th {
     font-weight: normal;
