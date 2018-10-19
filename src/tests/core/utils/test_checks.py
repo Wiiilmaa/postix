@@ -16,6 +16,7 @@ def test_redeemed_entry():
     list_constraint = list_constraint_factory()
     entry = list_constraint_entry_factory(list_constraint, redeemed=True)
     assert is_redeemed(entry)
+    assert entry.is_redeemed
 
 
 @pytest.mark.django_db
@@ -23,6 +24,7 @@ def test_unredeemed_entry():
     list_constraint = list_constraint_factory()
     entry = list_constraint_entry_factory(list_constraint, redeemed=False)
     assert not is_redeemed(entry)
+    assert not entry.is_redeemed
 
 
 @pytest.mark.django_db

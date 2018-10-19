@@ -16,13 +16,17 @@ class Quota(AbstractConstraint):
     products = models.ManyToManyField('Product', verbose_name='Affected products',
                                       blank=True)
 
-    def is_available(self) -> bool:
-        total = sum([product.amount_sold for product in self.products.all()])
-        return total < self.size
+    @property
+    def amount_sold(self):
+        return sum([product.amount_sold for product in self.products.all()])
 
+    @property
     def amount_available(self) -> int:
-        total = sum([product.amount_sold for product in self.products.all()])
-        return max(0, self.size - total)
+        return max(0, self.size - self.amount_sold)
+
+    @property
+    def is_available(self) -> bool:
+        return bool(self.amount_available)
 
     def __str__(self) -> str:
         return "{} ({})".format(self.name, self.size)

@@ -157,7 +157,7 @@ class Product(models.Model):
         from . import Quota
         quotas = Quota.objects.filter(products=self)
         if quotas.exists():
-            all_quotas_available = all([quota.is_available() for quota in quotas])
+            all_quotas_available = all([quota.is_available for quota in quotas])
             if not all_quotas_available:
                 return False
 
