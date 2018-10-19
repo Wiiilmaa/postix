@@ -13,6 +13,7 @@ from ..factories import user_factory
     ('/troubleshooter/transactions/', 200),
     ('/troubleshooter/constraints/', 200),
     ('/troubleshooter/preorders/', 200),
+    ('/troubleshooter/preorders/information/', 200),
     ('/troubleshooter/ping/', 200),
     ('/troubleshooter/information/', 200),
 ))

@@ -106,10 +106,10 @@ def preorder_factory(paid=False):
                                    is_paid=paid)
 
 
-def preorder_position_factory(paid=False, redeemed=False):
+def preorder_position_factory(paid=False, redeemed=False, information=None):
     pp = PreorderPosition.objects.create(preorder=preorder_factory(paid),
                                          secret=''.join(random.choice(string.ascii_letters) for _ in range(24)),
-                                         product=product_factory())
+                                         product=product_factory(), information=information)
     if redeemed:
         TransactionPosition.objects.create(
             type='redeem', preorder_position=pp,
