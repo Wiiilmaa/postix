@@ -4,3 +4,33 @@ $brand-info: #537ca6;
 $brand-warning: #e68d39;
 $brand-danger: #f50b00;
 $brand-inverse: #590017;
+
+$brand-light: fade-out($brand-primary, 0.2) !default;
+
+$white: #fff !default;
+$black: #000 !default;
+$offwhite: #f8f9fa !default;
+$gray: mix(#8590a4, $brand-primary, 90) !default;
+
+$gray-100: mix(#f8f9fa, $brand-primary, 95) !default;
+$gray-200: mix(#e9ecef, $brand-primary, 95) !default;
+$gray-300: mix(#dae0e4, $brand-primary, 90) !default;
+$gray-500: mix(#636c72, $brand-primary, 90) !default;
+$gray-800: #343a40 !default;
+
+$gray-light: $gray-300 !default;
+$gray-lighter: $gray-200 !default;
+$gray-lightest: $gray-100 !default;
+
+$btn-primary-bg: $brand-success !default;
+$btn-primary-border: $btn-primary-bg !default;
+$btn-primary-color: $white !default;
+
+$fa-font-path: "shared/fontawesome/fonts";
+
+$theme-colors: (primary: $brand-primary, success: $brand-success, info: $brand-info, warning: $brand-warning, danger: $brand-danger, light: $gray-100, dark: $gray-800);
+
+.form-control:focus {
+    border-color: $brand-info !important;
+    box-shadow: 0 0 0 0.2rem rgba(83, 124, 166, 0.35) !important;
+}
