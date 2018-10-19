@@ -82,7 +82,7 @@ class Record(models.Model):
         search = os.path.join(
             base,
             '{}_record_{}-*.pdf'.format(
-                EventSettings.objects.get().short_name, self.pk
+                EventSettings.get_solo().short_name, self.pk
             ),
         )
         all_records = sorted(glob.glob(search))

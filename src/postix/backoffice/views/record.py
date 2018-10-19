@@ -41,7 +41,7 @@ class RecordListView(BackofficeUserRequiredMixin, TemplateView):
                 amount = obj.get_cash_transaction_total()
                 obj.amount = amount
                 running_total += obj.amount
-            elif obj.type == 'incoming':
+            elif obj.type == 'inflow':
                 running_total += obj.amount
             else:
                 running_total -= obj.amount
