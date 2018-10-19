@@ -46,7 +46,7 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
 
     if isinstance(data, str):
         presale_export = json.loads(data)['event']
-    elif isinstance(data, (dict, list)):
+    elif isinstance(data, dict):
         presale_export = data['event']
     else:
         presale_export = json.load(data)['event']
