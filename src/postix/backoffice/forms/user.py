@@ -59,10 +59,7 @@ class ResetPasswordForm(forms.Form):
         self.helper.field_class = 'col-md-8'
         self.helper.add_input(Submit('submit', _('Reset password')))
 
-    def is_valid(self):
-        valid = super().is_valid()
-        if valid:
-            if self.cleaned_data.get('password1') == self.cleaned_data.get('password2'):
-                return valid
-            self._errors['incorrect_password'] = _('Passwords do not match!')
-        return valid
+    def clean(self):
+        super().clean()
+        if not self.cleaned_data.get('password1') == self.cleaned_data.get('password2'):
+            raise forms.ValidationError(_('Passwords do not match!'))

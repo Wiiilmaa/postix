@@ -13,11 +13,6 @@ from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 
 @backoffice_user_required
-def main_view(request: HttpRequest) -> HttpResponse:
-    return render(request, 'backoffice/main.html')
-
-
-@backoffice_user_required
 def create_user_view(request: HttpRequest) -> Union[HttpResponseRedirect, HttpResponse]:
     if request.method == "POST":
         form = CreateUserForm(request.POST)
@@ -43,9 +38,9 @@ class ResetPasswordView(BackofficeUserRequiredMixin, FormView):
     form_class = ResetPasswordForm
     template_name = 'backoffice/reset_password.html'
 
-    def get_context_data(self):
+    def get_context_data(self, **kwargs):
         pk = self.kwargs['pk']
-        ctx = super().get_context_data()
+        ctx = super().get_context_data(**kwargs)
         ctx['user'] = User.objects.get(pk=pk)
         return ctx
 
@@ -62,6 +57,7 @@ class ResetPasswordView(BackofficeUserRequiredMixin, FormView):
             user.save()
             messages.success(self.request, _('Passwort has been changed.'))
             return self.form_valid(form)
+        return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse('backoffice:user-list')
