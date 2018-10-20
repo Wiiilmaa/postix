@@ -35,7 +35,7 @@ def test_shows_troubleshooter_notification(troubleshooter_client):
         message='Requesting resupply',
     )
     response = troubleshooter_client.get('/troubleshooter/')
-    assert 'class="nav-link subnav has-request' in response.content.decode()
+    assert 'class="nav-link nav-link-second-level has-request' in response.content.decode()
 
 
 @pytest.mark.django_db
