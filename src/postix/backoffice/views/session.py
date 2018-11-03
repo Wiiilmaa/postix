@@ -129,7 +129,7 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
         ctx = super().get_context_data(**kwargs)
         session = self.get_object()
         ctx['url'] = self.request.build_absolute_uri('/')
-        ctx['total'] = session.cash_after - session.cash_before
+        ctx['total'] = (session.cash_after or 0) - (session.cash_before or 0)
         return ctx
 
 
