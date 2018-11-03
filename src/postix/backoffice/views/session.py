@@ -257,24 +257,32 @@ class EndSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
         form, formset = self.get_form_and_formset()
         return super().get(request, pk)
 
+    @transaction.atomic
     def post(self, request, pk):
         session = self.get_object()
         form, formset = self.get_form_and_formset()
-        item_data = session.get_current_items()
-        cash_total = session.get_cash_transaction_total()
 
         if form.is_valid() and (not formset or formset.is_valid()):
             if session.end:
                 # This is not optimal, but our data model does not have a way of tracking
                 # cash movement over time.
-                session.cash_after = form.cleaned_data.get('cash_before')
-                session.backoffice_user_after = form.cleaned_data.get('backoffice_user')
-                session.save(update_fields=['cash_after', 'backoffice_user_after'])
+                if session.cash_after != form.cleaned_data.get('cash_before'):
+                    session.cash_after = form.cleaned_data.get('cash_before')
+                    session.backoffice_user_after = form.cleaned_data.get('backoffice_user')
+                    session.save(update_fields=['cash_after', 'backoffice_user_after'])
+                    carrier = form.cleaned_data.get('user')
+                    movement = session.create_final_movement(carrier=carrier if isinstance(carrier, str) else None)
+                    record = movement.record
+                else:
+                    record = session.final_cash_movement.record
             else:
                 session.end = now()
                 session.backoffice_user_after = form.cleaned_data.get('backoffice_user')
                 session.cash_after = form.cleaned_data.get('cash_before')
                 session.save(update_fields=['backoffice_user_after', 'cash_after', 'end'])
+                carrier = form.cleaned_data.get('user')
+                movement = session.create_final_movement(carrier=carrier if isinstance(carrier, str) else None)
+                record = movement.record
                 messages.success(request, 'Session wurde beendet.')
 
             # It is important that we do this *after* we set session.end as the date of this movement
