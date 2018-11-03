@@ -21,3 +21,6 @@ table ul {
         background: $white;
     }
 }
+#active-sessions-table tr.coactive {
+    background: rgba($black, .075);
+}

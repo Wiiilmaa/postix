@@ -1,5 +1,9 @@
 {% extends 'backoffice/base.html' %}
 {% load i18n %}
+{% load static %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static "backoffice/js/record_list.js" %}"></script>
+{% endblock %}
 
 {% block content %}
 <div class="action-row">
@@ -10,7 +14,7 @@
         {% trans "New session" %}
     </a>
 </div>
-<table class="table" id="active-sessions-table">
+<table class="table table-hover" id="active-sessions-table">
     <thead>
         <th>{% trans "Date" %}</th>
         <th>{% trans "Entity" %}</th>
@@ -24,7 +28,7 @@
     <tbody>
     {% language "de" %}
         {% for record in records %}
-            <tr>
+        <tr{% if record.cash_movement %} data-session="{{ record.cash_movement.session.pk }}"{% endif %}>
                 <td>
                     {% if record.datetime %}
                         {{ record.datetime|date:"Y-m-d H:i:s" }}
@@ -33,7 +37,12 @@
                     {% endif %}
                 </td>
                 <td>
+                    {% if record.cash_movement %}<a href="{% url "backoffice:session-detail" pk=record.cash_movement.session.pk %}">
+                        {{ record.named_entity }}
+                    </a>
+                    {% else %}
                     {{ record.named_entity }}
+                    {% endif %}
                 </td>
                 <td>
                     {% if record.backoffice_user %}
