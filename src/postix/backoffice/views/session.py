@@ -210,15 +210,55 @@ def reverse_session_view(request: HttpRequest, pk: int) -> Union[HttpRequest, Ht
         })
 
 
-@backoffice_user_required
-def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpResponseRedirect]:
-    session = get_object_or_404(CashdeskSession, pk=pk)
-    item_data = session.get_current_items()
-    cash_total = session.get_cash_transaction_total()
+class EndSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateView):
+    template_name = 'backoffice/end_session.html'
 
-    if request.method == 'POST':
-        form, formset = get_form_and_formset(request=request, extra=0)
-        if form.is_valid() and formset.is_valid():
+    def get_object(self):
+        return get_object_or_404(CashdeskSession, pk=self.kwargs.get('pk'))
+
+    def get_form_and_formset(self):
+        session = self.get_object()
+        if self.request.method == 'POST':
+            form, formset = get_form_and_formset(request=request, extra=0)
+        else:
+            form, formset = get_form_and_formset(
+                extra=0,
+                initial_form={'cashdesk': session.cashdesk, 'user': session.user, 'backoffice_user': request.user, 'cash_before': session.cash_after},
+                initial_formset=[{'item': d['item'], 'amount': d['final_movements']} for d in item_data],
+            )
+        if not session.cashdesk.handles_items:
+            formset = None
+        else:
+            item_data = session.get_current_items()
+            for f, item_data in zip(formset, item_data):
+                f.product_label = item_data
+        return form, formset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['session'] = self.get_object()
+        form, formset = self.get_form_and_formset()
+        context['form'] = form
+        context['formset'] = formset
+        context['cash'] = {'initial': context['object'].cash_before, 'transactions': context['object'].get_cash_transaction_total()}
+        context['backoffice_users'] = User.objects.filter(is_backoffice_user=True).values_list('username', flat=True)
+        return context
+
+    def get(self, request, pk):
+        session = self.get_object()
+        if session.end:
+            msg = _('This session has ended already. Filling out this form will produce a corrected report. ')
+            messages.warning(request, msg)
+        form, formset = self.get_form_and_formset()
+        return super().get(request, pk)
+
+    def post(self, request, pk):
+        session = self.get_object()
+        form, formset = self.get_form_and_formset()
+        item_data = session.get_current_items()
+        cash_total = session.get_cash_transaction_total()
+
+        if form.is_valid() and (not formset or formset.is_valid()):
             if session.end:
                 # This is not optimal, but our data model does not have a way of tracking
                 # cash movement over time.
@@ -234,23 +274,12 @@ def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespons
 
             # It is important that we do this *after* we set session.end as the date of this movement
             # will be used in determining this as the final item takeout *after* the session.
-            if not session.end:  # End session
-                for f in formset:
-                    item = f.cleaned_data.get('item')
-                    amount = f.cleaned_data.get('amount')
-                    if item and amount and amount:
-                        ItemMovement.objects.create(
-                            item=item,
-                            session=session,
-                            amount=-amount,
-                            backoffice_user=form.cleaned_data['backoffice_user'],
-                        )
-            else:  # adjust end amounts
-                item_amounts = session.item_movements.values('item').annotate(total=Sum('amount'))
-                item_amounts = {
-                    d['item']: d
-                    for d in session.get_current_items()
-                }
+            item_amounts = session.item_movements.values('item').annotate(total=Sum('amount'))
+            item_amounts = {
+                d['item']: d
+                for d in session.get_current_items()
+            }
+            if formset:
                 for f in formset:
                     item = f.cleaned_data.get('item')
                     amount = f.cleaned_data.get('amount')
@@ -265,30 +294,8 @@ def end_session(request: HttpRequest, pk: int) -> Union[HttpRequest, HttpRespons
 
             generate_report(session)
             return redirect('backoffice:session-report', pk=pk)
-        else:
-            messages.error(request, _('Session could not be ended: Please review the data.'))
-
-    elif request.method == 'GET':
-        if session.end:
-            msg = _('This session has ended already. Filling out this form will produce a corrected report. ')
-            messages.warning(request, msg)
-
-        form, formset = get_form_and_formset(
-            extra=0,
-            initial_form={'cashdesk': session.cashdesk, 'user': session.user, 'backoffice_user': request.user, 'cash_before': session.cash_after},
-            initial_formset=[{'item': d['item'], 'amount': d['final_movements']} for d in item_data],
-        )
-
-    for f, item_data in zip(formset, item_data):
-        f.product_label = item_data
-
-    return render(request, 'backoffice/end_session.html', {
-        'session': session,
-        'form': form,
-        'formset': formset,
-        'cash': {'initial': session.cash_before, 'transactions': cash_total},
-        'backoffice_users': User.objects.filter(is_backoffice_user=True).values_list('username', flat=True),
-    })
+        messages.error(request, _('Session could not be ended: Please review the data.'))
+        return super().post(request, pk)
 
 
 @backoffice_user_required

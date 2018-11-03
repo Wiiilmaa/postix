@@ -13,7 +13,7 @@ urlpatterns = [
     url('^users/$', views.UserListView.as_view(), name='user-list'),
 
     url('^session/new/$', views.NewSessionView.as_view(), name='new-session'),
-    url('^session/(?P<pk>[0-9]+)/end/$', views.end_session, name='end-session'),
+    url('^session/(?P<pk>[0-9]+)/end/$', views.EndSessionView.as_view(), name='end-session'),
     url('^session/(?P<pk>[0-9]+)/report/$', views.session_report, name='session-report'),
     url('^session/(?P<pk>[0-9]+)/resupply/$', views.resupply_session, name='resupply-session'),
     url('^session/(?P<pk>[0-9]+)/move/$', views.move_session, name='move-session'),
@@ -35,6 +35,8 @@ urlpatterns = [
     url('^wizard/users/$', views.WizardUsersView.as_view(), name='wizard-users'),
     url('^wizard/settings/$', views.WizardSettingsView.as_view(), name='wizard-settings'),
     url('^wizard/cashdesks/$', views.WizardCashdesksView.as_view(), name='wizard-cashdesks'),
+    url('^wizard/cashdesks/new$', views.WizardCashdeskCreateView.as_view(), name='wizard-cashdesk-create'),
+    url('^wizard/cashdesks/(?P<pk>[0-9]+)/$', views.WizardCashdeskEditView.as_view(), name='wizard-cashdesk-edit'),
     url('^wizard/import/$', views.WizardPretixImportView.as_view(), name='wizard-import'),
     url('^wizard/items/$', views.WizardItemListView.as_view(), name='wizard-items-list'),
     url('^wizard/items/new$', views.WizardItemCreateView.as_view(), name='wizard-items-create'),

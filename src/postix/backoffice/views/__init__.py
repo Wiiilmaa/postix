@@ -7,7 +7,7 @@ from .record import (
 )
 from .session import (
     NewSessionView, ReportListView, SessionDetailView, SessionListView,
-    end_session, move_session, resupply_session, reverse_session_view,
+    EndSessionView, move_session, resupply_session, reverse_session_view,
     session_report,
 )
 from .user_management import ResetPasswordView, UserListView, create_user_view
@@ -21,7 +21,7 @@ from .wizard import (
 __all__ = (
     'backoffice_user_required',
     'create_user_view',
-    'end_session',
+    'EndSessionView',
     'LoginView',
     'logout_view',
     'MainView',
