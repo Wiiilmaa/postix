@@ -35,7 +35,7 @@ class CashdeskForm(forms.ModelForm):
     class Meta:
         model = Cashdesk
         fields = (
-            'name', 'ip_address', 'printer_queue_name', 'printer_handles_drawer'
+            'name', 'ip_address', 'printer_queue_name', 'printer_handles_drawer', 'handles_items'
         )
 
     def __init__(self, *args, **kwargs):
