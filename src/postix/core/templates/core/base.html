@@ -101,7 +101,7 @@
                         </a>
                     </span>
                     <div class="collapse in{% if "troubleshooter" not in url_name %} show{% endif %}" aria-expand="true" id="collapseTrouble">
-                        <a href="{% url "troubleshooter:main" %} "id="nav-sessions" class="nav-link nav-link-second-level{% if has_request %} has-request{% endif %}">
+                        <a href="{% url "troubleshooter:main" %}" id="nav-sessions" class="nav-link nav-link-second-level{% if has_request %} has-request{% endif %}">
                             {% trans "Current sessions" %}
                         </a>
                         <a class="nav-link nav-link-second-level" href="{% url "troubleshooter:transaction-list" %}">
@@ -173,6 +173,8 @@
 
         {% block area_content %}
         {% endblock %}
+    </div>
+    </div>
 
     <script type="text/javascript" src="{% static "shared/js/jquery.min.js" %}"></script>
     <script type="text/javascript" src="{% static "shared/js/bootstrap.min.js" %}"></script>
