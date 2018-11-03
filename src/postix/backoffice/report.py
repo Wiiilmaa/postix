@@ -15,7 +15,7 @@ from postix.core.utils.pdf import (
 )
 
 
-def get_qr_image(session: CashdeskSession) -> TemporaryFile:
+def get_qr_image(record) -> TemporaryFile:
     # TODO: check qr code
     qr = qrcode.QRCode(
         version=1,
@@ -24,22 +24,23 @@ def get_qr_image(session: CashdeskSession) -> TemporaryFile:
         border=4,
     )
     tz = timezone.get_current_timezone()
-    if isinstance(session, CashdeskSession):
+    if record.cash_movement and record.closes_session and record.cash_movement.session.cashdesk.handles_items:
+        session = record.cash_movement.session
         data = '{end}\tEinnahme\t{total}\tKassensession\t#{pk}\t{supervisor}\t{user}'.format(
             end=session.end.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
             total='{0:,.2f}'.format(session.get_cash_transaction_total()).translate(str.maketrans(',.', '.,')),
             pk=session.pk,
             supervisor=session.backoffice_user_after.get_full_name(),
-            user=session.user.get_full_name(),
+            user=session.user.get_full_name() if session.user else record.carrier or '',
         )
     else:
         data = '{end}\t{direction}\t{total}\t{entity}\t{supervisor}\t{user}'.format(
-            end=session.datetime.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
-            direction='Einnahme' if session.type == 'inflow' else 'Ausgabe',
-            total='{0:,.2f}'.format(session.amount).translate(str.maketrans(',.', '.,')),
-            entity='{e.name}\t{e.detail}'.format(e=session.entity),
-            supervisor=session.backoffice_user.get_full_name(),
-            user=session.carrier or '',
+            end=record.datetime.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
+            direction='Einnahme' if record.type == 'inflow' else 'Ausgabe',
+            total='{0:,.2f}'.format(record.amount).translate(str.maketrans(',.', '.,')),
+            entity=record.tabbed_entity,
+            supervisor=record.backoffice_user.get_full_name(),
+            user=record.named_carrier,
         )
     qr.add_data(data)
     qr.make()
@@ -154,30 +155,62 @@ def generate_item_report(session: CashdeskSession, doc) -> str:
     )
 
     # Signatures
-    col_width = (doc.width - 35) / 2
-    signatures = Table(
-        data=[['Kassierer/in: {}'.format(session.user.get_full_name()), '',
-               'Ausgezählt durch {}'.format(session.backoffice_user_after.get_full_name())]],
-        colWidths=[col_width, 35, col_width],
-        style=TableStyle([
-            ('FONTSIZE', (0, 0), (2, 0), FONTSIZE),
-            ('LINEABOVE', (0, 0), (0, 0), 1.2, colors.black),
-            ('LINEABOVE', (2, 0), (2, 0), 1.2, colors.black),
-            ('VALIGN', (0, 0), (2, 0), 'TOP'),
-        ]),
-    )
+    signatures = get_signature_block([
+        'Kassierer/in: {}'.format(session.user.get_full_name()),
+        'Ausgezählt durch {}'.format(session.backoffice_user_after.get_full_name()),
+    ], doc=doc)
 
-    story = [
+    return [
         header, Spacer(1, 15 * mm),
         sales_heading, sales, Spacer(1, 10 * mm),
         items_heading, items, Spacer(1, 30 * mm),
         signatures,
     ]
-    doc.build(story)
 
-    _buffer.seek(0)
-    stored_name = default_storage.save(session.get_new_report_path(), ContentFile(_buffer.read()))
-    return stored_name
+
+def generate_session_closing(record, doc):
+    session = record.cash_movement.session
+    header = get_session_header(session, doc=doc, title='Umsatzermittlung')
+    data = [
+        ['Datum', 'Grund', 'Betrag'],
+        [session.start.strftime('%Y-%m-%d, %H:%M'), 'Anfangsbestand', CURRENCY.format(0)],
+    ]
+    running_total = 0
+    for movement in session.cash_movements.all():
+        running_total += movement.cash
+        data.append([
+            movement.timestamp.strftime('%Y-%m-%d, %H:%M'),
+            'Wechselgeld' if movement.cash > 0 else 'Abschöpfung',
+            CURRENCY.format(movement.cash)
+        ])
+    data.append(
+        [session.end.strftime('%Y-%m-%d, %H:%M'), 'Endbestand', CURRENCY.format(0)]
+    )
+    data.append([
+        '', 'Umsatz', CURRENCY.format(-running_total)
+    ])
+    last_row = len(data) - 1
+    transactions = Table(
+        data=data,
+        colWidths=[doc.width / 3] * 3,
+        style=TableStyle([
+            ('FONTSIZE', (0, 0), (2, last_row), FONTSIZE),
+            ('ALIGN', (0, 0), (0, last_row), 'LEFT'),
+            ('ALIGN', (1, 0), (2, last_row), 'RIGHT'),
+            ('LINEABOVE', (0, 1), (2, 1), 1.0, colors.black),
+            ('LINEABOVE', (1, last_row), (2, last_row), 1.2, colors.black),
+        ]),
+    )
+    return [
+        header,
+        Spacer(1, 15 * mm),
+        transactions,
+        Spacer(1, 30 * mm),
+        get_signature_block([
+            'Abgeschlossen durch: {}'.format(record.backoffice_user.get_full_name()),
+            '',
+        ], doc=doc)
+    ]
 
 
 def generate_record(record: Record) -> str:
