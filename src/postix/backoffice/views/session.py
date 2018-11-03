@@ -141,31 +141,42 @@ def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpR
         'cash_before': 0,
     }
     form, formset = get_form_and_formset(initial_form=initial_form)
+    if not session.cashdesk.handles_items:
+        formset = None
 
     if request.method == 'POST':
         form, formset = get_form_and_formset(request=request)
+        if not session.cashdesk.handles_items:
+            formset = None
 
-        if formset.is_valid() and form.is_valid():
+        if (not formset or formset.is_valid()) and form.is_valid():
+            record = None
             if form.cleaned_data.get('cash_before'):
-                CashMovement.objects.create(
+                movement = CashMovement.objects.create(
                     cash=form.cleaned_data.get('cash_before'),
                     session=session,
                     backoffice_user=form.cleaned_data['backoffice_user'],
                 )
-            for f in formset:
-                item = f.cleaned_data.get('item')
-                amount = f.cleaned_data.get('amount')
-                if item and amount:
-                    ItemMovement.objects.create(
-                        item=item,
-                        session=session,
-                        amount=amount,
-                        backoffice_user=form.cleaned_data['backoffice_user'],
-                    )
+                record = movement.create_record(
+                    carrier=form.cleaned_data['user'] if not form.cleaned_data['cashdesk'].ip_address else None,
+                )
+            if formset:
+                for f in formset:
+                    item = f.cleaned_data.get('item')
+                    amount = f.cleaned_data.get('amount')
+                    if item and amount:
+                        ItemMovement.objects.create(
+                            item=item,
+                            session=session,
+                            amount=amount,
+                            backoffice_user=form.cleaned_data['backoffice_user'],
+                        )
             messages.success(request, _('Products have been added to the cashdesk.'))
+            if record:
+                return redirect('backoffice:record-print', pk=record.pk)
             return redirect('backoffice:session-detail', pk=pk)
 
-        elif formset.errors:
+        else:
             messages.error(request, _('Error: Please review the data.'))
 
     form.fields['user'].widget.attrs['readonly'] = True
