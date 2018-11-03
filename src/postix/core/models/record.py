@@ -83,10 +83,23 @@ class Record(models.Model):
             + " EUR"
         )
 
+    @property
     def named_entity(self):
         if self.cash_movement:
-            return str(self.cash_movement.cashdesk_session.cashdesk)
+            return str(self.cash_movement.session.cashdesk)
         return str(self.entity)
+
+    @property
+    def tabbed_entity(self):
+        if self.cash_movement:
+            return self.cash_movement.session.tabbed_entity
+        return '{e.name}\t{e.detail}'.format(e=self.entity)
+
+    @property
+    def named_carrier(self):
+        if self.cash_movement and self.cash_movement.session.user:
+            return str(self.cash_movement.session.user.get_full_name())
+        return self.carrier or ''
 
     def save(self, *args, **kwargs):
         if not self.datetime:
