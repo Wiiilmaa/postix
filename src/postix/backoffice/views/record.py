@@ -11,7 +11,7 @@ from postix.backoffice.forms.record import (
     RecordCreateForm, RecordEntityForm, RecordUpdateForm,
 )
 from postix.backoffice.report import generate_record
-from postix.core.models import CashdeskSession, Record, RecordEntity
+from postix.core.models import Record, RecordEntity
 
 from .utils import (
     BackofficeUserRequiredMixin, SuperuserRequiredMixin,
@@ -28,25 +28,14 @@ class RecordListView(BackofficeUserRequiredMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
         records = Record.objects.all()
-        sessions = CashdeskSession.objects.filter(end__isnull=False)
         running_total = 0
-        all_objects = sorted(
-            list(records) + list(sessions),
-            key=lambda element: getattr(
-                element, 'datetime', (getattr(element, 'end', None))
-            ),
-        )
-        for obj in all_objects:
-            if isinstance(obj, CashdeskSession):
-                amount = obj.get_cash_transaction_total()
-                obj.amount = amount
-                running_total += obj.amount
-            elif obj.type == 'inflow':
+        for obj in records:
+            if obj.type == 'inflow':
                 running_total += obj.amount
             else:
                 running_total -= obj.amount
             obj.running_total = running_total
-        ctx['records'] = all_objects
+        ctx['records'] = records[::-1]
         return ctx
 
 
