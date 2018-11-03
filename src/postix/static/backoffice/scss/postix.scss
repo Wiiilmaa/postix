@@ -24,3 +24,6 @@ table ul {
 #active-sessions-table tr.coactive {
     background: rgba($black, .075);
 }
+#end-sessions-table {
+    label {display: none}
+}

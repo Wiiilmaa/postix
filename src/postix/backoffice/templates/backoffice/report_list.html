@@ -24,9 +24,6 @@
                     <a href="{% url "backoffice:end-session" pk=session.pk %}" title="{% trans "Edit" %}">
                         <span class="fa fa-2x fa-fw fa-pencil" aria-hidden="true"></span>
                     </a>
-                    <a href="{% url "backoffice:session-report" pk=session.pk %}" title="{% trans "Report" %}">
-                        <span class="fa fa-2x fa-fw fa-print" aria-hidden="true"></span>
-                    </a>
                 </th>
                 <th> {{ session.cashdesk }} </th>
                 <th> {{ session.user }} </th>

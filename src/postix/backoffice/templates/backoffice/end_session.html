@@ -20,67 +20,73 @@
 
 
 {% block content %}
-<form method="post">
+<form method="post" action="">
     {% csrf_token %}
 
     <h4> {{ session.cashdesk }}, {% trans "Session ID" %} {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}</h4>
     {% language "de" %}
-    <h4> <b>{% trans "Start:" %}:</b> {{ session.start }} </h4>
+    <h4> <b>{% trans "Start:" %}</b> {{ session.start }} </h4>
     {% endlanguage %}
     <h4>
         {{ form.backoffice_user|as_crispy_field }}
     </h4>
 
-    {{ formset.management_form|crispy  }}
+    {% if formset %}
+        {{ formset.management_form|crispy  }}
+    {% endif %}
     <table class="table" id="end-sessions-table">
-	<thead>
+        <thead><tr>
         <th>{% trans "Product" %}</th>
         <th>{% trans "Initial" %}</th>
         <th>{% trans "Sales" %}</th>
         <th class="end-column">{% trans "Final" %}</th>
         <th>{% trans "Result" %}</th>
         <th>{% trans "Discrepancy" %}</th>
-	</thead>
+        </tr></thead>
         <tbody>
             <tr id="cash">
                 <td>
                     {% trans "Cash" %}
-                    <div class="hide">{{ form.user }} {{ form.cashdesk }}</div>
+                    <div class="d-none">{{ form.user }} {{ form.cashdesk }}</div>
                 </td>
                 <td class="before-value">{{ cash.initial }}</td>
                 <td class="transaction-value">{{ cash.transactions }}</td>
                 <td class="end-column">{{ session.cash_after }}</td>
-                <td>{{ form.cash_before|as_crispy_field }}</td>
+                <td>{{ form.cash_before|as_crispy_field }}
+                </td>
                 <td class="after-value danger"></td>
             </tr>
-            {% for form in formset %}
-            {% with counter=forloop.counter0 product=products.counter %}
-                <tr>
-                    <td>
-                        {{ form.product_label.item }}
-                        <div class="hide">{{ form.item }}</div>
-                    </td>
-                    <td class="before-value"> {{ form.product_label.movements }} </td>
-                    <td class="transaction-value"> {{ form.product_label.transactions }} </td>
-                    <td class="end-column"> {{ form.product_label.final_movements }} </td>
-                    {{ form.amount|as_crispy_field }}
-                    <td class="after-value danger"></td>
-                </tr>
-            {% endwith %}
-            {% empty %}
-                <tr>
-                    <th colspan="42" class="empty-row active">
-                        {% trans "This session did not contain any products." %}
-                    </th>
-                <tr>
-            {% endfor %}
+            {% if formset %}
+                {% for form in formset %}
+                {% with counter=forloop.counter0 product=products.counter %}
+                    <tr>
+                        <td>
+                            {{ form.product_label.item }}
+                            <div class="hide">{{ form.item }}</div>
+                        </td>
+                        <td class="before-value"> {{ form.product_label.movements }} </td>
+                        <td class="transaction-value"> {{ form.product_label.transactions }} </td>
+                        <td class="end-column"> {{ form.product_label.final_movements }} </td>
+                        {{ form.amount|as_crispy_field }}
+                        <td class="after-value danger"></td>
+                    </tr>
+                {% endwith %}
+                {% empty %}
+                    <tr>
+                        <th colspan="42" class="empty-row active">
+                            {% trans "This session did not contain any products." %}
+                        </th>
+                    <tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
     </table>
     <div class="form-actions">
         <input type="submit" name="submit" value="{% trans "Create report" %}" class="btn btn-primary btn-block" id="submit-save">
     </div>
-<form>
+</form>
 
+    {% if session.get_product_sales %}
     <h3 class="show-hide-heading">{% trans "Details" %}</h3>
 
     <ul>
@@ -95,6 +101,7 @@
         </li>
     {% endfor %}
     </ul>
+    {% endif %}
 
 {% endblock %}
 {% block scripts %}

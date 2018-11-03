@@ -80,9 +80,9 @@
             <tbody>
             <tr>
                 <td> {% trans "Cash" %} </td>
-                <td> {{ session.cash_before }} </td>
-                <td> {{ session.get_cash_transaction_total }} </td>
-                <td> {% if session.end %}{{ session.cash_after }}{% else %}{{ session.cash_remaining }}{% endif %} </td>
+                <td> {{ session.cash_before }} € </td>
+                <td> {% if session.cashdesk.ip_address %}{{ session.get_cash_transaction_total }} €{% elif session.end %}{{ total }}€{% endif %}</td>
+                <td> {% if session.end %}{{ session.cash_after }} € {% else %}{{ session.cash_remaining }}{% endif %}</td>
             </tr>
             {% for item in session.get_current_items %}
                 <tr>
@@ -95,6 +95,7 @@
             </tbody>
         </table>
 
+        {% if session.item_movements.exists %}
         <h3> {% trans "Item movement log" %} </h3>
         <table class="table" id="session-detail-table">
             <thead>
@@ -114,20 +115,21 @@
             {% endfor %}
             </tbody>
         </table>
+        {% endif %}
 
         <h3> {% trans "Cash movement log" %} </h3>
         <table class="table" id="session-detail-table">
             <thead>
             <th>{% trans "Time" %}</th>
-            <th>{% trans "Amount added" %}</th>
             <th>{% trans "User" %}</th>
+            <th class="text-right">{% trans "Amount added" %}</th>
             </thead>
             <tbody>
             {% for move in session.cash_movements.all %}
                 <tr>
                     <td> {{ move.timestamp|date:"SHORT_DATETIME_FORMAT" }} </td>
-                    <td> {{ move.cash }} </td>
                     <td> {{ move.backoffice_user }} </td>
+                    <td class="text-right"> {{ move.cash }} € </td>
                 </tr>
             {% endfor %}
             </tbody>
