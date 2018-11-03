@@ -68,6 +68,7 @@ class Record(models.Model):
         default=False,
         verbose_name=_('Report closes session and contains additional pages'),
     )
+    is_locked = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('datetime',)
