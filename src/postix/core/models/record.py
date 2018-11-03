@@ -34,6 +34,13 @@ class Record(models.Model):
         verbose_name=_('Date'),
         help_text=_('Leave empty to use the current date and time.'),
     )
+    cash_movement = models.OneToOneField(
+        to='core.CashMovement',
+        on_delete=models.SET_NULL,
+        related_name='record',
+        null=True,
+        blank=True,
+    )
     entity = models.ForeignKey(
         RecordEntity,
         on_delete=models.PROTECT,
@@ -57,6 +64,10 @@ class Record(models.Model):
     is_balancing = models.BooleanField(
         default=False, verbose_name=_('Is a balancing record')
     )
+    closes_session = models.BooleanField(
+        default=False,
+        verbose_name=_('Report closes session and contains additional pages'),
+    )
 
     class Meta:
         ordering = ('datetime',)
@@ -65,11 +76,16 @@ class Record(models.Model):
         return (
             self.datetime.strftime('Day %d %X')
             + " "
-            + str(self.entity)
+            + self.named_entity
             + " "
             + str(self.amount)
             + " EUR"
         )
+
+    def named_entity(self):
+        if self.cash_movement:
+            return str(self.cash_movement.cashdesk_session.cashdesk)
+        return str(self.entity)
 
     def save(self, *args, **kwargs):
         if not self.datetime:
@@ -81,9 +97,7 @@ class Record(models.Model):
         base = default_storage.path('records')
         search = os.path.join(
             base,
-            '{}_record_{}-*.pdf'.format(
-                EventSettings.get_solo().short_name, self.pk
-            ),
+            '{}_record_{}-*.pdf'.format(EventSettings.get_solo().short_name, self.pk),
         )
         all_records = sorted(glob.glob(search))
 
@@ -95,7 +109,7 @@ class Record(models.Model):
             'records',
             '{}_record_{}-{}.pdf'.format(
                 EventSettings.objects.get().short_name,
-                self.pk,
                 now().strftime('%Y%m%d-%H%M'),
+                self.pk,
             ),
         )

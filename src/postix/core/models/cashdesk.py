@@ -182,6 +182,11 @@ class CashdeskSession(models.Model):
         ]
 
     @property
+    def records(self):
+        from postix.core.models.record import Record
+        return Record.objects.filter(cash_movement__cashdesk_session=self)
+
+    @property
     def cash_remaining(self) -> Decimal:
         return self.cash_before + self.get_cash_transaction_total()
 
