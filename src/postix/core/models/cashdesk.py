@@ -115,7 +115,7 @@ class ActiveCashdeskSessionManager(models.Manager):
 
 class CashdeskSession(models.Model):
     cashdesk = models.ForeignKey('Cashdesk', related_name='sessions', on_delete=models.PROTECT)
-    user = models.ForeignKey('User', on_delete=models.PROTECT)
+    user = models.ForeignKey('User', on_delete=models.PROTECT, null=True, blank=True)
     start = models.DateTimeField(default=now,
                                  verbose_name='Start of session',
                                  help_text='Default: time of creation.')
