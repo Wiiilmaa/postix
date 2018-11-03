@@ -109,7 +109,7 @@ class Record(models.Model):
             'records',
             '{}_record_{}-{}.pdf'.format(
                 EventSettings.objects.get().short_name,
-                now().strftime('%Y%m%d-%H%M'),
                 self.pk,
+                now().strftime('%Y%m%d-%H%M'),
             ),
         )
