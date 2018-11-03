@@ -50,41 +50,22 @@
                     <span class="has-children">
                         <a href="{% url "backoffice:session-list" %}" class="nav-link nav-link-inner">
                             <span class="fa fa-fw fa-list"></span>
-                            {% trans "Sessions" %}
+                            {% trans "Backoffice" %}
                         </a>
                         <a class="arrow nav-link" data-toggle="collapse" href="#collapseSessions" aria-controls="collapseSessions">
                             <i class="fa fa-angle-down"></i>
                         </a>
                     </span>
                     <div class="collapse in{% if "session" not in url_name %} show{% endif %}" aria-expand="true" id="collapseSessions">
-
-                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:new-session" %}">
-                            {% trans "New session" %}
-                        </a>
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:session-list" %}">
-                            {% trans "List of sessions" %}
-                        </a>
-                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:report-list" %}">
-                            {% trans "Reports" %}
-                        </a>
-                    </div>
-                </li>
-                <li class="nav-fold">
-                    <span class="has-children">
-                        <a href="{% url "backoffice:record-list" %}" class="nav-link">
-                            <span class="fa fa-fw fa-book"></span>
-                            {% trans "List of records" %}
-                        </a>
-                        <a class="arrow nav-link" data-toggle="collapse" href="#collapseRecords" aria-controls="collapseRecords">
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                    </span>
-                    <div class="collapse in{% if "record" not in url_name %} show{% endif %}" aria-expand="true" id="collapseRecords">
-                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:new-record" %}">
-                            {% trans "New record" %}
+                            {% trans "Dashboard" %}
                         </a>
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:record-list" %}">
                             {% trans "List of records" %}
+                        </a>
+
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:report-list" %}">
+                            {% trans "Past sessions" %}
                         </a>
                     </div>
                 </li>
@@ -183,7 +164,7 @@
         </aside>
         {% endif %}
 
-    <div class="container" id="page-content">
+    <div class="postix-container" id="page-content">
 
         {% if messages %}
             {% for message in messages %}

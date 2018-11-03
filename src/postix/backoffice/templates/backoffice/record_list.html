@@ -50,18 +50,18 @@
                 </td>
                 <td>
                     {% if record.datetime and record.type == 'inflow' %}
-                        {{ record.amount }}
+                        {{ record.amount|floatformat:2 }}
                     {% elif record.end and record.amount >= 0 %}
-                        {{ record.amount }}
+                        {{ record.amount|floatformat:2 }}
                     {% endif %}
                 </td>
                 <td>
                     {% if record.type == 'outflow' or record.amount < 0 %}
-                        {{ record.amount }}
+                        {{ record.amount|floatformat:2 }}
                     {% endif %}
                 </td>
                 <td>
-                    {{ record.running_total }}
+                    {{ record.running_total|floatformat:2 }}
                 </td>
                 <td>
                     {% if record.datetime %}

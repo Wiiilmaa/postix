@@ -11,3 +11,13 @@ table ul {
     margin-left: 15px;
     padding: 0;
 }
+.action-row {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 24px 0;
+    a {
+        margin-left: 16px;
+        background: $white;
+    }
+}
