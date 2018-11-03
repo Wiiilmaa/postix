@@ -35,19 +35,23 @@ class SessionBaseForm(forms.Form):
     )
 
     def __init__(self, *args, must_be_positive=False, **kwargs):
+        initial = kwargs.get('initial', dict())
         super().__init__(*args, **kwargs)
         self.must_be_positive = must_be_positive
         if must_be_positive:
             self.fields['cash_before'].widget.attrs['min'] = '0'
+        self.fields['user'].required = (initial.get('cashdesk') and initial['cashdesk'].ip_address)
         self.helper = FormHelper()
         self.helper.form_tag = False
 
     def clean_user(self) -> User:
         value = self.cleaned_data['user']
-        try:
-            return User.objects.get(username=value)
-        except User.DoesNotExist:
-            raise forms.ValidationError(_('Angel does not exist.'))
+        if self.cleaned_data['cashdesk'].ip_address:
+            try:
+                return User.objects.get(username=value)
+            except User.DoesNotExist:
+                raise forms.ValidationError(_('Angel does not exist.'))
+        return value
 
     def clean_backoffice_user(self) -> User:
         value = self.cleaned_data['backoffice_user']
