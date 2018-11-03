@@ -162,7 +162,7 @@ class CashdeskPrinter:
         receipt += '\r\n\r\n\r\n'
         return receipt
 
-    def print_receipt(self, transaction: Transaction, do_open_drawer: bool=True) -> None:
+    def print_receipt(self, transaction: Transaction, do_open_drawer: bool = True) -> None:
         if do_open_drawer:
             self.open_drawer()
         receipt = self._build_receipt(transaction)
@@ -299,7 +299,7 @@ class DummyPrinter:
     def cut_tape(self) -> None:
         self.logger.info('[DummyPrinter] Cut tape')
 
-    def print_receipt(self, transaction: Transaction, do_open_drawer: bool=True) -> Union[str, None]:
+    def print_receipt(self, transaction: Transaction, do_open_drawer: bool = True) -> Union[str, None]:
         receipt = CashdeskPrinter('', self.cashdesk)._build_receipt(transaction)
         if receipt is not None:
             self.logger.info('[DummyPrinter] Printed receipt:\n{}'.format(receipt))
@@ -314,5 +314,5 @@ class DummyPrinter:
     def print_image(self, fileish):
         self.logger.info('[DummyPrinter] Printed image')
 
-    def print_text(self, text: str, centered: bool=True, cut_tape: bool=True) -> None:
+    def print_text(self, text: str, centered: bool = True, cut_tape: bool = True) -> None:
         self.send(text)

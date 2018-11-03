@@ -19,7 +19,7 @@ class Transaction(models.Model):
                                 on_delete=models.PROTECT)
     receipt_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
 
-    def print_receipt(self, do_open_drawer: bool=True) -> None:
+    def print_receipt(self, do_open_drawer: bool = True) -> None:
         self.session.cashdesk.printer.print_receipt(self, do_open_drawer)
 
     @property
@@ -42,7 +42,7 @@ class Transaction(models.Model):
     def has_invoice(self) -> bool:
         return bool(self.get_invoice_path())
 
-    def get_invoice_path(self, allow_nonexistent: bool=False) -> Union[str, None]:
+    def get_invoice_path(self, allow_nonexistent: bool = False) -> Union[str, None]:
         if self.receipt_id:
             base = default_storage.path('invoices')
             path = os.path.join(base, 'invoice_{:04d}.pdf'.format(self.receipt_id))
@@ -50,7 +50,7 @@ class Transaction(models.Model):
                 return path
         return ''
 
-    def set_receipt_id(self, retry: int=0) -> None:
+    def set_receipt_id(self, retry: int = 0) -> None:
         try:
             self.receipt_id = 1 + (Transaction.objects.aggregate(m=Max('receipt_id'))['m'] or 0)
             self.save(update_fields=['receipt_id'])

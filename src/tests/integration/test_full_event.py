@@ -166,10 +166,10 @@ class TestFullEvent:
         assert DUMMY_PRINTER_COUNT == old_count
 
         total_cash = round_decimal(
-            ((d1_sales - d1_reversals) * self.prod_d1.price) +
-            ((d2_sales - d2_reversals) * self.prod_d2.price) +
-            ((d_transport_sales - d_transport_reversals) * self.prod_transport.price) +
-            ((full_sales - full_reversals) * self.prod_full.price)
+            ((d1_sales - d1_reversals) * self.prod_d1.price)
+            + ((d2_sales - d2_reversals) * self.prod_d2.price)
+            + ((d_transport_sales - d_transport_reversals) * self.prod_transport.price)
+            + ((full_sales - full_reversals) * self.prod_full.price)
         )
 
         client.login(username=self.backoffice_user.username, password='123')

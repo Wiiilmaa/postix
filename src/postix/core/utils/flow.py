@@ -14,7 +14,7 @@ from .checks import is_redeemed
 
 class FlowError(Exception):
     def __init__(
-        self, msg: str, type: str="error", missing_field: str=None, bypass_price: Decimal=None
+        self, msg: str, type: str = "error", missing_field: str = None, bypass_price: Decimal = None
     ) -> None:
         self.message = msg
         self.type = type

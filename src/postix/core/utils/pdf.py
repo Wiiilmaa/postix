@@ -26,7 +26,7 @@ def scale_image(fileish, width: int) -> Image:
     return Image(fileish, width=width, height=width * aspect)
 
 
-def get_default_document(_buffer, footer: str=None) -> BaseDocTemplate:
+def get_default_document(_buffer, footer: str = None) -> BaseDocTemplate:
     def on_page(canvas, doc, footer=footer):
         canvas.saveState()
         if footer:

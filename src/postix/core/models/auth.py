@@ -3,13 +3,13 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username: str, password: str=None, **kwargs):
+    def create_user(self, username: str, password: str = None, **kwargs):
         user = self.model(username=username, **kwargs)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, username: str, password: str=None, **kwargs):
+    def create_superuser(self, username: str, password: str = None, **kwargs):
         if password is None:  # noqa
             raise Exception("You must provide a password")
         user = self.model(username=username, **kwargs)

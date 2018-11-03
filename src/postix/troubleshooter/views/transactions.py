@@ -91,7 +91,7 @@ def transaction_reprint(request: HttpRequest, pk: int) -> HttpResponseRedirect:
 
 @troubleshooter_user_required
 def transaction_invoice(request, pk) -> Union[HttpResponse, HttpResponseRedirect]:
-    def return_invoice(path: str, pk: int=pk) -> HttpResponse:
+    def return_invoice(path: str, pk: int = pk) -> HttpResponse:
         response = HttpResponse(content=default_storage.open(path, 'rb'))
         response['Content-Type'] = 'application/pdf'
         response['Content-Disposition'] = 'inline; filename=invoice-{}.pdf'.format(pk)

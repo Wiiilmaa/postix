@@ -19,7 +19,7 @@ class WizardSettingsView(SuperuserRequiredMixin, FormView):
         form = self.get_form()
         if form.is_valid():
             form.save()
-            messages.success(request, _('The settings have been updated \o/'))
+            messages.success(request, _('The settings have been updated.'))
             return self.form_valid(form)
 
     def get_initial(self):
@@ -43,7 +43,7 @@ class WizardCashdesksView(SuperuserRequiredMixin, FormView):
         form = self.get_form()
         if form.is_valid():
             form.save()
-            messages.success(request, _('The cashdesk has been created \o/'))
+            messages.success(request, _('The cashdesk has been created.'))
             return self.form_valid(form)
 
     def get_success_url(self):
@@ -115,7 +115,7 @@ class WizardItemCreateView(SuperuserRequiredMixin, FormView):
         form = self.get_form()
         if form.is_valid():
             form.save()
-            messages.success(request, _('The item has been saved \o/'))
+            messages.success(request, _('The item has been saved.'))
             return self.form_valid(form)
 
     def get_success_url(self):
@@ -129,7 +129,7 @@ class WizardItemEditView(SuperuserRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         form.save()
-        messages.success(self.request, _('The item has been updated \o/'))
+        messages.success(self.request, _('The item has been updated.'))
         return super().form_valid(form)
 
     def get_success_url(self):
