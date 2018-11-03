@@ -4,7 +4,6 @@ from typing import Union
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.files.storage import default_storage
 from django.db import transaction
 from django.db.models import QuerySet, Sum
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
@@ -296,20 +295,6 @@ class EndSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
             return redirect('backoffice:session-report', pk=pk)
         messages.error(request, _('Session could not be ended: Please review the data.'))
         return super().post(request, pk)
-
-
-@backoffice_user_required
-def session_report(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpResponseRedirect]:
-    session = get_object_or_404(CashdeskSession, pk=pk)
-    report_path = session.get_report_path()
-
-    if not report_path:
-        report_path = generate_report(session)
-
-    response = HttpResponse(content=default_storage.open(report_path, 'rb'))
-    response['Content-Type'] = 'application/pdf'
-    response['Content-Disposition'] = 'inline; filename=sessionreport-{}.pdf'.format(session.pk)
-    return response
 
 
 @backoffice_user_required

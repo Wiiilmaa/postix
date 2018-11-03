@@ -6,9 +6,8 @@ from .record import (
     RecordListView, record_print,
 )
 from .session import (
-    NewSessionView, ReportListView, SessionDetailView, SessionListView,
-    EndSessionView, move_session, resupply_session, reverse_session_view,
-    session_report,
+    EndSessionView, NewSessionView, ReportListView, SessionDetailView,
+    SessionListView, move_session, resupply_session, reverse_session_view,
 )
 from .user_management import ResetPasswordView, UserListView, create_user_view
 from .utils import backoffice_user_required
@@ -39,7 +38,6 @@ __all__ = (
     'record_print',
     'ReportListView',
     'ResetPasswordView',
-    'session_report',
     'switch_user',
     'SessionDetailView',
     'SessionListView',

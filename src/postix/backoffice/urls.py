@@ -14,7 +14,6 @@ urlpatterns = [
 
     url('^session/new/$', views.NewSessionView.as_view(), name='new-session'),
     url('^session/(?P<pk>[0-9]+)/end/$', views.EndSessionView.as_view(), name='end-session'),
-    url('^session/(?P<pk>[0-9]+)/report/$', views.session_report, name='session-report'),
     url('^session/(?P<pk>[0-9]+)/resupply/$', views.resupply_session, name='resupply-session'),
     url('^session/(?P<pk>[0-9]+)/move/$', views.move_session, name='move-session'),
     url('^session/(?P<pk>[0-9]+)/reverse/$', views.reverse_session_view, name='reverse-session'),
