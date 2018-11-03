@@ -190,13 +190,19 @@ tbody th {
 #end-sessions-table .control-label {
     display: none;
 }
-.pseudo-column {
-    width: 20%;
-    display: inline-block;
+.pseudo-row {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+  .pseudo-column {
+    flex-grow: 1;
+  }
 }
 .pseudo-column button {
-    width: 100%;
+    width: 90%;
     margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
 }
 #qrcode {
     float: right;

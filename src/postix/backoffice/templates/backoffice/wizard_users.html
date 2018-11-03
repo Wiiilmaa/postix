@@ -9,40 +9,40 @@
 <div class="user-list">
     <div class="table table-striped user-entry">
         {% for user in users %}
-            <div class="pseudo-row">
-                <form class="form form-inline" method="post">
+            <form class="form form-inline" method="post">
+                <div class="pseudo-row">
                     {% csrf_token %}
                     <input name="user" type="hidden" value="{{ user.id }}">
                     <span class="pseudo-column">{{ user.username }}</span>
                     {% if user.is_troubleshooter %}
-                        <span class="pseudo-column"><button class="btn btn-danger" name="target" value="troubleshooter-n">
+                        <span class="pseudo-column"><button class="btn btn-outline-danger" name="target" value="troubleshooter-n">
                             {% trans "Remove troubleshooter" %}
                         </button></span>
                     {% else %}
-                        <span class="pseudo-column"><button class="btn btn-success" name="target" value="troubleshooter-y">
+                        <span class="pseudo-column"><button class="btn btn-outline-success" name="target" value="troubleshooter-y">
                             {% trans "Make troubleshooter" %}
                         </button></span>
                     {% endif%}
                     {% if user.is_backoffice_user %}
-                        <span class="pseudo-column"><button class="btn btn-danger" name="target" value="backoffice-n">
+                        <span class="pseudo-column"><button class="btn btn-outline-danger" name="target" value="backoffice-n">
                             {% trans "Remove backoffice user" %}
                         </button></span>
                     {% else %}
-                        <span class="pseudo-column"><button class="btn btn-success" name="target" value="backoffice-y">
+                        <span class="pseudo-column"><button class="btn btn-outline-success" name="target" value="backoffice-y">
                             {% trans "Make backoffice user" %}
                         </button></span>
                     {% endif%}
                     {% if user.is_superuser %}
-                        <span class="pseudo-column" class="col"><button class="btn btn-danger" name="target" value="superuser-n">
+                        <span class="pseudo-column" class="col"><button class="btn btn-outline-danger" name="target" value="superuser-n">
                             {% trans "Remove superuser" %}
                             </button></span>
                     {% else %}
-                        <span class="pseudo-column"><button class="btn btn-success" name="target" value="superuser-y">
+                        <span class="pseudo-column"><button class="btn btn-outline-success" name="target" value="superuser-y">
                             {% trans "Make superuser" %}
                             </button></span>
                     {% endif%}
-                </form>
-            </div>
+                </div>
+            </form>
         {% endfor %}
     </div>
 </div>
