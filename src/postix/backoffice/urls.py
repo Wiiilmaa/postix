@@ -12,7 +12,7 @@ urlpatterns = [
     url('^users/reset_password/(?P<pk>[0-9]+)/$', views.ResetPasswordView.as_view(), name='reset-password'),
     url('^users/$', views.UserListView.as_view(), name='user-list'),
 
-    url('^session/new/$', views.new_session, name='new-session'),
+    url('^session/new/$', views.NewSessionView.as_view(), name='new-session'),
     url('^session/(?P<pk>[0-9]+)/end/$', views.end_session, name='end-session'),
     url('^session/(?P<pk>[0-9]+)/report/$', views.session_report, name='session-report'),
     url('^session/(?P<pk>[0-9]+)/resupply/$', views.resupply_session, name='resupply-session'),

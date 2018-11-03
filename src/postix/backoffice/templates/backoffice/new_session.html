@@ -18,9 +18,11 @@
 	{% language "de" %}
 		{% csrf_token %}
         {% crispy form %}
+        {% if formset %}
         <table>
             {% crispy formset helper %}
         </table>
+        {% endif %}
         <input type="submit" name="submit" value="{% trans "Create session" %}" class="btn btn-primary btn-block" id="submit-save">
 	{% endlanguage %}
 	</form>
@@ -28,11 +30,13 @@
 {% endblock %}
 
 {% block scripts %}
+    {% if formset %}
     <script type="text/html" id="item-template">
         <tr id="item-__prefix__">
             {% crispy formset.empty_form formset.form.helper %}
         </tr>
     </script>
+    {% endif %}
 
     <script type="text/javascript">
         var users = [ {% for user in users %} '{{ user }}', {% endfor %} ];

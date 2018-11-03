@@ -5,12 +5,13 @@ from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import default_storage
+from django.db import transaction
 from django.db.models import QuerySet, Sum
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
-from django.views.generic import DetailView
+from django.views.generic import DetailView, TemplateView
 from django.views.generic.list import ListView
 
 from postix.core.utils.flow import FlowError, reverse_session
@@ -26,25 +27,47 @@ from ..report import generate_report
 from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 
-@backoffice_user_required
-def new_session(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirect]:
-    form, formset = get_form_and_formset(initial_form={'backoffice_user': request.user})
+class NewSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateView):
+    template_name = 'backoffice/new_session.html'
 
-    if request.method == 'POST':
-        form, formset = get_form_and_formset(request=request)
+    def get_form_and_formset(self):
+        if self.request.method == 'POST':
+            form, formset = get_form_and_formset(request=self.request, must_be_positive=True)
+            with suppress(Exception):
+                if not Cashdesk.objects.get(pk=form.data.get('session-cashdesk')).handles_items:
+                    formset = None
+            return form, formset
+        form, formset = get_form_and_formset(initial_form={'backoffice_user': self.request.user}, must_be_positive=True)
+        param = self.request.GET.get('desk')
+        if param:
+            with suppress(Exception):
+                initial_form = {
+                    'cashdesk': Cashdesk.objects.get(pk=int(param)),
+                    'backoffice_user': self.request.user,
+                }
+                form, _ignored = get_form_and_formset(initial_form=initial_form, must_be_positive=True)
+                if not initial_form['cashdesk'].handles_items:
+                    formset = None
+        return form, formset
 
-        if form.is_valid() and formset.is_valid():
-            session = CashdeskSession.objects.create(
-                cashdesk=form.cleaned_data['cashdesk'],
-                user=form.cleaned_data['user'],
-                start=now(),
-                backoffice_user_before=form.cleaned_data['backoffice_user'],
-            )
-            CashMovement.objects.create(
-                session=session,
-                cash=form.cleaned_data['cash_before'],
-                backoffice_user=form.cleaned_data['backoffice_user'],
-            )
+    @transaction.atomic
+    def post(self, request: HttpRequest, *args, **kwargs):
+        form, formset = self.get_form_and_formset()
+        if not form.is_valid() or (formset and not formset.is_valid()):
+            messages.error(request, _('Session could not be created. Please review the data.'))
+            return self.render_to_response(self.get_context_data())
+        session = CashdeskSession.objects.create(
+            cashdesk=form.cleaned_data['cashdesk'],
+            user=form.cleaned_data['user'],
+            start=now(),
+            backoffice_user_before=form.cleaned_data['backoffice_user'],
+        )
+        CashMovement.objects.create(
+            session=session,
+            cash=form.cleaned_data['cash_before'],
+            backoffice_user=form.cleaned_data['backoffice_user'],
+        )
+        if formset:
             for f in formset:
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
@@ -55,29 +78,18 @@ def new_session(request: HttpRequest) -> Union[HttpResponse, HttpResponseRedirec
                         amount=amount,
                         backoffice_user=form.cleaned_data['backoffice_user'],
                     )
-            messages.success(request, _('Session has been created.'))
-            return redirect('backoffice:main')
+        messages.success(request, _('Session has been created.'))
+        return redirect('backoffice:main')
 
-        else:
-            messages.error(request, _('Session could not be created. Please review the data.'))
-
-    elif request.method == 'GET':
-        param = request.GET.get('desk')
-        if param:
-            with suppress(Exception):
-                initial_form = {
-                    'cashdesk': Cashdesk.objects.get(pk=int(param)),
-                    'backoffice_user': request.user,
-                }
-                form, _ignored = get_form_and_formset(initial_form=initial_form)
-
-    return render(request, 'backoffice/new_session.html', {
-        'form': form,
-        'formset': formset,
-        'helper': ItemMovementFormSetHelper(),
-        'users': User.objects.values_list('username', flat=True),
-        'backoffice_users': User.objects.filter(is_backoffice_user=True).values_list('username', flat=True),
-    })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        form, formset = self.get_form_and_formset()
+        context['form'] = form
+        context['formset'] = formset
+        context['helper'] = ItemMovementFormSetHelper()
+        context['users'] = User.objects.values_list('username', flat=True)
+        context['backoffice_users'] = User.objects.filter(is_backoffice_user=True).values_list('username', flat=True)
+        return context
 
 
 class SessionListView(LoginRequiredMixin, BackofficeUserRequiredMixin, ListView):
