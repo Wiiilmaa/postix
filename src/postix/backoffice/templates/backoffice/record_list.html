@@ -30,11 +30,7 @@
         {% for record in records %}
         <tr{% if record.cash_movement %} data-session="{{ record.cash_movement.session.pk }}"{% endif %}>
                 <td>
-                    {% if record.datetime %}
-                        {{ record.datetime|date:"Y-m-d H:i:s" }}
-                    {% else %}
-                        {{ record.end|date:"Y-m-d H:i:s" }}
-                    {% endif %}
+                    {{ record.datetime|date:"Y-m-d H:i:s" }}
                 </td>
                 <td>
                     {% if record.cash_movement %}<a href="{% url "backoffice:session-detail" pk=record.cash_movement.session.pk %}">
@@ -61,14 +57,12 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if record.datetime and record.type == 'inflow' %}
-                        {{ record.amount|floatformat:2 }}
-                    {% elif record.end and record.amount >= 0 %}
+                    {% if record.type == 'inflow' %}
                         {{ record.amount|floatformat:2 }}
                     {% endif %}
                 </td>
                 <td>
-                    {% if record.type == 'outflow' or record.amount < 0 %}
+                    {% if record.type == 'outflow' %}
                         {{ record.amount|floatformat:2 }}
                     {% endif %}
                 </td>
@@ -76,24 +70,12 @@
                     {{ record.running_total|floatformat:2 }}
                 </td>
                 <td>
-                    {% if record.datetime %}
-                        <a href="{% url "backoffice:record-detail" pk=record.pk %}" title="{% trans "Details" %}">
-                            <span class="fa fa-2x fa-fw fa-pencil" aria-hidden="true"></span>
-                        </a>
-                        <a href="{% url "backoffice:record-print" pk=record.pk %}" title="{% trans "Print" %}">
-                            <span class="fa fa-2x fa-fw fa-print" aria-hidden="true"></span>
-                        </a>
-                    {% else %}
-                        <a href="{% url "backoffice:session-detail" pk=record.pk %}" title="{% trans "Details" %}">
-                            <span class="fa fa-2x fa-fw fa-eye" aria-hidden="true"></span>
-                        </a>
-                        <a href="{% url "backoffice:end-session" pk=record.pk %}" title="{% trans "Edit" %}">
-                            <span class="fa fa-2x fa-fw fa-pencil" aria-hidden="true"></span>
-                        </a>
-                        <a href="{% url "backoffice:session-report" pk=record.pk %}" title="{% trans "Report" %}">
-                            <span class="fa fa-2x fa-fw fa-print" aria-hidden="true"></span>
-                        </a>
-                    {% endif %}
+                    <a href="{% url "backoffice:record-detail" pk=record.pk %}" title="{% trans "Details" %}">
+                        <span class="fa fa-2x fa-fw fa-pencil" aria-hidden="true"></span>
+                    </a>
+                    <a href="{% url "backoffice:record-print" pk=record.pk %}" title="{% trans "Print" %}">
+                        <span class="fa fa-2x fa-fw fa-print" aria-hidden="true"></span>
+                    </a>
                 </td>
             </tr>
         {% empty %}
