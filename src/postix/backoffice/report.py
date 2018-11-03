@@ -7,7 +7,7 @@ from django.core.files.storage import default_storage
 from django.utils import timezone
 from reportlab.lib import colors
 from reportlab.lib.units import mm
-from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
 
 from postix.core.models import CashdeskSession, EventSettings, Record
 from postix.core.utils.pdf import (
@@ -50,34 +50,23 @@ def get_qr_image(session: CashdeskSession) -> TemporaryFile:
     return f
 
 
-def generate_report(session: CashdeskSession) -> str:
-    """
-    Generates a closing report for a CashdeskSession; returns the path to the
-    report PDF.
-    """
-    if not session.end:
-        return
-
-    _buffer = BytesIO()
-    settings = EventSettings.get_solo()
-    doc = get_default_document(_buffer, footer=settings.report_footer)
+def get_session_header(session, doc, title='Kassenbericht'):
     style = get_paragraph_style()
-
-    # Header: info text and qr code
-    title_str = '[{}] Kassenbericht #{}'.format(settings.short_name, session.pk)
+    settings = EventSettings.get_solo()
+    title_str = '[{}] {}'.format(settings.short_name, title)
     title = Paragraph(title_str, style['Heading1'])
     tz = timezone.get_current_timezone()
-    text = """{user} an {cashdesk}<br/>{start} – {end}""".format(
-        user=session.user.get_full_name(),
+    text = '{} an '.format(session.user.get_full_name() if session.user else '')
+    text += "{cashdesk} (#{pk})<br/>{start} – {end}".format(
         cashdesk=session.cashdesk,
+        pk=session.pk,
         start=session.start.astimezone(tz).strftime('%Y-%m-%d %H:%M:%S'),
         end=session.end.astimezone(tz).strftime('%Y-%m-%d %H:%M:%S'),
     )
     info = Paragraph(text, style['Normal'])
-    logo = scale_image(get_qr_image(session), 100)
 
-    header = Table(
-        data=[[[title, info], logo], ],
+    return Table(
+        data=[[[title, info], ''], ],
         colWidths=[doc.width / 2] * 2,
         style=TableStyle([
             ('ALIGN', (0, 0), (0, 0), 'LEFT'),
@@ -85,6 +74,33 @@ def generate_report(session: CashdeskSession) -> str:
             ('VALIGN', (0, 0), (1, 0), 'TOP'),
         ]),
     )
+
+
+def get_signature_block(names, doc):
+    col_width = (doc.width - 35) / 2
+    second_sig = 2 if names[1] else 0
+    return Table(
+        data=[[names[0], '', names[1]]],
+        colWidths=[col_width, 35, col_width],
+        style=TableStyle([
+            ('FONTSIZE', (0, 0), (2, 0), FONTSIZE),
+            ('LINEABOVE', (0, 0), (0, 0), 1.2, colors.black),
+            ('LINEABOVE', (second_sig, 0), (second_sig, 0), 1.2, colors.black),
+            ('VALIGN', (0, 0), (2, 0), 'TOP'),
+        ]),
+    )
+
+
+def generate_item_report(session: CashdeskSession, doc) -> str:
+    """
+    Generates a closing report for a CashdeskSession that handled items
+    """
+    if not session.end:
+        return
+
+    style = get_paragraph_style()
+
+    header = get_session_header(session, doc)
 
     # Sales table
     sales_heading = Paragraph('Tickets', style['Heading3'])
@@ -188,13 +204,16 @@ def generate_record(record: Record) -> str:
             ('VALIGN', (0, 0), (1, 0), 'TOP'),
         ]),
     )
+    name = record.named_entity
+    if record.cash_movement and record.cash_movement.session:
+        name += ' (#{})'.format(record.cash_movement.session.pk)
     info = [
         ['Datum', datetime.strftime('%Y-%m-%d, %H:%M')],
-        ['Von' if record.type == 'inflow' else 'Nach', str(record.entity)],
+        ['Von' if record.type == 'inflow' else 'Nach', name],
         ['Betrag', CURRENCY.format(record.amount)]
     ]
     info = [
-        [Paragraph(line[0], style['Heading3']), Paragraph(line[1], style['Normal'])]
+        [Paragraph('<b>{}</b>'.format(line[0]), style['Normal']), Paragraph(line[1], style['Normal'])]
         for line in info
     ]
 
@@ -202,41 +221,32 @@ def generate_record(record: Record) -> str:
         data=info,
         colWidths=[90, doc.width - 90],
         style=TableStyle([
+            ('ALIGN', (0, 0), (0, 0), 'RIGHT'),
         ]),
     )
 
     # Signatures
-    col_width = (doc.width - 35) / 2
-    signature1 = Table(
-        data=[['Bearbeiter/in: {}'.format(record.backoffice_user.get_full_name()), '', '']],
-        colWidths=[col_width, 35, col_width],
-        style=TableStyle([
-            ('FONTSIZE', (0, 0), (0, 0), FONTSIZE),
-            ('LINEABOVE', (0, 0), (0, 0), 1.2, colors.black),
-            ('VALIGN', (0, 0), (0, 0), 'TOP'),
-        ]),
+    signature1 = get_signature_block(
+        ['Bearbeiter/in: {}'.format(record.backoffice_user.get_full_name()), ''],
+        doc=doc,
     )
-    if record.carrier:
-        signature2 = Table(
-            data=[['{}: {}'.format('Einlieferer/in' if record.type == 'inflow' else 'Emfpänger/in', record.carrier), '', '']],
-            colWidths=[col_width, 35, col_width],
-            style=TableStyle([
-                ('FONTSIZE', (0, 0), (0, 0), FONTSIZE),
-                ('LINEABOVE', (0, 0), (0, 0), 1.2, colors.black),
-                ('VALIGN', (0, 0), (0, 0), 'TOP'),
-            ]),
-        )
 
     story = [
         header, Spacer(1, 15 * mm),
         info_table, Spacer(1, 40 * mm),
         signature1,
     ]
-    if record.carrier:
+    if record.named_carrier:
         story.append(Spacer(1, 40 * mm))
-        story.append(signature2)
-    doc.build(story)
+        story.append(get_signature_block(['{}: {}'.format('Einlieferer/in' if record.type == 'inflow' else 'Emfpänger/in', record.carrier or ''), ''], doc=doc))
+    if record.cash_movement and record.closes_session:
+        if record.cash_movement.session.cashdesk.handles_items:
+            story.append(PageBreak())
+            story += generate_item_report(record.cash_movement.session, doc=doc)
+        story.append(PageBreak())
+        story += generate_session_closing(record, doc=doc)
 
+    doc.build(story)
     _buffer.seek(0)
     stored_name = default_storage.save(record.get_new_record_path(), ContentFile(_buffer.read()))
     return stored_name
