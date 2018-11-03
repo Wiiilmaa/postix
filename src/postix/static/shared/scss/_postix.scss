@@ -196,6 +196,10 @@ tbody th {
   width: 100%;
   .pseudo-column {
     flex-grow: 1;
+    &.name {
+      width: 200px;
+      flex-grow: 0;
+    }
   }
 }
 .pseudo-column button {

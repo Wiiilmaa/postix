@@ -13,7 +13,7 @@
                 <div class="pseudo-row">
                     {% csrf_token %}
                     <input name="user" type="hidden" value="{{ user.id }}">
-                    <span class="pseudo-column">{{ user.username }}</span>
+                    <span class="pseudo-column name">{{ user.username }}</span>
                     {% if user.is_troubleshooter %}
                         <span class="pseudo-column"><button class="btn btn-outline-danger" name="target" value="troubleshooter-n">
                             {% trans "Remove troubleshooter" %}

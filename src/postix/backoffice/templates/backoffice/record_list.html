@@ -2,7 +2,14 @@
 {% load i18n %}
 
 {% block content %}
-<a href="{% url "backoffice:new-record" %}" class="btn btn-primary pull-right">{% trans "New record" %}</a>
+<div class="action-row">
+    <a class="btn btn-lg btn-outline-info" href="{% url "backoffice:new-record" %}">
+        {% trans "New record" %}
+    </a>
+    <a class="btn btn-lg btn-outline-info" href="{% url "backoffice:new-session" %}">
+        {% trans "New session" %}
+    </a>
+</div>
 <table class="table" id="active-sessions-table">
     <thead>
         <th>{% trans "Date" %}</th>
@@ -26,11 +33,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if record.entity %}
-                        {{ record.entity }}
-                    {% else %}
-                        {% trans "Cashdesk session" %} #{{ record.pk}}
-                    {% endif %}
+                    {{ record.named_entity }}
                 </td>
                 <td>
                     {% if record.backoffice_user %}
