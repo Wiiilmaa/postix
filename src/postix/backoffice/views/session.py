@@ -22,7 +22,7 @@ from ...core.models import (
 from ..forms import (
     ItemMovementFormSetHelper, SessionBaseForm, get_form_and_formset,
 )
-from ..report import generate_report
+from ..report import generate_record
 from .utils import BackofficeUserRequiredMixin, backoffice_user_required
 
 
@@ -57,14 +57,17 @@ class NewSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
             return self.render_to_response(self.get_context_data())
         session = CashdeskSession.objects.create(
             cashdesk=form.cleaned_data['cashdesk'],
-            user=form.cleaned_data['user'],
+            user=form.cleaned_data['user'] if form.cleaned_data['cashdesk'].ip_address else None,
             start=now(),
             backoffice_user_before=form.cleaned_data['backoffice_user'],
         )
-        CashMovement.objects.create(
+        movement = CashMovement.objects.create(
             session=session,
             cash=form.cleaned_data['cash_before'],
             backoffice_user=form.cleaned_data['backoffice_user'],
+        )
+        record = movement.create_record(
+            carrier=form.cleaned_data['user'] if not form.cleaned_data['cashdesk'].ip_address else None,
         )
         if formset:
             for f in formset:
@@ -77,8 +80,7 @@ class NewSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
                         amount=amount,
                         backoffice_user=form.cleaned_data['backoffice_user'],
                     )
-        messages.success(request, _('Session has been created.'))
-        return redirect('backoffice:main')
+        return redirect('backoffice:record-print', pk=record.pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -125,11 +127,14 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        session = self.get_object()
         ctx['url'] = self.request.build_absolute_uri('/')
+        ctx['total'] = session.cash_after - session.cash_before
         return ctx
 
 
 @backoffice_user_required
+@transaction.atomic
 def resupply_session(request: HttpRequest, pk: int) -> Union[HttpResponse, HttpResponseRedirect]:
     """ TODO: show approximate current amounts of items? """
     session = get_object_or_404(CashdeskSession, pk=pk)
@@ -217,18 +222,18 @@ class EndSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
 
     def get_form_and_formset(self):
         session = self.get_object()
+        item_data = session.get_current_items()
         if self.request.method == 'POST':
-            form, formset = get_form_and_formset(request=request, extra=0)
+            form, formset = get_form_and_formset(request=self.request, extra=0)
         else:
             form, formset = get_form_and_formset(
                 extra=0,
-                initial_form={'cashdesk': session.cashdesk, 'user': session.user, 'backoffice_user': request.user, 'cash_before': session.cash_after},
+                initial_form={'cashdesk': session.cashdesk, 'user': session.user, 'backoffice_user': self.request.user, 'cash_before': session.cash_after},
                 initial_formset=[{'item': d['item'], 'amount': d['final_movements']} for d in item_data],
             )
         if not session.cashdesk.handles_items:
             formset = None
         else:
-            item_data = session.get_current_items()
             for f, item_data in zip(formset, item_data):
                 f.product_label = item_data
         return form, formset
@@ -237,9 +242,10 @@ class EndSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
         context = super().get_context_data(**kwargs)
         context['session'] = self.get_object()
         form, formset = self.get_form_and_formset()
+        context['helper'] = ItemMovementFormSetHelper()
         context['form'] = form
         context['formset'] = formset
-        context['cash'] = {'initial': context['object'].cash_before, 'transactions': context['object'].get_cash_transaction_total()}
+        context['cash'] = {'initial': context['session'].cash_before, 'transactions': context['session'].get_cash_transaction_total()}
         context['backoffice_users'] = User.objects.filter(is_backoffice_user=True).values_list('username', flat=True)
         return context
 
@@ -291,8 +297,8 @@ class EndSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
                             backoffice_user=form.cleaned_data['backoffice_user'],
                         )
 
-            generate_report(session)
-            return redirect('backoffice:session-report', pk=pk)
+            generate_record(record)
+            return redirect('backoffice:record-print', pk=record.pk)
         messages.error(request, _('Session could not be ended: Please review the data.'))
         return super().post(request, pk)
 
