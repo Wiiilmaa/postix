@@ -34,8 +34,11 @@ class SessionBaseForm(forms.Form):
         widget=forms.NumberInput(attrs={'type': 'text'}),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, must_be_positive=False, **kwargs):
         super().__init__(*args, **kwargs)
+        self.must_be_positive = must_be_positive
+        if must_be_positive:
+            self.fields['cash_before'].widget.attrs['min'] = '0'
         self.helper = FormHelper()
         self.helper.form_tag = False
 
@@ -54,6 +57,12 @@ class SessionBaseForm(forms.Form):
             raise forms.ValidationError(
                 _('Angel does not exist or is no backoffice angel.')
             )
+
+    def clean_cash_before(self):
+        value = self.cleaned_data['cash_before']
+        if self.must_be_positive and value < 0:
+            raise forms.ValidationError(_('Please supply a positive amount of cash.'))
+        return value
 
 
 class ItemMovementForm(forms.Form):
@@ -87,13 +96,14 @@ def get_form_and_formset(
     extra: int = 1,
     initial_form: SessionBaseForm = None,
     initial_formset=None,
+    must_be_positive=False,
 ) -> Tuple[SessionBaseForm, Any]:
     ItemMovementFormSet = forms.formset_factory(ItemMovementForm, extra=extra)
 
     if request:
-        form = SessionBaseForm(request.POST, prefix='session')
+        form = SessionBaseForm(request.POST, prefix='session', must_be_positive=must_be_positive)
         formset = ItemMovementFormSet(request.POST, prefix='items')
     else:
-        form = SessionBaseForm(initial=initial_form, prefix='session')
+        form = SessionBaseForm(initial=initial_form, prefix='session', must_be_positive=must_be_positive)
         formset = ItemMovementFormSet(initial=initial_formset, prefix='items')
     return form, formset
