@@ -40,7 +40,9 @@ class SessionBaseForm(forms.Form):
         self.must_be_positive = must_be_positive
         if must_be_positive:
             self.fields['cash_before'].widget.attrs['min'] = '0'
-        self.fields['user'].required = (initial.get('cashdesk') and initial['cashdesk'].ip_address)
+        self.fields['user'].required = (
+            initial.get('cashdesk') and initial['cashdesk'].ip_address
+        )
         self.helper = FormHelper()
         self.helper.form_tag = False
 
@@ -105,9 +107,13 @@ def get_form_and_formset(
     ItemMovementFormSet = forms.formset_factory(ItemMovementForm, extra=extra)
 
     if request:
-        form = SessionBaseForm(request.POST, prefix='session', must_be_positive=must_be_positive)
+        form = SessionBaseForm(
+            request.POST, prefix='session', must_be_positive=must_be_positive
+        )
         formset = ItemMovementFormSet(request.POST, prefix='items')
     else:
-        form = SessionBaseForm(initial=initial_form, prefix='session', must_be_positive=must_be_positive)
+        form = SessionBaseForm(
+            initial=initial_form, prefix='session', must_be_positive=must_be_positive
+        )
         formset = ItemMovementFormSet(initial=initial_formset, prefix='items')
     return form, formset

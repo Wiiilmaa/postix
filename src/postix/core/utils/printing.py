@@ -32,7 +32,9 @@ class CashdeskPrinter:
         return gap + formatted_value
 
     def send(self, data: Union[str, bytes]) -> None:
-        lpr = subprocess.Popen(['/usr/bin/lpr', '-l', '-P', self.printer], stdin=subprocess.PIPE)
+        lpr = subprocess.Popen(
+            ['/usr/bin/lpr', '-l', '-P', self.printer], stdin=subprocess.PIPE
+        )
         if isinstance(data, str):
             try:
                 data = data.encode('cp437')
@@ -55,15 +57,14 @@ class CashdeskPrinter:
 
     def _build_receipt(self, transaction: Transaction) -> Union[None, str]:
         from postix.core.models import EventSettings
+
         settings = EventSettings.get_solo()
         total_sum = 0
         position_lines = list()
         tax_sums = defaultdict(int)
         tax_symbols = dict()
 
-        positions = transaction.positions.exclude(
-            type='redeem', value=Decimal('0.00')
-        )
+        positions = transaction.positions.exclude(type='redeem', value=Decimal('0.00'))
 
         if not positions.exists():
             return
@@ -95,9 +96,13 @@ class CashdeskPrinter:
             }
             if position.has_constraint_bypass:
                 position_lines.append(' {product_name}'.format(**formatargs))
-                position_lines.append(' {upgrade} ({tax_str}){upgradegap} {price}'.format(**formatargs))
+                position_lines.append(
+                    ' {upgrade} ({tax_str}){upgradegap} {price}'.format(**formatargs)
+                )
             else:
-                pos_str = ' {product_name} ({tax_str}){gap} {price}'.format(**formatargs)
+                pos_str = ' {product_name} ({tax_str}){gap} {price}'.format(
+                    **formatargs
+                )
                 position_lines.append(pos_str)
         total_taxes = sum(tax_sums.values())
 
@@ -137,8 +142,12 @@ class CashdeskPrinter:
         receipt += '\r\n'.join(position_lines)
         receipt += '\r\n'
         receipt += SEPARATOR
-        receipt += bytearray([self.ESC, 0x61, 2]).decode()  # right-align text (0 would be left-align)
-        receipt += _("Net sum:  {}").format(self._format_number(total_sum - total_taxes))
+        receipt += bytearray(
+            [self.ESC, 0x61, 2]
+        ).decode()  # right-align text (0 would be left-align)
+        receipt += _("Net sum:  {}").format(
+            self._format_number(total_sum - total_taxes)
+        )
         receipt += '\r\n'
 
         for tax in sorted(list(tax_symbols))[::-1]:
@@ -162,7 +171,9 @@ class CashdeskPrinter:
         receipt += '\r\n\r\n\r\n'
         return receipt
 
-    def print_receipt(self, transaction: Transaction, do_open_drawer: bool = True) -> None:
+    def print_receipt(
+        self, transaction: Transaction, do_open_drawer: bool = True
+    ) -> None:
         if do_open_drawer:
             self.open_drawer()
         receipt = self._build_receipt(transaction)
@@ -173,20 +184,29 @@ class CashdeskPrinter:
                 self.send(receipt)
                 self.cut_tape()
             except Exception as e:
-                logging.getLogger('django').exception('Printing at {} failed: {}'.format(self.printer, str(e)))
+                logging.getLogger('django').exception(
+                    'Printing at {} failed: {}'.format(self.printer, str(e))
+                )
 
-    def _build_attendance(self, arrived: List['PreorderPosition'], not_arrived: List['PreorderPosition']):
+    def _build_attendance(
+        self, arrived: List['PreorderPosition'], not_arrived: List['PreorderPosition']
+    ):
         def shorten(line):
             if len(line) <= 40:
                 return line
             return line[:39] + '...'
 
         def build_lines(position):
-            information_lines = ['  ' + l.strip() for l in position.information.split('\n') if l.strip()]
-            information_lines = [info.split('–', maxsplit=1)[-1].strip() for info in information_lines]
+            information_lines = [
+                '  ' + l.strip() for l in position.information.split('\n') if l.strip()
+            ]
+            information_lines = [
+                info.split('–', maxsplit=1)[-1].strip() for info in information_lines
+            ]
             return information_lines
 
         from postix.core.models import EventSettings
+
         settings = EventSettings.get_solo()
         arrived_lines = [build_lines(position) for position in arrived]
         not_arrived_lines = [build_lines(position) for position in not_arrived]
@@ -203,8 +223,18 @@ class CashdeskPrinter:
             attendance += '\r\n'
             count = '{count} '.format(count=len(arrived))
             seplen = (40 - len(count + _('Arrived'))) // 2
-            attendance += SEPARATOR_CHAR * seplen + ' ' + count + _('Arrived') + ' ' + SEPARATOR_CHAR * seplen + '\r\n'
-            attendance += bytearray([self.ESC, 0x61, 0]).decode()  # right-align text (2 would be left-align)
+            attendance += (
+                SEPARATOR_CHAR * seplen
+                + ' '
+                + count
+                + _('Arrived')
+                + ' '
+                + SEPARATOR_CHAR * seplen
+                + '\r\n'
+            )
+            attendance += bytearray(
+                [self.ESC, 0x61, 0]
+            ).decode()  # right-align text (2 would be left-align)
             attendance += '\r\n'.join(arrived_lines)
             attendance += '\r\n'
 
@@ -214,8 +244,18 @@ class CashdeskPrinter:
             attendance += '\r\n'
             count = '{count} '.format(count=len(not_arrived))
             seplen = (40 - len(count + _('Not arrived'))) // 2
-            attendance += SEPARATOR_CHAR * seplen + ' ' + count + _('Not arrived') + ' ' + SEPARATOR_CHAR * seplen + '\r\n'
-            attendance += bytearray([self.ESC, 0x61, 2]).decode()  # right-align text (0 would be left-align)
+            attendance += (
+                SEPARATOR_CHAR * seplen
+                + ' '
+                + count
+                + _('Not arrived')
+                + ' '
+                + SEPARATOR_CHAR * seplen
+                + '\r\n'
+            )
+            attendance += bytearray(
+                [self.ESC, 0x61, 2]
+            ).decode()  # right-align text (0 would be left-align)
             attendance += '\r\n'.join(not_arrived_lines)
             attendance += '\r\n'
 
@@ -223,18 +263,24 @@ class CashdeskPrinter:
         attendance += '\r\n'
         return attendance
 
-    def print_attendance(self, arrived: List['PreorderPosition'], not_arrived: List['PreorderPosition']):
+    def print_attendance(
+        self, arrived: List['PreorderPosition'], not_arrived: List['PreorderPosition']
+    ):
         attendance = self._build_attendance(arrived, not_arrived)
         if attendance:
             try:
                 self.send(attendance)
                 self.cut_tape()
             except Exception as e:
-                logging.getLogger('django').exception('Printing at {} failed: {}'.format(self.printer, str(e)))
+                logging.getLogger('django').exception(
+                    'Printing at {} failed: {}'.format(self.printer, str(e))
+                )
 
     def print_text(self, text: str, centered=True, cut_tape=True) -> None:
         center = bytearray([self.ESC, 0x61, 1]).decode()  # center text
-        left_align = bytearray([self.ESC, 0x61, 0]).decode()  # left-align text (0 would be left-align)
+        left_align = bytearray(
+            [self.ESC, 0x61, 0]
+        ).decode()  # left-align text (0 would be left-align)
         print_text = ''
         if centered:
             print_text += center
@@ -243,7 +289,9 @@ class CashdeskPrinter:
         if cut_tape:
             self.cut_tape()
 
-    def _get_pixel_value(self, outer_x, outer_y, inner_x, inner_y, total_x, total_y, image):
+    def _get_pixel_value(
+        self, outer_x, outer_y, inner_x, inner_y, total_x, total_y, image
+    ):
         pixel_value = 0
         for square_y in range(8):
             x = outer_x * 3 + inner_x
@@ -267,14 +315,28 @@ class CashdeskPrinter:
 
         print_data = [self.ESC, ord('3'), 1]  # Set line spacing to 24 dots
 
-        for line_y in range(math.ceil(height / 24)):  # One "line" of image data is 24 px
+        for line_y in range(
+            math.ceil(height / 24)
+        ):  # One "line" of image data is 24 px
             print_data.extend([self.ESC, ord('*'), 33])  # Set mode to bitmap, 24 dots
             print_data.extend([bit_count, byte_count])  # Specify data to be printed
 
-            for line_x in range(math.ceil(width / 3)):  # We write 3 x (3 x 8) pixels at once
+            for line_x in range(
+                math.ceil(width / 3)
+            ):  # We write 3 x (3 x 8) pixels at once
                 for inner_x in range(3):
                     for inner_y in range(3):
-                        print_data.append(self._get_pixel_value(line_x, line_y, inner_x, inner_y, width, height, imagedata))
+                        print_data.append(
+                            self._get_pixel_value(
+                                line_x,
+                                line_y,
+                                inner_x,
+                                inner_y,
+                                width,
+                                height,
+                                imagedata,
+                            )
+                        )
             print_data.extend([ord('\n'), ord('\r')])  # Newline
 
         print_data.extend([ord('\n'), ord('\r')])  # Newline
@@ -299,14 +361,20 @@ class DummyPrinter:
     def cut_tape(self) -> None:
         self.logger.info('[DummyPrinter] Cut tape')
 
-    def print_receipt(self, transaction: Transaction, do_open_drawer: bool = True) -> Union[str, None]:
+    def print_receipt(
+        self, transaction: Transaction, do_open_drawer: bool = True
+    ) -> Union[str, None]:
         receipt = CashdeskPrinter('', self.cashdesk)._build_receipt(transaction)
         if receipt is not None:
             self.logger.info('[DummyPrinter] Printed receipt:\n{}'.format(receipt))
         return receipt
 
-    def print_attendance(self, arrived: List['PreorderPosition'], not_arrived: List['PreorderPosition']):
-        arrivals = CashdeskPrinter('', self.cashdesk)._build_attendance(arrived, not_arrived)
+    def print_attendance(
+        self, arrived: List['PreorderPosition'], not_arrived: List['PreorderPosition']
+    ):
+        arrivals = CashdeskPrinter('', self.cashdesk)._build_attendance(
+            arrived, not_arrived
+        )
         if arrivals is not None:
             self.logger.info('[DummyPrinter] Printed arrivals:\n{}'.format(arrivals))
         return arrivals
@@ -314,5 +382,7 @@ class DummyPrinter:
     def print_image(self, fileish):
         self.logger.info('[DummyPrinter] Printed image')
 
-    def print_text(self, text: str, centered: bool = True, cut_tape: bool = True) -> None:
+    def print_text(
+        self, text: str, centered: bool = True, cut_tape: bool = True
+    ) -> None:
         self.send(text)

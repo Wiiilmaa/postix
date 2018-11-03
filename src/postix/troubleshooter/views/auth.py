@@ -18,11 +18,16 @@ class LoginView(TemplateView):
         user = authenticate(username=username, password=password)
 
         if user is None:
-            messages.error(request, _('No user account matches the entered credentials.'))
+            messages.error(
+                request, _('No user account matches the entered credentials.')
+            )
             return redirect('troubleshooter:login')
 
         if not troubleshooter_user(user):
-            messages.error(request, _('User does not have permission to access troubleshooter data.'))
+            messages.error(
+                request,
+                _('User does not have permission to access troubleshooter data.'),
+            )
             return redirect('troubleshooter:login')
 
         login(request, user)

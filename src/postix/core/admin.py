@@ -35,17 +35,40 @@ class AuthorAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password', 'auth_token')}),
         ('Personal info', {'fields': ('firstname', 'lastname')}),
-        ('Permissions', {'fields': ('is_active', 'is_superuser', 'is_backoffice_user', 'is_troubleshooter')}),
+        (
+            'Permissions',
+            {
+                'fields': (
+                    'is_active',
+                    'is_superuser',
+                    'is_backoffice_user',
+                    'is_troubleshooter',
+                )
+            },
+        ),
         ('Important dates', {'fields': ('last_login',)}),
     )
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2'),
-        }),
+        (
+            None,
+            {'classes': ('wide',), 'fields': ('username', 'password1', 'password2')},
+        ),
     )
-    list_display = ('username', 'firstname', 'lastname', 'is_active', 'is_superuser', 'is_backoffice_user', 'is_troubleshooter')
-    list_filter = ('is_active', 'is_superuser', 'is_backoffice_user', 'is_troubleshooter')
+    list_display = (
+        'username',
+        'firstname',
+        'lastname',
+        'is_active',
+        'is_superuser',
+        'is_backoffice_user',
+        'is_troubleshooter',
+    )
+    list_filter = (
+        'is_active',
+        'is_superuser',
+        'is_backoffice_user',
+        'is_troubleshooter',
+    )
     search_fields = ('firstname', 'lastname', 'username')
     ordering = ('username',)
     filter_horizontal = []
@@ -145,9 +168,17 @@ class WarningConstriantAdmin(admin.ModelAdmin):
 
 class TransactionPositionInline(admin.TabularInline):
     model = TransactionPosition
-    fields = ('type', 'value', 'tax_rate', 'tax_value',
-              'product', 'reverses', 'listentry', 'preorder_position',
-              'authorized_by')
+    fields = (
+        'type',
+        'value',
+        'tax_rate',
+        'tax_value',
+        'product',
+        'reverses',
+        'listentry',
+        'preorder_position',
+        'authorized_by',
+    )
 
     def get_readonly_fields(self, request, obj=None):
         return TransactionPositionInline.fields

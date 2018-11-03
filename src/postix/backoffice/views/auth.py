@@ -19,11 +19,15 @@ class LoginView(TemplateView):
         user = authenticate(username=username, password=password)
 
         if user is None:
-            messages.error(request, _('No user account matches the entered credentials.'))
+            messages.error(
+                request, _('No user account matches the entered credentials.')
+            )
             return redirect('backoffice:login')
 
         if not is_backoffice_user(user):
-            messages.error(request, _('User does not have permission to access backoffice data.'))
+            messages.error(
+                request, _('User does not have permission to access backoffice data.')
+            )
             return redirect('backoffice:login')
 
         login(request, user)
@@ -41,4 +45,6 @@ def logout_view(request: HttpRequest) -> HttpResponseRedirect:
 
 def switch_user(request: HttpRequest) -> HttpResponseRedirect:
     logout(request)
-    return redirect(reverse('backoffice:login') + '?next=' + request.GET.get('next', ''))
+    return redirect(
+        reverse('backoffice:login') + '?next=' + request.GET.get('next', '')
+    )

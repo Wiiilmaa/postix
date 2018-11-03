@@ -16,7 +16,9 @@ class RecordCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['backoffice_user'].queryset = User.objects.filter(is_backoffice_user=True)
+        self.fields['backoffice_user'].queryset = User.objects.filter(
+            is_backoffice_user=True
+        )
         self.fields['datetime'].required = False
         self.helper = FormHelper()
         self.helper.form_tag = False
@@ -26,7 +28,9 @@ class RecordCreateForm(forms.ModelForm):
         try:
             return User.objects.filter(is_backoffice_user=True).get(username=value)
         except User.DoesNotExist:
-            raise forms.ValidationError(_('Angel does not exist or is no backoffice angel.'))
+            raise forms.ValidationError(
+                _('Angel does not exist or is no backoffice angel.')
+            )
 
     def clean_amount(self) -> User:
         amount = self.cleaned_data['amount']
@@ -42,7 +46,7 @@ class RecordCreateForm(forms.ModelForm):
 
     class Meta:
         model = Record
-        fields = ('type', 'datetime', 'entity', 'carrier', 'amount', 'backoffice_user', )
+        fields = ('type', 'datetime', 'entity', 'carrier', 'amount', 'backoffice_user')
 
 
 class RecordUpdateForm(RecordCreateForm):
@@ -61,11 +65,10 @@ class RecordUpdateForm(RecordCreateForm):
 
     class Meta:
         model = Record
-        fields = ('type', 'datetime', 'entity', 'carrier', 'amount', 'backoffice_user', )
+        fields = ('type', 'datetime', 'entity', 'carrier', 'amount', 'backoffice_user')
 
 
 class RecordEntityForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -73,4 +76,4 @@ class RecordEntityForm(forms.ModelForm):
 
     class Meta:
         model = RecordEntity
-        fields = ('name', 'detail', )
+        fields = ('name', 'detail')

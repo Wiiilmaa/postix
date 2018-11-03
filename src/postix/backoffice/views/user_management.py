@@ -19,9 +19,17 @@ def create_user_view(request: HttpRequest) -> Union[HttpResponseRedirect, HttpRe
         if form.is_valid():
             user = User.objects.create_user(**form.cleaned_data)
             if user.is_backoffice_user:
-                messages.success(request, _('Backoffice user {user} has been created.').format(user=user.username))
+                messages.success(
+                    request,
+                    _('Backoffice user {user} has been created.').format(
+                        user=user.username
+                    ),
+                )
             else:
-                messages.success(request, _('User {user} has been created.').format(user=user.username))
+                messages.success(
+                    request,
+                    _('User {user} has been created.').format(user=user.username),
+                )
             return redirect('backoffice:create-user')
     else:
         form = get_normal_user_form()
@@ -49,7 +57,12 @@ class ResetPasswordView(BackofficeUserRequiredMixin, FormView):
         pk = self.kwargs['pk']
         user = User.objects.get(pk=pk)
         if user.is_superuser and not request.user.is_superuser:
-            messages.error(self.request, _('You can only change administrator passwords if you are an admin yourself.'))
+            messages.error(
+                self.request,
+                _(
+                    'You can only change administrator passwords if you are an admin yourself.'
+                ),
+            )
             return self.form_valid(form)
 
         if form.is_valid():

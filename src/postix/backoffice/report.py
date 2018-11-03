@@ -24,11 +24,17 @@ def get_qr_image(record) -> TemporaryFile:
         border=4,
     )
     tz = timezone.get_current_timezone()
-    if record.cash_movement and record.closes_session and record.cash_movement.session.cashdesk.handles_items:
+    if (
+        record.cash_movement
+        and record.closes_session
+        and record.cash_movement.session.cashdesk.handles_items
+    ):
         session = record.cash_movement.session
         data = '{end}\tEinnahme\t{total}\tKassensession\t#{pk}\t{supervisor}\t{user}'.format(
             end=session.end.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
-            total='{0:,.2f}'.format(session.get_cash_transaction_total()).translate(str.maketrans(',.', '.,')),
+            total='{0:,.2f}'.format(session.get_cash_transaction_total()).translate(
+                str.maketrans(',.', '.,')
+            ),
             pk=session.pk,
             supervisor=session.backoffice_user_after.get_full_name(),
             user=session.user.get_full_name() if session.user else record.carrier or '',
@@ -67,13 +73,15 @@ def get_session_header(session, doc, title='Kassenbericht'):
     info = Paragraph(text, style['Normal'])
 
     return Table(
-        data=[[[title, info], ''], ],
+        data=[[[title, info], '']],
         colWidths=[doc.width / 2] * 2,
-        style=TableStyle([
-            ('ALIGN', (0, 0), (0, 0), 'LEFT'),
-            ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
-            ('VALIGN', (0, 0), (1, 0), 'TOP'),
-        ]),
+        style=TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+                ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
+                ('VALIGN', (0, 0), (1, 0), 'TOP'),
+            ]
+        ),
     )
 
 
@@ -83,12 +91,14 @@ def get_signature_block(names, doc):
     return Table(
         data=[[names[0], '', names[1]]],
         colWidths=[col_width, 35, col_width],
-        style=TableStyle([
-            ('FONTSIZE', (0, 0), (2, 0), FONTSIZE),
-            ('LINEABOVE', (0, 0), (0, 0), 1.2, colors.black),
-            ('LINEABOVE', (second_sig, 0), (second_sig, 0), 1.2, colors.black),
-            ('VALIGN', (0, 0), (2, 0), 'TOP'),
-        ]),
+        style=TableStyle(
+            [
+                ('FONTSIZE', (0, 0), (2, 0), FONTSIZE),
+                ('LINEABOVE', (0, 0), (0, 0), 1.2, colors.black),
+                ('LINEABOVE', (second_sig, 0), (second_sig, 0), 1.2, colors.black),
+                ('VALIGN', (0, 0), (2, 0), 'TOP'),
+            ]
+        ),
     )
 
 
@@ -105,65 +115,106 @@ def generate_item_report(session: CashdeskSession, doc) -> str:
 
     # Sales table
     sales_heading = Paragraph('Tickets', style['Heading3'])
-    data = [['Ticket', 'Einzelpreis', 'Presale', 'Verkauf', 'Stornos', 'Gesamt'], ]
+    data = [['Ticket', 'Einzelpreis', 'Presale', 'Verkauf', 'Stornos', 'Gesamt']]
     sales_raw_data = session.get_product_sales()
-    sales = [[p['product'].name, CURRENCY.format(p['value_single']), p['presales'], p['sales'],
-              p['reversals'], CURRENCY.format(p['value_total'])]
-             for p in sales_raw_data]
+    sales = [
+        [
+            p['product'].name,
+            CURRENCY.format(p['value_single']),
+            p['presales'],
+            p['sales'],
+            p['reversals'],
+            CURRENCY.format(p['value_total']),
+        ]
+        for p in sales_raw_data
+    ]
     data += sales
-    data += [['', '', '', '', '', CURRENCY.format(sum([p['value_total'] for p in sales_raw_data]))]]
+    data += [
+        [
+            '',
+            '',
+            '',
+            '',
+            '',
+            CURRENCY.format(sum([p['value_total'] for p in sales_raw_data])),
+        ]
+    ]
     last_row = len(data) - 1
     sales = Table(
         data=data,
         colWidths=[120] + [(doc.width - 120) / 5] * 5,
-        style=TableStyle([
-            ('FONTSIZE', (0, 0), (5, last_row), FONTSIZE),
-            # TODO: register bold font and use here: ('FACE', (0,0), (3,0), 'boldfontname'),
-            ('ALIGN', (0, 0), (0, last_row), 'LEFT'),
-            ('ALIGN', (1, 0), (5, last_row), 'RIGHT'),
-            ('LINEABOVE', (0, 1), (5, 1), 1.0, colors.black),
-            ('LINEABOVE', (5, last_row), (5, last_row), 1.2, colors.black),
-        ]),
+        style=TableStyle(
+            [
+                ('FONTSIZE', (0, 0), (5, last_row), FONTSIZE),
+                # TODO: register bold font and use here: ('FACE', (0,0), (3,0), 'boldfontname'),
+                ('ALIGN', (0, 0), (0, last_row), 'LEFT'),
+                ('ALIGN', (1, 0), (5, last_row), 'RIGHT'),
+                ('LINEABOVE', (0, 1), (5, 1), 1.0, colors.black),
+                ('LINEABOVE', (5, last_row), (5, last_row), 1.2, colors.black),
+            ]
+        ),
     )
 
     # Items table
     items_heading = Paragraph('Auszählung', style['Heading3'])
-    data = [['', 'Einzählung', 'Umsatz', 'Auszählung', 'Differenz'], ]
+    data = [['', 'Einzählung', 'Umsatz', 'Auszählung', 'Differenz']]
 
     # geld immer decimal mit € und nachkommastellen
     cash_transactions = session.get_cash_transaction_total()
-    cash = [['Bargeld',
-             CURRENCY.format(session.cash_before),
-             CURRENCY.format(cash_transactions),
-             CURRENCY.format(session.cash_after),
-             CURRENCY.format(session.cash_before + cash_transactions - session.cash_after)], ]
+    cash = [
+        [
+            'Bargeld',
+            CURRENCY.format(session.cash_before),
+            CURRENCY.format(cash_transactions),
+            CURRENCY.format(session.cash_after),
+            CURRENCY.format(
+                session.cash_before + cash_transactions - session.cash_after
+            ),
+        ]
+    ]
     items = [
-        [d['item'].name, d['movements'], d['transactions'], abs(d['final_movements']), d['total']]
+        [
+            d['item'].name,
+            d['movements'],
+            d['transactions'],
+            abs(d['final_movements']),
+            d['total'],
+        ]
         for d in session.get_current_items()
     ]
     last_row = len(items) + 1
     items = Table(
         data=data + cash + items,
         colWidths=[120] + [(doc.width - 120) / 4] * 4,
-        style=TableStyle([
-            ('FONTSIZE', (0, 0), (4, last_row), FONTSIZE),
-            # TODO: register bold font and use here: ('FACE', (0,0), (3,0), 'boldfontname'),
-            ('ALIGN', (0, 0), (0, last_row), 'LEFT'),
-            ('ALIGN', (1, 0), (4, last_row), 'RIGHT'),
-            ('LINEABOVE', (0, 1), (4, 1), 1.0, colors.black),
-        ]),
+        style=TableStyle(
+            [
+                ('FONTSIZE', (0, 0), (4, last_row), FONTSIZE),
+                # TODO: register bold font and use here: ('FACE', (0,0), (3,0), 'boldfontname'),
+                ('ALIGN', (0, 0), (0, last_row), 'LEFT'),
+                ('ALIGN', (1, 0), (4, last_row), 'RIGHT'),
+                ('LINEABOVE', (0, 1), (4, 1), 1.0, colors.black),
+            ]
+        ),
     )
 
     # Signatures
-    signatures = get_signature_block([
-        'Kassierer/in: {}'.format(session.user.get_full_name()),
-        'Ausgezählt durch {}'.format(session.backoffice_user_after.get_full_name()),
-    ], doc=doc)
+    signatures = get_signature_block(
+        [
+            'Kassierer/in: {}'.format(session.user.get_full_name()),
+            'Ausgezählt durch {}'.format(session.backoffice_user_after.get_full_name()),
+        ],
+        doc=doc,
+    )
 
     return [
-        header, Spacer(1, 15 * mm),
-        sales_heading, sales, Spacer(1, 10 * mm),
-        items_heading, items, Spacer(1, 30 * mm),
+        header,
+        Spacer(1, 15 * mm),
+        sales_heading,
+        sales,
+        Spacer(1, 10 * mm),
+        items_heading,
+        items,
+        Spacer(1, 30 * mm),
         signatures,
     ]
 
@@ -173,43 +224,54 @@ def generate_session_closing(record, doc):
     header = get_session_header(session, doc=doc, title='Umsatzermittlung')
     data = [
         ['Datum', 'Grund', 'Betrag'],
-        [session.start.strftime('%Y-%m-%d, %H:%M'), 'Anfangsbestand', CURRENCY.format(0)],
+        [
+            session.start.strftime('%Y-%m-%d, %H:%M'),
+            'Anfangsbestand',
+            CURRENCY.format(0),
+        ],
     ]
     running_total = 0
     for movement in session.cash_movements.all():
         running_total += movement.cash
-        data.append([
-            movement.timestamp.strftime('%Y-%m-%d, %H:%M'),
-            'Wechselgeld' if movement.cash > 0 else 'Abschöpfung',
-            CURRENCY.format(movement.cash)
-        ])
+        data.append(
+            [
+                movement.timestamp.strftime('%Y-%m-%d, %H:%M'),
+                'Wechselgeld' if movement.cash > 0 else 'Abschöpfung',
+                CURRENCY.format(movement.cash),
+            ]
+        )
     data.append(
         [session.end.strftime('%Y-%m-%d, %H:%M'), 'Endbestand', CURRENCY.format(0)]
     )
-    data.append([
-        '', 'Umsatz', CURRENCY.format(-running_total)
-    ])
+    data.append(['', 'Umsatz', CURRENCY.format(-running_total)])
     last_row = len(data) - 1
     transactions = Table(
         data=data,
         colWidths=[doc.width / 3] * 3,
-        style=TableStyle([
-            ('FONTSIZE', (0, 0), (2, last_row), FONTSIZE),
-            ('ALIGN', (0, 0), (0, last_row), 'LEFT'),
-            ('ALIGN', (1, 0), (2, last_row), 'RIGHT'),
-            ('LINEABOVE', (0, 1), (2, 1), 1.0, colors.black),
-            ('LINEABOVE', (1, last_row), (2, last_row), 1.2, colors.black),
-        ]),
+        style=TableStyle(
+            [
+                ('FONTSIZE', (0, 0), (2, last_row), FONTSIZE),
+                ('ALIGN', (0, 0), (0, last_row), 'LEFT'),
+                ('ALIGN', (1, 0), (2, last_row), 'RIGHT'),
+                ('LINEABOVE', (0, 1), (2, 1), 1.0, colors.black),
+                ('LINEABOVE', (1, last_row), (2, last_row), 1.2, colors.black),
+            ]
+        ),
     )
     return [
         header,
         Spacer(1, 15 * mm),
         transactions,
         Spacer(1, 30 * mm),
-        get_signature_block([
-            'Abgeschlossen durch: {}'.format(record.backoffice_user.get_full_name()),
-            '',
-        ], doc=doc)
+        get_signature_block(
+            [
+                'Abgeschlossen durch: {}'.format(
+                    record.backoffice_user.get_full_name()
+                ),
+                '',
+            ],
+            doc=doc,
+        ),
     ]
 
 
@@ -223,19 +285,23 @@ def generate_record(record: Record) -> str:
     style = get_paragraph_style()
 
     # Header: info text and qr code
-    title_str = '[{}] {}beleg'.format(settings.short_name, 'Einnahme' if record.type == 'inflow' else 'Ausgabe')
+    title_str = '[{}] {}beleg'.format(
+        settings.short_name, 'Einnahme' if record.type == 'inflow' else 'Ausgabe'
+    )
     title = Paragraph(title_str, style['Heading1'])
     tz = timezone.get_current_timezone()
     datetime = record.datetime.astimezone(tz)
     logo = scale_image(get_qr_image(record), 100)
     header = Table(
-        data=[[[title, ], logo], ],
+        data=[[[title], logo]],
         colWidths=[doc.width / 2] * 2,
-        style=TableStyle([
-            ('ALIGN', (0, 0), (0, 0), 'LEFT'),
-            ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
-            ('VALIGN', (0, 0), (1, 0), 'TOP'),
-        ]),
+        style=TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+                ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
+                ('VALIGN', (0, 0), (1, 0), 'TOP'),
+            ]
+        ),
     )
     name = record.named_entity
     if record.cash_movement and record.cash_movement.session:
@@ -243,19 +309,20 @@ def generate_record(record: Record) -> str:
     info = [
         ['Datum', datetime.strftime('%Y-%m-%d, %H:%M')],
         ['Von' if record.type == 'inflow' else 'Nach', name],
-        ['Betrag', CURRENCY.format(record.amount)]
+        ['Betrag', CURRENCY.format(record.amount)],
     ]
     info = [
-        [Paragraph('<b>{}</b>'.format(line[0]), style['Normal']), Paragraph(line[1], style['Normal'])]
+        [
+            Paragraph('<b>{}</b>'.format(line[0]), style['Normal']),
+            Paragraph(line[1], style['Normal']),
+        ]
         for line in info
     ]
 
     info_table = Table(
         data=info,
         colWidths=[90, doc.width - 90],
-        style=TableStyle([
-            ('ALIGN', (0, 0), (0, 0), 'RIGHT'),
-        ]),
+        style=TableStyle([('ALIGN', (0, 0), (0, 0), 'RIGHT')]),
     )
 
     # Signatures
@@ -264,14 +331,21 @@ def generate_record(record: Record) -> str:
         doc=doc,
     )
 
-    story = [
-        header, Spacer(1, 15 * mm),
-        info_table, Spacer(1, 40 * mm),
-        signature1,
-    ]
+    story = [header, Spacer(1, 15 * mm), info_table, Spacer(1, 40 * mm), signature1]
     if record.named_carrier:
         story.append(Spacer(1, 40 * mm))
-        story.append(get_signature_block(['{}: {}'.format('Einlieferer/in' if record.type == 'inflow' else 'Emfpänger/in', record.carrier or ''), ''], doc=doc))
+        story.append(
+            get_signature_block(
+                [
+                    '{}: {}'.format(
+                        'Einlieferer/in' if record.type == 'inflow' else 'Emfpänger/in',
+                        record.carrier or '',
+                    ),
+                    '',
+                ],
+                doc=doc,
+            )
+        )
     if record.cash_movement and record.closes_session:
         if record.cash_movement.session.cashdesk.handles_items:
             story.append(PageBreak())
@@ -281,5 +355,7 @@ def generate_record(record: Record) -> str:
 
     doc.build(story)
     _buffer.seek(0)
-    stored_name = default_storage.save(record.get_new_record_path(), ContentFile(_buffer.read()))
+    stored_name = default_storage.save(
+        record.get_new_record_path(), ContentFile(_buffer.read())
+    )
     return stored_name

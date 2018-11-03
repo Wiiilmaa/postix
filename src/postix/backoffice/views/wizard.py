@@ -24,10 +24,7 @@ class WizardSettingsView(SuperuserRequiredMixin, FormView):
 
     def get_initial(self):
         settings = EventSettings.get_solo()
-        attrs = {
-            attr: getattr(settings, attr)
-            for attr in EventSettingsForm().fields
-        }
+        attrs = {attr: getattr(settings, attr) for attr in EventSettingsForm().fields}
         attrs.update({'initialized': True})
         return attrs
 
@@ -105,6 +102,7 @@ class WizardPretixImportView(SuperuserRequiredMixin, FormView):
         form = self.get_form()
         if form.is_valid():
             from postix.core.utils.pretix_import import import_pretix_data
+
             try:
                 pretix_import = request.FILES['_file']
                 import_pretix_data(
@@ -114,7 +112,9 @@ class WizardPretixImportView(SuperuserRequiredMixin, FormView):
                 )
                 messages.success(request, _('The import has been processed \\o/'))
             except Exception as e:
-                messages.error(request, _('The import could not be processed: ') + str(e))
+                messages.error(
+                    request, _('The import could not be processed: ') + str(e)
+                )
             return self.form_valid(form)
 
     def get_success_url(self):

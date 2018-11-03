@@ -35,6 +35,7 @@ class PreorderViewSet(ReadOnlyModelViewSet):
     """
     This is a read-only list of all preorders.
     """
+
     queryset = Preorder.objects.all().order_by('id')
     serializer_class = PreorderSerializer
     permission_classes = (IsAdminUser,)
@@ -49,6 +50,7 @@ class PreorderPositionViewSet(ReadOnlyModelViewSet):
     match the *beginning* of secrets and only if the search query has more than
     6 characters.
     """
+
     queryset = PreorderPosition.objects.all().order_by('id')
     serializer_class = PreorderPositionSerializer
 
@@ -91,6 +93,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             ]
         }
     """
+
     queryset = Transaction.objects.all().prefetch_related('positions').order_by('id')
     serializer_class = TransactionSerializer
 
@@ -102,14 +105,18 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             return Response(e.data, status=status.HTTP_400_BAD_REQUEST)
 
     @transaction.atomic
-    def perform_create(self, request: HttpRequest) -> Dict[str, Union[bool, List[Dict]]]:
+    def perform_create(
+        self, request: HttpRequest
+    ) -> Dict[str, Union[bool, List[Dict]]]:
         data = request.data
         trans = Transaction()
         if 'cash_given' in data:
             trans.cash_given = round_decimal(data.get('cash_given', '0.00'))
         session = self.request.user.get_current_session()
         if not session:  # noqa
-            raise RuntimeError('This should never happen because the auth layer should handle this.')
+            raise RuntimeError(
+                'This should never happen because the auth layer should handle this.'
+            )
         trans.session = session
         trans.save()
 
@@ -130,25 +137,22 @@ class TransactionViewSet(ReadOnlyModelViewSet):
                 else:  # noqa
                     raise FlowError(_('Type {} is not yet implemented').format(postype))
             except FlowError as e:
-                position_feedback.append({
-                    'success': False,
-                    'message': e.message,
-                    'type': e.type,
-                    'missing_field': e.missing_field,
-                    'bypass_price': e.bypass_price
-                })
+                position_feedback.append(
+                    {
+                        'success': False,
+                        'message': e.message,
+                        'type': e.type,
+                        'missing_field': e.missing_field,
+                        'bypass_price': e.bypass_price,
+                    }
+                )
                 success = False
             else:
-                position_feedback.append({
-                    'success': True,
-                })
+                position_feedback.append({'success': True})
                 pos.transaction = trans
                 pos.save()
 
-        response = {
-            'success': success,
-            'positions': position_feedback
-        }
+        response = {'success': success, 'positions': position_feedback}
 
         if success:
             trans.print_receipt(do_open_drawer=True)
@@ -162,24 +166,29 @@ class TransactionViewSet(ReadOnlyModelViewSet):
     def reverse(self, *args, **kwargs) -> Response:
         session = self.request.user.get_current_session()
         if not session:  # noqa
-            raise RuntimeError('This should never happen because the auth layer should handle this.')
+            raise RuntimeError(
+                'This should never happen because the auth layer should handle this.'
+            )
         try:
             new_id = reverse_transaction(kwargs.get('pk'), session)
             Transaction.objects.get(pk=new_id).print_receipt(do_open_drawer=False)
-            return Response({
-                'success': True,
-                'id': new_id
-            }, status=status.HTTP_201_CREATED)
+            return Response(
+                {'success': True, 'id': new_id}, status=status.HTTP_201_CREATED
+            )
         except FlowError as e:
-            return Response({
-                'success': False,
-                'message': e.message
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'success': False, 'message': e.message},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class ProductViewSet(ReadOnlyModelViewSet):
 
-    queryset = Product.objects.prefetch_related('product_items', 'product_items__item').all().order_by('id')
+    queryset = (
+        Product.objects.prefetch_related('product_items', 'product_items__item')
+        .all()
+        .order_by('id')
+    )
     serializer_class = ProductSerializer
 
 
@@ -201,7 +210,10 @@ class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
             queryset = queryset.filter(list_id=listid_param)
             search_param = self.request.query_params.get('search', None)
             if search_param is not None and len(search_param) >= 3:
-                queryset = queryset.filter(Q(name__icontains=search_param) | Q(identifier__icontains=search_param))
+                queryset = queryset.filter(
+                    Q(name__icontains=search_param)
+                    | Q(identifier__icontains=search_param)
+                )
             elif search_param is not None:
                 queryset = queryset.filter(identifier__iexact=search_param)
             else:
@@ -216,6 +228,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
     We don't expose a queryset, and use a random serializer.
     Allowed actions: open-drawer, reprint-receipt, request-resupply, signal-next, print-ping, pong
     """
+
     serializer_class = ListConstraintEntrySerializer
     queryset = Cashdesk.objects.none()
 
@@ -223,7 +236,9 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
     def open_drawer(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
-            raise RuntimeError('This should never happen because the auth layer should handle this.')
+            raise RuntimeError(
+                'This should never happen because the auth layer should handle this.'
+            )
         session.cashdesk.printer.open_drawer()
         return Response({'success': True})
 
@@ -231,20 +246,27 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
     def reprint_receipt(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
-            raise RuntimeError('This should never happen because the auth layer should handle this.')
+            raise RuntimeError(
+                'This should never happen because the auth layer should handle this.'
+            )
 
         try:
             transaction = Transaction.objects.get(pk=request.data.get('transaction'))
             session.cashdesk.printer.print_receipt(transaction, do_open_drawer=False)
             return Response({'success': True})
         except Transaction.DoesNotExist:
-            return Response({'success': False, 'error': 'Transaction not found.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'success': False, 'error': 'Transaction not found.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     @list_route(methods=["POST"], url_path='request-resupply')
     def request_resupply(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
-            raise RuntimeError('This should never happen because the auth layer should handle this.')
+            raise RuntimeError(
+                'This should never happen because the auth layer should handle this.'
+            )
 
         session.request_resupply()
         return Response({'success': True})
@@ -253,7 +275,9 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
     def signal_next(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
-            raise RuntimeError('This should never happen because the auth layer should handle this.')
+            raise RuntimeError(
+                'This should never happen because the auth layer should handle this.'
+            )
 
         session.cashdesk.signal_next()
         return Response({'success': True})
@@ -262,7 +286,9 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
     def print_ping(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
-            raise RuntimeError('This should never happen because the auth layer should handle this.')
+            raise RuntimeError(
+                'This should never happen because the auth layer should handle this.'
+            )
 
         generate_ping(session.cashdesk)
         return Response({'success': True})

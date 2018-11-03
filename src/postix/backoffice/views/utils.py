@@ -21,7 +21,9 @@ class BackofficeUserRequiredMixin(UserPassesTestMixin):
         return redirect('backoffice:login')
 
 
-backoffice_user_required = user_passes_test(is_backoffice_user, login_url='backoffice:login')
+backoffice_user_required = user_passes_test(
+    is_backoffice_user, login_url='backoffice:login'
+)
 
 
 def is_superuser(user: User) -> bool:

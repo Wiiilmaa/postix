@@ -15,4 +15,6 @@ class TroubleshooterUserRequiredMixin(UserPassesTestMixin):
         return troubleshooter_user(self.request.user)
 
 
-troubleshooter_user_required = user_passes_test(troubleshooter_user, login_url='troubleshooter:login')
+troubleshooter_user_required = user_passes_test(
+    troubleshooter_user, login_url='troubleshooter:login'
+)

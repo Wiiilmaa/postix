@@ -59,8 +59,11 @@ class User(AbstractBaseUser):
     def get_current_session(self):
         from .cashdesk import CashdeskSession
 
-        return CashdeskSession.objects.filter(user=self, end__isnull=True) \
-            .order_by('-start').first()
+        return (
+            CashdeskSession.objects.filter(user=self, end__isnull=True)
+            .order_by('-start')
+            .first()
+        )
 
     def __str__(self) -> str:
         return self.username

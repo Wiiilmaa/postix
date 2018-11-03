@@ -9,8 +9,17 @@ from postix.core.models import (
 class PreorderPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PreorderPosition
-        fields = ('id', 'preorder', 'secret', 'product', 'is_redeemed', 'is_paid', 'product_name', 'pack_list',
-                  'redemption_message')
+        fields = (
+            'id',
+            'preorder',
+            'secret',
+            'product',
+            'is_redeemed',
+            'is_paid',
+            'product_name',
+            'pack_list',
+            'redemption_message',
+        )
 
 
 class PreorderSerializer(serializers.ModelSerializer):
@@ -24,7 +33,15 @@ class PreorderSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('id', 'name', 'price', 'tax_rate', 'requires_authorization', 'is_available', 'pack_list')
+        fields = (
+            'id',
+            'name',
+            'price',
+            'tax_rate',
+            'requires_authorization',
+            'is_available',
+            'pack_list',
+        )
 
 
 class ListConstraintSerializer(serializers.ModelSerializer):
@@ -42,9 +59,19 @@ class ListConstraintEntrySerializer(serializers.ModelSerializer):
 class TransactionPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransactionPosition
-        fields = ('id', 'type', 'value', 'tax_rate', 'tax_value', 'product',
-                  'reverses', 'listentry', 'preorder_position',
-                  'items', 'authorized_by')
+        fields = (
+            'id',
+            'type',
+            'value',
+            'tax_rate',
+            'tax_value',
+            'product',
+            'reverses',
+            'listentry',
+            'preorder_position',
+            'items',
+            'authorized_by',
+        )
 
 
 class TransactionSerializer(serializers.ModelSerializer):

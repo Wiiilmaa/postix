@@ -5,7 +5,6 @@ from postix.core.models import Cashdesk, Preorder, PreorderPosition, Product
 
 
 class FakeStyle:
-
     def __getattribute__(self, name):
         return lambda x: print(x)
 
@@ -22,7 +21,9 @@ def _build_product_dict(data, log, style):
     product_dict = dict()
     for item in data['items']:
         if item['variations']:
-            log.write(style.ERROR('Warning: Import script cannot deal with variations yet!'))
+            log.write(
+                style.ERROR('Warning: Import script cannot deal with variations yet!')
+            )
 
         try:
             product = Product.objects.get(import_source_id=item['id'])
@@ -36,13 +37,19 @@ def _build_product_dict(data, log, style):
         product.save()
         product_dict[item['id']] = product
 
-    log.write(style.SUCCESS(
-        'Found {} new and {} known products in file.'.format(created_items, loaded_items)
-    ))
+    log.write(
+        style.SUCCESS(
+            'Found {} new and {} known products in file.'.format(
+                created_items, loaded_items
+            )
+        )
+    )
     return product_dict
 
 
-def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle(), questions=None):
+def import_pretix_data(
+    data, add_cashdesks=False, log=FakeLog(), style=FakeStyle(), questions=None
+):
 
     if isinstance(data, str):
         presale_export = json.loads(data)['event']
@@ -51,20 +58,22 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
     else:
         presale_export = json.load(data)['event']
 
-    log.write(style.NOTICE(
-        'Importing data from event "{}".'.format(presale_export['name'])
-    ))
+    log.write(
+        style.NOTICE('Importing data from event "{}".'.format(presale_export['name']))
+    )
 
     orders = presale_export['orders']
     product_dict = _build_product_dict(presale_export, log=log, style=style)
     if isinstance(questions, str):
         questions = questions.split(',')
     questions = [int(q) for q in questions] if questions else list()
-    questions = {element['id']: element for element in presale_export.get('questions', []) if element['id'] in questions}
-
-    existing = {
-        p.order_code: p for p in Preorder.objects.prefetch_related('positions')
+    questions = {
+        element['id']: element
+        for element in presale_export.get('questions', [])
+        if element['id'] in questions
     }
+
+    existing = {p.order_code: p for p in Preorder.objects.prefetch_related('positions')}
 
     created_orders = 0
     loaded_orders = 0
@@ -75,16 +84,16 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
             created = False
 
             if preorder.is_paid != (order['status'] == 'p'):
-                preorder.is_paid = (order['status'] == 'p')
+                preorder.is_paid = order['status'] == 'p'
                 preorder.save()
         else:
-            preorder = Preorder.objects.create(order_code=order['code'], is_paid=(order['status'] == 'p'))
+            preorder = Preorder.objects.create(
+                order_code=order['code'], is_paid=(order['status'] == 'p')
+            )
             created = True
 
         if not created:
-            preorder_positions = {
-                p.secret: p for p in preorder.positions.all()
-            }
+            preorder_positions = {p.secret: p for p in preorder.positions.all()}
         else:
             preorder_positions = {}
 
@@ -99,13 +108,21 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
             if questions and 'answers' in position:
                 for answer in position['answers']:
                     if answer['question'] in questions:
-                        information += questions[answer['question']]['question'] + ' – ' + answer['answer'] + '\n\n'
+                        information += (
+                            questions[answer['question']]['question']
+                            + ' – '
+                            + answer['answer']
+                            + '\n\n'
+                        )
 
             if not pp.pk:
                 pp.information = information
                 pp.product = product_dict[position['item']]
                 to_insert.append(pp)
-            elif pp.information != information or pp.product_id != product_dict[position['item']].pk:
+            elif (
+                pp.information != information
+                or pp.product_id != product_dict[position['item']].pk
+            ):
                 pp.information = information
                 pp.product = product_dict[position['item']]
                 pp.save()
@@ -118,9 +135,13 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
         loaded_orders += int(not created)
 
     PreorderPosition.objects.bulk_create(to_insert)
-    log.write(style.SUCCESS(
-        'Found {} new and {} known orders in file.'.format(created_orders, loaded_orders)
-    ))
+    log.write(
+        style.SUCCESS(
+            'Found {} new and {} known orders in file.'.format(
+                created_orders, loaded_orders
+            )
+        )
+    )
 
     if add_cashdesks:
         cashdesk_count = add_cashdesks if isinstance(add_cashdesks, int) else 5
@@ -129,9 +150,5 @@ def import_pretix_data(data, add_cashdesks=False, log=FakeLog(), style=FakeStyle
                 name='Cashdesk {}'.format(cashdesk_number + 1),
                 ip_address='127.0.0.{}'.format(cashdesk_number + 1),
             )
-        log.write(style.SUCCESS(
-            'Added {} cashdesks.'.format(cashdesk_count)
-        ))
-    log.write(style.SUCCESS(
-        'Import done.'
-    ))
+        log.write(style.SUCCESS('Added {} cashdesks.'.format(cashdesk_count)))
+    log.write(style.SUCCESS('Import done.'))

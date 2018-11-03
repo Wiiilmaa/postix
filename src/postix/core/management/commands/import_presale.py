@@ -14,7 +14,13 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         try:
             with open(kwargs['presale_json'], 'r') as user_data:
-                import_pretix_data(user_data, add_cashdesks=kwargs.get('add_cashdesks'), log=self.stdout, style=self.style, questions=kwargs.get('questions'))
+                import_pretix_data(
+                    user_data,
+                    add_cashdesks=kwargs.get('add_cashdesks'),
+                    log=self.stdout,
+                    style=self.style,
+                    questions=kwargs.get('questions'),
+                )
         except Exception as e:
             self.stdout.write(self.style.ERROR('Failed to import file.'))
             self.stdout.write(e)

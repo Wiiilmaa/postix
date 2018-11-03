@@ -31,11 +31,14 @@ class EventSettingsForm(forms.ModelForm):
 
 
 class CashdeskForm(forms.ModelForm):
-
     class Meta:
         model = Cashdesk
         fields = (
-            'name', 'ip_address', 'printer_queue_name', 'printer_handles_drawer', 'handles_items'
+            'name',
+            'ip_address',
+            'printer_queue_name',
+            'printer_handles_drawer',
+            'handles_items',
         )
 
     def __init__(self, *args, **kwargs):
@@ -59,7 +62,9 @@ class ImportForm(forms.Form):
     questions = forms.CharField(
         required=False,
         label=_('Questions to import'),
-        help_text=_('Please enter comma separated question IDs that you wish to import'),
+        help_text=_(
+            'Please enter comma separated question IDs that you wish to import'
+        ),
     )
 
     def clean_questions(self):
@@ -80,20 +85,19 @@ class ImportForm(forms.Form):
 
 class ItemForm(forms.ModelForm):
     products = forms.ModelMultipleChoiceField(
-        queryset=Product.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
+        queryset=Product.objects.all(), widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
         model = Item
-        fields = (
-            'name', 'description', 'initial_stock',
-        )
+        fields = ('name', 'description', 'initial_stock')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance:
-            valid_products = ProductItem.objects.filter(item=self.instance).values_list('product_id', flat=True)
+            valid_products = ProductItem.objects.filter(item=self.instance).values_list(
+                'product_id', flat=True
+            )
             self.initial['products'] = Product.objects.filter(pk__in=valid_products)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
@@ -103,7 +107,9 @@ class ItemForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         ret = super().save(*args, **kwargs)
-        old_products = set(ProductItem.objects.filter(item=ret).values_list('product', flat=True))
+        old_products = set(
+            ProductItem.objects.filter(item=ret).values_list('product', flat=True)
+        )
         new_products = set(self.cleaned_data['products'])
 
         for product in old_products - new_products:

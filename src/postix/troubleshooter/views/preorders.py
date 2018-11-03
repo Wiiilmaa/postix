@@ -20,7 +20,10 @@ class PreorderListView(TroubleshooterUserRequiredMixin, ListView):
         _filter = self.request.GET
         if 'code' in _filter and _filter['code']:
             if len(_filter['code']) < 4:
-                messages.error(request, _('You need to enter at least four characters of the order code.'))
+                messages.error(
+                    request,
+                    _('You need to enter at least four characters of the order code.'),
+                )
             else:
                 self.filter['code'] = _filter['code']
         return super().dispatch(request, *args, **kwargs)
@@ -38,7 +41,11 @@ class PreorderInformationListView(TroubleshooterUserRequiredMixin, ListView):
     template_name = 'troubleshooter/preorder_information.html'
     context_object_name = 'positions'
     model = PreorderPosition
-    queryset = PreorderPosition.objects.all().exclude(information__isnull=True).exclude(information='')
+    queryset = (
+        PreorderPosition.objects.all()
+        .exclude(information__isnull=True)
+        .exclude(information='')
+    )
 
     def get_context_data(self):
         ctx = super().get_context_data()
@@ -49,8 +56,12 @@ class PreorderInformationListView(TroubleshooterUserRequiredMixin, ListView):
         form = CashdeskForm(request.POST)
         if form.is_valid():
             form.cleaned_data['cashdesk'].printer.print_attendance(
-                arrived=[position for position in self.queryset if position.is_redeemed],
-                not_arrived=[position for position in self.queryset if not position.is_redeemed],
+                arrived=[
+                    position for position in self.queryset if position.is_redeemed
+                ],
+                not_arrived=[
+                    position for position in self.queryset if not position.is_redeemed
+                ],
             )
             messages.success(request, _('Attendance print in progress.'))
         else:

@@ -11,6 +11,7 @@ class AbstractDevice(metaclass=ABCMeta):
     """
     Ensure that every device class implements open(), next() and close().
     """
+
     @abstractmethod
     def open(self):
         pass
@@ -30,19 +31,12 @@ class OverheadDisplay(AbstractDevice):
 
     def _request(self, method: str):
         # TODO: document API responses
-        payload = {
-            'method': method,
-            'id': 1,
-            'params': [],
-        }
+        payload = {'method': method, 'id': 1, 'params': []}
         headers = {'Content-Type': 'application/json'}
         url = 'http://{}:8888/jsonrpc'.format(self.ip_address)
         try:
             response = requests.post(
-                url,
-                data=json.dumps(payload),
-                headers=headers,
-                timeout=0.5,
+                url, data=json.dumps(payload), headers=headers, timeout=0.5
             )
             return response.json().get('result', response.json().get('error'))
         except Exception:

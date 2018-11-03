@@ -46,9 +46,11 @@ class TransactionListView(TroubleshooterUserRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self) -> QuerySet:
-        qs = TransactionPosition.objects.all()\
-            .order_by('-transaction__datetime')\
+        qs = (
+            TransactionPosition.objects.all()
+            .order_by('-transaction__datetime')
             .select_related('transaction')
+        )
         if 'cashdesk' in self.filter:
             qs = qs.filter(transaction__session__cashdesk=self.filter['cashdesk'])
         if 'type' in self.filter and self.filter['type']:
@@ -84,7 +86,12 @@ def transaction_reprint(request: HttpRequest, pk: int) -> HttpResponseRedirect:
             messages.error(request, _('Unknown transaction.'))
         else:
             transaction.print_receipt(do_open_drawer=False)
-            messages.success(request, _('Receipt has been reprinted at {}.').format(transaction.session.cashdesk))
+            messages.success(
+                request,
+                _('Receipt has been reprinted at {}.').format(
+                    transaction.session.cashdesk
+                ),
+            )
 
     return redirect('troubleshooter:transaction-detail', pk=pk)
 

@@ -32,7 +32,9 @@ def get_default_document(_buffer, footer: str = None) -> BaseDocTemplate:
         if footer:
             canvas.setFontSize(8)
             for i, line in enumerate(footer.split('\n')[::-1]):
-                canvas.drawCentredString(PAGESIZE[0] / 2, 25 + (3.5 * i) * mm, line.strip())
+                canvas.drawCentredString(
+                    PAGESIZE[0] / 2, 25 + (3.5 * i) * mm, line.strip()
+                )
             canvas.restoreState()
 
     doc = BaseDocTemplate(
@@ -43,8 +45,19 @@ def get_default_document(_buffer, footer: str = None) -> BaseDocTemplate:
         topMargin=20 * mm,
         bottomMargin=20 * mm,
     )
-    frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height,
-                  leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0, id='normal')
-    doc_template = PageTemplate(id='all', pagesize=PAGESIZE, frames=[frame], onPage=on_page)
+    frame = Frame(
+        doc.leftMargin,
+        doc.bottomMargin,
+        doc.width,
+        doc.height,
+        leftPadding=0,
+        rightPadding=0,
+        topPadding=0,
+        bottomPadding=0,
+        id='normal',
+    )
+    doc_template = PageTemplate(
+        id='all', pagesize=PAGESIZE, frames=[frame], onPage=on_page
+    )
     doc.addPageTemplates([doc_template])
     return doc

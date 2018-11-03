@@ -14,7 +14,11 @@ from .checks import is_redeemed
 
 class FlowError(Exception):
     def __init__(
-        self, msg: str, type: str = "error", missing_field: str = None, bypass_price: Decimal = None
+        self,
+        msg: str,
+        type: str = "error",
+        missing_field: str = None,
+        bypass_price: Decimal = None,
     ) -> None:
         self.message = msg
         self.type = type
@@ -58,7 +62,9 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
         pp = PreorderPosition.objects.get(secret=kwargs.get('secret'))
         last_trans_id = pp.last_transaction
 
-        pp = PreorderPosition.objects.select_for_update().get(secret=kwargs.get('secret'))
+        pp = PreorderPosition.objects.select_for_update().get(
+            secret=kwargs.get('secret')
+        )
         if pp.last_transaction != last_trans_id:
             raise FlowError(_('Race condition. Please try again.'))
 
@@ -74,17 +80,28 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
         raise FlowError(_('This product is currently not available.'))
 
     if is_redeemed(pp):
-        last_r = TransactionPosition.objects.filter(preorder_position=pp, type='redeem').last()
+        last_r = TransactionPosition.objects.filter(
+            preorder_position=pp, type='redeem'
+        ).last()
         tz = timezone.get_current_timezone()
 
-        raise FlowError(_('This ticket ({secret}…) has already been redeemed at {datetime}.').format(
-            datetime=last_r.transaction.datetime.astimezone(tz).strftime('%Y-%m-%d %H:%M:%S'),
-            secret=pp.secret[:6]
-        ))
+        raise FlowError(
+            _(
+                'This ticket ({secret}…) has already been redeemed at {datetime}.'
+            ).format(
+                datetime=last_r.transaction.datetime.astimezone(tz).strftime(
+                    '%Y-%m-%d %H:%M:%S'
+                ),
+                secret=pp.secret[:6],
+            )
+        )
 
     if pp.preorder.warning_text and 'warning_acknowledged' not in kwargs:
-        raise FlowError(pp.preorder.warning_text, type='confirmation',
-                        missing_field='warning_acknowledged')
+        raise FlowError(
+            pp.preorder.warning_text,
+            type='confirmation',
+            missing_field='warning_acknowledged',
+        )
 
     for c in pp.product.product_warning_constraints.all():
         if 'warning_{}_acknowledged'.format(c.constraint.pk) not in kwargs:
@@ -92,9 +109,12 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
                 bypass_price_paying -= c.price
                 bypass_taxrate = c.tax_rate
             else:
-                raise FlowError(c.constraint.message, type='confirmation',
-                                missing_field='warning_{}_acknowledged'.format(c.constraint.pk),
-                                bypass_price=c.price)
+                raise FlowError(
+                    c.constraint.message,
+                    type='confirmation',
+                    missing_field='warning_{}_acknowledged'.format(c.constraint.pk),
+                    bypass_price=c.price,
+                )
 
     try:
         c = pp.product.product_list_constraint
@@ -102,28 +122,45 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
         if c.price is not None and bypass_price_paying >= c.price:
             bypass_price_paying -= c.price
             if bypass_taxrate is not None and bypass_taxrate != c.tax_rate:
-                raise FlowError(_("Multiple upgrades with different tax rates are not supported."))
+                raise FlowError(
+                    _("Multiple upgrades with different tax rates are not supported.")
+                )
             bypass_taxrate = c.tax_rate
         else:
             if not entryid:
                 raise FlowError(
-                    _('This ticket can only redeemed by persons on the list "{}".').format(c.constraint.name),
-                    type='input', missing_field='list_{}'.format(c.constraint.pk), bypass_price=c.price)
+                    _(
+                        'This ticket can only redeemed by persons on the list "{}".'
+                    ).format(c.constraint.name),
+                    type='input',
+                    missing_field='list_{}'.format(c.constraint.pk),
+                    bypass_price=c.price,
+                )
             try:
-                pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
+                pos.authorized_by = User.objects.get(
+                    is_troubleshooter=True, auth_token=entryid
+                )
             except User.DoesNotExist:
                 try:
                     entry = c.constraint.entries.get(identifier=entryid)
                     if is_redeemed(entry):
-                        raise FlowError(_('This list entry has already been used.'),
-                                        type='input', missing_field='list_{}'.format(c.constraint.pk),
-                                        bypass_price=c.price)
+                        raise FlowError(
+                            _('This list entry has already been used.'),
+                            type='input',
+                            missing_field='list_{}'.format(c.constraint.pk),
+                            bypass_price=c.price,
+                        )
                     else:
                         pos.listentry = entry
                 except ListConstraintEntry.DoesNotExist:
-                    raise FlowError(_('This entry could not be found in list "{}".').format(c.constraint.name),
-                                    type='input', missing_field='list_{}'.format(c.constraint.pk),
-                                    bypass_price=c.price)
+                    raise FlowError(
+                        _('This entry could not be found in list "{}".').format(
+                            c.constraint.name
+                        ),
+                        type='input',
+                        missing_field='list_{}'.format(c.constraint.pk),
+                        bypass_price=c.price,
+                    )
 
     except ListConstraintProduct.DoesNotExist:
         pass
@@ -166,36 +203,58 @@ def sell_ticket(**kwargs) -> TransactionPosition:
     if product.requires_authorization:
         auth = kwargs.get('auth', '!invalid')
         try:
-            pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=auth)
+            pos.authorized_by = User.objects.get(
+                is_troubleshooter=True, auth_token=auth
+            )
         except User.DoesNotExist:
-            raise FlowError(_('This sale requires authorization by a troubleshooter.'),
-                            type='input', missing_field='auth')
+            raise FlowError(
+                _('This sale requires authorization by a troubleshooter.'),
+                type='input',
+                missing_field='auth',
+            )
 
     for c in product.product_warning_constraints.all():
         if 'warning_{}_acknowledged'.format(c.constraint.pk) not in kwargs:
-            raise FlowError(c.constraint.message, type='confirmation',
-                            missing_field='warning_{}_acknowledged'.format(c.constraint.pk))
+            raise FlowError(
+                c.constraint.message,
+                type='confirmation',
+                missing_field='warning_{}_acknowledged'.format(c.constraint.pk),
+            )
 
     try:
         c = product.product_list_constraint
         entryid = kwargs.get('list_{}'.format(c.constraint.pk), None)
         if not entryid:
             raise FlowError(
-                _('This ticket can only redeemed by persons on the list "{}".').format(c.constraint.name),
-                type='input', missing_field='list_{}'.format(c.constraint.pk))
+                _('This ticket can only redeemed by persons on the list "{}".').format(
+                    c.constraint.name
+                ),
+                type='input',
+                missing_field='list_{}'.format(c.constraint.pk),
+            )
         try:
-            pos.authorized_by = User.objects.get(is_troubleshooter=True, auth_token=entryid)
+            pos.authorized_by = User.objects.get(
+                is_troubleshooter=True, auth_token=entryid
+            )
         except User.DoesNotExist:
             try:
                 entry = c.constraint.entries.get(identifier=entryid)
                 if is_redeemed(entry):
-                    raise FlowError(_('This list entry has already been used.'),
-                                    type='input', missing_field='list_{}'.format(c.constraint.pk))
+                    raise FlowError(
+                        _('This list entry has already been used.'),
+                        type='input',
+                        missing_field='list_{}'.format(c.constraint.pk),
+                    )
                 else:
                     pos.listentry = entry
             except ListConstraintEntry.DoesNotExist:
-                raise FlowError(_('This entry could not be found in list "{}".').format(c.constraint.name),
-                                type='input', missing_field='list_{}'.format(c.constraint.pk))
+                raise FlowError(
+                    _('This entry could not be found in list "{}".').format(
+                        c.constraint.name
+                    ),
+                    type='input',
+                    missing_field='list_{}'.format(c.constraint.pk),
+                )
     except ListConstraintProduct.DoesNotExist:
         pass
 
@@ -203,7 +262,9 @@ def sell_ticket(**kwargs) -> TransactionPosition:
     return pos
 
 
-def reverse_transaction(trans_id: int, current_session: CashdeskSession, authorized_by=None) -> int:
+def reverse_transaction(
+    trans_id: int, current_session: CashdeskSession, authorized_by=None
+) -> int:
     """
     Creates a Transaction that reverses an earlier transaction as a whole.
 
@@ -221,10 +282,14 @@ def reverse_transaction(trans_id: int, current_session: CashdeskSession, authori
     if old_transaction.session != current_session:
         if not current_session.user.is_troubleshooter:
             if not authorized_by or not authorized_by.is_troubleshooter:
-                raise FlowError(_('Only troubleshooters can reverse sales from other sessions.'))
+                raise FlowError(
+                    _('Only troubleshooters can reverse sales from other sessions.')
+                )
 
     if old_transaction.has_reversed_positions:
-        raise FlowError(_('At least one position of this transaction has already been reversed.'))
+        raise FlowError(
+            _('At least one position of this transaction has already been reversed.')
+        )
     if old_transaction.has_reversals:
         raise FlowError(_('At least one position of this transaction is a reversal.'))
 
@@ -266,7 +331,9 @@ def reverse_transaction_position(
     if old_pos.transaction.session != current_session:
         if not current_session.user.is_troubleshooter:
             if not authorized_by or not authorized_by.is_troubleshooter:
-                raise FlowError(_('Only troubleshooters can reverse sales from other sessions.'))
+                raise FlowError(
+                    _('Only troubleshooters can reverse sales from other sessions.')
+                )
 
     if old_pos.reversed_by.exists():
         raise FlowError(_('This position has already been reversed.'))
@@ -302,8 +369,12 @@ def reverse_session(session: CashdeskSession) -> int:
     if not session.is_active():
         raise FlowError(_('The session needs to be still active.'))
 
-    if TransactionPosition.objects.filter(transaction__session=session, type='reverse').exists():
-        raise FlowError(_('For safety, you cannot execute this on sessions that contain reversals.'))
+    if TransactionPosition.objects.filter(
+        transaction__session=session, type='reverse'
+    ).exists():
+        raise FlowError(
+            _('For safety, you cannot execute this on sessions that contain reversals.')
+        )
 
     new_transaction = Transaction(session=session)
     new_transaction.save()
