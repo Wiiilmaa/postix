@@ -8,7 +8,7 @@ from postix.backoffice.forms import (
     CashdeskForm, EventSettingsForm, ImportForm, ItemForm,
 )
 from postix.backoffice.views.utils import SuperuserRequiredMixin
-from postix.core.models import EventSettings, Item, User
+from postix.core.models import Cashdesk, EventSettings, Item, User
 
 
 class WizardSettingsView(SuperuserRequiredMixin, FormView):
@@ -35,7 +35,12 @@ class WizardSettingsView(SuperuserRequiredMixin, FormView):
         return reverse('backoffice:wizard-settings')
 
 
-class WizardCashdesksView(SuperuserRequiredMixin, FormView):
+class WizardCashdesksView(SuperuserRequiredMixin, ListView):
+    template_name = 'backoffice/wizard_cashdesks_list.html'
+    model = Cashdesk
+
+
+class WizardCashdeskCreateView(SuperuserRequiredMixin, FormView):
     template_name = 'backoffice/wizard_cashdesks.html'
     form_class = CashdeskForm
 
@@ -45,6 +50,20 @@ class WizardCashdesksView(SuperuserRequiredMixin, FormView):
             form.save()
             messages.success(request, _('The cashdesk has been created.'))
             return self.form_valid(form)
+
+    def get_success_url(self):
+        return reverse('backoffice:wizard-cashdesks')
+
+
+class WizardCashdeskEditView(SuperuserRequiredMixin, UpdateView):
+    template_name = 'backoffice/wizard_cashdesks_edit.html'
+    model = Cashdesk
+    form_class = CashdeskForm
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, _('The item has been updated.'))
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('backoffice:wizard-cashdesks')

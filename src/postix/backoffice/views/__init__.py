@@ -13,9 +13,9 @@ from .session import (
 from .user_management import ResetPasswordView, UserListView, create_user_view
 from .utils import backoffice_user_required
 from .wizard import (
-    WizardCashdesksView, WizardItemCreateView, WizardItemEditView,
-    WizardItemListView, WizardPretixImportView, WizardSettingsView,
-    WizardUsersView,
+    WizardCashdeskCreateView, WizardCashdeskEditView, WizardCashdesksView,
+    WizardItemCreateView, WizardItemEditView, WizardItemListView,
+    WizardPretixImportView, WizardSettingsView, WizardUsersView,
 )
 
 __all__ = (
@@ -44,6 +44,8 @@ __all__ = (
     'SessionDetailView',
     'SessionListView',
     'UserListView',
+    'WizardCashdeskCreateView',
+    'WizardCashdeskEditView',
     'WizardCashdesksView',
     'WizardItemCreateView',
     'WizardItemEditView',

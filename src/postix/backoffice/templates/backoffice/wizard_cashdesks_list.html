@@ -1,0 +1,24 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block headline %}{% trans "Cashdesk List" %}{% endblock %}
+
+{% block content %}
+<a href="{% url "backoffice:wizard-cashdesk-create" %}" class="btn btn-info btn-xs">
+    {% trans "Add cashdesk" %}
+</a>
+
+<ul>
+    {% for cashdesk in object_list %}
+        <li>
+            {{ cashdesk.name }}
+            <a href="{% url "backoffice:wizard-cashdesk-edit" pk=cashdesk.pk %}" class="btn btn-info btn-xs">
+                {% trans "Edit cashdesk" %}
+            </a>
+        </li>
+    {% endfor %}
+
+</ul>
+
+{% endblock %}
