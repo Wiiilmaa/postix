@@ -63,10 +63,10 @@ def test_wizard_settings_view(superuser_client, event_settings):
 @pytest.mark.django_db
 def test_wizard_create_cashdesks(superuser_client, event_settings):
     assert Cashdesk.objects.count() == 0
-    response = superuser_client.get('/backoffice/wizard/cashdesks/')
+    response = superuser_client.get('/backoffice/wizard/cashdesks/new')
     assert response.status_code == 200
     response = superuser_client.post(
-        '/backoffice/wizard/cashdesks/',
+        '/backoffice/wizard/cashdesks/new',
         {
             'name': 'Cashdesk 1',
             'ip_address': '10.0.0.1',
@@ -113,11 +113,11 @@ def test_wizard_pretix_import(superuser_client, event_settings, normal_pretix_da
     assert PreorderPosition.objects.count() == 0
     assert Cashdesk.objects.count() == 0
     f = SimpleUploadedFile('pretix.json', json.dumps(normal_pretix_data).encode())
-    response = superuser_client.post('/backoffice/wizard/import/', {
-        '_file': f,
-        'cashdesks': 5,
-        'questions': '10'
-    }, follow=True)
+    response = superuser_client.post(
+        '/backoffice/wizard/import/',
+        {'_file': f, 'cashdesks': 5, 'questions': '10'},
+        follow=True,
+    )
     assert response.status_code == 200
     assert Product.objects.count() == 1
     assert Preorder.objects.count() == 2
@@ -129,12 +129,16 @@ def test_wizard_pretix_import(superuser_client, event_settings, normal_pretix_da
 def test_wizard_create_new_items(superuser_client, event_settings):
     assert Item.objects.count() == 0
     product = product_factory()
-    response = superuser_client.post('/backoffice/wizard/items/new', {
-        'name': 'Name',
-        'description': 'Description',
-        'initial_stock': 50,
-        'products': str(product.pk)
-    }, follow=True)
+    response = superuser_client.post(
+        '/backoffice/wizard/items/new',
+        {
+            'name': 'Name',
+            'description': 'Description',
+            'initial_stock': 50,
+            'products': str(product.pk),
+        },
+        follow=True,
+    )
     assert response.status_code == 200
     assert Item.objects.count() == 1
 
@@ -143,12 +147,16 @@ def test_wizard_create_new_items(superuser_client, event_settings):
 def test_wizard_edit_item(superuser_client, event_settings):
     item = item_factory()
     product = product_factory()
-    response = superuser_client.post('/backoffice/wizard/items/{}/'.format(item.pk), {
-        'name': 'Name',
-        'description': 'Description',
-        'initial_stock': 20,
-        'products': str(product.pk)
-    }, follow=True)
+    response = superuser_client.post(
+        '/backoffice/wizard/items/{}/'.format(item.pk),
+        {
+            'name': 'Name',
+            'description': 'Description',
+            'initial_stock': 20,
+            'products': str(product.pk),
+        },
+        follow=True,
+    )
     assert response.status_code == 200
     old_name = item.name
     item.refresh_from_db()

@@ -33,7 +33,6 @@ def test_backoffice_can_create_session(backoffice_client):
     )
     assert response.status_code == 200
     assert CashdeskSession.objects.count() == 1
-    assert 'Session has been created' in response.content.decode()
 
 
 @pytest.mark.django_db
@@ -88,7 +87,6 @@ def test_backoffice_can_resupply(backoffice_client):
         follow=True,
     )
     assert response.status_code == 200
-    assert 'Products have been added' in response.content.decode()
     session.refresh_from_db()
     assert session.cash_before == cash_before + 10
 
@@ -139,10 +137,10 @@ def test_backoffice_can_end_and_correct_session(backoffice_client):
 
 
 @pytest.mark.django_db
-def test_backoffice_can_see_report(backoffice_client):
+def test_backoffice_can_see_record(backoffice_client):
     session = cashdesk_session_after_factory()
     response = backoffice_client.get(
-        '/backoffice/session/{}/report/'.format(session.pk)
+        '/backoffice/records/{}/print/'.format(session.final_cash_movement.record.pk)
     )
     assert response.status_code == 200
 

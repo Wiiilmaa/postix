@@ -83,6 +83,7 @@ def cashdesk_session_after_factory(ip=None, user=None, create_items=True):
     cd.backoffice_user_after = cd.backoffice_user_before
     cd.cash_after = cd.cash_before
     cd.save()
+    cd.create_final_movement()
     return cd
 
 
