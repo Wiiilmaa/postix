@@ -6,6 +6,7 @@ const priceMap = {
     "bill-100": 100,
     "bill-200": 200,
     "bill-500": 500,
+    "bill-other": 1,
     "coin-200": 2,
     "coin-100": 1,
     "coin-50": 0.5,
@@ -14,6 +15,7 @@ const priceMap = {
     "coin-5": 0.05,
     "coin-2": 0.02,
     "coin-1": 0.01,
+    "coin-other": 1,
 }
 let calculateTotal = function() {
     let runningTotal = 0;
