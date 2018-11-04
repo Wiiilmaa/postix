@@ -8,7 +8,18 @@ from django.utils.translation import ugettext as _
 from postix.core.models import Cashdesk, Item, User
 
 
+class CalculatorWidget(forms.NumberInput):
+
+    def __init__(self, *args, attrs=None, **kwargs):
+        attrs = attrs or dict()
+        attrs['type'] = 'text'
+        attrs['class'] = 'calculatable'
+        super().__init__(*args, attrs=attrs, **kwargs)
+
+
 class RelaxedDecimalField(forms.DecimalField):
+    widget = CalculatorWidget
+
     def to_python(self, value):
         return super().to_python(
             value.replace(",", ".") if isinstance(value, str) else value
@@ -31,7 +42,6 @@ class SessionBaseForm(forms.Form):
         max_digits=10,
         decimal_places=2,
         label=_('Cash'),
-        widget=forms.NumberInput(attrs={'type': 'text'}),
     )
 
     def __init__(self, *args, must_be_positive=False, **kwargs):

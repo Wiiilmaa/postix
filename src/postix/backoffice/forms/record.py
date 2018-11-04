@@ -7,6 +7,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from postix.core.models import Record, RecordEntity
+from .session import RelaxedDecimalField
 
 User = get_user_model()
 
@@ -47,6 +48,7 @@ class RecordCreateForm(forms.ModelForm):
     class Meta:
         model = Record
         fields = ('type', 'datetime', 'entity', 'carrier', 'amount', 'backoffice_user')
+        field_classes = {'amount': RelaxedDecimalField}
 
 
 class RecordUpdateForm(RecordCreateForm):

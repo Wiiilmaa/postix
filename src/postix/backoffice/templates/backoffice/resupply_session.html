@@ -30,6 +30,7 @@
 		</div>
 	</form>
 </div>
+{% include "backoffice/calculator.html" %}
 {% endblock %}
 
 {% block scripts %}
@@ -46,4 +47,5 @@
 
     <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
     <script type="text/javascript" src="{% static "backoffice/js/sessionform.js" %}"></script>
+    <script src="{% static "backoffice/js/calculator.js" %}"></script>
 {% endblock %}

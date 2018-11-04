@@ -27,3 +27,34 @@ table ul {
 #end-sessions-table {
     label {display: none}
 }
+#calculatorTrigger {
+    position: fixed;
+    top: 80px;
+    right: 30px;
+}
+#calculator .modal-dialog {
+    max-width: 900px;
+    .modal-body {
+        display: flex;
+        justify-content: space-around;
+        h4 {
+            text-align: center;
+        }
+        .column {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            label {
+                width: 50px;
+                margin-right: 16px;
+                text-align: right;
+            }
+        }
+    }
+    #calculatorResult {
+        margin-left: 16px;
+        &:after {
+            content: " €"
+        }
+    }
+}
