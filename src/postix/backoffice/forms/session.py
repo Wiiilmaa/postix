@@ -9,7 +9,6 @@ from postix.core.models import Cashdesk, Item, User
 
 
 class CalculatorWidget(forms.NumberInput):
-
     def __init__(self, *args, attrs=None, **kwargs):
         attrs = attrs or dict()
         attrs['type'] = 'text'
@@ -38,11 +37,7 @@ class SessionBaseForm(forms.Form):
     )
     user = forms.CharField(max_length=254, label=_('Angel'))
     backoffice_user = forms.CharField(max_length=254, label=_('Backoffice angel'))
-    cash_before = RelaxedDecimalField(
-        max_digits=10,
-        decimal_places=2,
-        label=_('Cash'),
-    )
+    cash_before = RelaxedDecimalField(max_digits=10, decimal_places=2, label=_('Cash'))
 
     def __init__(self, *args, must_be_positive=False, **kwargs):
         initial = kwargs.get('initial', dict())

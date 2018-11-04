@@ -7,6 +7,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from postix.core.models import Record, RecordEntity
+
 from .session import RelaxedDecimalField
 
 User = get_user_model()
