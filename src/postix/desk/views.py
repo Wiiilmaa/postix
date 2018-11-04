@@ -17,12 +17,20 @@ from ..core.utils.iputils import detect_cashdesk, get_ip_address
 class LoginView(TemplateView):
     template_name = 'desk/login.html'
 
-    def dispatch(self, request: HttpRequest, *args, **kwargs) -> Union[HttpResponseRedirect, HttpResponse]:
+    def dispatch(
+        self, request: HttpRequest, *args, **kwargs
+    ) -> Union[HttpResponseRedirect, HttpResponse]:
         if not self.cashdesk:
-            return render(request, 'desk/fail.html', {
-                'message': _('This is not a registered cashdesk.'),
-                'detail': _('Your IP address is {0}').format(get_ip_address(request))
-            })
+            return render(
+                request,
+                'desk/fail.html',
+                {
+                    'message': _('This is not a registered cashdesk.'),
+                    'detail': _('Your IP address is {0}').format(
+                        get_ip_address(request)
+                    ),
+                },
+            )
         if request.user.is_authenticated:
             return redirect('/')
         return super().dispatch(request, *args, **kwargs)
@@ -38,15 +46,22 @@ class LoginView(TemplateView):
                 return redirect('desk:login')
 
             if session.cashdesk != self.cashdesk:
-                messages.error(request, _('Your session is scheduled for a different cashdesk. Please go to '
-                                          '{desk}').format(desk=str(session.cashdesk)))
+                messages.error(
+                    request,
+                    _(
+                        'Your session is scheduled for a different cashdesk. Please go to '
+                        '{desk}'
+                    ).format(desk=str(session.cashdesk)),
+                )
                 return redirect('desk:login')
 
             login(request, user)
             session.cashdesk.signal_next()
             return redirect('desk:main')
         else:
-            messages.error(request, _('No user account matches the entered credentials.'))
+            messages.error(
+                request, _('No user account matches the entered credentials.')
+            )
         return redirect('desk:login')
 
     @cached_property
@@ -70,11 +85,15 @@ def main_view(request: HttpRequest) -> HttpResponse:
     cashdesk = detect_cashdesk(request)
     session = request.user.get_current_session()
     if not cashdesk or session is None or session.cashdesk != cashdesk:
-        return render(request, 'desk/fail.html', {
-            'message': _('You do not have an active session at this cashdesk.'),
-            'detail': _('You are logged in as {}.'.format(request.user)),
-            'offer_logout': True
-        })
+        return render(
+            request,
+            'desk/fail.html',
+            {
+                'message': _('You do not have an active session at this cashdesk.'),
+                'detail': _('You are logged in as {}.'.format(request.user)),
+                'offer_logout': True,
+            },
+        )
 
     if not session.start:
         session.start = now()

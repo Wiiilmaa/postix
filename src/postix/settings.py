@@ -46,7 +46,8 @@ INSTALLED_APPS = (
 
 try:
     import django_extensions  # noqa
-    INSTALLED_APPS += ('django_extensions', )
+
+    INSTALLED_APPS += ('django_extensions',)
 except ImportError:
     pass
 
@@ -72,7 +73,9 @@ DATABASES = {
         'PASSWORD': os.getenv('POSTIX_DB_PASS', ''),
         'HOST': os.getenv('POSTIX_DB_HOST', ''),
         'PORT': os.getenv('POSTIX_DB_PORT', ''),
-        'CONN_MAX_AGE': 300 if os.getenv('POSTIX_DB_TYPE', 'sqlite3') != 'sqlite3' else 0,
+        'CONN_MAX_AGE': 300
+        if os.getenv('POSTIX_DB_TYPE', 'sqlite3') != 'sqlite3'
+        else 0,
     }
 }
 
@@ -92,36 +95,31 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
-                'postix.troubleshooter.context.processor'
-            ],
-        }
+                'postix.troubleshooter.context.processor',
+            ]
+        },
     }
 ]
 
 LANGUAGE_CODE = 'de'
-LANGUAGES = (
-    ('en', 'English'),
-    ('de', 'German'),
-)
+LANGUAGES = (('en', 'English'), ('de', 'German'))
 TIME_ZONE = 'Europe/Berlin'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LOCALE_PATHS = [
-    os.path.join(os.path.dirname(os.path.dirname(__file__)), 'locale')
-]
+LOCALE_PATHS = [os.path.join(os.path.dirname(os.path.dirname(__file__)), 'locale')]
 
 STATIC_URL = os.getenv('POSTIX_STATIC_URL', '/static/postix/')
 if os.path.exists('/srv/static'):
     # Backwards compatibility
     STATIC_ROOT = os.getenv('POSTIX_STATIC_ROOT', '/srv/static/postix/')
 else:
-    STATIC_ROOT = os.getenv('POSTIX_STATIC_ROOT', os.path.join(os.path.dirname(__file__), 'static.dist'))
+    STATIC_ROOT = os.getenv(
+        'POSTIX_STATIC_ROOT', os.path.join(os.path.dirname(__file__), 'static.dist')
+    )
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'postix', 'static'),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'postix', 'static')]
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -138,9 +136,7 @@ MESSAGE_TAGS = {
     50: 'critical',
 }
 
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
-)
+COMPRESS_PRECOMPILERS = (('text/x-scss', 'django_libsass.SassCompiler'),)
 
 COMPRESS_CSS_FILTERS = (
     'compressor.filters.css_default.CssAbsoluteFilter',
@@ -152,12 +148,10 @@ REST_FRAMEWORK = {
         'postix.api.auth.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'PAGE_SIZE': 25,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
 }
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -165,15 +159,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        },
-    },
+    'handlers': {'console': {'class': 'logging.StreamHandler'}},
+    'loggers': {'django': {'handlers': ['console'], 'level': 'INFO'}},
 }
