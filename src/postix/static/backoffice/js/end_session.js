@@ -27,10 +27,10 @@ var get_difference = function(numberinput) {
     }
 }
 
-$('.numberinput').on('keyup', function() {
+$('.numberinput, .calculatorwidget').on('keyup', function() {
     get_difference($(this));
 });
-$('.numberinput').each(function(index) {
+$('.numberinput, .calculatorwidget').each(function(index) {
     get_difference($(this));
 });
 $('.show-hide-heading').on('click', function() {
