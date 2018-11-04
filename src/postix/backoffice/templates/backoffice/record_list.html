@@ -48,10 +48,10 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if record.carrier %}
+                    {% if record.cash_movement.session.user %}
+                        {{ record.cash_movement.session.user.get_full_name }}
+                    {% elif record.carrier %}
                         {{ record.carrier }}
-                    {% elif record.backoffice_user_after %}
-                        {{ record.user.get_full_name }}
                     {% else %}
                         -
                     {% endif %}

@@ -338,8 +338,8 @@ def generate_record(record: Record) -> str:
             get_signature_block(
                 [
                     '{}: {}'.format(
-                        'Einlieferer/in' if record.type == 'inflow' else 'Emfpänger/in',
-                        record.carrier or '',
+                        'Einlieferer/in' if record.type == 'inflow' else 'Empfänger/in',
+                        record.named_carrier,
                     ),
                     '',
                 ],
