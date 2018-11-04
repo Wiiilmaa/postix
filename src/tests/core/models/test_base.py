@@ -65,8 +65,13 @@ def test_product_unavailable_quota():
 @pytest.mark.django_db
 def test_tax_calculation():
     trans = transaction_factory()
-    pos = TransactionPosition(type='sale', tax_rate=Decimal('7.00'), value=Decimal('1.07'),
-                              transaction=trans, product=product_factory())
+    pos = TransactionPosition(
+        type='sale',
+        tax_rate=Decimal('7.00'),
+        value=Decimal('1.07'),
+        transaction=trans,
+        product=product_factory(),
+    )
     pos.save()
     assert pos.tax_value == Decimal('0.07')
 
@@ -74,8 +79,13 @@ def test_tax_calculation():
 @pytest.mark.django_db
 def test_tax_calculation_no_tax():
     trans = transaction_factory()
-    pos = TransactionPosition(type='sale', tax_rate=Decimal('0.00'), value=Decimal('1.19'),
-                              transaction=trans, product=product_factory())
+    pos = TransactionPosition(
+        type='sale',
+        tax_rate=Decimal('0.00'),
+        value=Decimal('1.19'),
+        transaction=trans,
+        product=product_factory(),
+    )
     pos.save()
     assert pos.tax_value == Decimal('0.00')
 
@@ -104,11 +114,13 @@ def test_product_pack_list():
     prod = product_factory()
     ProductItem.objects.create(
         item=Item.objects.create(name='Foo', description='', initial_stock=10),
-        product=prod, amount=1
+        product=prod,
+        amount=1,
     )
     ProductItem.objects.create(
         item=Item.objects.create(name='Bar', description='', initial_stock=10),
-        product=prod, amount=3
+        product=prod,
+        amount=3,
     )
     assert prod.pack_list == 'Foo, 3x Bar'
 

@@ -12,6 +12,8 @@ def test_troubleshooter_ping_view(troubleshooter_client):
     assert Ping.objects.count() == 10
     response = troubleshooter_client.get('/troubleshooter/ping/')
     assert response.status_code == 200
-    response = troubleshooter_client.post('/troubleshooter/ping/', {'cashdesk': desk.pk}, follow=True)
+    response = troubleshooter_client.post(
+        '/troubleshooter/ping/', {'cashdesk': desk.pk}, follow=True
+    )
     assert response.status_code == 200
     assert Ping.objects.count() == 11

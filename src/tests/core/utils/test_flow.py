@@ -79,7 +79,9 @@ def test_preorder_warning_constraint():
         redeem_preorder_ticket(secret=pp.secret)
     assert excinfo.value.message == warning_constraint.message
     assert excinfo.value.type == 'confirmation'
-    assert excinfo.value.missing_field == 'warning_{}_acknowledged'.format(warning_constraint.pk)
+    assert excinfo.value.missing_field == 'warning_{}_acknowledged'.format(
+        warning_constraint.pk
+    )
 
 
 @pytest.mark.django_db
@@ -89,9 +91,7 @@ def test_preorder_warning_constraint_passed():
     WarningConstraintProduct.objects.create(
         product=pp.product, constraint=warning_constraint
     )
-    options = {
-        'warning_{}_acknowledged'.format(warning_constraint.pk): 'ok'
-    }
+    options = {'warning_{}_acknowledged'.format(warning_constraint.pk): 'ok'}
     redeem_preorder_ticket(secret=pp.secret, **options)
 
 
@@ -106,7 +106,9 @@ def test_preorder_warning_constraint_bypass_to_low():
         redeem_preorder_ticket(secret=pp.secret)
     assert excinfo.value.message == warning_constraint.message
     assert excinfo.value.type == 'confirmation'
-    assert excinfo.value.missing_field == 'warning_{}_acknowledged'.format(warning_constraint.pk)
+    assert excinfo.value.missing_field == 'warning_{}_acknowledged'.format(
+        warning_constraint.pk
+    )
     with pytest.raises(FlowError):
         redeem_preorder_ticket(secret=pp.secret, bypass_price=4)
 
@@ -135,9 +137,7 @@ def test_preorder_warning_constraint_bypass_price_paid():
     WarningConstraintProduct.objects.create(
         product=pp.product, constraint=warning_constraint, price=Decimal('7.00')
     )
-    options = {
-        'bypass_price': 7
-    }
+    options = {'bypass_price': 7}
     pos = redeem_preorder_ticket(secret=pp.secret, **options)
     assert pos.value == Decimal('7.00')
 
@@ -145,11 +145,17 @@ def test_preorder_warning_constraint_bypass_price_paid():
 @pytest.mark.django_db
 def test_preorder_list_constraint_bypass_success():
     pp = preorder_position_factory(paid=True)
-    list_constraint = list_constraint_factory(product=pp.product, price=Decimal('23.00'))
+    list_constraint = list_constraint_factory(
+        product=pp.product, price=Decimal('23.00')
+    )
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret)
-    assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
-        list_constraint.name)
+    assert (
+        excinfo.value.message
+        == 'This ticket can only redeemed by persons on the list "{}".'.format(
+            list_constraint.name
+        )
+    )
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
     assert excinfo.value.bypass_price == Decimal('23.00')
@@ -165,11 +171,17 @@ def test_preorder_list_constraint_bypass_success():
 @pytest.mark.django_db
 def test_preorder_list_constraint_bypass_too_low():
     pp = preorder_position_factory(paid=True)
-    list_constraint = list_constraint_factory(product=pp.product, price=Decimal('23.00'))
+    list_constraint = list_constraint_factory(
+        product=pp.product, price=Decimal('23.00')
+    )
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret)
-    assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
-        list_constraint.name)
+    assert (
+        excinfo.value.message
+        == 'This ticket can only redeemed by persons on the list "{}".'.format(
+            list_constraint.name
+        )
+    )
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
     assert excinfo.value.bypass_price == Decimal('23.00')
@@ -181,13 +193,15 @@ def test_preorder_list_constraint_bypass_too_low():
 def test_preorder_list_constraint():
     pp = preorder_position_factory(paid=True)
     list_constraint = list_constraint_factory()
-    ListConstraintProduct.objects.create(
-        product=pp.product, constraint=list_constraint
-    )
+    ListConstraintProduct.objects.create(product=pp.product, constraint=list_constraint)
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret)
-    assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
-        list_constraint.name)
+    assert (
+        excinfo.value.message
+        == 'This ticket can only redeemed by persons on the list "{}".'.format(
+            list_constraint.name
+        )
+    )
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
 
@@ -196,16 +210,14 @@ def test_preorder_list_constraint():
 def test_preorder_list_constraint_unknown():
     pp = preorder_position_factory(paid=True)
     list_constraint = list_constraint_factory()
-    ListConstraintProduct.objects.create(
-        product=pp.product, constraint=list_constraint,
-    )
-    options = {
-        'list_{}'.format(list_constraint.pk): '2'
-    }
+    ListConstraintProduct.objects.create(product=pp.product, constraint=list_constraint)
+    options = {'list_{}'.format(list_constraint.pk): '2'}
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret, **options)
-    assert excinfo.value.message == 'This entry could not be found in list "{}".'.format(
-        list_constraint.name)
+    assert (
+        excinfo.value.message
+        == 'This entry could not be found in list "{}".'.format(list_constraint.name)
+    )
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
 
@@ -214,13 +226,11 @@ def test_preorder_list_constraint_unknown():
 def test_preorder_list_constraint_used():
     pp = preorder_position_factory(paid=True)
     list_constraint = list_constraint_factory()
-    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=True)
-    ListConstraintProduct.objects.create(
-        product=pp.product, constraint=entry.list,
+    entry = list_constraint_entry_factory(
+        list_constraint=list_constraint, redeemed=True
     )
-    options = {
-        'list_{}'.format(entry.list.pk): str(entry.identifier)
-    }
+    ListConstraintProduct.objects.create(product=pp.product, constraint=entry.list)
+    options = {'list_{}'.format(entry.list.pk): str(entry.identifier)}
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret, **options)
     assert excinfo.value.message == 'This list entry has already been used.'
@@ -232,13 +242,11 @@ def test_preorder_list_constraint_used():
 def test_preorder_list_constraint_success():
     pp = preorder_position_factory(paid=True)
     list_constraint = list_constraint_factory()
-    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=False)
-    ListConstraintProduct.objects.create(
-        product=pp.product, constraint=entry.list,
+    entry = list_constraint_entry_factory(
+        list_constraint=list_constraint, redeemed=False
     )
-    options = {
-        'list_{}'.format(entry.list.pk): str(entry.identifier)
-    }
+    ListConstraintProduct.objects.create(product=pp.product, constraint=entry.list)
+    options = {'list_{}'.format(entry.list.pk): str(entry.identifier)}
     pos = redeem_preorder_ticket(secret=pp.secret, **options)
     assert pos.listentry == entry
 
@@ -247,15 +255,11 @@ def test_preorder_list_constraint_success():
 def test_preorder_list_constraint_troubleshooter_bypass():
     pp = preorder_position_factory(paid=True)
     list_constraint = list_constraint_factory()
-    ListConstraintProduct.objects.create(
-        product=pp.product, constraint=list_constraint,
-    )
+    ListConstraintProduct.objects.create(product=pp.product, constraint=list_constraint)
     user = user_factory(troubleshooter=True)
     user.auth_token = 'abcdefg'
     user.save()
-    options = {
-        'list_{}'.format(list_constraint.pk): str(user.auth_token)
-    }
+    options = {'list_{}'.format(list_constraint.pk): str(user.auth_token)}
     pos = redeem_preorder_ticket(secret=pp.secret, **options)
     assert pos.listentry is None
     assert pos.authorized_by == user
@@ -276,13 +280,15 @@ def test_preorder_list_and_warning_bypass():
         redeem_preorder_ticket(secret=pp.secret)
     assert excinfo.value.bypass_price == Decimal('23.00')
 
-    options = {
-        'bypass_price': '23.00'
-    }
+    options = {'bypass_price': '23.00'}
     with pytest.raises(FlowError) as excinfo:
         redeem_preorder_ticket(secret=pp.secret, **options)
-    assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
-        list_constraint.name)
+    assert (
+        excinfo.value.message
+        == 'This ticket can only redeemed by persons on the list "{}".'.format(
+            list_constraint.name
+        )
+    )
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
     assert excinfo.value.bypass_price == Decimal('12.00')
@@ -312,26 +318,22 @@ def test_sell_unavailable_product():
 def test_sell_warning_constraint():
     p = product_factory()
     warning_constraint = warning_constraint_factory()
-    WarningConstraintProduct.objects.create(
-        product=p, constraint=warning_constraint
-    )
+    WarningConstraintProduct.objects.create(product=p, constraint=warning_constraint)
     with pytest.raises(FlowError) as excinfo:
         sell_ticket(product=p.pk)
     assert excinfo.value.message == warning_constraint.message
     assert excinfo.value.type == 'confirmation'
-    assert excinfo.value.missing_field == 'warning_{}_acknowledged'.format(warning_constraint.pk)
+    assert excinfo.value.missing_field == 'warning_{}_acknowledged'.format(
+        warning_constraint.pk
+    )
 
 
 @pytest.mark.django_db
 def test_sell_warning_constraint_passed():
     p = product_factory()
     warning_constraint = warning_constraint_factory()
-    WarningConstraintProduct.objects.create(
-        product=p, constraint=warning_constraint
-    )
-    options = {
-        'warning_{}_acknowledged'.format(warning_constraint.pk): 'ok'
-    }
+    WarningConstraintProduct.objects.create(product=p, constraint=warning_constraint)
+    options = {'warning_{}_acknowledged'.format(warning_constraint.pk): 'ok'}
     sell_ticket(product=p.id, **options)
 
 
@@ -339,13 +341,15 @@ def test_sell_warning_constraint_passed():
 def test_sell_list_constraint():
     p = product_factory()
     list_constraint = list_constraint_factory()
-    ListConstraintProduct.objects.create(
-        product=p, constraint=list_constraint
-    )
+    ListConstraintProduct.objects.create(product=p, constraint=list_constraint)
     with pytest.raises(FlowError) as excinfo:
         sell_ticket(product=p.id)
-    assert excinfo.value.message == 'This ticket can only redeemed by persons on the list "{}".'.format(
-        list_constraint.name)
+    assert (
+        excinfo.value.message
+        == 'This ticket can only redeemed by persons on the list "{}".'.format(
+            list_constraint.name
+        )
+    )
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
 
@@ -354,16 +358,14 @@ def test_sell_list_constraint():
 def test_sell_list_constraint_unknown():
     p = product_factory()
     list_constraint = list_constraint_factory()
-    ListConstraintProduct.objects.create(
-        product=p, constraint=list_constraint,
-    )
-    options = {
-        'list_{}'.format(list_constraint.pk): '2'
-    }
+    ListConstraintProduct.objects.create(product=p, constraint=list_constraint)
+    options = {'list_{}'.format(list_constraint.pk): '2'}
     with pytest.raises(FlowError) as excinfo:
         sell_ticket(product=p.id, **options)
-    assert excinfo.value.message == 'This entry could not be found in list "{}".'.format(
-        list_constraint.name)
+    assert (
+        excinfo.value.message
+        == 'This entry could not be found in list "{}".'.format(list_constraint.name)
+    )
     assert excinfo.value.type == 'input'
     assert excinfo.value.missing_field == 'list_{}'.format(list_constraint.pk)
 
@@ -372,13 +374,11 @@ def test_sell_list_constraint_unknown():
 def test_sell_list_constraint_used():
     p = product_factory()
     list_constraint = list_constraint_factory()
-    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=True)
-    ListConstraintProduct.objects.create(
-        product=p, constraint=entry.list,
+    entry = list_constraint_entry_factory(
+        list_constraint=list_constraint, redeemed=True
     )
-    options = {
-        'list_{}'.format(entry.list.pk): str(entry.identifier)
-    }
+    ListConstraintProduct.objects.create(product=p, constraint=entry.list)
+    options = {'list_{}'.format(entry.list.pk): str(entry.identifier)}
     with pytest.raises(FlowError) as excinfo:
         sell_ticket(product=p.id, **options)
     assert excinfo.value.message == 'This list entry has already been used.'
@@ -390,13 +390,11 @@ def test_sell_list_constraint_used():
 def test_sell_list_constraint_success():
     p = product_factory()
     list_constraint = list_constraint_factory()
-    entry = list_constraint_entry_factory(list_constraint=list_constraint, redeemed=False)
-    ListConstraintProduct.objects.create(
-        product=p, constraint=entry.list,
+    entry = list_constraint_entry_factory(
+        list_constraint=list_constraint, redeemed=False
     )
-    options = {
-        'list_{}'.format(entry.list.pk): str(entry.identifier)
-    }
+    ListConstraintProduct.objects.create(product=p, constraint=entry.list)
+    options = {'list_{}'.format(entry.list.pk): str(entry.identifier)}
     pos = sell_ticket(product=p.id, **options)
     assert pos.listentry == entry
 
@@ -405,15 +403,11 @@ def test_sell_list_constraint_success():
 def test_sell_list_constraint_troubleshooter_bypass():
     p = product_factory()
     list_constraint = list_constraint_factory()
-    ListConstraintProduct.objects.create(
-        product=p, constraint=list_constraint,
-    )
+    ListConstraintProduct.objects.create(product=p, constraint=list_constraint)
     user = user_factory(troubleshooter=True)
     user.auth_token = 'abcdefg'
     user.save()
-    options = {
-        'list_{}'.format(list_constraint.pk): str(user.auth_token)
-    }
+    options = {'list_{}'.format(list_constraint.pk): str(user.auth_token)}
     pos = sell_ticket(product=p.id, **options)
     assert pos.listentry is None
     assert pos.authorized_by == user
@@ -435,7 +429,10 @@ def test_reverse_wrong_session():
     transaction_position_factory(transaction=trans)
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction(trans_id=trans.pk, current_session=session2)
-    assert excinfo.value.message == 'Only troubleshooters can reverse sales from other sessions.'
+    assert (
+        excinfo.value.message
+        == 'Only troubleshooters can reverse sales from other sessions.'
+    )
 
 
 @pytest.mark.django_db
@@ -444,15 +441,23 @@ def test_reverse_wrong_session_troubleshooter():
     session2 = cashdesk_session_before_factory(user=user_factory(troubleshooter=True))
     trans = transaction_factory(session1)
     transaction_position_factory(transaction=trans)
-    reverse_transaction(trans_id=trans.pk, current_session=session2, authorized_by=user_factory(troubleshooter=True))
+    reverse_transaction(
+        trans_id=trans.pk,
+        current_session=session2,
+        authorized_by=user_factory(troubleshooter=True),
+    )
 
 
 @pytest.mark.django_db
 def test_reverse_success():
     session = cashdesk_session_before_factory()
     trans = transaction_factory(session)
-    pos = [transaction_position_factory(transaction=trans, product=product_factory(items=True)),
-           transaction_position_factory(transaction=trans)]
+    pos = [
+        transaction_position_factory(
+            transaction=trans, product=product_factory(items=True)
+        ),
+        transaction_position_factory(transaction=trans),
+    ]
     revtransid = reverse_transaction(trans_id=trans.pk, current_session=session)
     revtrans = Transaction.objects.get(pk=revtransid)
     assert revtrans.session == session
@@ -466,9 +471,13 @@ def test_reverse_success():
         assert rp.product == lp.product
         assert {i.id for i in lp.items.all()} == {i.id for i in rp.items.all()}
 
-        ls = TransactionPositionItem.objects.filter(position=lp).aggregate(s=Sum('amount'))['s']
+        ls = TransactionPositionItem.objects.filter(position=lp).aggregate(
+            s=Sum('amount')
+        )['s']
         if ls:
-            rs = TransactionPositionItem.objects.filter(position=rp).aggregate(s=Sum('amount'))['s']
+            rs = TransactionPositionItem.objects.filter(position=rp).aggregate(
+                s=Sum('amount')
+            )['s']
             assert rs == ls * -1
 
 
@@ -481,7 +490,10 @@ def test_reverse_double():
     reverse_transaction(trans_id=trans.pk, current_session=session)
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction(trans_id=trans.pk, current_session=session)
-    assert excinfo.value.message == 'At least one position of this transaction has already been reversed.'
+    assert (
+        excinfo.value.message
+        == 'At least one position of this transaction has already been reversed.'
+    )
 
 
 @pytest.mark.django_db
@@ -493,7 +505,10 @@ def test_reverse_reversal():
     trans = reverse_transaction(trans_id=trans.pk, current_session=session)
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction(trans_id=trans, current_session=session)
-    assert excinfo.value.message == 'At least one position of this transaction is a reversal.'
+    assert (
+        excinfo.value.message
+        == 'At least one position of this transaction is a reversal.'
+    )
 
 
 @pytest.mark.django_db
@@ -512,7 +527,10 @@ def test_reverse_position_wrong_session():
     tpos = transaction_position_factory(transaction=trans)
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction_position(tpos.pk, current_session=session2)
-    assert excinfo.value.message == 'Only troubleshooters can reverse sales from other sessions.'
+    assert (
+        excinfo.value.message
+        == 'Only troubleshooters can reverse sales from other sessions.'
+    )
 
 
 @pytest.mark.django_db
@@ -521,14 +539,20 @@ def test_reverse_position_wrong_session_troubleshooter():
     session2 = cashdesk_session_before_factory(user=user_factory(troubleshooter=True))
     trans = transaction_factory(session1)
     tpos = transaction_position_factory(transaction=trans)
-    reverse_transaction_position(tpos.pk, current_session=session2, authorized_by=user_factory(troubleshooter=True))
+    reverse_transaction_position(
+        tpos.pk,
+        current_session=session2,
+        authorized_by=user_factory(troubleshooter=True),
+    )
 
 
 @pytest.mark.django_db
 def test_reverse_success_single():
     session = cashdesk_session_before_factory()
     trans = transaction_factory(session)
-    lp = transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    lp = transaction_position_factory(
+        transaction=trans, product=product_factory(items=True)
+    )
     revtrans = Transaction.objects.get(
         pk=reverse_transaction_position(trans_pos_id=lp.pk, current_session=session)
     )
@@ -544,9 +568,13 @@ def test_reverse_success_single():
     assert rp.product == lp.product
     assert {i.id for i in lp.items.all()} == {i.id for i in rp.items.all()}
 
-    ls = TransactionPositionItem.objects.filter(position=lp).aggregate(s=Sum('amount'))['s']
+    ls = TransactionPositionItem.objects.filter(position=lp).aggregate(s=Sum('amount'))[
+        's'
+    ]
     if ls:
-        rs = TransactionPositionItem.objects.filter(position=rp).aggregate(s=Sum('amount'))['s']
+        rs = TransactionPositionItem.objects.filter(position=rp).aggregate(
+            s=Sum('amount')
+        )['s']
         assert rs == ls * -1
 
 
@@ -554,7 +582,9 @@ def test_reverse_success_single():
 def test_reverse_position_double():
     session = cashdesk_session_before_factory()
     trans = transaction_factory(session)
-    tpos = transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    tpos = transaction_position_factory(
+        transaction=trans, product=product_factory(items=True)
+    )
     reverse_transaction_position(tpos.pk, current_session=session)
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction_position(tpos.pk, current_session=session)
@@ -565,7 +595,9 @@ def test_reverse_position_double():
 def test_reverse_position_reversal():
     session = cashdesk_session_before_factory()
     trans = transaction_factory(session)
-    tpos = transaction_position_factory(transaction=trans, product=product_factory(items=True))
+    tpos = transaction_position_factory(
+        transaction=trans, product=product_factory(items=True)
+    )
     pos = reverse_transaction_position(tpos.pk, current_session=session)
     with pytest.raises(FlowError) as excinfo:
         reverse_transaction_position(pos, current_session=session)
