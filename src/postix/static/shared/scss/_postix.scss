@@ -56,6 +56,9 @@ h1 .glyphicon {
   background: white;
   flex-grow: 1;
   padding: 20px;
+  &.full-width {
+    max-width: none;
+  }
 }
 .flex-row {
   flex-direction:row !important

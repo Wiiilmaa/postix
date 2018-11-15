@@ -161,7 +161,7 @@
         </aside>
         {% endif %}
 
-    <div class="postix-container" id="page-content">
+        <div class="postix-container{% block page_override %}{% endblock %}" id="page-content">
 
         {% if messages %}
             {% for message in messages %}

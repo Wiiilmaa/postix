@@ -5,6 +5,7 @@
     <script type="text/javascript" src="{% static "backoffice/js/record_list.js" %}"></script>
 {% endblock %}
 
+{% block page_override %} full-width{% endblock %}
 {% block content %}
 <div class="action-row">
     <a class="btn btn-lg btn-outline-info" href="{% url "backoffice:new-record" %}">
@@ -69,7 +70,7 @@
                 <td>
                     {{ record.running_total|floatformat:2 }}
                 </td>
-                <td>
+                <td class="d-flex">
                     <a href="{% url "backoffice:record-detail" pk=record.pk %}" title="{% trans "Details" %}">
                         <span class="fa fa-2x fa-fw fa-pencil" aria-hidden="true"></span>
                     </a>
