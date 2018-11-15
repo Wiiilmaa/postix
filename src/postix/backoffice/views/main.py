@@ -2,7 +2,6 @@ from django.views.generic import TemplateView
 
 from postix.core.models import Quota
 from postix.core.models.base import Item, Product
-from postix.core.models.cashdesk import CashdeskSession
 
 from .. import checks
 from .utils import BackofficeUserRequiredMixin
