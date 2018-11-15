@@ -80,3 +80,69 @@ class RecordEntityForm(forms.ModelForm):
     class Meta:
         model = RecordEntity
         fields = ('name', 'detail')
+
+
+class BillForm(forms.Form):
+    bill_500 = forms.IntegerField(min_value=0, required=False, label='500 €')
+    bill_200 = forms.IntegerField(min_value=0, required=False, label='200 €')
+    bill_100 = forms.IntegerField(min_value=0, required=False, label='100 €')
+    bill_50 = forms.IntegerField(min_value=0, required=False, label='50 €')
+    bill_20 = forms.IntegerField(min_value=0, required=False, label='20 €')
+    bill_10 = forms.IntegerField(min_value=0, required=False, label='10 €')
+    bill_5 = forms.IntegerField(min_value=0, required=False, label='5 €')
+
+    def total_value(self):
+        total = 0
+        for bill, amount in self.cleaned_data.items():
+            total += int(bill.rsplit('_', maxsplit=1)[-1]) * amount
+        return total
+
+
+class CoinForm(forms.Form):
+    coin_200 = forms.IntegerField(min_value=0, required=False, label='2 €')
+    coin_50 = forms.IntegerField(min_value=0, required=False, label='0,50 €')
+    coin_100 = forms.IntegerField(min_value=0, required=False, label='1 €')
+    coin_20 = forms.IntegerField(min_value=0, required=False, label='0,20 €')
+    coin_5 = forms.IntegerField(min_value=0, required=False, label='0,05 €')
+    coin_10 = forms.IntegerField(min_value=0, required=False, label='0,10 €')
+    coin_2 = forms.IntegerField(min_value=0, required=False, label='0,02 €')
+    coin_1 = forms.IntegerField(min_value=0, required=False, label='0,01 €')
+
+    def total_value(self):
+        total = 0
+        for coin, amount in self.cleaned_data.items():
+            total += int(coin.rsplit('_', maxsplit=1)[-1]) * amount
+        return total / 100
+
+
+class BillBulkForm(forms.Form):
+    bill_50000 = forms.IntegerField(min_value=0, required=False, label='500 €')
+    bill_20000 = forms.IntegerField(min_value=0, required=False, label='200 €')
+    bill_10000 = forms.IntegerField(min_value=0, required=False, label='100 €')
+    bill_5000 = forms.IntegerField(min_value=0, required=False, label='50 €')
+    bill_2000 = forms.IntegerField(min_value=0, required=False, label='20 €')
+    bill_1000 = forms.IntegerField(min_value=0, required=False, label='10 €')
+    bill_500 = forms.IntegerField(min_value=0, required=False, label='5 €')
+
+    def total_value(self):
+        total = 0
+        for bill, amount in self.cleaned_data.items():
+            total += int(bill.rsplit('_', maxsplit=1)[-1]) * amount
+        return total
+
+
+class CoinBulkForm(forms.Form):
+    coin_5000 = forms.IntegerField(min_value=0, required=False, label='2 €')
+    coin_2000 = forms.IntegerField(min_value=0, required=False, label='0,50 €')
+    coin_2500 = forms.IntegerField(min_value=0, required=False, label='1 €')
+    coin_800 = forms.IntegerField(min_value=0, required=False, label='0,20 €')
+    coin_250 = forms.IntegerField(min_value=0, required=False, label='0,05 €')
+    coin_400 = forms.IntegerField(min_value=0, required=False, label='0,10 €')
+    coin_100 = forms.IntegerField(min_value=0, required=False, label='0,02 €')
+    coin_50 = forms.IntegerField(min_value=0, required=False, label='0,01 €')
+
+    def total_value(self):
+        total = 0
+        for coin, amount in self.cleaned_data.items():
+            total += int(coin.rsplit('_', maxsplit=1)[-1]) * amount
+        return total / 100

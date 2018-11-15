@@ -1,9 +1,9 @@
 from .auth import LoginView, logout_view, switch_user
 from .main import MainView
 from .record import (
-    RecordCreateView, RecordDetailView, RecordEntityCreateView,
-    RecordEntityDeleteView, RecordEntityDetailView, RecordEntityListView,
-    RecordListView, record_print,
+    RecordBalanceView, RecordCreateView, RecordDetailView,
+    RecordEntityCreateView, RecordEntityDeleteView, RecordEntityDetailView,
+    RecordEntityListView, RecordListView, record_print,
 )
 from .session import (
     EndSessionView, NewSessionView, ReportListView, SessionDetailView,
@@ -28,6 +28,7 @@ __all__ = (
     'NewSessionView',
     'resupply_session',
     'reverse_session_view',
+    'RecordBalanceView',
     'RecordCreateView',
     'RecordDetailView',
     'RecordEntityCreateView',

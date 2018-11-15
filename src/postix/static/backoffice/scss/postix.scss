@@ -58,3 +58,23 @@ table ul {
         }
     }
 }
+#balance-form {
+    display: flex;
+    flex-wrap: wrap;
+    .card {
+        margin: 16px;
+        .card-body {
+            p {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: flex-end;
+                label {
+                    margin-left: 8px; 
+                }
+                input {
+                    width: 100px;
+                }
+            }
+        }
+    }
+}

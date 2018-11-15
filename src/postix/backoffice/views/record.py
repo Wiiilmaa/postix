@@ -1,17 +1,22 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.files.storage import default_storage
+from django.forms import formset_factory
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView,
 )
 
 from postix.backoffice.forms.record import (
-    RecordCreateForm, RecordEntityForm, RecordUpdateForm,
+    BillBulkForm, BillForm, CoinBulkForm, CoinForm, RecordCreateForm,
+    RecordEntityForm, RecordUpdateForm,
 )
 from postix.backoffice.report import generate_record
-from postix.core.models import Record, RecordEntity
+from postix.core.models.record import Record, RecordEntity, record_balance
 
 from .utils import (
     BackofficeUserRequiredMixin, SuperuserRequiredMixin,
@@ -54,6 +59,46 @@ class RecordCreateView(BackofficeUserRequiredMixin, CreateView):
         return reverse(
             'backoffice:record-print', kwargs={'pk': self.get_form().instance.pk}
         )
+
+
+class RecordBalanceView(BackofficeUserRequiredMixin, TemplateView):
+    model = Record
+    form_class = RecordCreateForm
+    template_name = 'backoffice/new_balance.html'
+
+    @cached_property
+    def balance(self):
+        return record_balance()
+
+    @cached_property
+    def formsets(self):
+        result = dict()
+        request_data = self.request.POST if self.request.method == 'POST' else None
+        result['bills_automated'] = formset_factory(BillForm)(request_data, prefix='bills_automated')
+        result['bills_manually'] = formset_factory(BillForm)(request_data, prefix='bills_manually')
+        result['bills_bulk'] = formset_factory(BillBulkForm)(request_data, prefix='bills_bulk')
+        result['coins_automated'] = formset_factory(CoinForm)(request_data, prefix='coins_automated')
+        result['coins_bulk'] = formset_factory(CoinBulkForm)(request_data, prefix='coins_bulk')
+        return result
+
+    def post(self, request, *args, **kwargs):
+        if not all([f.is_valid() for f in self.formsets.values()]):
+            messages.warning(_('Something seems wrong here.'))
+            return super().post(request, *args, **kwargs)
+
+        total_value = sum([form.total_value() for form in formset for formset in self.formsets.values()])
+        expected_value = self.balance
+        return redirect(reverse(
+            'backoffice:record-print', kwargs={'pk': record.pk}
+        ))
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx['backoffice_users'] = User.objects.filter(is_backoffice_user=True)
+        ctx['balance'] = self.balance
+        ctx['formsets'] = self.formsets
+        return ctx
+
 
 
 class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
