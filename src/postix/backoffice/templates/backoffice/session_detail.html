@@ -18,6 +18,8 @@
     {% else %}
         {% trans "Ended session" %} #{{ session.pk }}
     {% endif %}
+    <small> {{ session.cashdesk }}, {{ session.user.firstname }} {{ session.user.lastname }}
+        ({{ session.user.username }})</small>
 {% endblock %}
 
 {% block content %}
@@ -31,16 +33,14 @@
         </script>
     {% endif %}
 
-    <h4> {{ session.cashdesk }}, {% trans "Session ID" %} {{ session.pk }}, {{ session.user.firstname }} {{ session.user.lastname }}
-        ({{ session.user.username }})</h4>
     {% language "de" %}
         {% if session.end %}
-            <h4> {% trans "Start" %}: {{ session.start }} </h4>
-            <h4> {% trans "End" %}: {{ session.ende }} </h4>
+            <h5> {% trans "Start" %}: {{ session.start }} </h5>
+            <h5> {% trans "End" %}: {{ session.end }} </h5>
         {% else %}
-            <h4> {% trans "Start" %}: {{ session.start|timesince }} </h4>
+            <h5> {% trans "Start" %}: {{ session.start|timesince }} </h5>
         {% endif %}
-
+        <hr>
 
         <h3 style="clear:both"> {% trans "Sold products" %} </h3>
         <table class="table" id="session-detail-table">
@@ -101,16 +101,16 @@
             <thead>
             <th>{% trans "Time" %}</th>
             <th>{% trans "Item" %}</th>
-            <th>{% trans "Amount added" %}</th>
             <th>{% trans "User" %}</th>
+            <th>{% trans "Amount added" %}</th>
             </thead>
             <tbody>
             {% for move in session.item_movements.all %}
                 <tr>
                     <td> {{ move.timestamp|date:"SHORT_DATETIME_FORMAT" }} </td>
                     <td> {{ move.item }} </td>
-                    <td> {{ move.amount }} </td>
                     <td> {{ move.backoffice_user }} </td>
+                    <td> {{ move.amount }} </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -123,6 +123,7 @@
             <th>{% trans "Time" %}</th>
             <th>{% trans "User" %}</th>
             <th class="text-right">{% trans "Amount added" %}</th>
+            <th></th>
             </thead>
             <tbody>
             {% for move in session.cash_movements.all %}
@@ -130,6 +131,13 @@
                     <td> {{ move.timestamp|date:"SHORT_DATETIME_FORMAT" }} </td>
                     <td> {{ move.backoffice_user }} </td>
                     <td class="text-right"> {{ move.cash }} € </td>
+                    <td class="text-right">
+                        {% if move.record %}
+                            <a href="{% url "backoffice:record-print" pk=move.record.pk %}" title="{% trans "Print" %}">
+                                <span class="fa fa-2x fa-fw fa-print" aria-hidden="true"></span>
+                            </a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
