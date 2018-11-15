@@ -11,6 +11,16 @@ from django.utils.translation import ugettext_lazy as _
 from .settings import EventSettings
 
 
+def record_balance():
+    balance = 0
+    for record in Record.objects.all():
+        if record.type == 'inflow':
+            balance += record.amount
+        elif record.type == 'outflow':
+            balance -= record.amount
+    return balance
+
+
 class RecordEntity(models.Model):
     """This class is the source or destination for records, for example "Bar 1", or "Unnamed Supplier"."""
 
