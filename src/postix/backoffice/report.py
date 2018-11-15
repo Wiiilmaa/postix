@@ -281,7 +281,7 @@ def generate_record(record: Record) -> str:
     """
     _buffer = BytesIO()
     settings = EventSettings.get_solo()
-    doc = get_default_document(_buffer, footer=settings.report_footer)
+    doc = get_default_document(_buffer, footer=settings.report_footer + '\n{}'.format(record.checksum))
     style = get_paragraph_style()
 
     # Header: info text and qr code

@@ -1,4 +1,5 @@
 import glob
+import hashlib
 import os
 
 from django.conf import settings
@@ -69,6 +70,13 @@ class Record(models.Model):
         verbose_name=_('Report closes session and contains additional pages'),
     )
     is_locked = models.BooleanField(default=False)
+
+    @property
+    def checksum(self):
+        checksum = hashlib.sha1()
+        for attribute in ['type', 'datetime', 'cash_movement', 'entity', 'carrier', 'amount', 'is_balancing']:
+            checksum.update(str(getattr(self, attribute, '')).encode())
+        return checksum.hexdigest()
 
     class Meta:
         ordering = ('datetime',)
