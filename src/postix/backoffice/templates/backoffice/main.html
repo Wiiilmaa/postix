@@ -9,7 +9,7 @@
 
 <h3>{% trans "Progress" %}</h3>
 
-{% blocktrans with redeemed_preorders=redeemed_preorders all_preorders=all_preorders preorder_percentage=preorder_percentage %}
+{% blocktrans with redeemed_preorders=redeemed_preorders all_preorders=all_preorders preorder_percentage=preorder_percentage trimmed %}
 Currently, about {{ redeemed_preorders }} of {{ all_preorders }} preorders are redeemed: <strong>{{ preorder_percentage }}%</strong>.
 {% endblocktrans %}
 
