@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.utils.functional import cached_property
 
 
 class UserManager(BaseUserManager):
@@ -64,6 +67,20 @@ class User(AbstractBaseUser):
             .order_by('-start')
             .first()
         )
+
+    @cached_property
+    def hours(self):
+        from .cashdesk import CashdeskSession
+        total = timedelta()
+        for session in CashdeskSession.objects.filter(user=self, end__isnull=False):
+            total += (session.end - session.start)
+        if not total:
+            return total
+        string_result = '{} days, '.format(total.days) if total.days else ''
+        hours = int(total.seconds / 60 / 60) % 24
+        minutes = int(total.seconds / 60) % 60
+        string_result += '{}:{:02d}'.format(hours, minutes)
+        return total, string_result
 
     def __str__(self) -> str:
         return self.username

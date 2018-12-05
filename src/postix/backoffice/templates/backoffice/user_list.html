@@ -6,16 +6,30 @@
 
 {% block content %}
 
-<ul>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>{% trans "Nick" %}</th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Hours" %}</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
     {% for user in object_list %}
-        <li>
-            {{ user.username }} ({{ user.firstname}} {{user.lastname}})
-            <a href="{% url "backoffice:reset-password" pk=user.pk %}" class="btn btn-info btn-xs">
-                {% trans "Reset password" %}
-            </a>
-        </li>
+        <tr>
+            <td> {{ user.username }} </td>
+            <td>{{ user.firstname}} {{user.lastname}}</td>
+            <td>{% if user.hours %}{{ user.hours.1 }}{% endif %}</td>
+            <td>
+                <a href="{% url "backoffice:reset-password" pk=user.pk %}" class="btn btn-info btn-xs">
+                    {% trans "Reset password" %}
+                </a>
+            </td>
+        </tr>
     {% endfor %}
+    </tbody>
 
-</ul>
+</table>
 
 {% endblock %}
