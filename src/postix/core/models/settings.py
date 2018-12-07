@@ -45,6 +45,20 @@ class EventSettings(SingletonModel):
         help_text=_('This will show up on backoffice session reports.'),
     )
     initialized = models.BooleanField(default=False)
+    queue_sync_url = models.URLField(
+        verbose_name=_('c3queue.de URL'),
+        max_length=100,
+        help_text=_('The URL of the c3queue.de instance'),
+        default='https://c3queue.de',
+        null=True,
+        blank=True,
+    )
+    queue_sync_token = models.CharField(
+        max_length=100,
+        verbose_name=_('c3queue authentication token'),
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = 'Event Settings'
