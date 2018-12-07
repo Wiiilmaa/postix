@@ -1,6 +1,7 @@
 from tempfile import TemporaryFile
 
 import qrcode
+import requests
 from django.db import models
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
@@ -44,3 +45,32 @@ class Ping(models.Model):
         if not self.ponged:
             self.ponged = now()
             self.save()
+
+    def sync(self, force=False):
+        if self.synced and not force:
+            return
+
+        from .settings import EventSettings
+
+        settings = EventSettings.get_solo()
+        if not settings.queue_sync_url or not settings.queue_sync_token:
+            return
+
+        url = settings.queue_sync_url
+        if not url.endswith('/'):
+            url += '/'
+        url += 'pong'
+        fmt = '%Y-%m-%d %H:%M:%S'
+        requests.post(
+            url,
+            headers={'Authorization': settings.queue_sync_token},
+            data={'ping': self.pinged.strftime(fmt), 'pong': self.ponged.strftime(fmt)},
+        )
+        if response.status_code != 201:
+            raise Exception(
+                'Received non-201 status response from {}: {}'.format(
+                    url, response.status_code
+                )
+            )
+        self.synced = True
+        self.save()
