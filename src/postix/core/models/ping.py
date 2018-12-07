@@ -24,6 +24,7 @@ class Ping(models.Model):
     pinged = models.DateTimeField(auto_now_add=True)
     ponged = models.DateTimeField(null=True, blank=True)
     secret = models.CharField(max_length=MAX_LENGTH, default=generate_ping_secret)
+    synced = models.BooleanField(default=False)
 
     def get_qr_code(self):
         qr = qrcode.QRCode(
