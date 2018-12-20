@@ -1,5 +1,5 @@
 # Basic and production requirements
-Django==2.1.*
+Django>=2.1.2,<2.2
 djangorestframework==3.7.*
 django-compressor==2.2.*
 django-crispy-forms==1.7.*
@@ -9,7 +9,7 @@ django-solo==1.1.*
 markdown==2.6.*
 qrcode==5.3
 reportlab==3.4.*
-requests==2.18.*
+requests==2.21.*
 
 # Testing and development requirements
 pytest-django==3.4.*
