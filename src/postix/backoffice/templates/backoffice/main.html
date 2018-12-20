@@ -9,9 +9,18 @@
 
 <h3>{% trans "Progress" %}</h3>
 
-{% blocktrans with redeemed_preorders=redeemed_preorders all_preorders=all_preorders preorder_percentage=preorder_percentage trimmed %}
-Currently, about {{ redeemed_preorders }} of {{ all_preorders }} preorders are redeemed: <strong>{{ preorder_percentage }}%</strong>.
-{% endblocktrans %}
+    <p>
+        {% blocktrans with redeemed_preorders=redeemed_preorders all_preorders=all_preorders preorder_percentage=preorder_percentage trimmed %}
+        Currently, about {{ redeemed_preorders }} of {{ all_preorders }} preorders are redeemed: <strong>{{ preorder_percentage }}%</strong>.
+        {% endblocktrans %}
+    </p>
+
+    <h3>{% trans "Troubleshooter stock" %}</h3>
+    {% for t in troubleshooter_stock %}
+        <ul>
+            <li>{{ t.s }} x {{ t.item__name }}</li>
+        </ul>
+    {% endfor %}
 
 <h3>{% trans "Products" %}</h3>
 

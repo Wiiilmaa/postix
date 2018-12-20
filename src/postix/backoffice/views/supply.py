@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import ListView, FormView
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import FormView, ListView
 
 from postix.backoffice.forms.supply import SupplyCreateForm, SupplyMoveForm
-from postix.core.models.base import ItemSupplyPack, Item
+from postix.core.models.base import Item, ItemSupplyPack
+
 from .utils import BackofficeUserRequiredMixin
 
 User = get_user_model()
