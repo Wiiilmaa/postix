@@ -19,5 +19,5 @@ class MainView(BackofficeUserRequiredMixin, TemplateView):
         ctx['check_errors'] = checks.all_errors()
         ctx['all_preorders'] = PreorderPosition.objects.filter(preorder__is_paid=True).count()
         ctx['redeemed_preorders'] = PreorderPosition.objects.filter(preorder__is_paid=True, transaction_positions__isnull=False).count()
-        ctx['preorder_percentage'] = round(ctx['redeemed_preorders'] * 100 / ctx['all_preorders'], 2)
+        ctx['preorder_percentage'] = round(ctx['redeemed_preorders'] * 100 / ctx['all_preorders'], 2) if ctx['all_preorders'] else 0
         return ctx
