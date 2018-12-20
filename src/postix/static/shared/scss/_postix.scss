@@ -218,3 +218,11 @@ tbody th {
 .hidden, .hide {
   display: none;
 }
+
+.nav-fold div {
+  display: none;
+}
+.nav-fold div.show {
+  display: block;
+}
+
