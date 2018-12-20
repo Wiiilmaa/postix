@@ -14,6 +14,7 @@ from postix.core.models import (
     TimeConstraint, Transaction, TransactionPosition,
     TroubleshooterNotification, User, WarningConstraint,
 )
+from postix.core.models.base import ItemSupplyPack
 
 
 def user_factory(
@@ -232,3 +233,8 @@ def notification_factory(acked=False):
 
 def information_factory():
     return Info.objects.create(content='blabla keks lorem ipsum', name='test info')
+
+
+def itemsupplypack_factory(item=None, state='backoffice'):
+    return ItemSupplyPack.objects.create(amount=50, item=item or item_factory(), identifier='/supply 5KzLPML2L1ij52cl93VduM4cdOjuYz',
+                                         state=state)

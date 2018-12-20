@@ -23,5 +23,4 @@ class MainView(BackofficeUserRequiredMixin, TemplateView):
         ctx['troubleshooter_stock'] = ItemSupplyPack.objects.filter(
             state='troubleshooter'
         ).order_by().values('item', 'item__name').annotate(s=Sum('amount'))
-        print(ctx['troubleshooter_stock'])
         return ctx

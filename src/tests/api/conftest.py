@@ -11,7 +11,11 @@ def api():
 
 
 @pytest.fixture
-def api_with_session(api):
-    session = cashdesk_session_before_factory()
+def session():
+    return cashdesk_session_before_factory()
+
+
+@pytest.fixture
+def api_with_session(api, session):
     api.force_authenticate(user=session.user)
     return api
