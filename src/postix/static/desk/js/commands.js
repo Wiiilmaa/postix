@@ -14,6 +14,27 @@ var commands = {
             + "</dl>");
     },
 
+    '/supply': function (args) {
+        $.ajax({
+            url: '/api/cashdesk/supply/',
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({
+                'identifier': args.join(' ')
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            success: function (data, status, xhr) {
+                if (data.success === true) {
+                    dialog.flash_success(gettext('Yay, you\'ve got more things now!'));
+                } else {
+                    dialog.show_error(data.message);
+                }
+            }
+        });
+    },
+
     '/ping': function(args) {
         if (args && args.length > 1) {
             $.ajax({

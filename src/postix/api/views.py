@@ -10,6 +10,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from postix.core.models import ItemMovement
+from postix.core.models.base import ItemSupplyPack
 from ..core.models import (
     Cashdesk, ListConstraint, ListConstraintEntry, Ping, Preorder,
     PreorderPosition, Product, Transaction,
@@ -106,7 +108,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
 
     @transaction.atomic
     def perform_create(
-        self, request: HttpRequest
+            self, request: HttpRequest
     ) -> Dict[str, Union[bool, List[Dict]]]:
         data = request.data
         trans = Transaction()
@@ -183,23 +185,20 @@ class TransactionViewSet(ReadOnlyModelViewSet):
 
 
 class ProductViewSet(ReadOnlyModelViewSet):
-
     queryset = (
         Product.objects.prefetch_related('product_items', 'product_items__item')
-        .all()
-        .order_by('id')
+            .all()
+            .order_by('id')
     )
     serializer_class = ProductSerializer
 
 
 class ListConstraintViewSet(ReadOnlyModelViewSet):
-
     queryset = ListConstraint.objects.all().order_by('id')
     serializer_class = ListConstraintSerializer
 
 
 class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
-
     queryset = ListConstraintEntry.objects.all().order_by('id')
     serializer_class = ListConstraintEntrySerializer
 
@@ -302,3 +301,32 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
             pass
 
         return Response({'success': True})
+
+    @list_route(methods=["POST"], url_path='supply')
+    def supply(self, request: HttpRequest) -> Response:
+        try:
+            isp = ItemSupplyPack.objects.get(identifier=request.data.get('identifier').strip())
+        except ItemSupplyPack.DoesNotExist:
+            return Response({'success': False, 'message': _('Unknown supply pack barcode.')})
+
+        if isp.state == "troubleshooter":
+            with transaction.atomic():
+                isp.state = "used"
+                isp.save()
+                isp.logs.create(
+                    user=request.user,
+                    new_state='used',
+                    item_movement=ItemMovement.objects.create(
+                        item=isp.item,
+                        session=request.user.get_current_session(),
+                        amount=isp.amount,
+                        backoffice_user=request.user
+                    )
+                )
+            return Response({'success': True})
+        elif isp.state == "backoffice":
+            return Response({'success': False, 'message': _('This supply pack has not been transferred to the troubleshooter yet, you cannot use it.')})
+        elif isp.state == "dissolved":
+            return Response({'success': False, 'message': _('This supply pack does not exist any more.')})
+        elif isp.state == "used":
+            return Response({'success': False, 'message': _('This supply pack has already been used.')})
