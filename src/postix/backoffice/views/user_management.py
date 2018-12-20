@@ -42,14 +42,17 @@ class UserListView(BackofficeUserRequiredMixin, ListView):
     queryset = User.objects.all().order_by('username')
 
     def dispatch(self, request, *args, **kwargs):
-        if not 'export' in request.GET:
+        if 'export' not in request.GET:
             return super().dispatch(request, *args, **kwargs)
         user_list = User.objects.filter(cashdesksession__isnull=False).order_by().distinct()
         user_list = sorted(user_list, key=lambda u: u.hours[0], reverse=True)
         content = 'nick,name,minutes\n'
-        content += '\n'.join(['{nick},{name},{minutes}'.format(nick=user.username, name=user.get_full_name(), minutes=int(user.hours[0].seconds/60) + user.hours[0].days * 24 * 60) for user in user_list])
+        content += '\n'.join(['{nick},{name},{minutes}'.format(
+            nick=user.username, name=user.get_full_name(), minutes=int(user.hours[0].seconds / 60) + user.hours[0].days * 24 * 60
+        ) for user in user_list])
         response = HttpResponse(content, content_type='text/plain;charset=utf-8')
         return response
+
 
 class ResetPasswordView(BackofficeUserRequiredMixin, FormView):
     form_class = ResetPasswordForm

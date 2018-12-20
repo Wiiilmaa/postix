@@ -61,7 +61,7 @@ class Ping(models.Model):
             url += '/'
         url += 'pong'
         fmt = '%Y-%m-%d %H:%M:%S'
-        requests.post(
+        response = requests.post(
             url,
             headers={'Authorization': settings.queue_sync_token},
             data={'ping': self.pinged.strftime(fmt), 'pong': self.ponged.strftime(fmt)},
