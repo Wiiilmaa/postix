@@ -86,8 +86,8 @@ class RecordBalanceView(BackofficeUserRequiredMixin, TemplateView):
             messages.warning(_('Something seems wrong here.'))
             return super().post(request, *args, **kwargs)
 
-        total_value = sum([form.total_value() for form in formset for formset in self.formsets.values()])
-        expected_value = self.balance
+        #total_value = sum([form.total_value() for form in formset for formset in self.formsets.values()])
+        #expected_value = self.balance
         return redirect(reverse(
             'backoffice:record-print', kwargs={'pk': record.pk}
         ))

@@ -56,14 +56,16 @@
                             <i class="fa fa-angle-down"></i>
                         </a>
                     </span>
-                    <div class="{% if "session" in url_name or "record-list" in url_name or "report" in url_name %} show{% endif %}" aria-expand="true" id="collapseSessions">
+                    <div class="{% if "session" in url_name or "record-list" in url_name or "report" in url_name or "supply" in url_name %} show{% endif %}" aria-expand="true" id="collapseSessions">
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:session-list" %}">
                             {% trans "Dashboard" %}
                         </a>
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:record-list" %}">
                             {% trans "List of records" %}
                         </a>
-
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:supply-list" %}">
+                            {% trans "Item supply packs" %}
+                        </a>
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:report-list" %}">
                             {% trans "Past sessions" %}
                         </a>

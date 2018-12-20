@@ -1,0 +1,80 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+{% load static %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static "backoffice/js/record_list.js" %}"></script>
+{% endblock %}
+
+{% block page_override %} full-width{% endblock %}
+{% block content %}
+    <a href="{% url "backoffice:supply-create" %}" class="btn btn-primary">
+        {% trans "Create new packs" %}
+    </a>
+    <a href="{% url "backoffice:supply-out" %}" class="btn btn-primary">
+        {% trans "Storage → Troubleshooter" %}
+    </a>
+    <a href="{% url "backoffice:supply-in" %}" class="btn btn-primary">
+        {% trans "Troubleshooter → Storage" %}
+    </a>
+    <a href="{% url "backoffice:supply-away" %}" class="btn btn-light">
+        {% trans "Storage → Dissolved" %}
+    </a>
+    <p>
+        <input type="text" class="form-control" placeholder="{% trans "Search…" %}" id="search">
+    </p>
+    <table class="table table-hover" id="active-sessions-table">
+        <thead>
+        <th>{% trans "Pack barcode" %}</th>
+        <th>{% trans "Content" %}</th>
+        <th>{% trans "State" %}</th>
+        <th></th>
+        </thead>
+        <tbody>
+        {% for pack in supplies %}
+            <tr>
+                <td>
+                    {{ pack.identifier }}
+                </td>
+                <td>
+                    {{ pack.amount }}x {{ pack.item }}
+                </td>
+                <td>
+                    {{ pack.get_state_display }}
+                </td>
+                <td class="d-flex">
+                    {% if pack.state == "troubleshooter" %}
+                        <a href="{% url "backoffice:supply-in" %}?identifier={{ pack.identifier }}" title="{% trans "Troublshooter → Storage" %}">
+                            <span class="fa fa-2x fa-fw fa-sign-in"></span>
+                        </a>
+                    {% elif pack.state == "backoffice" %}
+                        <a href="{% url "backoffice:supply-out" %}?identifier={{ pack.identifier }}" title="{% trans "Storage → Troubleshooter" %}">
+                            <span class="fa fa-2x fa-fw fa-sign-out"></span>
+                        </a>
+                        <a href="{% url "backoffice:supply-away" %}?identifier={{ pack.identifier }}" title="{% trans "Storage → Dissolved" %}">
+                            <span class="fa fa-2x fa-fw fa-trash"></span>
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <th colspan="42" class="empty-row active">
+                    {% trans "No packs yet, get going!" %}
+                </th>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        window.onload = function () {
+            $("#search").on("change keydown keyup", function () {
+                var query = $(this).val();
+                $("table tr").hide();
+                $("table tr").filter(function () {
+                    return $(this).select("td").first().text().indexOf(query) >= 0
+                }).show();
+            });
+        }
+    </script>
+
+{% endblock %}

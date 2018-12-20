@@ -31,6 +31,12 @@ urlpatterns = [
     url('^records/entity/(?P<pk>[0-9]+)/$', views.RecordEntityDetailView.as_view(), name='record-entity-detail'),
     url('^records/entity/(?P<pk>[0-9]+)/delete/$', views.RecordEntityDeleteView.as_view(), name='record-entity-delete'),
 
+    url('^supplies/$', views.SupplyListView.as_view(), name='supply-list'),
+    url('^supplies/create/$', views.SupplyCreateView.as_view(), name='supply-create'),
+    url('^supplies/out/$', views.SupplyMoveOutView.as_view(), name='supply-out'),
+    url('^supplies/in/$', views.SupplyMoveInView.as_view(), name='supply-in'),
+    url('^supplies/away/$', views.SupplyMoveAwayView.as_view(), name='supply-away'),
+
     # These are called 'wizard' cause they're only for wizards (erm, superusers)
     url('^wizard/users/$', views.WizardUsersView.as_view(), name='wizard-users'),
     url('^wizard/settings/$', views.WizardSettingsView.as_view(), name='wizard-settings'),

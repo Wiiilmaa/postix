@@ -299,3 +299,42 @@ class TransactionPositionItem(models.Model):
         'Item', on_delete=models.PROTECT, related_name='transaction_position_items'
     )
     amount = models.IntegerField()
+
+
+class ItemSupplyPack(models.Model):
+    STATES = (
+        ('backoffice', 'In backoffice'),
+        ('troubleshooter', 'With troubleshooter'),
+        ('dissolved', 'Dissolved for other reasons'),
+        ('used', 'Used to refill cash session'),
+    )
+    identifier = models.CharField(max_length=190, unique=True)
+    item = models.ForeignKey(
+        'Item', on_delete=models.PROTECT, related_name='supply_packs'
+    )
+    amount = models.IntegerField(default=50)
+    state = models.CharField(
+        max_length=190,
+        choices=STATES
+    )
+
+    def __str__(self):
+        return self.identifier
+
+
+class ItemSupplyPackLog(models.Model):
+    supply_pack = models.ForeignKey(ItemSupplyPack, related_name='logs', on_delete=models.PROTECT)
+    new_state = models.CharField(
+        max_length=190,
+        choices=ItemSupplyPack.STATES
+    )
+    item_movement = models.ForeignKey(
+        'ItemMovement', null=True, blank=True, on_delete=models.PROTECT,
+        verbose_name='Associated item movement'
+    )
+    user = models.ForeignKey(
+        'User',
+        on_delete=models.PROTECT,
+        related_name='item_supply_logs',
+        verbose_name='User issuing movement',
+    )
