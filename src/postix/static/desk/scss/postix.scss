@@ -168,10 +168,12 @@ body.login, body.error {
     flex: 1;
     padding-top: 10px;
     line-height: 20px;
+    font-size: 14px;
 }
 #cart .cart-line .cart-product small {
     line-height: 16px;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: bold;
 }
 #cart .cart-line .cart-price {
     width: 100px;
