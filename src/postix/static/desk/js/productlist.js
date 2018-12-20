@@ -19,7 +19,7 @@ var productlist = {
                 product = data.results[i];
                 if (product.is_available) {
                     productlist.products[product.id] = product;
-                    var btn = $("<button>").addClass("btn btn-default btn-block").attr("data-id", product.id).append(
+                    var btn = $("<button>").addClass("btn btn-light btn-block").attr("data-id", product.id).append(
                             $("<strong>").text(product.name)
                         ).append($("<br>")).append(product.price + ' €');
                     if (product.requires_authorization) {
