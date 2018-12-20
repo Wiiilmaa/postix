@@ -7,6 +7,14 @@
     <meta http-equiv="refresh" content="5">
 {% endblock %}
 {% block content %}
+    <h4>{% trans "Reserve stock" %}</h4>
+    {% for t in troubleshooter_stock %}
+        <ul>
+            <li>{{ t.s }} x {{ t.item__name }}</li>
+        </ul>
+    {% empty %}
+        <p>{% trans "Nothing." %}</p>
+    {% endfor %}
     <div class="">
         <div class="panel">
             <ul class="list-group">

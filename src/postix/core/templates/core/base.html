@@ -56,9 +56,12 @@
                             <i class="fa fa-angle-down"></i>
                         </a>
                     </span>
-                    <div class="{% if "session" in url_name or "record-list" in url_name or "report" in url_name or "supply" in url_name %} show{% endif %}" aria-expand="true" id="collapseSessions">
+                    <div class="{% if "backoffice" in url_namespace and "wizard" not in url_name %} show{% endif %}" aria-expand="true" id="collapseSessions">
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:session-list" %}">
-                            {% trans "Dashboard" %}
+                            {% trans "Session dashboard" %}
+                        </a>
+                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:main" %}">
+                            {% trans "Statistics" %}
                         </a>
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:record-list" %}">
                             {% trans "List of records" %}
