@@ -100,7 +100,7 @@ msgstr "Bitte gib eine positive Zahl fürs Bargeld an."
 #: postix/backoffice/templates/backoffice/end_session.html:39
 #: postix/troubleshooter/invoicing.py:52
 msgid "Product"
-msgstr "Ticket"
+msgstr "Produkt"
 
 #: postix/backoffice/forms/user.py:9 postix/desk/templates/desk/login.html:35
 msgid "User name"
@@ -177,7 +177,7 @@ msgstr "Presale-Export importieren"
 
 #: postix/backoffice/forms/wizard.py:104
 msgid "Save Item"
-msgstr "Produkt speichern"
+msgstr "Gegenstand speichern"
 
 #: postix/backoffice/templates/backoffice/base.html:19
 #: postix/core/templates/core/base.html:53
@@ -315,7 +315,7 @@ msgstr ""
 #: postix/troubleshooter/templates/troubleshooter/constraint_detail.html:12
 #: postix/troubleshooter/templates/troubleshooter/constraints_list.html:16
 msgid "Products"
-msgstr "Tickets"
+msgstr "Produkte"
 
 #: postix/backoffice/templates/backoffice/main.html:21
 #: postix/backoffice/templates/backoffice/main.html:34
@@ -330,7 +330,7 @@ msgstr ""
 #: postix/backoffice/templates/backoffice/main.html:29
 #: postix/backoffice/templates/backoffice/session_detail.html:72
 msgid "Items"
-msgstr "Produkte"
+msgstr "Gegenstände"
 
 #: postix/backoffice/templates/backoffice/main.html:42
 msgid "Quotas"
@@ -569,7 +569,7 @@ msgstr "Noch verfügbar"
 
 #: postix/backoffice/templates/backoffice/session_detail.html:99
 msgid "Item movement log"
-msgstr "Produkt-Auszählungen"
+msgstr "Gegenstand-Transaktionen"
 
 #: postix/backoffice/templates/backoffice/session_detail.html:102
 #: postix/backoffice/templates/backoffice/session_detail.html:123
@@ -578,7 +578,7 @@ msgstr "Zeit"
 
 #: postix/backoffice/templates/backoffice/session_detail.html:103
 msgid "Item"
-msgstr "Produkt"
+msgstr "Gegenstand"
 
 #: postix/backoffice/templates/backoffice/session_detail.html:105
 #: postix/backoffice/templates/backoffice/session_detail.html:125
@@ -587,7 +587,7 @@ msgstr "Menge"
 
 #: postix/backoffice/templates/backoffice/session_detail.html:120
 msgid "Cash movement log"
-msgstr "Geld-Auszählungen"
+msgstr "Geld-Transaktionen"
 
 #: postix/backoffice/templates/backoffice/session_list.html:20
 msgid "Duration"
@@ -599,7 +599,7 @@ msgstr "Verkaufte Produkte"
 
 #: postix/backoffice/templates/backoffice/session_list.html:22
 msgid "Current items"
-msgstr "Vorhandene Produkte"
+msgstr "Vorhandene Gegenstände"
 
 #: postix/backoffice/templates/backoffice/session_list.html:52
 #: postix/troubleshooter/templates/troubleshooter/main.html:25
@@ -659,16 +659,16 @@ msgstr "Presale-Daten importieren"
 #: postix/backoffice/templates/backoffice/wizard_item_edit.html:6
 #: postix/backoffice/templates/backoffice/wizard_item_list.html:16
 msgid "Edit item"
-msgstr "Produkt bearbeiten"
+msgstr "Gegenstand bearbeiten"
 
 #: postix/backoffice/templates/backoffice/wizard_item_list.html:4
 #: postix/core/templates/core/base.html:153
 msgid "Item List"
-msgstr "Produkte"
+msgstr "Gegenstände"
 
 #: postix/backoffice/templates/backoffice/wizard_item_list.html:8
 msgid "Add an Item"
-msgstr "Produkt hinzufügen"
+msgstr "Gegenstand hinzufügen"
 
 #: postix/backoffice/templates/backoffice/wizard_settings.html:6
 msgid "General settings"
@@ -786,7 +786,7 @@ msgstr "Die Kasse wurde angelegt."
 
 #: postix/backoffice/views/wizard.py:62 postix/backoffice/views/wizard.py:151
 msgid "The item has been updated."
-msgstr "Das Produkt wurde gespeichert."
+msgstr "Der Gegenstand wurde gespeichert."
 
 #: postix/backoffice/views/wizard.py:91
 msgid "User rights have been expanded"
@@ -806,7 +806,7 @@ msgstr "Der Import konnte nicht verarbeitet werden: "
 
 #: postix/backoffice/views/wizard.py:137
 msgid "The item has been saved."
-msgstr "Das Produkt wurde gespeichert."
+msgstr "Der Gegenstand wurde gespeichert."
 
 #: postix/core/models/cashdesk.py:38
 msgid "IP address"
