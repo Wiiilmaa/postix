@@ -113,7 +113,7 @@ body.login, body.error {
 #redeem-presale {
     padding: 10px;
 }
-#redeem-presale .panel {
+#redeem-presale .card {
     margin: 0;
 }
 #lower-right {
@@ -122,13 +122,13 @@ body.login, body.error {
     display: flex;
     flex-flow: column;
 }
-#lower-right .panel {
+#lower-right .card {
     flex-flow: column;
     flex: 1;
     display: flex;
     margin: 0;
 }
-#lower-right .panel-body {
+#lower-right .card-body {
     flex: 1;
     display: flex;
     flex-flow: column;
@@ -220,12 +220,10 @@ body.login, body.error {
 #btn-clear {
     font-size: 20px;
 }
-.panel-body {
+.card-body {
     padding: 10px;
 }
-.panel-heading {
-    padding: 10px;
-    line-height: 40px;
+.card-title {
     font-size: 20px;
     font-weight: bold;
 }
@@ -253,7 +251,7 @@ body.has-modal #main-container {
 .has-modal #modal-container {
     display: flex;
 }
-#modal .panel {
+#modal .card {
     margin: 0;
     width: 760px;
     font-size: 22px;
@@ -290,7 +288,7 @@ body.has-modal #main-container {
 #modal-input-wrapper {
     flex: 1 1;
 }
-.panel-sale .panel-heading {
+.panel-sale .card-title {
     line-height: 40px;
 }
 .info-completed {
@@ -308,14 +306,14 @@ body.has-modal #main-container {
     height: 52px;
     transition: height 1s;
 }
-.post-sale .panel {
+.post-sale .card {
     border-color: #3e8f3e !important;
 }
-.post-sale .panel-body {
+.post-sale .card-body {
     background: #3e8f3e !important;
     color: #ffffff;
 }
-.post-sale .panel>.panel-heading {
+.post-sale .card>.card-heading {
     color: #ffffff;
     background: #3e8f3e !important;
     border-color: #3e8f3e !important;

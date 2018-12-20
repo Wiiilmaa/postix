@@ -103,7 +103,7 @@ var transaction = {
             }),
             success: function (data, status, jqXHR) {
                 loading.end();
-                $('#lower-right').addClass('post-sale').find('.panel-heading span').text(gettext('Last transaction'));
+                $('#lower-right').addClass('post-sale').find('.card-heading span').text(gettext('Last transaction'));
 
                 var i, total = 0;
                 for (i = 0; i < transaction.positions.length; i++) {

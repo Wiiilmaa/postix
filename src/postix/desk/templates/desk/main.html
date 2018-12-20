@@ -49,24 +49,24 @@
     </div>
     <div id="right-side">
         <div id="redeem-presale">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    {% trans "Redeem preordered ticket" %}
-                </div>
-                <div class="panel-body">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {% trans "Redeem preordered ticket" %}
+                    </h5>
                     <input type="text" id="preorder-input" class="typeahead form-control">
                 </div>
             </div>
         </div>
         <div id="lower-right">
-            <div class="panel panel-primary panel-sale">
-                <div class="panel-heading">
-                    <span>{% trans "Current transaction" %}</span>
-                    <button class="btn btn-sm btn-light pull-right" id="btn-clear">
-                        {% trans "clear" %}
-                    </button>
-                </div>
-                <div class="panel-body">
+            <div class="card panel-sale">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span>{% trans "Current transaction" %}</span>
+                        <button class="btn btn-sm btn-light pull-right" id="btn-clear">
+                            {% trans "clear" %}
+                        </button>
+                    </h5>
                     <div id="cart">
                         <div id="cart-empty">
                             <p id="greeting">
@@ -125,11 +125,11 @@
 
 <div id="modal-container">
     <div id="modal">
-        <div class="panel">
-            <div class="panel-heading" id="modal-title">
-                {% trans "Redeem preordered ticket" %}
-            </div>
-            <div class="panel-body">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" id="modal-title">
+                    {% trans "Redeem preordered ticket" %}
+                </h5>
                 <p id="modal-text">
                 </p>
                 <p id="modal-input-wrapper">
