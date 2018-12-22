@@ -150,7 +150,10 @@ class TransactionViewSet(ReadOnlyModelViewSet):
                 )
                 success = False
             else:
-                position_feedback.append({'success': True})
+                feedback = {'success': True}
+                if pos.preorder_position:
+                    feedback['preorder_position'] = PreorderPositionSerializer(pos.preorder_position).data
+                position_feedback.append(feedback)
                 pos.transaction = trans
                 pos.save()
 
