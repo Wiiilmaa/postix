@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-21 16:55+0100\n"
-"PO-Revision-Date: 2018-12-21 17:01+0100\n"
+"PO-Revision-Date: 2018-12-21 17:05+0100\n"
 "Last-Translator: Tobias Kunze <r@rixx.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -683,7 +683,7 @@ msgstr "Troubleshooter → Lager"
 #: postix/backoffice/templates/backoffice/supply_list.html:20
 #: postix/backoffice/templates/backoffice/supply_list.html:53
 msgid "Storage → Dissolved"
-msgstr "Lager → Aufgelös"
+msgstr "Lager → Aufgelöst"
 
 #: postix/backoffice/templates/backoffice/supply_list.html:23
 msgid "Search…"
@@ -707,7 +707,7 @@ msgstr "Noch keine Pakete, es kann losgehen!"
 
 #: postix/backoffice/templates/backoffice/supply_move_away.html:11
 msgid "Dissolve a supply pack"
-msgstr "Paket als verwendet markieren"
+msgstr "Paket auflösen"
 
 #: postix/backoffice/templates/backoffice/supply_move_in.html:11
 msgid "Incoming supply from troubleshooter"
