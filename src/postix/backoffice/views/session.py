@@ -88,6 +88,9 @@ class NewSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
                 item = f.cleaned_data.get('item')
                 amount = f.cleaned_data.get('amount')
                 if item and amount and amount > 0:
+                    if not form.cleaned_data['cashdesk'].handles_items:
+                        messages.error(request, _('You cannot add items to this cashdesk!'))
+                        return self.render_to_response(self.get_context_data())
                     ItemMovement.objects.create(
                         item=item,
                         session=session,

@@ -50,7 +50,7 @@ class Cashdesk(models.Model):
         verbose_name=_('Printer handles drawer'),
         help_text=_('Unset if the printer or drawer are broken.'),
     )
-    handles_items = models.BooleanField(default=True)
+    handles_items = models.BooleanField(default=True, verbose_name=_('Handles items'))
 
     def __str__(self) -> str:
         return self.name
