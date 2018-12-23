@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 
+from django.db import transaction
 from postix.core.models import Cashdesk, Preorder, PreorderPosition, Product
 
 
@@ -47,6 +48,7 @@ def _build_product_dict(data, log, style):
     return product_dict
 
 
+@transaction.atomic
 def import_pretix_data(
     data, add_cashdesks=False, log=FakeLog(), style=FakeStyle(), questions=None
 ):
