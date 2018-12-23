@@ -42,6 +42,33 @@
         {% endif %}
         <hr>
 
+        <h3> {% trans "Contents" %} </h3>
+        <table class="table" id="session-detail-table">
+            <thead>
+            <th></th>
+            <th>{% trans "Initial" %}</th>
+            <th>{% trans "Sales" %}</th>
+            <th>{% if session.end %}{% trans "Final" %}{% else %}{% trans "Currently remaining" %}{% endif %}</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td> {% trans "Cash" %} </td>
+                <td> {{ session.cash_before }} € </td>
+                <td> {% if session.cashdesk.ip_address %}{{ session.get_cash_transaction_total }} €{% elif session.end %}{{ total }}€{% endif %}</td>
+                <td> {% if session.end %}{{ session.cash_after }} € {% else %}{{ session.cash_remaining }}{% endif %}</td>
+            </tr>
+            {% for item in session.get_current_items %}
+                <tr>
+                    <td> {{ item.item.name }} </td>
+                    <td> {{ item.movements }} </td>
+                    <td> {{ item.transactions }} </td>
+                    <td> {% if session.end %}{{ item.final_movements }}{% else %}{{ item.total }}{% endif %} </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if session.cashdesk.handles_items %}
         <h3 style="clear:both"> {% trans "Sold products" %} </h3>
         <table class="table" id="session-detail-table">
             <thead>
@@ -68,32 +95,7 @@
             {% endfor %}
             </tbody>
         </table>
-
-        <h3> {% trans "Items" %} </h3>
-        <table class="table" id="session-detail-table">
-            <thead>
-            <th></th>
-            <th>{% trans "Initial" %}</th>
-            <th>{% trans "Sales" %}</th>
-            <th>{% if session.end %}{% trans "Final" %}{% else %}{% trans "Currently remaining" %}{% endif %}</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td> {% trans "Cash" %} </td>
-                <td> {{ session.cash_before }} € </td>
-                <td> {% if session.cashdesk.ip_address %}{{ session.get_cash_transaction_total }} €{% elif session.end %}{{ total }}€{% endif %}</td>
-                <td> {% if session.end %}{{ session.cash_after }} € {% else %}{{ session.cash_remaining }}{% endif %}</td>
-            </tr>
-            {% for item in session.get_current_items %}
-                <tr>
-                    <td> {{ item.item.name }} </td>
-                    <td> {{ item.movements }} </td>
-                    <td> {{ item.transactions }} </td>
-                    <td> {% if session.end %}{{ item.final_movements }}{% else %}{{ item.total }}{% endif %} </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% endif %}
 
         {% if session.item_movements.exists %}
         <h3> {% trans "Item movement log" %} </h3>

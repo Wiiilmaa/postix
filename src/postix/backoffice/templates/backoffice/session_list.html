@@ -29,7 +29,7 @@
                 {% for session in cashdesk.get_active_sessions %}
                 <tr{% if not session.is_latest_session %} class="success"{% endif %}>
                     <td><strong>{{ session.cashdesk }}</strong></td>
-                    <td> {{ session.user }} </td>
+                    <td>{% if session.user %}{{ session.user }}{% else %}-{% endif %}</td>
                     <td>seit {{ session.start|timesince }} </td>
                     <td>
                         <ul>
