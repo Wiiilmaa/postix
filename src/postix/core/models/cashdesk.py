@@ -1,5 +1,6 @@
 import random
 import string
+from collections import defaultdict
 from datetime import timedelta
 from decimal import Decimal
 from typing import Dict, List, Union
@@ -203,28 +204,31 @@ class CashdeskSession(models.Model):
             total=models.Sum('amount')
         )
 
-        post_movement_dict = {}
+        transaction_dict = defaultdict(int)
+        movement_dict = defaultdict(int)
+        post_movement_dict = defaultdict(int)
         if self.end:
             post_movements = item_movements.filter(timestamp__gte=self.end)
             item_movements = item_movements.filter(timestamp__lt=self.end)
-            post_movement_dict = {
-                d['item']: {'total': d['total']} for d in post_movements
-            }
-        movement_dict = {d['item']: {'total': d['total']} for d in item_movements}
-        transaction_dict = {d['item']: {'total': d['total']} for d in transactions}
+            for d in post_movements:
+                post_movement_dict[d['item']] += d['total']
 
-        DEFAULT = {'total': 0}
+        for d in item_movements:
+            movement_dict[d['item']] += d['total']
+        for d in transactions:
+            transaction_dict[d['item']] += d['total']
+
         return [
             {
                 'item': item,
-                'movements': movement_dict.get(item.pk, DEFAULT)['total'],
-                'transactions': transaction_dict.get(item.pk, DEFAULT)['total'],
-                'final_movements': -post_movement_dict.get(item.pk, DEFAULT)['total']
+                'movements': movement_dict.get(item.pk, 0),
+                'transactions': transaction_dict.get(item.pk, 0),
+                'final_movements': -post_movement_dict.get(item.pk, 0)
                 if self.end
                 else 0,
-                'total': movement_dict.get(item.pk, DEFAULT)['total']
-                + post_movement_dict.get(item.pk, DEFAULT)['total']
-                - transaction_dict.get(item.pk, DEFAULT)['total'],
+                'total': movement_dict.get(item.pk, 0)
+                + post_movement_dict.get(item.pk, 0)
+                - transaction_dict.get(item.pk, 0),
             }
             for item in self.get_item_set()
         ]
