@@ -94,7 +94,7 @@ class BillForm(forms.Form):
     def total_value(self):
         total = 0
         for bill, amount in self.cleaned_data.items():
-            total += int(bill.rsplit('_', maxsplit=1)[-1]) * amount
+            total += int(bill.rsplit('_', maxsplit=2)[-1]) * (amount or 0)
         return total
 
 
@@ -111,7 +111,7 @@ class CoinForm(forms.Form):
     def total_value(self):
         total = 0
         for coin, amount in self.cleaned_data.items():
-            total += int(coin.rsplit('_', maxsplit=1)[-1]) * amount
+            total += int(coin.rsplit('_', maxsplit=1)[-1]) * (amount or 0)
         return total / 100
 
 
@@ -127,7 +127,7 @@ class BillBulkForm(forms.Form):
     def total_value(self):
         total = 0
         for bill, amount in self.cleaned_data.items():
-            total += int(bill.rsplit('_', maxsplit=1)[-1]) * amount
+            total += int(bill.rsplit('_', maxsplit=1)[-1]) * (amount or 0)
         return total
 
 
@@ -144,5 +144,5 @@ class CoinBulkForm(forms.Form):
     def total_value(self):
         total = 0
         for coin, amount in self.cleaned_data.items():
-            total += int(coin.rsplit('_', maxsplit=1)[-1]) * amount
+            total += int(coin.rsplit('_', maxsplit=1)[-1]) * (amount or 0)
         return total / 100
