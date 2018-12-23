@@ -1,3 +1,4 @@
+import json
 from io import BytesIO
 from tempfile import TemporaryFile
 
@@ -39,14 +40,14 @@ def get_qr_image(record) -> TemporaryFile:
             supervisor=session.backoffice_user_after.get_full_name(),
             user=session.user.get_full_name() if session.user else record.carrier or '',
         )
-    else:
+    elif record.is_balancing:
         data = '{end}\t{direction}\t{total}\t{entity}\t{supervisor}\t{user}'.format(
             end=record.datetime.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
             direction='Einnahme' if record.type == 'inflow' else 'Ausgabe',
             total='{0:,.2f}'.format(record.amount).translate(str.maketrans(',.', '.,')),
-            entity=record.tabbed_entity,
-            supervisor=record.backoffice_user.get_full_name(),
-            user=record.named_carrier,
+            entity=record.tabbed_entity or '',
+            supervisor=record.backoffice_user.get_full_name() or '',
+            user=record.named_carrier or '',
         )
     qr.add_data(data)
     qr.make()
@@ -275,10 +276,110 @@ def generate_session_closing(record, doc):
     ]
 
 
+def generate_balance_statement(record, doc):
+    data = json.loads(record.data)
+    style = get_paragraph_style()
+    settings = EventSettings.get_solo()
+    title_str = '[{}] Kassenabschluss'.format(settings.short_name)
+    title = Paragraph(title_str, style['Heading1'])
+    tz = timezone.get_current_timezone()
+    text = record.datetime.astimezone(tz).strftime('%Y-%m-%d %H:%M:%S')
+    info = Paragraph(text, style['Normal'])
+
+    header = Table(
+        data=[[[title, info], '']],
+        colWidths=[doc.width / 2] * 2,
+        style=TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+                ('ALIGN', (1, 0), (1, 0), 'RIGHT'),
+                ('VALIGN', (0, 0), (1, 0), 'TOP'),
+            ]
+        ),
+    )
+
+    bills = [5, 10, 20, 50, 100, 200, 500]
+    bills_data = [['Wert', 'Manuell', 'Maschinell', 'In Bündeln']]
+    for bill in bills:
+        bills_data.append([
+            CURRENCY.format(bill),
+            data['bills_manually'].get('bill_{}'.format(bill), 0),
+            data['bills_automated'].get('bill_{}'.format(bill), 0),
+            data['bills_bulk'].get('bill_{}00'.format(bill) , 0) * 100,
+        ])
+    bills_data.append([
+        '',
+        CURRENCY.format(data['bills_manually']['total']),
+        CURRENCY.format(data['bills_automated']['total']),
+        CURRENCY.format(data['bills_bulk']['total']),
+    ])
+
+    coins = [(0.01, 50), (0.02, 100), (0.05, 250), (0.10, 400), (0.20, 800), (0.50, 2000), (1, 2500), (2, 5000)]
+    coins_data = [['Wert', 'Maschinell', 'In Rollen']]
+    for coin in coins:
+        coins_data.append([
+            CURRENCY.format(coin[0]),
+            data['coins_automated'].get('coin_{}'.format(int(coin[0] * 100)), 0),
+            int(data['coins_bulk'].get('coin_{}'.format(coin[1]), 0) * (coin[1] / (coin[0] * 100))),
+        ])
+    coins_data.append([
+        '',
+        CURRENCY.format(data['coins_automated']['total']),
+        CURRENCY.format(data['coins_bulk']['total']),
+    ])
+
+    last_row = len(bills_data) - 1
+    bills_table = Table(
+        data=bills_data, colWidths=[doc.width/4]*4,
+        style=TableStyle(
+            [
+                ('FONTSIZE', (0, 0), (2, last_row), FONTSIZE),
+                ('ALIGN', (0, 0), (3, last_row), 'RIGHT'),
+                ('LINEABOVE', (0, 1), (3, 1), 1.0, colors.black),
+                ('LINEABOVE', (1, last_row), (3, last_row), 1.2, colors.black),
+            ]
+        ),
+    )
+    last_row = len(coins_data) - 1
+    coins_table = Table(
+        data=coins_data, colWidths=[doc.width/3]*3,
+        style=TableStyle(
+            [
+                ('FONTSIZE', (0, 0), (2, last_row), FONTSIZE),
+                ('ALIGN', (0, 0), (2, last_row), 'RIGHT'),
+                ('LINEABOVE', (0, 1), (2, 1), 1.0, colors.black),
+                ('LINEABOVE', (1, last_row), (2, last_row), 1.2, colors.black),
+            ]
+        ),
+    )
+    final_table_data = [['Erwartet:', CURRENCY.format(data['expected'])], ['Ausgezählt:', CURRENCY.format(data['total'])], ['Differenz:', CURRENCY.format(record.amount)]]
+    last_row = len(final_table_data) - 1
+    final_table = Table(
+        data=final_table_data, colWidths=[doc.width/4]*2,
+        style=TableStyle(
+            [
+                ('FONTSIZE', (0, 0), (1, last_row), FONTSIZE),
+                ('ALIGN', (0, 0), (0, last_row), 'LEFT'),
+                ('ALIGN', (1, 0), (1, last_row), 'RIGHT'),
+            ]
+        ),
+    )
+    return [
+        header,
+        Spacer(1, 15 * mm),
+        bills_table,
+        Spacer(1, 15 * mm),
+        coins_table,
+        Spacer(1, 15 * mm),
+        final_table,
+    ]
+
+
 def generate_record(record: Record) -> str:
     """
     Generates the PDF for a given record; returns the path to the record PDF.
     """
+
     _buffer = BytesIO()
     settings = EventSettings.get_solo()
     doc = get_default_document(_buffer, footer=settings.report_footer + '\n{}'.format(record.checksum))
@@ -287,7 +388,7 @@ def generate_record(record: Record) -> str:
     # Header: info text and qr code
     title_str = '[{}] {}beleg'.format(
         settings.short_name, 'Einnahme' if record.type == 'inflow' else 'Ausgabe'
-    )
+    ) if not record.is_balancing else 'Kassenabschluss'
     title = Paragraph(title_str, style['Heading1'])
     tz = timezone.get_current_timezone()
     datetime = record.datetime.astimezone(tz)
@@ -308,7 +409,7 @@ def generate_record(record: Record) -> str:
         name += ' (#{})'.format(record.cash_movement.session.pk)
     info = [
         ['Datum', datetime.strftime('%Y-%m-%d, %H:%M')],
-        ['Von' if record.type == 'inflow' else 'Nach', name],
+        ['Von' if record.type == 'inflow' else 'Nach', name or ''],
         ['Betrag', CURRENCY.format(record.amount)],
     ]
     info = [
@@ -352,6 +453,9 @@ def generate_record(record: Record) -> str:
             story += generate_item_report(record.cash_movement.session, doc=doc)
         story.append(PageBreak())
         story += generate_session_closing(record, doc=doc)
+    if record.is_balancing:
+        story.append(PageBreak())
+        story += generate_balance_statement(record, doc=doc)
 
     doc.build(story)
     _buffer.seek(0)
