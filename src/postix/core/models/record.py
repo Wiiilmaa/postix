@@ -80,6 +80,7 @@ class Record(models.Model):
         verbose_name=_('Report closes session and contains additional pages'),
     )
     is_locked = models.BooleanField(default=False)
+    data = models.TextField(null=True, blank=True)
 
     @property
     def checksum(self):
