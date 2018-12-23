@@ -18,12 +18,13 @@
     {% else %}
         {% trans "Ended session" %} #{{ session.pk }}
     {% endif %}
-    <small> {{ session.cashdesk }}, {{ session.user.firstname }} {{ session.user.lastname }}
-        ({{ session.user.username }})</small>
+    <small> {{ session.cashdesk }}
+        {% if session.user %}, {{ session.user.firstname }} {{ session.user.lastname }} ({{ session.user.username }}){% endif %}
+    </small>
 {% endblock %}
 
 {% block content %}
-    {% if not session.end %}
+    {% if session.cashdesk.handles_items and not session.end %}
         <div id="qrcode"></div>
         <script type="text/json" id="qrcodedata">
         {
@@ -38,7 +39,7 @@
             <h5> {% trans "Start" %}: {{ session.start }} </h5>
             <h5> {% trans "End" %}: {{ session.end }} </h5>
         {% else %}
-            <h5> {% trans "Start" %}: {{ session.start|timesince }} </h5>
+            <h5> {% trans "Active for" %}: {{ session.start|timesince }} </h5>
         {% endif %}
         <hr>
 

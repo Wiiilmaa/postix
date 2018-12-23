@@ -408,7 +408,7 @@ msgstr "Session verschieben"
 #: postix/backoffice/templates/backoffice/record_list.html:18
 #: postix/backoffice/templates/backoffice/session_list.html:13
 msgid "Balance records"
-msgstr "Kassenzählung"
+msgstr "Kassenabschluss"
 
 #: postix/backoffice/templates/backoffice/new_balance.html:22
 msgid "Bills (machine-counted)"
