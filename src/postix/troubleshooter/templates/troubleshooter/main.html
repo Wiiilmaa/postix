@@ -18,7 +18,7 @@
     <div class="">
         <div class="panel">
             <ul class="list-group">
-                {% for sess in sessions %}
+                {% for sess in sessions %}{% if sess.cashdesk.handles_items %}
                 {% with sess.has_open_requests as requests %}
                     <li class="list-group-item open-cashdesk {% if requests %} has-request list-group-item-warning{% endif %}">
                         <h3>
@@ -51,7 +51,7 @@
                 {% endwith %}
                 {% empty %}
                     {% trans "This is it: the calm before (or after?) the storm. Hold tight, shifts will appear here shortly." %}
-                {% endfor %}
+                {% endif %}{% endfor %}
             </ul>
         </div>
     </div>
