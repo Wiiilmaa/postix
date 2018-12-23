@@ -8,6 +8,7 @@ from django.db import models
 from django.db.models import Max, Sum
 from django.utils import timezone
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 
 from ..utils import round_decimal
 
@@ -303,10 +304,10 @@ class TransactionPositionItem(models.Model):
 
 class ItemSupplyPack(models.Model):
     STATES = (
-        ('backoffice', 'In backoffice'),
-        ('troubleshooter', 'With troubleshooter'),
-        ('dissolved', 'Dissolved for other reasons'),
-        ('used', 'Used to refill cash session'),
+        ('backoffice', _('In backoffice')),
+        ('troubleshooter', _('With troubleshooter')),
+        ('dissolved', _('Dissolved for other reasons')),
+        ('used', _('Used to refill cash session')),
     )
     identifier = models.CharField(max_length=190, unique=True)
     item = models.ForeignKey(

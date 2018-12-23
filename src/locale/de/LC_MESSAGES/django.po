@@ -1522,7 +1522,7 @@ msgstr "Einloggen"
 
 #: postix/troubleshooter/templates/troubleshooter/main.html:10
 msgid "Reserve stock"
-msgstr "Vorräte zurücklegen"
+msgstr "Vorräte"
 
 #: postix/troubleshooter/templates/troubleshooter/main.html:16
 msgid "Nothing."
