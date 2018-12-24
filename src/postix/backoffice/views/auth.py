@@ -35,7 +35,7 @@ class LoginView(TemplateView):
         if url and is_safe_url(url, request.get_host()):
             return redirect(url)
 
-        return redirect('backoffice:main')
+        return redirect('backoffice:session-list')
 
 
 def logout_view(request: HttpRequest) -> HttpResponseRedirect:
