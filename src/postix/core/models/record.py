@@ -105,13 +105,15 @@ class Record(models.Model):
     @property
     def named_entity(self):
         if self.cash_movement:
-            return str(self.cash_movement.session.cashdesk)
-        return str(self.entity)
+            return str(self.cash_movement.session.cashdesk or '')
+        return str(self.entity or '')
 
     @property
     def tabbed_entity(self):
         if self.cash_movement:
             return self.cash_movement.session.tabbed_entity
+        if self.is_balancing:
+            return str(_('Balancing')) + '\t' + str(_('Difference'))
         return '{e.name}\t{e.detail}'.format(e=self.entity)
 
     @property
