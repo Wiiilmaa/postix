@@ -29,12 +29,12 @@ def get_qr_image(record) -> TemporaryFile:
         record.cash_movement
         and record.closes_session
         and record.cash_movement.session.cashdesk.handles_items
-    ):
+    ):  # TODO: this is nearly ready to be merged with the second branch
         session = record.cash_movement.session
-        data = '{end}\tEinnahme\t{total}\tKassensession\t#{pk}\t{supervisor}\t{user}'.format(
+        data = '{end}\tEinnahme\t{total}\t{entity}\t{supervisor}\t{user}'.format(
             end=session.end.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
             total='{0:,.2f}'.format(record.amount).translate(str.maketrans(',.', '.,')),
-            pk=session.pk,
+            entity=record.tabbed_entity or '',
             supervisor=session.backoffice_user_after.get_full_name(),
             user=session.user.get_full_name() if session.user else record.carrier or '',
         )

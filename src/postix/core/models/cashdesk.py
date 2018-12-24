@@ -245,6 +245,7 @@ class CashdeskSession(models.Model):
             return '{c.record_name}\t{c.record_detail} (#{self.pk})'.format(
                 c=self.cashdesk, self=self
             )
+        return 'Kassensession\t{self.pk}'.format(self=self)
 
     @property
     def cash_remaining(self) -> Decimal:
