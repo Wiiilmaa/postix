@@ -40,7 +40,7 @@ def get_qr_image(record) -> TemporaryFile:
             supervisor=session.backoffice_user_after.get_full_name(),
             user=session.user.get_full_name() if session.user else record.carrier or '',
         )
-    elif record.is_balancing:
+    else:
         data = '{end}\t{direction}\t{total}\t{entity}\t{supervisor}\t{user}'.format(
             end=record.datetime.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
             direction='Einnahme' if record.type == 'inflow' else 'Ausgabe',
