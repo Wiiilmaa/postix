@@ -40,10 +40,13 @@ const priceMap = {
 }
 let calculateTotal = function() {
     let runningTotal = 0;
-    for (key in priceMap) {
-	const value = document.querySelector('#' + key).value || 0;
-	runningTotal += value * priceMap[key];
-    }
+    document.querySelectorAll('.balance-card input[type=number]').forEach(function(element) {
+	if (!element.value) return
+	const factor = element.id.includes('coins') ? 100 : 1;
+	const value = Number(element.id.substring(element.id.lastIndexOf('_') + 1))/factor;
+	runningTotal += value * element.value
+    })
+
     return runningTotal.toFixed(2)
 }
 document.querySelectorAll("#balance-form input").forEach(function (element) {
@@ -53,3 +56,26 @@ document.querySelectorAll("#balance-form input").forEach(function (element) {
     }, false)
 })
 document.querySelector("#calculator-result").textContent = calculateTotal()
+
+document.querySelector('#id_coins_bulk-TOTAL_FORMS').value = 1
+document.querySelector('#id_coins_automated-TOTAL_FORMS').value = 1
+document.querySelector('#id_bills_bulk-TOTAL_FORMS').value = 1
+document.querySelector('#id_bills_automated-TOTAL_FORMS').value = 1
+document.querySelector('#id_bills_manually-TOTAL_FORMS').value = 1
+
+document.querySelectorAll("a.add-form").forEach(function (element) {
+    element.addEventListener("click", function() {
+	const title = element.id.substring(0, element.id.lastIndexOf('-'))
+	const form_count = document.querySelectorAll('.balance-card.' + title).length
+	const template = document.querySelector('#template .balance-card.' + title)
+	const new_form = template.outerHTML.replace(/__prefix__/g, form_count - 1);
+	document.querySelector('#id_' + title.replace('-', '_') + '-TOTAL_FORMS').value = form_count
+	document.querySelector('.balance-card.' + title).insertAdjacentHTML('beforebegin', new_form)
+	document.querySelectorAll("#balance-form .balance-card." + title + " input").forEach(function (element) {
+	    element.addEventListener("input", function() {
+		document.querySelector("#calculator-result").textContent = calculateTotal()
+
+	    }, false)
+	})
+    })
+})

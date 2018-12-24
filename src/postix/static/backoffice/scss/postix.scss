@@ -64,17 +64,23 @@ table ul {
     .card {
         margin: 16px;
         .card-body {
-            p {
+            .form-group {
                 display: flex;
                 flex-direction: row-reverse;
                 justify-content: flex-end;
-                label {
-                    margin-left: 8px; 
-                }
                 input {
-                    width: 100px;
+                    width: 80px;
+                    margin-right: 8px;
                 }
             }
+        }
+    }
+    & + .submit-row {
+        display: flex;
+        justify-content: flex-end;
+        div {
+            margin: 8px;
+            cursor: default;
         }
     }
 }

@@ -1,4 +1,5 @@
 {% extends 'backoffice/base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
 
@@ -17,54 +18,111 @@
 	{% trans "Balance records" %}
     </h2>
     <div id="balance-form">
-	<div class="card balance-card">
+	<div class="card balance-card bills-automated">
 	    <div class="card-header">
 		{% trans "Bills (machine-counted)" %}
 	    </div>
 	    <div class="card-body">
-		{{ formsets.bills_automated.as_p }}
+		{% crispy formsets.bills_automated helper %}
 	    </div>
+	    <a class="btn btn-success add-form" id="bills-automated-add"><i class="fa fa-plus"></i></a>
 	</div>
-	<div class="card balance-card">
+	<div class="card balance-card bills-bulk">
 	    <div class="card-header">
 		{% trans "Bills (bundles)" %}
 	    </div>
 	    <div class="card-body">
-		{{ formsets.bills_bulk.as_p }}
+		{% crispy formsets.bills_bulk helper %}
 	    </div>
+	    <a class="btn btn-success add-form" id="bills-bulk-add"><i class="fa fa-plus"></i></a>
 	</div>
-	<div class="card balance-card">
+	<div class="card balance-card bills-manually">
 	    <div class="card-header">
 		{% trans "Bills (manually)" %}
 	    </div>
 	    <div class="card-body">
-		{{ formsets.bills_manually.as_p }}
+		{% crispy formsets.bills_manually helper %}
 	    </div>
+	    <a class="btn btn-success add-form" id="bills-manually-add"><i class="fa fa-plus"></i></a>
 	</div>
-	<div class="card balance-card">
+	<div class="card balance-card coins-automated">
 	    <div class="card-header">
 		{% trans "Coins (machine-counted)" %}
 	    </div>
 	    <div class="card-body">
-		{{ formsets.coins_automated.as_p }}
+		{% crispy formsets.coins_automated helper %}
+
 	    </div>
+	    <a class="btn btn-success add-form" id="coins-automated-add"><i class="fa fa-plus"></i></a>
 	</div>
-	<div class="card balance-card">
+	<div class="card balance-card coins-bulk">
 	    <div class="card-header">
 		{% trans "Coins (rolls)" %}
 	    </div>
 	    <div class="card-body">
-		{{ formsets.coins_bulk.as_p }}
+		{% crispy formsets.coins_bulk helper %}
 	    </div>
+	    <a class="btn btn-success add-form" id="coins-bulk-add"><i class="fa fa-plus"></i></a>
 	</div>
     </div>
     <div class="submit-row">
-	<div id="balance-expected" data-value="{{ balance }}">{% trans "Expected:" %} {{ balance }} €</div>
-	<div id="balance-current">{% trans "Actual:" %} <span id="calculator-result"></span> €</div>
+	<div id="balance-expected" class="btn" data-value="{{ balance }}">{% trans "Expected:" %} {{ balance }} €</div>
+	<div id="balance-current" class="btn">{% trans "Actual:" %} <span id="calculator-result"></span> €</div>
 	<button type="submit" class="btn btn-primary">{% trans "Irreversibly balance records" %}</button>
     </div>
 </form>
+<div id="template" class="d-none">
+    <div class="card balance-card coins-bulk">
+	<div class="card-header">
+	    {% trans "Coins (rolls)" %}
+	</div>
+	<div class="card-body">
+	    {% crispy formsets.coins_bulk.empty_form helper %}
+	</div>
+    </div>
+</div>
+<div id="template" class="d-none">
+    <div class="card balance-card coins-automated">
+	<div class="card-header">
+	    {% trans "Coins (machine-counted)" %}
+	</div>
+	<div class="card-body">
+	    {% crispy formsets.coins_automated.empty_form helper %}
+	</div>
+    </div>
+</div>
+<div id="template" class="d-none">
+    <div class="card balance-card bills-automated">
+	<div class="card-header">
+	    {% trans "Bills (machine-counted)" %}
+	</div>
+	<div class="card-body">
+	    {% crispy formsets.bills_automated.empty_form helper %}
+	</div>
+    </div>
+</div>
+<div id="template" class="d-none">
+    <div class="card balance-card bills-manually">
+	<div class="card-header">
+	    {% trans "Bills (manually)" %}
+	</div>
+	<div class="card-body">
+	    {% crispy formsets.bills_manually.empty_form helper %}
+	</div>
+    </div>
+</div>
+<div id="template" class="d-none">
+    <div class="card balance-card bills-bulk">
+	<div class="card-header">
+	    {% trans "Bills (bundles)" %}
+	</div>
+	<div class="card-body">
+	    {% crispy formsets.bills_bulk.empty_form helper %}
+	</div>
+    </div>
+</div>
 {% endblock %}
+
 
 {% block scripts %}
     <script type="text/javascript">
