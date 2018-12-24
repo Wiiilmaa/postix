@@ -236,5 +236,7 @@ def information_factory():
 
 
 def itemsupplypack_factory(item=None, state='backoffice'):
-    return ItemSupplyPack.objects.create(amount=50, item=item or item_factory(), identifier='/supply 5KzLPML2L1ij52cl93VduM4cdOjuYz',
-                                         state=state)
+    return ItemSupplyPack.objects.create(
+        amount=50, item=item or item_factory(), identifier='/supply 5KzLPML2L1ij52cl93VduM4cdOjuYz',
+        state=state
+    )

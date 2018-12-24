@@ -79,7 +79,7 @@ def test_backoffice_supply_in(event_settings, backoffice_client):
 
 
 @pytest.mark.django_db
-def test_backoffice_supply_out_invalid_state(event_settings, backoffice_client):
+def test_backoffice_supply_in_invalid_state(event_settings, backoffice_client):
     isp = itemsupplypack_factory(state='used')
     response = backoffice_client.post('/backoffice/supplies/in/', data={
         'identifier': isp.identifier
@@ -91,7 +91,7 @@ def test_backoffice_supply_out_invalid_state(event_settings, backoffice_client):
 
 
 @pytest.mark.django_db
-def test_backoffice_supply_out(event_settings, backoffice_client):
+def test_backoffice_supply_dissolve(event_settings, backoffice_client):
     isp = itemsupplypack_factory(state='backoffice')
     response = backoffice_client.post('/backoffice/supplies/away/', data={
         'identifier': isp.identifier
@@ -103,7 +103,7 @@ def test_backoffice_supply_out(event_settings, backoffice_client):
 
 
 @pytest.mark.django_db
-def test_backoffice_supply_out_invalid_state(event_settings, backoffice_client):
+def test_backoffice_supply_away_invalid_state(event_settings, backoffice_client):
     isp = itemsupplypack_factory(state='used')
     response = backoffice_client.post('/backoffice/supplies/away/', data={
         'identifier': isp.identifier
