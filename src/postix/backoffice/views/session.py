@@ -73,16 +73,18 @@ class NewSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
             start=now(),
             backoffice_user_before=form.cleaned_data['backoffice_user'],
         )
-        movement = CashMovement.objects.create(
-            session=session,
-            cash=form.cleaned_data['cash_before'],
-            backoffice_user=form.cleaned_data['backoffice_user'],
-        )
-        record = movement.create_record(
-            carrier=form.cleaned_data['user']
-            if not form.cleaned_data['cashdesk'].ip_address
-            else None
-        )
+        record = None
+        if form.cleaned_data['cash_before']:
+            movement = CashMovement.objects.create(
+                session=session,
+                cash=form.cleaned_data['cash_before'],
+                backoffice_user=form.cleaned_data['backoffice_user'],
+            )
+            record = movement.create_record(
+                carrier=form.cleaned_data['user']
+                if not form.cleaned_data['cashdesk'].ip_address
+                else None
+            )
         if formset:
             for f in formset:
                 item = f.cleaned_data.get('item')
@@ -97,7 +99,9 @@ class NewSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
                         amount=amount,
                         backoffice_user=form.cleaned_data['backoffice_user'],
                     )
-        return redirect('backoffice:record-print', pk=record.pk)
+        if record:
+            return redirect('backoffice:record-print', pk=record.pk)
+        return redirect('backoffice:session-list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
