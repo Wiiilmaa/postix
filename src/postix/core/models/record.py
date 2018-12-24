@@ -118,15 +118,19 @@ class Record(models.Model):
 
     @property
     def tabbed_entity(self):
-        if self.cash_movement:
-            return self.cash_movement.session.tabbed_entity
         if self.is_balancing:
             return str(_('Balancing')) + '\t' + str(_('Difference'))
-        return '{e.name}\t{e.detail}'.format(e=self.entity)
+        if self.cash_movement:
+             entity = self.cash_movement.session.tabbed_entity
+             if entity:
+                 return entity
+        if self.entity:
+            return '{e.name}\t{e.detail}'.format(e=self.entity)
+        return '\t'
 
     @property
     def named_carrier(self):
-        if self.cash_movement and self.cash_movement.session.user:
+        if self.cash_movement and self.cash_movement.session.user and self.cash_movement.session.cashdesk.ip_address:
             return str(self.cash_movement.session.user.get_full_name())
         return self.carrier or ''
 

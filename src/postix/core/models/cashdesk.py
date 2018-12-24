@@ -241,9 +241,10 @@ class CashdeskSession(models.Model):
 
     @property
     def tabbed_entity(self):
-        return '{c.record_name}\t{c.record_detail} (#{self.pk})'.format(
-            c=self.cashdesk, self=self
-        )
+        if self.cashdesk and self.cashdesk.record_name and self.cashdesk.record_detail:
+            return '{c.record_name}\t{c.record_detail} (#{self.pk})'.format(
+                c=self.cashdesk, self=self
+            )
 
     @property
     def cash_remaining(self) -> Decimal:

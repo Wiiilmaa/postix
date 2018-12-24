@@ -167,7 +167,7 @@ def resupply_session(
     session = get_object_or_404(CashdeskSession, pk=pk)
     initial_form = {
         'cashdesk': session.cashdesk,
-        'user': session.user,
+        'user': session.user if session.cashdesk.ip_address else '',
         'backoffice_user': request.user,
         'cash_before': 0,
     }
@@ -212,7 +212,7 @@ def resupply_session(
         else:
             messages.error(request, _('Error: Please review the data.'))
 
-    form.fields['user'].widget.attrs['readonly'] = True
+    form.fields['user'].widget.attrs['readonly'] = bool(session.cashdesk.ip_address)
     form.fields['cashdesk'].widget.attrs['readonly'] = True
     # form.fields['cash_before'].widget = forms.HiddenInput()
 
