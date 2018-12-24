@@ -2,7 +2,9 @@ import json
 
 import pytest
 
-from ..factories import ping_factory, transaction_factory, itemsupplypack_factory
+from ..factories import (
+    itemsupplypack_factory, ping_factory, transaction_factory,
+)
 
 
 @pytest.mark.django_db

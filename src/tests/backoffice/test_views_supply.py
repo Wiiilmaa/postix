@@ -1,9 +1,8 @@
 import pytest
 
 from postix.core.models.base import ItemSupplyPack
-from ..factories import (
-    itemsupplypack_factory,
-    item_factory)
+
+from ..factories import item_factory, itemsupplypack_factory
 
 
 @pytest.mark.django_db

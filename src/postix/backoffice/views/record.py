@@ -79,11 +79,21 @@ class RecordBalanceView(BackofficeUserRequiredMixin, TemplateView):
     def formsets(self):
         result = dict()
         request_data = self.request.POST if self.request.method == 'POST' else None
-        result['bills_automated'] = formset_factory(BillForm)(request_data, prefix='bills_automated')
-        result['bills_manually'] = formset_factory(BillForm)(request_data, prefix='bills_manually')
-        result['bills_bulk'] = formset_factory(BillBulkForm)(request_data, prefix='bills_bulk')
-        result['coins_automated'] = formset_factory(CoinForm)(request_data, prefix='coins_automated')
-        result['coins_bulk'] = formset_factory(CoinBulkForm)(request_data, prefix='coins_bulk')
+        result['bills_automated'] = formset_factory(BillForm)(
+            request_data, prefix='bills_automated'
+        )
+        result['bills_manually'] = formset_factory(BillForm)(
+            request_data, prefix='bills_manually'
+        )
+        result['bills_bulk'] = formset_factory(BillBulkForm)(
+            request_data, prefix='bills_bulk'
+        )
+        result['coins_automated'] = formset_factory(CoinForm)(
+            request_data, prefix='coins_automated'
+        )
+        result['coins_bulk'] = formset_factory(CoinBulkForm)(
+            request_data, prefix='coins_bulk'
+        )
         return result
 
     @transaction.atomic
@@ -92,13 +102,23 @@ class RecordBalanceView(BackofficeUserRequiredMixin, TemplateView):
             messages.warning(_('Something seems wrong here.'))
             return super().post(request, *args, **kwargs)
 
-        total_value = Decimal(str(sum([form.total_value() for formset in self.formsets.values() for form in formset])))
+        total_value = Decimal(
+            str(
+                sum(
+                    [
+                        form.total_value()
+                        for formset in self.formsets.values()
+                        for form in formset
+                    ]
+                )
+            )
+        )
         total_data = dict()
         for name, formset in self.formsets.items():
             total_data[name] = defaultdict(int)
             for form in formset:
                 for key, value in form.cleaned_data.items():
-                    total_data[name][key] += (value or 0)
+                    total_data[name][key] += value or 0
                 total_data[name]['total'] += form.total_value()
         expected_value = self.balance
         direction = 'inflow' if total_value >= expected_value else 'outflow'
@@ -112,9 +132,7 @@ class RecordBalanceView(BackofficeUserRequiredMixin, TemplateView):
             data=json.dumps(total_data),
         )
         Record.objects.all().update(is_locked=True)
-        return redirect(reverse(
-            'backoffice:record-print', kwargs={'pk': record.pk}
-        ))
+        return redirect(reverse('backoffice:record-print', kwargs={'pk': record.pk}))
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)

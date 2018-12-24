@@ -2,6 +2,7 @@ import json
 from decimal import Decimal
 
 from django.db import transaction
+
 from postix.core.models import Cashdesk, Preorder, PreorderPosition, Product
 
 

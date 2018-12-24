@@ -301,36 +301,57 @@ def generate_balance_statement(record, doc):
     bills = [5, 10, 20, 50, 100, 200, 500]
     bills_data = [['Wert', 'Manuell', 'Maschinell', 'In Bündeln']]
     for bill in bills:
-        bills_data.append([
-            CURRENCY.format(bill),
-            data['bills_manually'].get('bill_{}'.format(bill), 0),
-            data['bills_automated'].get('bill_{}'.format(bill), 0),
-            data['bills_bulk'].get('bill_{}00'.format(bill), 0) * 100,
-        ])
-    bills_data.append([
-        '',
-        CURRENCY.format(data['bills_manually']['total']),
-        CURRENCY.format(data['bills_automated']['total']),
-        CURRENCY.format(data['bills_bulk']['total']),
-    ])
+        bills_data.append(
+            [
+                CURRENCY.format(bill),
+                data['bills_manually'].get('bill_{}'.format(bill), 0),
+                data['bills_automated'].get('bill_{}'.format(bill), 0),
+                data['bills_bulk'].get('bill_{}00'.format(bill), 0) * 100,
+            ]
+        )
+    bills_data.append(
+        [
+            '',
+            CURRENCY.format(data['bills_manually']['total']),
+            CURRENCY.format(data['bills_automated']['total']),
+            CURRENCY.format(data['bills_bulk']['total']),
+        ]
+    )
 
-    coins = [(0.01, 50), (0.02, 100), (0.05, 250), (0.10, 400), (0.20, 800), (0.50, 2000), (1, 2500), (2, 5000)]
+    coins = [
+        (0.01, 50),
+        (0.02, 100),
+        (0.05, 250),
+        (0.10, 400),
+        (0.20, 800),
+        (0.50, 2000),
+        (1, 2500),
+        (2, 5000),
+    ]
     coins_data = [['Wert', 'Maschinell', 'In Rollen']]
     for coin in coins:
-        coins_data.append([
-            CURRENCY.format(coin[0]),
-            data['coins_automated'].get('coin_{}'.format(int(coin[0] * 100)), 0),
-            int(data['coins_bulk'].get('coin_{}'.format(coin[1]), 0) * (coin[1] / (coin[0] * 100))),
-        ])
-    coins_data.append([
-        '',
-        CURRENCY.format(data['coins_automated']['total']),
-        CURRENCY.format(data['coins_bulk']['total']),
-    ])
+        coins_data.append(
+            [
+                CURRENCY.format(coin[0]),
+                data['coins_automated'].get('coin_{}'.format(int(coin[0] * 100)), 0),
+                int(
+                    data['coins_bulk'].get('coin_{}'.format(coin[1]), 0)
+                    * (coin[1] / (coin[0] * 100))
+                ),
+            ]
+        )
+    coins_data.append(
+        [
+            '',
+            CURRENCY.format(data['coins_automated']['total']),
+            CURRENCY.format(data['coins_bulk']['total']),
+        ]
+    )
 
     last_row = len(bills_data) - 1
     bills_table = Table(
-        data=bills_data, colWidths=[doc.width / 4] * 4,
+        data=bills_data,
+        colWidths=[doc.width / 4] * 4,
         style=TableStyle(
             [
                 ('FONTSIZE', (0, 0), (2, last_row), FONTSIZE),
@@ -342,7 +363,8 @@ def generate_balance_statement(record, doc):
     )
     last_row = len(coins_data) - 1
     coins_table = Table(
-        data=coins_data, colWidths=[doc.width / 3] * 3,
+        data=coins_data,
+        colWidths=[doc.width / 3] * 3,
         style=TableStyle(
             [
                 ('FONTSIZE', (0, 0), (2, last_row), FONTSIZE),
@@ -359,7 +381,8 @@ def generate_balance_statement(record, doc):
     ]
     last_row = len(final_table_data) - 1
     final_table = Table(
-        data=final_table_data, colWidths=[doc.width / 4] * 2,
+        data=final_table_data,
+        colWidths=[doc.width / 4] * 2,
         style=TableStyle(
             [
                 ('FONTSIZE', (0, 0), (1, last_row), FONTSIZE),
@@ -386,13 +409,19 @@ def generate_record(record: Record) -> str:
 
     _buffer = BytesIO()
     settings = EventSettings.get_solo()
-    doc = get_default_document(_buffer, footer=settings.report_footer + '\n{}'.format(record.checksum))
+    doc = get_default_document(
+        _buffer, footer=settings.report_footer + '\n{}'.format(record.checksum)
+    )
     style = get_paragraph_style()
 
     # Header: info text and qr code
-    title_str = '[{}] {}beleg'.format(
-        settings.short_name, 'Einnahme' if record.type == 'inflow' else 'Ausgabe'
-    ) if not record.is_balancing else 'Kassenabschluss'
+    title_str = (
+        '[{}] {}beleg'.format(
+            settings.short_name, 'Einnahme' if record.type == 'inflow' else 'Ausgabe'
+        )
+        if not record.is_balancing
+        else 'Kassenabschluss'
+    )
     title = Paragraph(title_str, style['Heading1'])
     tz = timezone.get_current_timezone()
     datetime = record.datetime.astimezone(tz)

@@ -85,7 +85,15 @@ class Record(models.Model):
     @property
     def checksum(self):
         checksum = hashlib.sha1()
-        for attribute in ['type', 'datetime', 'cash_movement', 'entity', 'carrier', 'amount', 'is_balancing']:
+        for attribute in [
+            'type',
+            'datetime',
+            'cash_movement',
+            'entity',
+            'carrier',
+            'amount',
+            'is_balancing',
+        ]:
             checksum.update(str(getattr(self, attribute, '')).encode())
         return checksum.hexdigest()
 
