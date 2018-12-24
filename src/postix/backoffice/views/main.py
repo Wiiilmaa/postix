@@ -6,10 +6,10 @@ from postix.core.models.base import Item, ItemSupplyPack, Product
 from postix.core.models.preorder import PreorderPosition
 
 from .. import checks
-from .utils import BackofficeUserRequiredMixin
+from .utils import SuperuserRequiredMixin
 
 
-class MainView(BackofficeUserRequiredMixin, TemplateView):
+class MainView(SuperuserRequiredMixin, TemplateView):
     template_name = 'backoffice/main.html'
 
     def get_context_data(self):

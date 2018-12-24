@@ -52,25 +52,16 @@
                             <span class="fa fa-fw fa-list"></span>
                             {% trans "Backoffice" %}
                         </a>
-                        <a class="arrow nav-link" data-toggle="nav" href="#collapseSessions" aria-controls="collapseSessions">
-                            <i class="fa fa-angle-down"></i>
-                        </a>
                     </span>
-                    <div class="{% if "backoffice" in url_namespace and "wizard" not in url_name %} show{% endif %}" aria-expand="true" id="collapseSessions">
+                    <div class="{% if "backoffice" in url_namespace and "wizard" not in url_name %} show{% endif %}" aria-expand="true">
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:session-list" %}">
                             {% trans "Session dashboard" %}
-                        </a>
-                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:main" %}">
-                            {% trans "Statistics" %}
                         </a>
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:record-list" %}">
                             {% trans "List of records" %}
                         </a>
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:supply-list" %}">
                             {% trans "Item supply packs" %}
-                        </a>
-                        <a class="nav-link nav-link-second-level" href="{% url "backoffice:report-list" %}">
-                            {% trans "Past sessions" %}
                         </a>
                     </div>
                 </li>
@@ -80,11 +71,8 @@
                             <span class="fa fa-fw fa-users"></span>
                             {% trans "Users" %}
                         </a>
-                        <a class="arrow nav-link" data-toggle="nav" href="#collapseUsers" aria-controls="collapseUsers">
-                            <i class="fa fa-angle-down"></i>
-                        </a>
                     </span>
-                    <div class="{% if "user" in url_name %} show{% endif %}" aria-expand="true" id="collapseUsers">
+                    <div class="{% if "user" in url_name %} show{% endif %}" aria-expand="true">
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:create-user" %}">
                             {% trans "New user" %}
                         </a>
@@ -101,11 +89,8 @@
                             <span class="fa fa-fw fa-user-secret"></span>
                             {% trans "Troubleshooting" %}
                         </a>
-                        <a class="arrow nav-link" data-toggle="nav" href="#collapseTrouble" aria-controls="collapseTrouble">
-                            <i class="fa fa-angle-down"></i>
-                        </a>
                     </span>
-                    <div class="{% if "troubleshooter" in url_namespace %} show{% endif %}" aria-expand="true" id="collapseTrouble">
+                    <div class="{% if "troubleshooter" in url_namespace %} show{% endif %}" aria-expand="true">
                         <a href="{% url "troubleshooter:main" %}" id="nav-sessions" class="nav-link nav-link-second-level{% if has_request %} has-request{% endif %}">
                             {% trans "Current sessions" %}
                         </a>
@@ -137,11 +122,8 @@
                             <span class="fa fa-fw fa-cogs"></span>
                             {% trans "Settings" %}
                         </a>
-                        <a class="arrow nav-link" data-toggle="nav" href="#collapseSettings" aria-controls="collapseSettings">
-                            <i class="fa fa-angle-down"></i>
-                        </a>
                     </span>
-                    <div class="{% if "wizard" in url_name or "record-entity-list" in url_name %} show{% endif %}" aria-expand="true" id="collapseSettings">
+                    <div class="{% if "wizard" in url_name or "record-entity-list" in url_name %} show{% endif %}" aria-expand="true">
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:wizard-settings" %}">
                             {% trans "General Settings" %}
                         </a>
