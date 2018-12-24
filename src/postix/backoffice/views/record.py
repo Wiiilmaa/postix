@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 from decimal import Decimal
 
+from crispy_forms.helper import FormHelper
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.files.storage import default_storage
@@ -138,6 +139,9 @@ class RecordBalanceView(BackofficeUserRequiredMixin, TemplateView):
         ctx = super().get_context_data(*args, **kwargs)
         ctx['balance'] = self.balance
         ctx['formsets'] = self.formsets
+        helper = FormHelper()
+        helper.form_tag = False
+        ctx['helper'] = helper
         return ctx
 
 
