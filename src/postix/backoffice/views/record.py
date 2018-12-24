@@ -1,6 +1,11 @@
+import json
+from collections import defaultdict
+from decimal import Decimal
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.files.storage import default_storage
+from django.db import transaction
 from django.forms import formset_factory
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -81,20 +86,38 @@ class RecordBalanceView(BackofficeUserRequiredMixin, TemplateView):
         result['coins_bulk'] = formset_factory(CoinBulkForm)(request_data, prefix='coins_bulk')
         return result
 
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         if not all([f.is_valid() for f in self.formsets.values()]):
             messages.warning(_('Something seems wrong here.'))
             return super().post(request, *args, **kwargs)
 
-        #total_value = sum([form.total_value() for form in formset for formset in self.formsets.values()])
-        #expected_value = self.balance
+        total_value = Decimal(str(sum([form.total_value() for formset in self.formsets.values() for form in formset])))
+        total_data = dict()
+        for name, formset in self.formsets.items():
+            total_data[name] = defaultdict(int)
+            for form in formset:
+                for key, value in form.cleaned_data.items():
+                    total_data[name][key] += (value or 0)
+                total_data[name]['total'] += form.total_value()
+        expected_value = self.balance
+        direction = 'inflow' if total_value >= expected_value else 'outflow'
+        total_data['expected'] = float(expected_value)
+        total_data['total'] = float(total_value)
+        record = Record.objects.create(
+            type=direction,
+            amount=abs(expected_value - total_value),
+            backoffice_user=request.user,
+            is_balancing=True,
+            data=json.dumps(total_data),
+        )
+        Record.objects.all().update(is_locked=True)
         return redirect(reverse(
             'backoffice:record-print', kwargs={'pk': record.pk}
         ))
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        ctx['backoffice_users'] = User.objects.filter(is_backoffice_user=True)
         ctx['balance'] = self.balance
         ctx['formsets'] = self.formsets
         return ctx
