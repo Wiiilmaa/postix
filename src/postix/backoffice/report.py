@@ -305,7 +305,7 @@ def generate_balance_statement(record, doc):
             CURRENCY.format(bill),
             data['bills_manually'].get('bill_{}'.format(bill), 0),
             data['bills_automated'].get('bill_{}'.format(bill), 0),
-            data['bills_bulk'].get('bill_{}00'.format(bill) , 0) * 100,
+            data['bills_bulk'].get('bill_{}00'.format(bill), 0) * 100,
         ])
     bills_data.append([
         '',
@@ -330,7 +330,7 @@ def generate_balance_statement(record, doc):
 
     last_row = len(bills_data) - 1
     bills_table = Table(
-        data=bills_data, colWidths=[doc.width/4]*4,
+        data=bills_data, colWidths=[doc.width / 4] * 4,
         style=TableStyle(
             [
                 ('FONTSIZE', (0, 0), (2, last_row), FONTSIZE),
@@ -342,7 +342,7 @@ def generate_balance_statement(record, doc):
     )
     last_row = len(coins_data) - 1
     coins_table = Table(
-        data=coins_data, colWidths=[doc.width/3]*3,
+        data=coins_data, colWidths=[doc.width / 3] * 3,
         style=TableStyle(
             [
                 ('FONTSIZE', (0, 0), (2, last_row), FONTSIZE),
@@ -352,10 +352,14 @@ def generate_balance_statement(record, doc):
             ]
         ),
     )
-    final_table_data = [['Erwartet:', CURRENCY.format(data['expected'])], ['Ausgezählt:', CURRENCY.format(data['total'])], ['Differenz:', CURRENCY.format(record.amount)]]
+    final_table_data = [
+        ['Erwartet:', CURRENCY.format(data['expected'])],
+        ['Ausgezählt:', CURRENCY.format(data['total'])],
+        ['Differenz:', CURRENCY.format(record.amount)],
+    ]
     last_row = len(final_table_data) - 1
     final_table = Table(
-        data=final_table_data, colWidths=[doc.width/4]*2,
+        data=final_table_data, colWidths=[doc.width / 4] * 2,
         style=TableStyle(
             [
                 ('FONTSIZE', (0, 0), (1, last_row), FONTSIZE),

@@ -123,7 +123,6 @@ class RecordBalanceView(BackofficeUserRequiredMixin, TemplateView):
         return ctx
 
 
-
 class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
     model = Record
     form_class = RecordUpdateForm
