@@ -12,7 +12,7 @@ def test_backoffice_login(client):
         follow=True,
     )
     assert response.status_code == 200
-    assert response.redirect_chain[-1][0] == '/backoffice/'
+    assert response.redirect_chain[-1][0] == '/backoffice/session/'
 
 
 @pytest.mark.django_db

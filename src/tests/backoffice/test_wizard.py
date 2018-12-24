@@ -13,7 +13,7 @@ from ..factories import item_factory, product_factory, user_factory
 @pytest.mark.parametrize(
     'url,expected',
     (
-        ('/backoffice/', 200),
+        ('/backoffice/', 302),
         ('/backoffice/session/new/', 200),
         ('/backoffice/session/', 200),
         ('/backoffice/reports/', 200),
