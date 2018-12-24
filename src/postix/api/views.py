@@ -109,7 +109,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
 
     @transaction.atomic
     def perform_create(
-            self, request: HttpRequest
+        self, request: HttpRequest
     ) -> Dict[str, Union[bool, List[Dict]]]:
         data = request.data
         trans = Transaction()
@@ -153,7 +153,9 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             else:
                 feedback = {'success': True}
                 if pos.preorder_position:
-                    feedback['preorder_position'] = PreorderPositionSerializer(pos.preorder_position).data
+                    feedback['preorder_position'] = PreorderPositionSerializer(
+                        pos.preorder_position
+                    ).data
                 position_feedback.append(feedback)
                 pos.transaction = trans
                 pos.save()
@@ -191,8 +193,8 @@ class TransactionViewSet(ReadOnlyModelViewSet):
 class ProductViewSet(ReadOnlyModelViewSet):
     queryset = (
         Product.objects.prefetch_related('product_items', 'product_items__item')
-            .all()
-            .order_by('id')
+        .all()
+        .order_by('id')
     )
     serializer_class = ProductSerializer
 
@@ -309,9 +311,13 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
     @list_route(methods=["POST"], url_path='supply')
     def supply(self, request: HttpRequest) -> Response:
         try:
-            isp = ItemSupplyPack.objects.get(identifier=request.data.get('identifier').strip())
+            isp = ItemSupplyPack.objects.get(
+                identifier=request.data.get('identifier').strip()
+            )
         except ItemSupplyPack.DoesNotExist:
-            return Response({'success': False, 'message': _('Unknown supply pack barcode.')})
+            return Response(
+                {'success': False, 'message': _('Unknown supply pack barcode.')}
+            )
 
         if isp.state == "troubleshooter":
             with transaction.atomic():
@@ -324,13 +330,30 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
                         item=isp.item,
                         session=request.user.get_current_session(),
                         amount=isp.amount,
-                        backoffice_user=request.user
-                    )
+                        backoffice_user=request.user,
+                    ),
                 )
             return Response({'success': True})
         elif isp.state == "backoffice":
-            return Response({'success': False, 'message': _('This supply pack has not been transferred to the troubleshooter yet, you cannot use it.')})
+            return Response(
+                {
+                    'success': False,
+                    'message': _(
+                        'This supply pack has not been transferred to the troubleshooter yet, you cannot use it.'
+                    ),
+                }
+            )
         elif isp.state == "dissolved":
-            return Response({'success': False, 'message': _('This supply pack does not exist any more.')})
+            return Response(
+                {
+                    'success': False,
+                    'message': _('This supply pack does not exist any more.'),
+                }
+            )
         elif isp.state == "used":
-            return Response({'success': False, 'message': _('This supply pack has already been used.')})
+            return Response(
+                {
+                    'success': False,
+                    'message': _('This supply pack has already been used.'),
+                }
+            )

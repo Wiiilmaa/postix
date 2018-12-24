@@ -121,9 +121,9 @@ class Record(models.Model):
         if self.is_balancing:
             return str(_('Balancing')) + '\t' + str(_('Difference'))
         if self.cash_movement:
-             entity = self.cash_movement.session.tabbed_entity
-             if entity:
-                 return entity
+            entity = self.cash_movement.session.tabbed_entity
+            if entity:
+                return entity
         if self.entity:
             return '{e.name}\t{e.detail}'.format(e=self.entity)
         return '\t'
