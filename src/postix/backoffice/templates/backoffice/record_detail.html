@@ -16,15 +16,17 @@
 	{% language "de" %}
 	    {% csrf_token %}
         {% crispy form form.helper %}
-		{% if form.editable %}
+		{% if form.editable and not form.instance.is_locked %}
         	<input type="submit" name="submit" value="{% trans "Save record" %}" class="btn btn-primary btn-block" id="submit-save">
-		{% else %}
+		{% elif not form.instance.is_locked %}
 			<a href="?edit" class="btn btn-primary btn-block">{% trans "Edit record" %}</a>
 		{% endif %}
 	{% endlanguage %}
 	</form>
 </div>
-{% include "backoffice/calculator.html" %}
+{% if form.editable and not form.instance.is_locked %}
+    {% include "backoffice/calculator.html" %}
+{% endif %}
 {% endblock %}
 
 {% block scripts %}

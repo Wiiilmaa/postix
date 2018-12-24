@@ -71,10 +71,12 @@
                 <td>
                     {{ record.running_total|floatformat:2 }}
                 </td>
-                <td class="d-flex">
+                <td class="d-flex justify-content-end">
+                    {% if not record.is_locked %}
                     <a href="{% url "backoffice:record-detail" pk=record.pk %}" title="{% trans "Details" %}">
                         <span class="fa fa-2x fa-fw fa-pencil" aria-hidden="true"></span>
                     </a>
+                    {% endif %}
                     <a href="{% url "backoffice:record-print" pk=record.pk %}" title="{% trans "Print" %}">
                         <span class="fa fa-2x fa-fw fa-print" aria-hidden="true"></span>
                     </a>

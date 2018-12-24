@@ -154,7 +154,7 @@ class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs(*args, **kwargs)
-        kwargs['editable'] = 'edit' in self.request.GET
+        kwargs['editable'] = 'edit' in self.request.GET and not self.object.is_locked
         return kwargs
 
     def get_success_url(self):
