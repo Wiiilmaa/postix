@@ -161,6 +161,22 @@ class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
         kwargs['editable'] = 'edit' in self.request.GET and not self.object.is_locked
         return kwargs
 
+    @transaction.atomic
+    def form_valid(self, form):
+        record = self.get_object()
+        if record.is_locked:
+            messages.error(self.request, _('This record cannot be modified any more.'))
+            return redirect(self.get_success_url())
+        difference = form.cleaned_data['amount'] - record.amount
+        if record.cash_movement:
+            movement = record.cash_movement
+            if movement.cash > 0:
+                movement.cash += difference
+            else:
+                movement.cash -= difference
+            movement.save()
+        return super().form_valid(form)
+
     def get_success_url(self):
         return reverse('backoffice:record-print', kwargs={'pk': self.kwargs['pk']})
 
