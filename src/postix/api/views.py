@@ -23,7 +23,7 @@ from ..core.utils.flow import (
     FlowError, redeem_preorder_ticket, reverse_transaction, sell_ticket,
 )
 from .serializers import (
-    ListConstraintEntrySerializer, ListConstraintSerializer,
+    ListConstraintEntrySerializer, ListConstraintSerializer, PingSerializer,
     PreorderPositionSerializer, PreorderSerializer, ProductSerializer,
     TransactionSerializer,
 )
@@ -357,3 +357,26 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
                     'message': _('This supply pack has already been used.'),
                 }
             )
+
+
+class PingViewSet(ReadOnlyModelViewSet):
+    queryset = Ping.objects.all().order_by('-id')
+    serializer_class = PingSerializer
+    permission_classes = []
+
+    def get_queryset(self) -> QuerySet:
+        queryset = self.queryset
+        ponged_param = self.request.GET.get('ponged', None)
+        synced_param = self.request.GET.get('synced', None)
+        if ponged_param is not None:
+            queryset = queryset.filter(ponged__isnull=(ponged_param not in ('True', 'true', '1')))
+        if synced_param:
+            queryset = queryset.filter(synced=(synced_param in ('True', 'true', '1')))
+        return queryset
+
+    @detail_route(methods=["POST"])
+    def mark_synced(self, *args, **kwargs) -> Response:
+        obj = self.get_object()
+        obj.synced = True
+        obj.save()
+        return Response(PingSerializer(obj).data)

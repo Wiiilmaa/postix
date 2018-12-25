@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from postix.core.models import (
-    ListConstraint, ListConstraintEntry, Preorder, PreorderPosition, Product,
-    Transaction, TransactionPosition,
+    ListConstraint, ListConstraintEntry, Ping, Preorder, PreorderPosition,
+    Product, Transaction, TransactionPosition,
 )
 
 
@@ -80,3 +80,10 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = ('id', 'datetime', 'session', 'cash_given', 'positions')
+
+
+class PingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ping
+        fields = ('id', 'pinged', 'ponged', 'secret', 'synced')
