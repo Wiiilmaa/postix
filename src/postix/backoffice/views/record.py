@@ -175,6 +175,12 @@ class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
             else:
                 movement.cash -= difference
             movement.save()
+            if record.closes_session and movement.session:
+                if movement.session.cash_after > 0:
+                    movement.session.cash_after += difference
+                else:
+                    movement.session.cash_after -= difference
+                movement.session.save()
         return super().form_valid(form)
 
     def get_success_url(self):
