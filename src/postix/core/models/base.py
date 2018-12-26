@@ -339,3 +339,4 @@ class ItemSupplyPackLog(models.Model):
         related_name='item_supply_logs',
         verbose_name='User issuing movement',
     )
+    datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True)
