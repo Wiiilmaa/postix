@@ -63,8 +63,9 @@ document.querySelector('#id_bills_automated-TOTAL_FORMS').value = 1;
 document.querySelector('#id_bills_manually-TOTAL_FORMS').value = 1;
 
 for (var element of document.querySelectorAll("a.add-form")) {
-    element.addEventListener("click", function() {
-	const title = element.id.substring(0, element.id.lastIndexOf('-'));
+    element.addEventListener("click", function(e) {
+	const currentElement = e.currentTarget;
+	const title = currentElement.id.substring(0, currentElement.id.lastIndexOf('-'));
 	const form_count = document.querySelectorAll('.balance-card.' + title).length;
 	const template = document.querySelector('#template .balance-card.' + title);
 	const new_form = template.outerHTML.replace(/__prefix__/g, form_count - 1);
