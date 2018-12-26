@@ -16,15 +16,15 @@ const priceMap = {
     "coin-2": 0.02,
     "coin-1": 0.01,
     "coin-other": 1,
-}
-let calculateTotal = function() {
-    let runningTotal = 0;
+};
+var calculateTotal = function() {
+    var runningTotal = 0;
     for (key in priceMap) {
 	const value = document.querySelector('#' + key).value || 0;
 	runningTotal += value * priceMap[key];
     }
     return runningTotal.toFixed(2)
-}
+};
 document.querySelector("#calculator #resetInput").addEventListener("click", function() {
     for (key in priceMap) {
 	document.querySelector('#' + key).value = 0;
@@ -39,5 +39,5 @@ document.querySelectorAll("#calculator input").forEach(function (element) {
 	document.querySelector("#calculator #calculatorResult").textContent = calculateTotal()
 
     }, false)
-})
-document.querySelector("#calculator #calculatorResult").textContent = calculateTotal()
+});
+document.querySelector("#calculator #calculatorResult").textContent = calculateTotal();
