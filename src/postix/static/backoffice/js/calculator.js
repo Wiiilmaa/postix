@@ -34,10 +34,10 @@ document.querySelector("#calculator #resetInput").addEventListener("click", func
 document.querySelector("#calculator #useResult").addEventListener("click", function() {
     document.querySelector(".calculatable").value = calculateTotal()
 }, false);
-document.querySelectorAll("#calculator input").forEach(function (element) {
+for (var element of document.querySelectorAll("#calculator input")) {
     element.addEventListener("input", function() {
 	document.querySelector("#calculator #calculatorResult").textContent = calculateTotal()
 
     }, false)
-});
+}
 document.querySelector("#calculator #calculatorResult").textContent = calculateTotal();
