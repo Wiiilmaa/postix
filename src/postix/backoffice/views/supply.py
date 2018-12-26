@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, ListView
@@ -17,6 +18,10 @@ class SupplyListView(BackofficeUserRequiredMixin, ListView):
     template_name = 'backoffice/supply_list.html'
     context_object_name = 'supplies'
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['in_states'] = ItemSupplyPack.objects.order_by().values('item', 'item__name', 'state').annotate(s=Sum('amount')).order_by('state', 'item__name')
+        return ctx
 
 class SupplyCreateView(BackofficeUserRequiredMixin, FormView):
     form_class = SupplyCreateForm
