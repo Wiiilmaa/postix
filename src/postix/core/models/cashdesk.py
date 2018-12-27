@@ -230,7 +230,7 @@ class CashdeskSession(models.Model):
                 + post_movement_dict.get(item.pk, 0)
                 - transaction_dict.get(item.pk, 0),
             }
-            for item in self.get_item_set()
+            for item in sorted(self.get_item_set(), key=lambda x: x.pk)
         ]
 
     @property
