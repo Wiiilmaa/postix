@@ -40,6 +40,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'tax_rate',
             'requires_authorization',
             'is_available',
+            'is_availably_by_time',
             'pack_list',
         )
 

@@ -29,7 +29,7 @@ var transaction = {
 
     add_product: function (prod_id) {
         // Adds the product with the ID prod_id to the cart
-        var product = productlist.products[prod_id];
+        var product = productlist.products_all[prod_id];
 
         transaction._add_position({
             'product': product.id,
@@ -198,6 +198,7 @@ var transaction = {
         transaction.positions = [];
         $("#cart-inner").html("");
         $("#cart-empty").toggle(transaction.positions.length < 1);
+        $("#info-view").hide();
         transaction._render();
         transaction.post_sale = false;
         transaction.last_id = null;

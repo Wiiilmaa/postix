@@ -4,6 +4,7 @@ var productlist = {
      */
 
     products: {},  // A list of products known to the frontend
+    products_all: {},  // A list of products known to the frontend, even hidden ones
     _touch_scrolling: false,
     _touch_scroll_start_mpos: 0,
     _touch_scroll_start_cpos: 0,
@@ -19,6 +20,7 @@ var productlist = {
                 product = data.results[i];
                 if (product.is_available) {
                     productlist.products[product.id] = product;
+                    productlist.products_all[product.id] = product;
                     var btn = $("<button>").addClass("btn btn-light btn-block").attr("data-id", product.id).append(
                             $("<strong>").text(product.name)
                         ).append($("<br>")).append(product.price + ' €');
@@ -26,6 +28,8 @@ var productlist = {
                         btn.append(" ").append($("<span>").addClass("fa fa-lock"))
                     }
                     $("<div>").addClass("product").append(btn).appendTo($("#product-view-inner"));
+                } else if (product.is_availably_by_time) {
+                    productlist.products_all[product.id] = product;
                 }
             }
             productlist._scroll();

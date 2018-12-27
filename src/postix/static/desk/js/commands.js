@@ -14,6 +14,20 @@ var commands = {
             + "</dl>");
     },
 
+    '/sell': function (args) {
+        if (args[1]) {
+            transaction.add_product(parseInt(args[1]));
+        } else {
+            var val = "<p><strong>" + gettext("Supported commands:") + "</strong></p>"
+                + "<ul>";
+            for (var key in productlist.products_all) {
+                val += "<li><strong>/sell " + key + "</strong>: "+ productlist.products_all[key].name +"</li>"
+            }
+            val += "</ul>";
+            commands._info_view(val);
+        }
+    },
+
     '/supply': function (args) {
         $.ajax({
             url: '/api/cashdesk/supply/',
