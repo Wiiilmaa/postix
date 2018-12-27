@@ -197,7 +197,7 @@ def sell_ticket(**kwargs) -> TransactionPosition:
     except Product.DoesNotExist:
         raise FlowError(_('This product ID is not known.'))
 
-    if not product.is_available:
+    if not product.is_availably_by_time:  # TODO: This allows to sell all hidden products, should not keep it this way
         raise FlowError(_('This product is currently unavailable or sold out.'))
 
     if product.requires_authorization:
