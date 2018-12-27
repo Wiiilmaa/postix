@@ -85,11 +85,15 @@ def transaction_reprint(request: HttpRequest, pk: int) -> HttpResponseRedirect:
         except Transaction.DoesNotExist:
             messages.error(request, _('Unknown transaction.'))
         else:
-            transaction.print_receipt(do_open_drawer=False)
+            if 'session' in request.POST:
+                session = CashdeskSession.objects.filter(pk=request.POST.get('session')).first()
+            else:
+                session = None
+            transaction.print_receipt(do_open_drawer=False, session=session)
             messages.success(
                 request,
                 _('Receipt has been reprinted at {}.').format(
-                    transaction.session.cashdesk
+                    (session or transaction.session).cashdesk
                 ),
             )
 

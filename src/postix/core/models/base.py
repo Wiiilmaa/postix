@@ -21,8 +21,8 @@ class Transaction(models.Model):
     )
     receipt_id = models.PositiveIntegerField(null=True, blank=True, unique=True)
 
-    def print_receipt(self, do_open_drawer: bool = True) -> None:
-        self.session.cashdesk.printer.print_receipt(self, do_open_drawer)
+    def print_receipt(self, do_open_drawer: bool = True, session=None) -> None:
+        (session or self.session).cashdesk.printer.print_receipt(self, do_open_drawer)
 
     @property
     def value(self) -> Decimal:
