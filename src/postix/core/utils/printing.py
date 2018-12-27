@@ -55,6 +55,42 @@ class CashdeskPrinter:
     def cut_tape(self) -> None:
         self.send(bytearray([0x1D, 0x56, 66, 100]))
 
+    def _build_log(self, transaction: Transaction) -> Union[None, str]:
+        positions = transaction.positions.filter(authorized_by__isnull=False)
+        print(positions)
+        if not positions:
+            return None
+
+        receipt = bytearray([self.ESC, 0x61, 1]).decode()  # center text
+        receipt += bytearray([self.ESC, 0x45, 1]).decode()  # emphasize
+        receipt += _('Troubleshooter log') + '\r\n\r\n'
+        receipt += bytearray([self.ESC, 0x45, 0]).decode()  # de-emphasize
+
+        receipt += SEPARATOR
+
+        receipt += bytearray([self.ESC, 0x61, 1]).decode()  # center text
+        tz = timezone.get_current_timezone()
+        receipt += _('Date: {}').format(transaction.datetime.astimezone(tz).strftime("%d.%m.%Y %H:%M")) + "\r\n"
+        receipt += _('Transaction number: {}').format(transaction.id) + "\r\n"
+        receipt += _('Cashdesk: {}').format(transaction.session.cashdesk.name) + "\r\n"
+        receipt += _('Cashdesk session: {}').format(transaction.session.pk) + "\r\n"
+        receipt += _('Cashdesk user: {}').format(transaction.session.user.username) + "\r\n"
+        if transaction.receipt_id:
+            receipt += _('Receipt number: {}').format(transaction.receipt_id) + "\r\n"
+        receipt += '\r\n\r\n'
+
+        receipt += bytearray([self.ESC, 0x61, 0]).decode()  # left-align text
+
+        receipt += SEPARATOR
+        for p in positions:
+            receipt += _('Position type: {}').format(p.type) + "\r\n"
+            receipt += _('Product: {}').format(p.product.name) + "\r\n"
+            receipt += _('Price: {}').format(p.value) + "\r\n"
+            receipt += _('Authorized by: {}').format(p.authorized_by.username) + "\r\n"
+            receipt += _('What happened?') + ("\r\n" * 20)
+            receipt += SEPARATOR
+        return receipt
+
     def _build_receipt(self, transaction: Transaction) -> Union[None, str]:
         from postix.core.models import EventSettings
 
@@ -177,11 +213,21 @@ class CashdeskPrinter:
         if do_open_drawer:
             self.open_drawer()
         receipt = self._build_receipt(transaction)
+        log = self._build_log(transaction)
 
         if receipt:
             try:
                 # self.send(image_tools.get_imagedata(settings.STATIC_ROOT + '/' + settings.EVENT_RECIPE_HEADER))
                 self.send(receipt)
+                self.cut_tape()
+            except Exception as e:
+                logging.getLogger('django').exception(
+                    'Printing at {} failed: {}'.format(self.printer, str(e))
+                )
+
+        if log:
+            try:
+                self.send(log)
                 self.cut_tape()
             except Exception as e:
                 logging.getLogger('django').exception(
@@ -367,6 +413,9 @@ class DummyPrinter:
         receipt = CashdeskPrinter('', self.cashdesk)._build_receipt(transaction)
         if receipt is not None:
             self.logger.info('[DummyPrinter] Printed receipt:\n{}'.format(receipt))
+        log = CashdeskPrinter('', self.cashdesk)._build_log(transaction)
+        if log is not None:
+            self.logger.info('[DummyPrinter] Printed log entry:\n{}'.format(log))
         return receipt
 
     def print_attendance(

@@ -211,7 +211,7 @@ class ListConstraintEntryViewSet(ReadOnlyModelViewSet):
     def get_queryset(self) -> QuerySet:
         queryset = ListConstraintEntry.objects.all().order_by('id')
         listid_param = self.request.query_params.get('listid', None)
-        if listid_param is not None:
+        if listid_param is not None and listid_param.isdigit():
             queryset = queryset.filter(list_id=listid_param)
             search_param = self.request.query_params.get('search', None)
             if search_param is not None and len(search_param) >= 3:
