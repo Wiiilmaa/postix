@@ -287,7 +287,7 @@ class ProductItem(models.Model):
     is_visible = models.BooleanField(
         default=True, help_text='If activated, this item will be shown in the frontend'
     )
-    amount = models.PositiveIntegerField()
+    amount = models.IntegerField()
 
 
 class TransactionPositionItem(models.Model):
