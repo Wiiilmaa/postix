@@ -333,6 +333,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
                         backoffice_user=request.user,
                     ),
                 )
+            request.user.get_current_session().cashdesk.printer.open_drawer()
             return Response({'success': True})
         elif isp.state == "backoffice":
             return Response(
