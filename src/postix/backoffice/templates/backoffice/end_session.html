@@ -30,6 +30,9 @@
     <h4>
         {{ form.backoffice_user|as_crispy_field }}
     </h4>
+    <h4{% if session.user %} class="d-none"{% endif %}>
+        {{ form.user|as_crispy_field }}
+    </h4>
 
     {% if formset %}
         {{ formset.management_form|crispy  }}
@@ -45,9 +48,9 @@
         </tr></thead>
         <tbody>
             <tr id="cash">
-                <td>
+                <td class="d-none">
                     {% trans "Cash" %}
-                    <div class="d-none">{{ form.user }} {{ form.cashdesk }}</div>
+                    <div>{{ form.cashdesk }}</div>
                 </td>
                 <td class="before-value">{{ cash.initial }}</td>
                 <td class="transaction-value">{{ cash.transactions }}</td>
@@ -109,8 +112,10 @@
     <script type="text/javascript">
         var backoffice_users = [ {% for user in backoffice_users %} '{{ user }}', {% endfor %} ];
         var already_ended = {% if session.end %}true{% else %}false{% endif %};
+        var carriers = [ {% for carrier in carriers %} '{{ carrier }}', {% endfor %} ];
     </script>
     <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "backoffice/js/sessionform.js" %}"></script>
     <script type="text/javascript" src="{% static "backoffice/js/end_session.js" %}"></script>
     <script src="{% static "backoffice/js/calculator.js" %}"></script>
 {% endblock %}

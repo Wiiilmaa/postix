@@ -17,7 +17,7 @@ from postix.core.utils.flow import FlowError, reverse_session
 
 from .. import checks
 from ...core.models import (
-    Cashdesk, CashdeskSession, CashMovement, ItemMovement, User,
+    Cashdesk, CashdeskSession, CashMovement, ItemMovement, User, Record,
 )
 from ..forms import (
     ItemMovementFormSetHelper, SessionBaseForm, get_form_and_formset,
@@ -290,6 +290,7 @@ class EndSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
         context['helper'] = ItemMovementFormSetHelper()
         context['form'] = form
         context['formset'] = formset
+        context['carriers'] = set(Record.objects.all().values_list('carrier', flat=True))
         context['cash'] = {
             'initial': context['session'].cash_before,
             'transactions': context['session'].get_cash_transaction_total(),
