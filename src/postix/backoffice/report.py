@@ -199,7 +199,7 @@ def generate_item_report(session: CashdeskSession, doc) -> str:
     # Signatures
     signatures = get_signature_block(
         [
-            'Kassierer/in: {}'.format(session.user.get_full_name()),
+            'Kassierer/in: {}'.format(session.user.get_full_name() if session.user else ''),
             'Ausgezählt durch {}'.format(session.backoffice_user_after.get_full_name()),
         ],
         doc=doc,
