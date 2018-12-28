@@ -48,9 +48,9 @@
         </tr></thead>
         <tbody>
             <tr id="cash">
-                <td class="d-none">
+                <td>
                     {% trans "Cash" %}
-                    <div>{{ form.cashdesk }}</div>
+                    <div class="d-none">{{ form.cashdesk }}</div>
                 </td>
                 <td class="before-value">{{ cash.initial }}</td>
                 <td class="transaction-value">{{ cash.transactions }}</td>
