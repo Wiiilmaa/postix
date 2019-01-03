@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.functional import cached_property
+from django.utils import timezone
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -116,10 +117,13 @@ class Record(models.Model):
             entity = self.entity.name
             entity_detail = self.entity.detail
 
+        tz = timezone.get_current_timezone()
+        date = self.datetime.astimezone(tz)
         return {
-            'date': self.datetime,
+            'date': date.strftime('%d.%m.%Y'),
+            'time': date.strftime('%H:%M:%S'),
             'direction': 'Einnahme' if (is_special or self.type == 'inflow') else 'Ausgabe',
-            'amount': self.amount,
+            'amount': '{0:,.2f}'.format(self.amount).translate(str.maketrans(',.', '.,')),
             'entity': entity,
             'entity_detail': entity_detail,
             'supervisor': (self.cash_movement.session.backoffice_user_after.get_full_name() if is_special else self.backoffice_user.get_full_name()) or '',

@@ -25,16 +25,7 @@ def get_qr_image(record) -> TemporaryFile:
         border=4,
     )
     tz = timezone.get_current_timezone()
-    data = '{date}\t{direction}\t{total}\t{entity}\t{entity_detail}\t{supervisor}\t{user}'.format(
-        date=record.export_data['date'].astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
-        direction=record.export_data['direction'],
-        total='{0:,.2f}'.format(record.export_data['amount']).translate(str.maketrans(',.', '.,')),
-        entity=record.export_data['entity'],
-        entity_detail=record.export_data['entity_detail'],
-        supervisor=record.export_data['supervisor'],
-        user=record.export_data['user'],
-        # TODO: add checksum?
-    )
+    data = '{date}\t{time}\t{direction}\t{amount}\t{entity}\t{entity_detail}\t{supervisor}\t{user}'.format(**record.export_data)
     qr.add_data(data)
     qr.make()
 
