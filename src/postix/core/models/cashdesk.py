@@ -240,14 +240,6 @@ class CashdeskSession(models.Model):
         return Record.objects.filter(cash_movement__cashdesk_session=self)
 
     @property
-    def tabbed_entity(self):
-        if self.cashdesk and self.cashdesk.record_name and self.cashdesk.record_detail:
-            return '{c.record_name}\t{c.record_detail} (#{self.pk})'.format(
-                c=self.cashdesk, self=self
-            )
-        return 'Kassensession\t#{self.pk}'.format(self=self)
-
-    @property
     def cash_remaining(self) -> Decimal:
         return self.cash_before + self.get_cash_transaction_total()
 

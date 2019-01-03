@@ -25,28 +25,16 @@ def get_qr_image(record) -> TemporaryFile:
         border=4,
     )
     tz = timezone.get_current_timezone()
-    if (
-        record.cash_movement
-        and record.closes_session
-        and record.cash_movement.session.cashdesk.handles_items
-    ):  # TODO: this is nearly ready to be merged with the second branch
-        session = record.cash_movement.session
-        data = '{end}\tEinnahme\t{total}\t{entity}\t{supervisor}\t{user}'.format(
-            end=session.end.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
-            total='{0:,.2f}'.format(record.amount).translate(str.maketrans(',.', '.,')),
-            entity=record.tabbed_entity or '',
-            supervisor=session.backoffice_user_after.get_full_name(),
-            user=session.user.get_full_name() if session.user else record.carrier or '',
-        )
-    else:
-        data = '{end}\t{direction}\t{total}\t{entity}\t{supervisor}\t{user}'.format(
-            end=record.datetime.astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
-            direction='Einnahme' if record.type == 'inflow' else 'Ausgabe',
-            total='{0:,.2f}'.format(record.amount).translate(str.maketrans(',.', '.,')),
-            entity=record.tabbed_entity or '',
-            supervisor=record.backoffice_user.get_full_name() or '',
-            user=record.named_carrier or '',
-        )
+    data = '{date}\t{direction}\t{total}\t{entity}\t{entity_detail}\t{supervisor}\t{user}'.format(
+        date=record.export_data['date'].astimezone(tz).strftime('%d.%m.%Y\t%H:%M:%S'),
+        direction=record.export_data['direction'],
+        total='{0:,.2f}'.format(record.export_data['amount']).translate(str.maketrans(',.', '.,')),
+        entity=record.export_data['entity'],
+        entity_detail=record.export_data['entity_detail'],
+        supervisor=record.export_data['supervisor'],
+        user=record.export_data['user'],
+        # TODO: add checksum?
+    )
     qr.add_data(data)
     qr.make()
 
