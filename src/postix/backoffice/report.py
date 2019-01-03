@@ -25,7 +25,9 @@ def get_qr_image(record) -> TemporaryFile:
         border=4,
     )
     tz = timezone.get_current_timezone()
-    data = '{date}\t{time}\t{direction}\t{amount}\t{entity}\t{entity_detail}\t{supervisor}\t{user}'.format(**record.export_data)
+    data = '{date}\t{time}\t{direction}\t{amount}\t{entity}\t{entity_detail}\t{supervisor}\t{user}'.format(
+        **record.export_data
+    )
     qr.add_data(data)
     qr.make()
 
@@ -178,7 +180,9 @@ def generate_item_report(session: CashdeskSession, doc) -> str:
     # Signatures
     signatures = get_signature_block(
         [
-            'Kassierer/in: {}'.format(session.user.get_full_name() if session.user else ''),
+            'Kassierer/in: {}'.format(
+                session.user.get_full_name() if session.user else ''
+            ),
             'Ausgezählt durch {}'.format(session.backoffice_user_after.get_full_name()),
         ],
         doc=doc,

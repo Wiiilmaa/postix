@@ -5,8 +5,8 @@ import os
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models
-from django.utils.functional import cached_property
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -101,15 +101,26 @@ class Record(models.Model):
 
     @cached_property
     def export_data(self):
-        is_special = self.cash_movement and self.closes_session and self.cash_movement.session.cashdesk.handles_items
+        is_special = (
+            self.cash_movement
+            and self.closes_session
+            and self.cash_movement.session.cashdesk.handles_items
+        )
         entity = entity_detail = ''
         if self.is_balancing:
             entity = str(_('Balancing'))
             entity_detail = str(_('Difference'))
         elif self.cash_movement:
-            if self.cash_movement.session.cashdesk and self.cash_movement.session.cashdesk.record_name and self.cash_movement.session.cashdesk.record_detail:
+            if (
+                self.cash_movement.session.cashdesk
+                and self.cash_movement.session.cashdesk.record_name
+                and self.cash_movement.session.cashdesk.record_detail
+            ):
                 entity = self.cash_movement.session.cashdesk.record_name
-                entity_detail = self.cash_movement.session.cashdesk.record_detail + ' (#{})'.format(self.cash_movement.session.pk)
+                entity_detail = (
+                    self.cash_movement.session.cashdesk.record_detail
+                    + ' (#{})'.format(self.cash_movement.session.pk)
+                )
             else:
                 entity = 'Kassensession'
                 entity_detail = '#' + str(self.cash_movement.session.pk)
@@ -122,12 +133,30 @@ class Record(models.Model):
         return {
             'date': date.strftime('%d.%m.%Y'),
             'time': date.strftime('%H:%M:%S'),
-            'direction': 'Einnahme' if (is_special or self.type == 'inflow') else 'Ausgabe',
-            'amount': '{0:,.2f}'.format(self.amount).translate(str.maketrans(',.', '.,')),
+            'direction': 'Einnahme'
+            if (is_special or self.type == 'inflow')
+            else 'Ausgabe',
+            'amount': '{0:,.2f}'.format(self.amount).translate(
+                str.maketrans(',.', '.,')
+            ),
             'entity': entity,
             'entity_detail': entity_detail,
-            'supervisor': (self.cash_movement.session.backoffice_user_after.get_full_name() if is_special else self.backoffice_user.get_full_name()) or '',
-            'user': ((self.cash_movement.session.user.get_full_name() if self.cash_movement.session.user else self.carrier) if is_special else self.named_carrier) or '',
+            'supervisor': (
+                self.cash_movement.session.backoffice_user_after.get_full_name()
+                if is_special
+                else self.backoffice_user.get_full_name()
+            )
+            or '',
+            'user': (
+                (
+                    self.cash_movement.session.user.get_full_name()
+                    if self.cash_movement.session.user
+                    else self.carrier
+                )
+                if is_special
+                else self.named_carrier
+            )
+            or '',
             'checksum': self.checksum,
         }
 
@@ -152,7 +181,11 @@ class Record(models.Model):
 
     @property
     def named_carrier(self):
-        if self.cash_movement and self.cash_movement.session.user and self.cash_movement.session.cashdesk.ip_address:
+        if (
+            self.cash_movement
+            and self.cash_movement.session.user
+            and self.cash_movement.session.cashdesk.ip_address
+        ):
             return str(self.cash_movement.session.user.get_full_name())
         return self.carrier or ''
 
