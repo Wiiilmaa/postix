@@ -391,22 +391,24 @@ def generate_record(record: Record) -> str:
     _buffer = BytesIO()
     settings = EventSettings.get_solo()
     doc = get_default_document(
-        _buffer, footer=settings.report_footer + '\n{}'.format(record.checksum)
+        _buffer, footer=settings.report_footer + '\n{}'.format(record.checksum or '')
     )
     style = get_paragraph_style()
 
     # Header: info text and qr code
-    title_str = (
-        '[{}] {}beleg'.format(
-            settings.short_name, 'Einnahme' if record.type == 'inflow' else 'Ausgabe'
-        )
-        if not record.is_balancing
-        else 'Kassenabschluss'
-    )
+    title_str = '[{}] '.format(settings.short_name)
+    direction = 'Von' if record.type == 'inflow' else 'Nach'
+    if not record.pk:
+        title_str += 'Beleg'
+        direction = 'Von/Nach:'
+    elif record.is_balancing:
+        title_str += 'Kassenabschluss'
+    else:
+        title_str += 'Einnahme' if record.type == 'inflow' else 'Ausgabe'
     title = Paragraph(title_str, style['Heading1'])
     tz = timezone.get_current_timezone()
-    datetime = record.datetime.astimezone(tz)
-    logo = scale_image(get_qr_image(record), 100)
+    datetime = record.datetime.astimezone(tz) if record.pk else ''
+    logo = scale_image(get_qr_image(record), 100) if record.pk else ''
     header = Table(
         data=[[[title], logo]],
         colWidths=[doc.width / 2] * 2,
@@ -422,9 +424,9 @@ def generate_record(record: Record) -> str:
     if record.cash_movement and record.cash_movement.session:
         name += ' (#{})'.format(record.cash_movement.session.pk)
     info = [
-        ['Datum', datetime.strftime('%Y-%m-%d, %H:%M')],
-        ['Von' if record.type == 'inflow' else 'Nach', name or ''],
-        ['Betrag', CURRENCY.format(record.amount)],
+        ['Datum', datetime.strftime('%Y-%m-%d, %H:%M') if record.pk else ''],
+        [direction, name or ''],
+        ['Betrag', CURRENCY.format(record.amount) if record.pk else ''],
     ]
     info = [
         [
@@ -442,7 +444,12 @@ def generate_record(record: Record) -> str:
 
     # Signatures
     signature1 = get_signature_block(
-        ['Bearbeiter/in: {}'.format(record.backoffice_user.get_full_name()), ''],
+        [
+            'Bearbeiter/in: {}'.format(
+                record.backoffice_user.get_full_name() if record.pk else ''
+            ),
+            '',
+        ],
         doc=doc,
     )
 
@@ -473,6 +480,8 @@ def generate_record(record: Record) -> str:
 
     doc.build(story)
     _buffer.seek(0)
+    if not record.pk:
+        return _buffer
     stored_name = default_storage.save(
         record.get_new_record_path(), ContentFile(_buffer.read())
     )

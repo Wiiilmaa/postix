@@ -188,17 +188,23 @@ class RecordDetailView(BackofficeUserRequiredMixin, UpdateView):
 
 
 @backoffice_user_required
-def record_print(request, pk: int):
-    record = get_object_or_404(Record, pk=pk)
+def record_print(request, pk: int = None):
+    if pk is None:
+        record = Record()
+        content = generate_record(record)
+    else:
+        record = get_object_or_404(Record, pk=pk)
+        if (
+            not record.record_path or 'cached' not in request.GET
+        ):  # TODO: don't regenerate pdf always
+            generate_record(record)
+        content = default_storage.open(record.record_path, 'rb')
 
-    if (
-        not record.record_path or 'cached' not in request.GET
-    ):  # TODO: don't regenerate pdf always
-        generate_record(record)
-
-    response = HttpResponse(content=default_storage.open(record.record_path, 'rb'))
+    response = HttpResponse(content=content)
     response['Content-Type'] = 'application/pdf'
-    response['Content-Disposition'] = 'inline; filename=record-{}.pdf'.format(record.pk)
+    response['Content-Disposition'] = 'inline; filename=record-{}.pdf'.format(
+        record.pk if record.pk else 'blank'
+    )
     return response
 
 

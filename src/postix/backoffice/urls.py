@@ -24,6 +24,7 @@ urlpatterns = [
     url('^records/$', views.RecordListView.as_view(), name='record-list'),
     url('^records/balance/$', views.RecordBalanceView.as_view(), name='record-balance'),
     url('^records/new/$', views.RecordCreateView.as_view(), name='new-record'),
+    url('^records/blank/$', views.record_print, name='blank-record'),
     url('^records/(?P<pk>[0-9]+)/$', views.RecordDetailView.as_view(), name='record-detail'),
     url('^records/(?P<pk>[0-9]+)/print/$', views.record_print, name='record-print'),
     url('^records/entity/$', views.RecordEntityListView.as_view(), name='record-entity-list'),
