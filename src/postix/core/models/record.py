@@ -86,6 +86,8 @@ class Record(models.Model):
 
     @property
     def checksum(self):
+        if not self.pk:
+            return ''
         checksum = hashlib.sha1()
         for attribute in [
             'type',
