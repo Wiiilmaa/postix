@@ -186,7 +186,7 @@ class CashdeskPrinter:
         )
         receipt += '\r\n'
 
-        for tax in sorted(list(tax_symbols))[::-1]:
+        for tax in sorted(list(tax_symbols), reverse=True):
             receipt += _("Tax {tax_rate}% ({tax_identifier}):  {tax_amount}").format(
                 tax_rate=tax,
                 tax_identifier=tax_symbols[tax],

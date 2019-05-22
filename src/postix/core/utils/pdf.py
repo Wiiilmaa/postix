@@ -31,7 +31,7 @@ def get_default_document(_buffer, footer: str = None) -> BaseDocTemplate:
         canvas.saveState()
         if footer:
             canvas.setFontSize(8)
-            for i, line in enumerate(footer.split('\n')[::-1]):
+            for i, line in enumerate(reversed(footer.split('\n'))):
                 canvas.drawCentredString(
                     PAGESIZE[0] / 2, 25 + (3.5 * i) * mm, line.strip()
                 )

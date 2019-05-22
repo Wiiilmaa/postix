@@ -46,7 +46,7 @@ class RecordListView(BackofficeUserRequiredMixin, TemplateView):
             else:
                 running_total -= obj.amount
             obj.running_total = running_total
-        ctx['records'] = records[::-1]
+        ctx['records'] = reversed(records)
         return ctx
 
 
