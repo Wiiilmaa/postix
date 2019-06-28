@@ -12,6 +12,7 @@ from postix.core.models import (
     Item, ItemMovement, Product, ProductItem, TransactionPosition,
 )
 from postix.core.utils.flow import reverse_transaction
+from postix.core.utils import times
 
 
 @pytest.mark.django_db
@@ -59,9 +60,9 @@ def test_current_items():
     assert session.cash_remaining == session.cash_before
     assert session.is_latest_session
 
-    for i in range(3):
+    for _ in times(3):
         transaction_position_factory(transaction_factory(session), prod_full)
-    for i in range(2):
+    for _ in times(2):
         transaction_position_factory(transaction_factory(session), prod_1d)
 
     trans = transaction_position_factory(
@@ -101,7 +102,7 @@ def test_cash_transaction_total():
     session = cashdesk_session_before_factory(create_items=False)
     prod_full = Product.objects.create(name='Full ticket', price=23, tax_rate=19)
 
-    for i in range(3):
+    for _ in times(3):
         transaction_position_factory(transaction_factory(session), prod_full)
     trans = transaction_position_factory(
         transaction_factory(session), prod_full
@@ -125,7 +126,7 @@ def test_product_sales():
     session = cashdesk_session_before_factory(create_items=False)
     prod_full = Product.objects.create(name='Full ticket', price=23, tax_rate=19)
 
-    for i in range(3):
+    for _ in times(3):
         transaction_position_factory(transaction_factory(session), prod_full)
     trans = transaction_position_factory(transaction_factory(session), prod_full)
     reverse_transaction(trans_id=trans.transaction_id, current_session=session)

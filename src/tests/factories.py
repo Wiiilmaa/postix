@@ -15,6 +15,7 @@ from postix.core.models import (
     TroubleshooterNotification, User, WarningConstraint,
 )
 from postix.core.models.base import ItemSupplyPack
+from postix.core.utils import times
 
 
 def user_factory(
@@ -67,7 +68,7 @@ def cashdesk_session_before_factory(ip=None, user=None, create_items=True):
     )
 
     if create_items:
-        items = [item_factory() for _ in range(3)]
+        items = [item_factory() for _ in times(3)]
         for i in items:
             ItemMovement.objects.create(
                 session=cd,
@@ -120,7 +121,7 @@ def product_factory(items=False):
 
 def preorder_factory(paid=False):
     return Preorder.objects.create(
-        order_code=''.join(random.choice(string.ascii_letters) for _ in range(24)),
+        order_code=''.join(random.choice(string.ascii_letters) for _ in times(24)),
         is_paid=paid,
     )
 
@@ -128,7 +129,7 @@ def preorder_factory(paid=False):
 def preorder_position_factory(paid=False, redeemed=False, information=None):
     pp = PreorderPosition.objects.create(
         preorder=preorder_factory(paid),
-        secret=''.join(random.choice(string.ascii_letters) for _ in range(24)),
+        secret=''.join(random.choice(string.ascii_letters) for _ in times(24)),
         product=product_factory(),
         information=information,
     )

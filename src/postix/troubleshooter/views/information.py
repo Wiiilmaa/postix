@@ -4,6 +4,7 @@ from django.views.generic import FormView
 from django.views.generic.list import ListView
 
 from postix.core.models import Info
+from postix.core.utils import times
 from postix.troubleshooter.forms import PrintForm
 from postix.troubleshooter.views.utils import TroubleshooterUserRequiredMixin
 
@@ -31,7 +32,7 @@ class InformationDetailView(TroubleshooterUserRequiredMixin, FormView):
             info = Info.objects.get(pk=self.kwargs['pk'])
             cashdesk = form.cleaned_data.get('cashdesk')
             amount = form.cleaned_data.get('amount')
-            for _ in range(amount):
+            for _ in times(amount):
                 cashdesk.printer.print_text(info.content)
             messages.success(request, 'Done.')
             return self.form_valid(form)

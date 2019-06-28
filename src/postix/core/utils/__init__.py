@@ -1,4 +1,8 @@
 import decimal
+from itertools import repeat
+from functools import partial
+
+times = partial(repeat, None)
 
 DECIMAL_QUANTIZE = decimal.Decimal('0.01')
 

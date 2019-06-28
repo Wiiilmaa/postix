@@ -2,13 +2,14 @@ import json
 
 import pytest
 
+from postix.core.utils import times
 from ..factories import notification_factory
 
 
 @pytest.mark.parametrize('amount', (0, 1, 2))
 @pytest.mark.django_db
 def test_check_requests_without_requests(amount, troubleshooter_client):
-    [notification_factory() for _ in range(amount)]
+    [notification_factory() for _ in times(amount)]
     response = troubleshooter_client.get('/troubleshooter/session/check_requests')
     assert response.status_code == 200
     content = json.loads(response.content.decode())
