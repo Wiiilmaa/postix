@@ -7,6 +7,7 @@ from typing import Dict, List, Union
 
 from django.db import models
 from django.db.models import Sum
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
@@ -16,9 +17,7 @@ from .base import Item, Product, TransactionPosition, TransactionPositionItem
 
 
 def generate_key() -> str:
-    return "".join(
-        random.choice(string.ascii_letters + string.digits) for i in range(32)
-    )
+    return get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)
 
 
 class Cashdesk(models.Model):
