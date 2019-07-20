@@ -76,6 +76,9 @@ h1 .glyphicon {
   &.navbar-inverse .navbar-nav > li > a, &.navbar-inverse .navbar-brand {
       color: $brand-primary;
   }
+  ul {
+    flex-direction: row;
+  }
   li {
     margin-right: 8px;
   }

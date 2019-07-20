@@ -27,10 +27,8 @@
         </a>
         <div id="navbar" class="">
             <ul class="nav navbar-nav navbar-right">
-                {% if user.is_superuser %}
-                    {% if not settings.initialized %}
-                        <li><a href="{% url "backoffice:wizard-settings" %}"><span class="text-danger fa fa-bell"></span></a></li>
-                    {% endif %}
+                {% if user.is_superuser and not settings.initialized %}
+                    <li><a href="{% url "backoffice:wizard-settings" %}"><span class="text-danger fa fa-bell"></span></a></li>
                 {% endif %}
                 {% if not request.user.is_anonymous %}
                     <li>
