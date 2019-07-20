@@ -130,13 +130,14 @@ class WizardItemCreateView(SuperuserRequiredMixin, FormView):
     template_name = 'backoffice/wizard_item_edit.html'
     form_class = ItemForm
 
-    def post(self, request):
-        form = self.get_form()
-        if form.is_valid():
-            form.save()
-            messages.success(request, _('The item has been saved.'))
-            return self.form_valid(form)
-        return self.form_invalid(form)
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, _('The item has been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)
 
     def get_success_url(self):
         return reverse('backoffice:wizard-items-list')
