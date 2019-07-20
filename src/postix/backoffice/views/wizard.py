@@ -136,6 +136,7 @@ class WizardItemCreateView(SuperuserRequiredMixin, FormView):
             form.save()
             messages.success(request, _('The item has been saved.'))
             return self.form_valid(form)
+        return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse('backoffice:wizard-items-list')
