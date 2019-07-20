@@ -8,7 +8,7 @@ from postix.backoffice.forms import (
     CashdeskForm, EventSettingsForm, ImportForm, ItemForm,
 )
 from postix.backoffice.views.utils import SuperuserRequiredMixin
-from postix.core.models import Cashdesk, EventSettings, Item, User
+from postix.core.models import Cashdesk, EventSettings, Item, Product, User
 
 
 class WizardSettingsView(SuperuserRequiredMixin, FormView):
@@ -124,6 +124,11 @@ class WizardPretixImportView(SuperuserRequiredMixin, FormView):
 class WizardItemListView(SuperuserRequiredMixin, ListView):
     template_name = 'backoffice/wizard_item_list.html'
     model = Item
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product_count'] = Product.objects.all().count()
+        return context
 
 
 class WizardItemCreateView(SuperuserRequiredMixin, FormView):

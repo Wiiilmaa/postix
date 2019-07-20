@@ -4,9 +4,20 @@
 {% block headline %}{% trans "Item List" %}{% endblock %}
 
 {% block content %}
-<a class="btn btn-info btn-xs" href="{% url "backoffice:wizard-items-create" %}">
-    {% trans "Add an Item" %}
-</a>
+
+{% if product_count == 0 %}
+    <div class="alert alert-danger">
+        {% url "backoffice:wizard-import" as href %}
+        {% blocktrans trimmed with href=href %}
+        You cannot create any items because you haven't configured any products yet!
+        Go <a href="{{ href }}">here</a> to import presale data.
+        {% endblocktrans %}
+    </div>
+{% else %}
+    <a class="btn btn-info btn-xs" href="{% url "backoffice:wizard-items-create" %}">
+        {% trans "Add an Item" %}
+    </a>
+{% endif %}
 
 <ul>
     {% for item in object_list %}
