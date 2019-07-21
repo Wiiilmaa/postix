@@ -1,6 +1,6 @@
-import pytest
+from itertools import repeat
 
-from postix.core.utils import times
+import pytest
 
 from ..factories import list_constraint_entry_factory, list_constraint_factory
 

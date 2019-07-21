@@ -24,7 +24,6 @@ def get_qr_image(record) -> TemporaryFile:
         box_size=10,
         border=4,
     )
-    tz = timezone.get_current_timezone()
     data = '{date}\t{time}\t{direction}\t{amount}\t{entity}\t{entity_detail}\t{supervisor}\t{user}'.format(
         **record.export_data
     )

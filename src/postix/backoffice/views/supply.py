@@ -23,6 +23,7 @@ class SupplyListView(BackofficeUserRequiredMixin, ListView):
         ctx['in_states'] = ItemSupplyPack.objects.order_by().values('item', 'item__name', 'state').annotate(s=Sum('amount')).order_by('state', 'item__name')
         return ctx
 
+
 class SupplyCreateView(BackofficeUserRequiredMixin, FormView):
     form_class = SupplyCreateForm
     template_name = 'backoffice/supply_create.html'
