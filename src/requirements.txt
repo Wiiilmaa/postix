@@ -12,7 +12,8 @@ reportlab==3.4.*
 requests==2.21.*
 
 # Testing and development requirements
-pytest-django==3.4.*
+pytest
+pytest-django
 Faker==0.8.*
 pytest-cov==2.*
 PyYAML==5.1
