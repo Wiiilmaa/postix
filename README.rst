@@ -21,7 +21,7 @@ postix supports a full cash desk setup with both preorder redemptions (it comes
 with a pretix import module) and cash transactions, with a layer of
 accountability for each cashier.
 
-pretix has the user roles of **cashiers**, who do the main work of exchanging
+postix has the user roles of **cashiers**, who do the main work of exchanging
 preorder codes or cash for goodies (at least an entrance token), **backoffice**
 users (who give and collect cash and goodies to the cashiers), and
 **troubleshooters** who support cashiers by looking up presale data, talking to
