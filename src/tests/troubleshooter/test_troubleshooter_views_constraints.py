@@ -1,6 +1,7 @@
 import pytest
 
 from postix.core.utils import times
+
 from ..factories import list_constraint_entry_factory, list_constraint_factory
 
 

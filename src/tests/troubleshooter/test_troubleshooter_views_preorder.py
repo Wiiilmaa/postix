@@ -1,6 +1,7 @@
 import pytest
 
 from postix.core.utils import times
+
 from ..factories import (
     cashdesk_factory, preorder_factory, preorder_position_factory,
 )

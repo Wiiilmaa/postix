@@ -3,6 +3,7 @@ import json
 import pytest
 
 from postix.core.utils import times
+
 from ..factories import notification_factory
 
 

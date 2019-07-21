@@ -1,14 +1,11 @@
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
-from django.views.generic import (
-    CreateView, ListView, UpdateView, FormView
-)
 from django.utils.timezone import now
-from postix.backoffice.forms.asset import (
-    AssetForm, AssetMoveForm
-)
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import CreateView, FormView, ListView, UpdateView
+
+from postix.backoffice.forms.asset import AssetForm, AssetMoveForm
 from postix.core.models.asset import Asset, AssetPosition
 
 from .utils import BackofficeUserRequiredMixin

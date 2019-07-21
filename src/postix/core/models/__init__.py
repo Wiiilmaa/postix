@@ -1,3 +1,4 @@
+from .asset import Asset, AssetPosition
 from .auth import User
 from .base import (
     Item, Product, ProductItem, Transaction, TransactionPosition,
@@ -17,7 +18,6 @@ from .ping import Ping
 from .preorder import Preorder, PreorderPosition
 from .record import Record, RecordEntity
 from .settings import EventSettings
-from .asset import Asset, AssetPosition
 
 __all__ = (
     'AbstractConstraint',

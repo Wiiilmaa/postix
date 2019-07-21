@@ -11,8 +11,8 @@ from tests.factories import (
 from postix.core.models import (
     Item, ItemMovement, Product, ProductItem, TransactionPosition,
 )
-from postix.core.utils.flow import reverse_transaction
 from postix.core.utils import times
+from postix.core.utils.flow import reverse_transaction
 
 
 @pytest.mark.django_db

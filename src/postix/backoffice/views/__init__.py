@@ -1,3 +1,7 @@
+from .asset import (
+    AssetCreateView, AssetHistoryView, AssetListView, AssetMoveView,
+    AssetUpdateView,
+)
 from .auth import LoginView, logout_view, switch_user
 from .main import MainView
 from .record import (
@@ -19,10 +23,6 @@ from .wizard import (
     WizardCashdeskCreateView, WizardCashdeskEditView, WizardCashdesksView,
     WizardItemCreateView, WizardItemEditView, WizardItemListView,
     WizardPretixImportView, WizardSettingsView, WizardUsersView,
-)
-from .asset import (
-    AssetListView, AssetCreateView, AssetMoveView, AssetHistoryView,
-    AssetUpdateView
 )
 
 __all__ = (

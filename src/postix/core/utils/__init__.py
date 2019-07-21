@@ -1,6 +1,6 @@
 import decimal
-from itertools import repeat
 from functools import partial
+from itertools import repeat
 
 times = partial(repeat, None)
 
