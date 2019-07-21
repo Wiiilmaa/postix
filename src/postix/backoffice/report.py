@@ -423,7 +423,7 @@ def generate_record(record: Record) -> str:
     if record.cash_movement and record.cash_movement.session:
         name += ' (#{})'.format(record.cash_movement.session.pk)
     info = [
-        ['Datum', datetime.strftime('%Y-%m-%d, %H:%M') if record.pk else ''],
+        ['Datum', datetime.strftime('%Y-%m-%d, %H:%M:%S') if record.pk else ''],
         [direction, name or ''],
         ['Betrag', CURRENCY.format(record.amount) if record.pk else ''],
     ]
