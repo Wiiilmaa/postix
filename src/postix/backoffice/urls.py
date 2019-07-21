@@ -32,6 +32,12 @@ urlpatterns = [
     url('^records/entity/(?P<pk>[0-9]+)/$', views.RecordEntityDetailView.as_view(), name='record-entity-detail'),
     url('^records/entity/(?P<pk>[0-9]+)/delete/$', views.RecordEntityDeleteView.as_view(), name='record-entity-delete'),
 
+    url('^assets/$', views.AssetListView.as_view(), name='asset-list'),
+    url('^assets/new/$', views.AssetCreateView.as_view(), name='new-asset'),
+    url('^assets/(?P<pk>[0-9]+)/$', views.AssetUpdateView.as_view(), name='asset-detail'),
+    url('^assets/move/$', views.AssetMoveView.as_view(), name='move-asset'),
+    url('^assets/history/$', views.AssetHistoryView.as_view(), name='history-asset'),
+
     url('^supplies/$', views.SupplyListView.as_view(), name='supply-list'),
     url('^supplies/create/$', views.SupplyCreateView.as_view(), name='supply-create'),
     url('^supplies/out/$', views.SupplyMoveOutView.as_view(), name='supply-out'),

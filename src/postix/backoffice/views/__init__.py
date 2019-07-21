@@ -20,8 +20,17 @@ from .wizard import (
     WizardItemCreateView, WizardItemEditView, WizardItemListView,
     WizardPretixImportView, WizardSettingsView, WizardUsersView,
 )
+from .asset import (
+    AssetListView, AssetCreateView, AssetMoveView, AssetHistoryView,
+    AssetUpdateView
+)
 
 __all__ = (
+    'AssetCreateView',
+    'AssetHistoryView',
+    'AssetListView',
+    'AssetMoveView',
+    'AssetUpdateView',
     'backoffice_user_required',
     'create_user_view',
     'EndSessionView',

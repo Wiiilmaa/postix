@@ -1,0 +1,52 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+
+{% block content %}
+<a href="{% url "backoffice:new-asset" %}" class="btn btn-primary">
+        {% trans "Create new asset" %}
+</a>
+<a href="{% url "backoffice:move-asset" %}" class="btn btn-primary">
+        {% trans "Move asset" %}
+</a>
+<a href="{% url "backoffice:history-asset" %}" class="btn btn-primary">
+        {% trans "Movement history" %}
+</a>
+<table class="table table-hover">
+    <thead>
+        <th>{% trans "Description" %}</th>
+        <th>{% trans "Type" %}</th>
+        <th>{% trans "Location" %}</th>
+        <th>{% trans "Last seen" %}</th>
+        <th></th>
+    </thead>
+    <tbody>
+        {% for asset in object_list %}
+        <tr>
+            <td>
+                {{asset.description}}
+            </td>
+            <td>
+                {{asset.asset_type}}
+            </td>
+            <td>
+                {{asset.get_current_position.location}}
+            </td>
+            <td>
+                {{asset.last_seen}}
+            </td>
+            <td class="d-flex justify-content-end">
+                <a href="{% url "backoffice:asset-detail" pk=asset.pk %}" title="{% trans "Edit" %}">
+                    <span class="fa fa-2x fa-fw fa-pencil" aria-hidden="true"></span>
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <th colspan="42" class"empty-row active">
+                {% trans "No records yet, get going!" %}
+            </th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -17,9 +17,12 @@ from .ping import Ping
 from .preorder import Preorder, PreorderPosition
 from .record import Record, RecordEntity
 from .settings import EventSettings
+from .asset import Asset, AssetPosition
 
 __all__ = (
     'AbstractConstraint',
+    'Asset',
+    'AssetPosition',
     'Cashdesk',
     'CashMovement',
     'CashdeskSession',

@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from solo.admin import SingletonModelAdmin
 
 from .models import (
-    Cashdesk, CashdeskSession, EventSettings, Item, ItemMovement,
+    Asset, Cashdesk, CashdeskSession, EventSettings, Item, ItemMovement,
     ListConstraint, ListConstraintEntry, ListConstraintProduct, Preorder,
     PreorderPosition, Product, ProductItem, Quota, TimeConstraint, Transaction,
     TransactionPosition, User, WarningConstraint, WarningConstraintProduct,
@@ -207,3 +207,5 @@ class TransactionAdmin(admin.ModelAdmin):
 
 
 admin.site.unregister(Group)
+
+admin.site.register(Asset)

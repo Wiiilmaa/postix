@@ -1,0 +1,36 @@
+{% extends 'backoffice/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static "shared/css/typeaheadjs.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "backoffice/css/sessionform.css" %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="ml-auto mr-auto col-md-8">
+    <input type="submit" value="Add More" id="add_more" style="display: None">
+
+    <form method="post" action="">
+    {% language "de" %}
+        {% csrf_token %}
+        {% crispy form form.helper %}
+        <input type="submit" name="submit" value="{% trans "Create asset" %}" class="btn btn-primary btn-block" id="submit-save">
+    {% endlanguage %}
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        var backoffice_users = [ {% for user in backoffice_users %} '{{ user }}', {% endfor %} ];
+        var carriers = [ {% for carrier in carriers %} '{{ carrier }}', {% endfor %} ];
+    </script>
+
+    <script type="text/javascript" src="{% static "shared/js/typeahead.bundle.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "backoffice/js/sessionform.js" %}"></script>
+    <script src="{% static "backoffice/js/calculator.js" %}"></script>
+{% endblock %}

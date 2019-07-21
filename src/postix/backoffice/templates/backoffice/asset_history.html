@@ -1,0 +1,45 @@
+{% extends 'backoffice/base.html' %}
+{% load i18n %}
+
+{% block content %}
+<a href="{% url "backoffice:asset-list" %}" class="btn btn-primary">
+        {% trans "Back" %}
+</a>
+<table class="table table-hover">
+    <thead>
+        <th>{% trans "Description" %}</th>
+        <th>{% trans "Start" %}</th>
+        <th>{% trans "End" %}</th>
+        <th>{% trans "Location" %}</th>
+        <th>{% trans "Comment" %}</th>
+        <th></th>
+    </thead>
+    <tbody>
+        {% for movement in object_list %}
+        <tr>
+            <td>
+                {{movement.asset.description}}
+            </td>
+            <td>
+                {{movement.start}}
+            </td>
+            <td>
+                {{movement.end}}
+            </td>
+            <td>
+                {{movement.location}}
+            </td>
+            <td>
+                {{movement.comment}}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <th colspan="42" class"empty-row active">
+                {% trans "No records yet, get going!" %}
+            </th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
