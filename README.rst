@@ -30,7 +30,7 @@ troublesome attendees, resupply the cashiers with goodies, etc.
 Every cashier will receive a custom amount of cash (and, optionally, goodies),
 and will be assigned a cashdesk. After the cashier's session is over, a report
 is printed, where the cash and goodies present can be checked against the
-amounts that *should* be present.  These reports also come with a barcode to
+amounts that *should* be present.  These reports also come with a QR code to
 make them easily readable into a tab delimited file or a spreadsheet.
 
 postix supports adding a variety of constraints to products to be sold or redeemed:
