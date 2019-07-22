@@ -207,7 +207,7 @@ def generate_session_closing(record, doc):
     data = [
         ['Datum', 'Grund', 'Betrag'],
         [
-            session.start.astimezone(tz).strftime('%Y-%m-%d, %H:%M'),
+            session.start.astimezone(tz).strftime('%Y-%m-%d, %H:%M:%S'),
             'Anfangsbestand',
             CURRENCY.format(0),
         ],
@@ -217,13 +217,13 @@ def generate_session_closing(record, doc):
         running_total += movement.cash
         data.append(
             [
-                movement.timestamp.astimezone(tz).strftime('%Y-%m-%d, %H:%M'),
+                movement.timestamp.astimezone(tz).strftime('%Y-%m-%d, %H:%M:%S'),
                 'Wechselgeld' if movement.cash > 0 else 'Abschöpfung',
                 CURRENCY.format(movement.cash),
             ]
         )
     data.append(
-        [session.end.astimezone(tz).strftime('%Y-%m-%d, %H:%M'), 'Endbestand', CURRENCY.format(0)]
+        [session.end.astimezone(tz).strftime('%Y-%m-%d, %H:%M:%S'), 'Endbestand', CURRENCY.format(0)]
     )
     data.append(['', 'Umsatz', CURRENCY.format(-running_total)])
     last_row = len(data) - 1
