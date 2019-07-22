@@ -202,11 +202,12 @@ def generate_item_report(session: CashdeskSession, doc) -> str:
 
 def generate_session_closing(record, doc):
     session = record.cash_movement.session
+    tz = timezone.get_current_timezone()
     header = get_session_header(session, doc=doc, title='Umsatzermittlung')
     data = [
         ['Datum', 'Grund', 'Betrag'],
         [
-            session.start.strftime('%Y-%m-%d, %H:%M'),
+            session.start.astimezone(tz).strftime('%Y-%m-%d, %H:%M'),
             'Anfangsbestand',
             CURRENCY.format(0),
         ],
@@ -216,13 +217,13 @@ def generate_session_closing(record, doc):
         running_total += movement.cash
         data.append(
             [
-                movement.timestamp.strftime('%Y-%m-%d, %H:%M'),
+                movement.timestamp.astimezone(tz).strftime('%Y-%m-%d, %H:%M'),
                 'Wechselgeld' if movement.cash > 0 else 'Abschöpfung',
                 CURRENCY.format(movement.cash),
             ]
         )
     data.append(
-        [session.end.strftime('%Y-%m-%d, %H:%M'), 'Endbestand', CURRENCY.format(0)]
+        [session.end.astimezone(tz).strftime('%Y-%m-%d, %H:%M'), 'Endbestand', CURRENCY.format(0)]
     )
     data.append(['', 'Umsatz', CURRENCY.format(-running_total)])
     last_row = len(data) - 1
