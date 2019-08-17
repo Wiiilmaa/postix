@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-24 11:18+0100\n"
-"PO-Revision-Date: 2018-12-24 10:18+0100\n"
+"POT-Creation-Date: 2019-08-17 11:52+0200\n"
+"PO-Revision-Date: 2019-08-17 11:52+0200\n"
 "Last-Translator: Tobias Kunze <r@rixx.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: postix/api/auth.py:29
 msgid "Your token is valid for a different cashdesk. Your IP is: {}"
@@ -30,7 +30,7 @@ msgstr "Typ {} ist noch nicht implementiert"
 msgid "Unknown supply pack barcode."
 msgstr "Unbekannter Paketcode."
 
-#: postix/api/views.py:342
+#: postix/api/views.py:343
 msgid ""
 "This supply pack has not been transferred to the troubleshooter yet, you "
 "cannot use it."
@@ -38,11 +38,11 @@ msgstr ""
 "Dieser Paketcode wurde noch nicht an die Troubleshooter übertragen, und kann "
 "noch nicht genutzt werden."
 
-#: postix/api/views.py:350
+#: postix/api/views.py:351
 msgid "This supply pack does not exist any more."
 msgstr "Diesen Paketcode gibt es nicht mehr."
 
-#: postix/api/views.py:357
+#: postix/api/views.py:358
 msgid "This supply pack has already been used."
 msgstr "Dieser Paketcode wurde bereits abgehakt."
 
@@ -103,7 +103,7 @@ msgid "Angel"
 msgstr "Engel"
 
 #: postix/backoffice/forms/session.py:40
-#: postix/backoffice/templates/backoffice/end_session.html:49
+#: postix/backoffice/templates/backoffice/end_session.html:52
 #: postix/backoffice/templates/backoffice/session_detail.html:56
 msgid "Cash"
 msgstr "Bargeld"
@@ -117,7 +117,7 @@ msgid "Please supply a positive amount of cash."
 msgstr "Bitte gib eine positive Zahl fürs Bargeld an."
 
 #: postix/backoffice/forms/session.py:85
-#: postix/backoffice/templates/backoffice/end_session.html:39
+#: postix/backoffice/templates/backoffice/end_session.html:42
 #: postix/troubleshooter/invoicing.py:52
 msgid "Product"
 msgstr "Produkt"
@@ -131,7 +131,7 @@ msgid "Type of items in pack"
 msgstr "Art von Produkten im Paket"
 
 #: postix/backoffice/forms/supply.py:13 postix/backoffice/forms/supply.py:33
-#: postix/backoffice/templates/backoffice/supply_list.html:27
+#: postix/backoffice/templates/backoffice/supply_list.html:34
 msgid "Pack barcode"
 msgstr "Paketcode"
 
@@ -174,46 +174,132 @@ msgstr "Passwort zurücksetzen"
 msgid "Passwords do not match!"
 msgstr "Passwörter stimmen nicht überein!"
 
-#: postix/backoffice/forms/wizard.py:28
+#: postix/backoffice/forms/wizard.py:31
 msgid "Set up settings"
 msgstr "Einstellungen anlegen"
 
-#: postix/backoffice/forms/wizard.py:48
+#: postix/backoffice/forms/wizard.py:51
 msgid "Add Cashdesk"
 msgstr "Kasse hinzufügen"
 
-#: postix/backoffice/forms/wizard.py:55
+#: postix/backoffice/forms/wizard.py:58
 msgid "JSON File"
 msgstr "JSON-Datei"
 
-#: postix/backoffice/forms/wizard.py:59
+#: postix/backoffice/forms/wizard.py:62
 msgid "Create cashdesks"
 msgstr "Kassen anlegen"
 
-#: postix/backoffice/forms/wizard.py:60
+#: postix/backoffice/forms/wizard.py:63
 msgid "If you do not have any cashdesks yet, create them"
 msgstr "Wenn du noch keine Kassen hast, kannst du sie hier generieren lassen"
 
-#: postix/backoffice/forms/wizard.py:64
+#: postix/backoffice/forms/wizard.py:67
 msgid "Questions to import"
 msgstr "Fragen importieren"
 
-#: postix/backoffice/forms/wizard.py:66
+#: postix/backoffice/forms/wizard.py:69
 msgid "Please enter comma separated question IDs that you wish to import"
 msgstr ""
 "Bitte gib eine Komma-getrennte Liste von Frage-IDs an, die importiert werden "
 "sollen"
 
-#: postix/backoffice/forms/wizard.py:81
+#: postix/backoffice/forms/wizard.py:84
 msgid "Import presale export"
 msgstr "Presale-Export importieren"
 
-#: postix/backoffice/forms/wizard.py:104
+#: postix/backoffice/forms/wizard.py:107
 msgid "Save Item"
 msgstr "Gegenstand speichern"
 
+#: postix/backoffice/forms/wizard.py:126 postix/backoffice/forms/wizard.py:136
+msgid "Include cashdesks"
+msgstr "Importiere Kassen"
+
+#: postix/backoffice/forms/wizard.py:131
+msgid "Export settings"
+msgstr "Einstellungen exportieren"
+
+#: postix/backoffice/forms/wizard.py:137
+msgid "Settings file"
+msgstr "Einstellungsdatei"
+
+#: postix/backoffice/forms/wizard.py:137
+msgid "A JSON file exported from another postix event."
+msgstr "Eine JSON-Datei, aus einem anderen postix-Event exportiert"
+
+#: postix/backoffice/forms/wizard.py:142
+msgid "Import settings"
+msgstr "Einstellungen importieren"
+
+#: postix/backoffice/templates/backoffice/asset_history.html:6
+msgid "Back"
+msgstr "Zurück"
+
+#: postix/backoffice/templates/backoffice/asset_history.html:10
+#: postix/backoffice/templates/backoffice/asset_list.html:16
+msgid "Description"
+msgstr "Beschreibung"
+
+#: postix/backoffice/templates/backoffice/asset_history.html:11
+#: postix/backoffice/templates/backoffice/move_session.html:24
+#: postix/backoffice/templates/backoffice/report_list.html:12
+#: postix/backoffice/templates/backoffice/reverse_session.html:28
+#: postix/backoffice/templates/backoffice/session_detail.html:39
+msgid "Start"
+msgstr "Beginn"
+
+#: postix/backoffice/templates/backoffice/asset_history.html:12
+#: postix/backoffice/templates/backoffice/report_list.html:13
+#: postix/backoffice/templates/backoffice/session_detail.html:40
+#: postix/backoffice/templates/backoffice/session_list.html:58
+msgid "End"
+msgstr "Ende"
+
+#: postix/backoffice/templates/backoffice/asset_history.html:13
+#: postix/backoffice/templates/backoffice/asset_list.html:18
+msgid "Location"
+msgstr "Ort"
+
+#: postix/backoffice/templates/backoffice/asset_history.html:14
+msgid "Comment"
+msgstr "Kommentar"
+
+#: postix/backoffice/templates/backoffice/asset_history.html:39
+#: postix/backoffice/templates/backoffice/asset_list.html:46
+#: postix/backoffice/templates/backoffice/record_list.html:88
+msgid "No records yet, get going!"
+msgstr "Noch keine Belege, es kann losgehen!"
+
+#: postix/backoffice/templates/backoffice/asset_list.html:6
+msgid "Create new asset"
+msgstr "Neues Inventarobjekt"
+
+#: postix/backoffice/templates/backoffice/asset_list.html:9
+#: postix/backoffice/templates/backoffice/move_asset.html:21
+msgid "Move asset"
+msgstr "Inventarobjekt verschieben"
+
+#: postix/backoffice/templates/backoffice/asset_list.html:12
+msgid "Movement history"
+msgstr "Verlauf"
+
+#: postix/backoffice/templates/backoffice/asset_list.html:17
+#: postix/troubleshooter/templates/troubleshooter/transaction_list.html:49
+msgid "Type"
+msgstr "Typ"
+
+#: postix/backoffice/templates/backoffice/asset_list.html:19
+msgid "Last seen"
+msgstr "Zuletzt gesehen"
+
+#: postix/backoffice/templates/backoffice/asset_list.html:38
+#: postix/backoffice/templates/backoffice/report_list.html:24
+msgid "Edit"
+msgstr "Editieren"
+
 #: postix/backoffice/templates/backoffice/base.html:19
-#: postix/core/templates/core/base.html:53
+#: postix/core/templates/core/base.html:51
 msgid "Backoffice"
 msgstr "Hinterzimmer"
 
@@ -274,40 +360,40 @@ msgstr "Session"
 msgid "Start:"
 msgstr "Beginn:"
 
-#: postix/backoffice/templates/backoffice/end_session.html:40
+#: postix/backoffice/templates/backoffice/end_session.html:43
 #: postix/backoffice/templates/backoffice/session_detail.html:50
 msgid "Initial"
 msgstr "Eingezählt"
 
-#: postix/backoffice/templates/backoffice/end_session.html:41
-#: postix/backoffice/templates/backoffice/end_session.html:97
+#: postix/backoffice/templates/backoffice/end_session.html:44
+#: postix/backoffice/templates/backoffice/end_session.html:100
 #: postix/backoffice/templates/backoffice/session_detail.html:51
 #: postix/backoffice/templates/backoffice/session_detail.html:77
 msgid "Sales"
 msgstr "Umsatz"
 
-#: postix/backoffice/templates/backoffice/end_session.html:42
+#: postix/backoffice/templates/backoffice/end_session.html:45
 #: postix/backoffice/templates/backoffice/session_detail.html:52
 msgid "Final"
 msgstr "Endstand"
 
-#: postix/backoffice/templates/backoffice/end_session.html:43
+#: postix/backoffice/templates/backoffice/end_session.html:46
 msgid "Result"
 msgstr "Abschluss"
 
-#: postix/backoffice/templates/backoffice/end_session.html:44
+#: postix/backoffice/templates/backoffice/end_session.html:47
 msgid "Discrepancy"
 msgstr "Diskrepanz"
 
-#: postix/backoffice/templates/backoffice/end_session.html:77
+#: postix/backoffice/templates/backoffice/end_session.html:80
 msgid "This session did not contain any products."
 msgstr "Diese Session enthielt keine Produkte."
 
-#: postix/backoffice/templates/backoffice/end_session.html:85
+#: postix/backoffice/templates/backoffice/end_session.html:88
 msgid "Create report"
 msgstr "Auszählung abschließen"
 
-#: postix/backoffice/templates/backoffice/end_session.html:90
+#: postix/backoffice/templates/backoffice/end_session.html:93
 #: postix/backoffice/templates/backoffice/record_entity_list.html:23
 #: postix/backoffice/templates/backoffice/record_list.html:76
 #: postix/backoffice/templates/backoffice/report_list.html:21
@@ -318,16 +404,17 @@ msgstr "Auszählung abschließen"
 msgid "Details"
 msgstr "Details"
 
-#: postix/backoffice/templates/backoffice/end_session.html:98
+#: postix/backoffice/templates/backoffice/end_session.html:101
 msgid "Presales"
 msgstr "Vorverkauf"
 
-#: postix/backoffice/templates/backoffice/end_session.html:99
+#: postix/backoffice/templates/backoffice/end_session.html:102
 #: postix/backoffice/templates/backoffice/session_detail.html:79
 msgid "Reversals"
 msgstr "Stornos"
 
 #: postix/backoffice/templates/backoffice/main.html:6
+#: postix/backoffice/templates/backoffice/supply_list.html:25
 msgid "Statistics"
 msgstr "Statistik"
 
@@ -384,13 +471,6 @@ msgstr ""
 msgid "Active session at"
 msgstr "Laufende Session an"
 
-#: postix/backoffice/templates/backoffice/move_session.html:24
-#: postix/backoffice/templates/backoffice/report_list.html:12
-#: postix/backoffice/templates/backoffice/reverse_session.html:28
-#: postix/backoffice/templates/backoffice/session_detail.html:39
-msgid "Start"
-msgstr "Beginn"
-
 #: postix/backoffice/templates/backoffice/move_session.html:26
 msgid ""
 "Please don't move an active session without talking to the user at the "
@@ -401,41 +481,50 @@ msgstr "Bitte Sessions nicht unabgesprochen im laufenden Betrieb verschieben."
 msgid "Move session"
 msgstr "Session verschieben"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:17
+#: postix/backoffice/templates/backoffice/new_asset.html:21
+msgid "Create asset"
+msgstr "Inventarobjekt anlegen"
+
+#: postix/backoffice/templates/backoffice/new_balance.html:18
 #: postix/backoffice/templates/backoffice/record_list.html:18
 #: postix/backoffice/templates/backoffice/session_list.html:13
 msgid "Balance records"
 msgstr "Kassenabschluss"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:22
+#: postix/backoffice/templates/backoffice/new_balance.html:23
+#: postix/backoffice/templates/backoffice/new_balance.html:97
 msgid "Bills (machine-counted)"
 msgstr "Scheine (maschinengezählt)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:30
+#: postix/backoffice/templates/backoffice/new_balance.html:32
+#: postix/backoffice/templates/backoffice/new_balance.html:117
 msgid "Bills (bundles)"
 msgstr "Scheine (Bündel)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:38
+#: postix/backoffice/templates/backoffice/new_balance.html:41
+#: postix/backoffice/templates/backoffice/new_balance.html:107
 msgid "Bills (manually)"
 msgstr "Scheine (manuell)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:46
+#: postix/backoffice/templates/backoffice/new_balance.html:50
+#: postix/backoffice/templates/backoffice/new_balance.html:87
 msgid "Coins (machine-counted)"
 msgstr "Münzen (maschinengezählt)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:54
+#: postix/backoffice/templates/backoffice/new_balance.html:60
+#: postix/backoffice/templates/backoffice/new_balance.html:77
 msgid "Coins (rolls)"
 msgstr "Münzen (gerollt)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:62
+#: postix/backoffice/templates/backoffice/new_balance.html:69
 msgid "Expected:"
 msgstr "Erwartet:"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:63
+#: postix/backoffice/templates/backoffice/new_balance.html:70
 msgid "Actual:"
 msgstr "Tatsächlich:"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:64
+#: postix/backoffice/templates/backoffice/new_balance.html:71
 msgid "Irreversibly balance records"
 msgstr "Unwiderruflich Ausgleich buchen"
 
@@ -469,7 +558,7 @@ msgstr "Neue Quelle/neues Ziel"
 
 #: postix/backoffice/templates/backoffice/record_entity_list.html:8
 #: postix/backoffice/templates/backoffice/user_list.html:15
-#: postix/core/models/settings.py:8
+#: postix/core/models/settings.py:10
 msgid "Name"
 msgstr "Name"
 
@@ -497,12 +586,12 @@ msgid "New session"
 msgstr "Kasse einzählen"
 
 #: postix/backoffice/templates/backoffice/record_list.html:23
-#: postix/core/models/record.py:45
+#: postix/core/models/record.py:47
 msgid "Date"
 msgstr "Datum"
 
 #: postix/backoffice/templates/backoffice/record_list.html:24
-#: postix/core/models/record.py:59
+#: postix/core/models/record.py:61
 msgid "Entity"
 msgstr "Quelle/Ziel"
 
@@ -514,17 +603,17 @@ msgid "User"
 msgstr "Benutzer"
 
 #: postix/backoffice/templates/backoffice/record_list.html:26
-#: postix/core/models/record.py:64
+#: postix/core/models/record.py:66
 msgid "Carrier"
 msgstr "Einlieferer/Empfänger"
 
 #: postix/backoffice/templates/backoffice/record_list.html:27
-#: postix/core/models/record.py:42
+#: postix/core/models/record.py:44
 msgid "Inflow"
 msgstr "Einnahme"
 
 #: postix/backoffice/templates/backoffice/record_list.html:28
-#: postix/core/models/record.py:42
+#: postix/core/models/record.py:44
 msgid "Outflow"
 msgstr "Ausgabe"
 
@@ -534,30 +623,16 @@ msgstr "Saldo"
 
 #: postix/backoffice/templates/backoffice/record_list.html:80
 #: postix/backoffice/templates/backoffice/session_detail.html:139
-#: postix/core/templates/core/base.html:113
+#: postix/core/templates/core/base.html:114
 #: postix/troubleshooter/templates/troubleshooter/information_detail.html:16
 #: postix/troubleshooter/templates/troubleshooter/information_detail.html:20
 msgid "Print"
 msgstr "Drucken"
 
-#: postix/backoffice/templates/backoffice/record_list.html:88
-msgid "No records yet, get going!"
-msgstr "Noch keine Belege, es kann losgehen!"
-
-#: postix/backoffice/templates/backoffice/report_list.html:13
-#: postix/backoffice/templates/backoffice/session_detail.html:40
-#: postix/backoffice/templates/backoffice/session_list.html:58
-msgid "End"
-msgstr "Ende"
-
 #: postix/backoffice/templates/backoffice/report_list.html:14
 #: postix/backoffice/templates/backoffice/session_detail.html:73
 msgid "Sold products"
 msgstr "Verkaufte Produkte"
-
-#: postix/backoffice/templates/backoffice/report_list.html:24
-msgid "Edit"
-msgstr "Editieren"
 
 #: postix/backoffice/templates/backoffice/report_list.html:44
 msgid "No reports yet, get going!"
@@ -673,7 +748,7 @@ msgid "Create new packs"
 msgstr "Neue Pakete anlegen"
 
 #: postix/backoffice/templates/backoffice/supply_list.html:14
-#: postix/backoffice/templates/backoffice/supply_list.html:50
+#: postix/backoffice/templates/backoffice/supply_list.html:57
 msgid "Storage → Troubleshooter"
 msgstr "Lager → Troubleshooter"
 
@@ -682,7 +757,7 @@ msgid "Troubleshooter → Storage"
 msgstr "Troubleshooter → Lager"
 
 #: postix/backoffice/templates/backoffice/supply_list.html:20
-#: postix/backoffice/templates/backoffice/supply_list.html:53
+#: postix/backoffice/templates/backoffice/supply_list.html:60
 msgid "Storage → Dissolved"
 msgstr "Lager → Aufgelöst"
 
@@ -690,19 +765,23 @@ msgstr "Lager → Aufgelöst"
 msgid "Search…"
 msgstr "Suchen…"
 
-#: postix/backoffice/templates/backoffice/supply_list.html:28
+#: postix/backoffice/templates/backoffice/supply_list.html:31
+msgid "List"
+msgstr "Liste"
+
+#: postix/backoffice/templates/backoffice/supply_list.html:35
 msgid "Content"
 msgstr "Inhalt"
 
-#: postix/backoffice/templates/backoffice/supply_list.html:29
+#: postix/backoffice/templates/backoffice/supply_list.html:36
 msgid "State"
 msgstr "Status"
 
-#: postix/backoffice/templates/backoffice/supply_list.html:46
+#: postix/backoffice/templates/backoffice/supply_list.html:53
 msgid "Troublshooter → Storage"
 msgstr "Troubleshooter → Lager"
 
-#: postix/backoffice/templates/backoffice/supply_list.html:62
+#: postix/backoffice/templates/backoffice/supply_list.html:69
 msgid "No packs yet, get going!"
 msgstr "Noch keine Pakete, es kann losgehen!"
 
@@ -752,27 +831,45 @@ msgid "Edit cashdesk"
 msgstr "Kasse editieren"
 
 #: postix/backoffice/templates/backoffice/wizard_import.html:6
-#: postix/core/templates/core/base.html:137
+#: postix/core/templates/core/base.html:138
 msgid "Import Presale Data"
 msgstr "Presale-Daten importieren"
 
 #: postix/backoffice/templates/backoffice/wizard_item_edit.html:6
-#: postix/backoffice/templates/backoffice/wizard_item_list.html:16
+#: postix/backoffice/templates/backoffice/wizard_item_list.html:27
 msgid "Edit item"
 msgstr "Gegenstand bearbeiten"
 
 #: postix/backoffice/templates/backoffice/wizard_item_list.html:4
-#: postix/core/templates/core/base.html:140
+#: postix/core/templates/core/base.html:141
 msgid "Item List"
 msgstr "Gegenstände"
 
-#: postix/backoffice/templates/backoffice/wizard_item_list.html:8
+#: postix/backoffice/templates/backoffice/wizard_item_list.html:11
+#, python-format
+msgid ""
+"You cannot create any items because you haven't configured any products yet! "
+"Go <a href=\"%(href)s\">here</a> to import presale data."
+msgstr ""
+"Du kannst noch keine Gegenstände anlegen, weil es noch keine Produkte gibt! "
+"Gehe <a href=\"%(href)s\">auf diese Seite</a>, um Presale-Daten zu "
+"importieren."
+
+#: postix/backoffice/templates/backoffice/wizard_item_list.html:18
 msgid "Add an Item"
 msgstr "Gegenstand hinzufügen"
 
 #: postix/backoffice/templates/backoffice/wizard_settings.html:6
 msgid "General settings"
 msgstr "Allgemeine Einstellungen"
+
+#: postix/backoffice/templates/backoffice/wizard_settings.html:12
+msgid "Settings Export"
+msgstr "Einstellungen exportieren"
+
+#: postix/backoffice/templates/backoffice/wizard_settings.html:16
+msgid "Settings Import"
+msgstr "Einstellungen importieren"
 
 #: postix/backoffice/templates/backoffice/wizard_users.html:5
 msgid "User rights"
@@ -802,6 +899,16 @@ msgstr "Adminrechte entfernen"
 msgid "Make superuser"
 msgstr "Adminrechte hinzufügen"
 
+#: postix/backoffice/views/asset.py:50
+msgid "Unknown asset"
+msgstr "Unbekanntes Inventarobjekt"
+
+#: postix/backoffice/views/asset.py:57
+msgid "Asset was not marked as away, does not need to be returned"
+msgstr ""
+"Dieses Inventarobjekt war nicht als ausgegeben markiert, und muss nicht "
+"zurückgegeben werden."
+
 #: postix/backoffice/views/auth.py:23 postix/desk/views.py:63
 #: postix/troubleshooter/views/auth.py:22
 msgid "No user account matches the entered credentials."
@@ -811,9 +918,13 @@ msgstr "Die eingegebenen Benutzerdaten sind nicht bekannt."
 msgid "User does not have permission to access backoffice data."
 msgstr "Du darfst leider nicht auf Hinterzimmer-Daten zugreifen."
 
-#: postix/backoffice/views/record.py:102
+#: postix/backoffice/views/record.py:103
 msgid "Something seems wrong here."
 msgstr "Hier ist etwas nicht ganz richtig."
+
+#: postix/backoffice/views/record.py:168
+msgid "This record cannot be modified any more."
+msgstr "Dieser Eintrag kann nicht mehr verändert werden."
 
 #: postix/backoffice/views/session.py:65
 msgid "Session could not be created. Please review the data."
@@ -835,7 +946,7 @@ msgstr "Fehler: Bitte prüfe die Eingabedaten."
 msgid "All transactions in the session have been cancelled."
 msgstr "Alle Buchungen in der Session wurden storniert."
 
-#: postix/backoffice/views/session.py:306
+#: postix/backoffice/views/session.py:307
 msgid ""
 "This session has ended already. Filling out this form will produce a "
 "corrected report. "
@@ -843,38 +954,38 @@ msgstr ""
 "Die Session wurde bereits beendet. Wenn du dieses Formular ausfüllst, wird "
 "der bestehende Report korrigiert. "
 
-#: postix/backoffice/views/session.py:370
+#: postix/backoffice/views/session.py:371
 msgid "Session could not be ended: Please review the data."
 msgstr "Die Session konnte nicht beendet werden: Bitte prüfe die Eingabedaten."
 
-#: postix/backoffice/views/session.py:382
+#: postix/backoffice/views/session.py:383
 msgid "Session has already ended and cannot be moved."
 msgstr "Die Session wurde bereits beendet und kann nicht mehr verlegt werden."
 
-#: postix/backoffice/views/session.py:390
+#: postix/backoffice/views/session.py:391
 msgid "Session has been moved."
 msgstr "Die Session wurde verlegt."
 
-#: postix/backoffice/views/session.py:392
+#: postix/backoffice/views/session.py:393
 msgid "Session could not be moved!"
 msgstr "Die Session konnte nicht verlegt werden!"
 
-#: postix/backoffice/views/supply.py:46
+#: postix/backoffice/views/supply.py:52
 #, python-brace-format
 msgid "The supply pack {id} has been created."
 msgstr "Das Paket {id} wurde angelegt."
 
-#: postix/backoffice/views/supply.py:70
+#: postix/backoffice/views/supply.py:76
 #, python-brace-format
 msgid "The supply pack {id} has been moved to the troubleshooter."
 msgstr "Das Paket {id} wurde zu den Troubleshootern ausgebucht."
 
-#: postix/backoffice/views/supply.py:94
+#: postix/backoffice/views/supply.py:100
 #, python-brace-format
 msgid "The supply pack {id} has been moved to the backoffice."
 msgstr "Das Paket {id} wurde ins Hinterzimmer eingebucht."
 
-#: postix/backoffice/views/supply.py:118
+#: postix/backoffice/views/supply.py:124
 #, python-brace-format
 msgid "The supply pack {id} has been dissolved."
 msgstr "Das Paket {id} wurde als verwendet markiert."
@@ -900,37 +1011,57 @@ msgstr ""
 msgid "Passwort has been changed."
 msgstr "Das Passwort wurde geändert."
 
-#: postix/backoffice/views/wizard.py:22
+#: postix/backoffice/views/wizard.py:27
 msgid "The settings have been updated."
 msgstr "Die Einstellungen wurden gespeichert."
 
-#: postix/backoffice/views/wizard.py:48
+#: postix/backoffice/views/wizard.py:59
 msgid "The cashdesk has been created."
 msgstr "Die Kasse wurde angelegt."
 
-#: postix/backoffice/views/wizard.py:62 postix/backoffice/views/wizard.py:151
+#: postix/backoffice/views/wizard.py:73 postix/backoffice/views/wizard.py:169
 msgid "The item has been updated."
 msgstr "Der Gegenstand wurde gespeichert."
 
-#: postix/backoffice/views/wizard.py:91
+#: postix/backoffice/views/wizard.py:102
 msgid "User rights have been expanded"
 msgstr "Nutzerrechte wurden erweitert"
 
-#: postix/backoffice/views/wizard.py:93
+#: postix/backoffice/views/wizard.py:104
 msgid "User rights have been curtailed."
 msgstr "Nutzerrechte wurden beschnitten."
 
-#: postix/backoffice/views/wizard.py:113
+#: postix/backoffice/views/wizard.py:124
 msgid "The import has been processed \\o/"
 msgstr "Der Import wurde durchgeführt – danke für deine Geduld :)"
 
-#: postix/backoffice/views/wizard.py:116
+#: postix/backoffice/views/wizard.py:127
 msgid "The import could not be processed: "
 msgstr "Der Import konnte nicht verarbeitet werden: "
 
-#: postix/backoffice/views/wizard.py:137
+#: postix/backoffice/views/wizard.py:151
 msgid "The item has been saved."
 msgstr "Der Gegenstand wurde gespeichert."
+
+#: postix/backoffice/views/wizard.py:215
+msgid "The settings have been imported, please double-check them."
+msgstr "Die Einstellungen wurden importiert, bitte überprüfe diese."
+
+#: postix/core/models/asset.py:7
+msgid "Box"
+msgstr "Kiste"
+
+#: postix/core/models/asset.py:8
+msgid "Inlay"
+msgstr "Einsatz"
+
+#: postix/core/models/asset.py:9
+msgid "Bag"
+msgstr "Beutel"
+
+#: postix/core/models/asset.py:10
+msgid "Counting board"
+msgstr "Zählbrett"
 
 #: postix/core/models/base.py:307
 msgid "In backoffice"
@@ -948,31 +1079,31 @@ msgstr "Aufgelöst"
 msgid "Used to refill cash session"
 msgstr "In Kasse eingelöst"
 
-#: postix/core/models/cashdesk.py:39
+#: postix/core/models/cashdesk.py:38
 msgid "IP address"
 msgstr "IP-Adresse"
 
-#: postix/core/models/cashdesk.py:45
+#: postix/core/models/cashdesk.py:44
 msgid "Printer queue name"
 msgstr "Drucker-Name"
 
-#: postix/core/models/cashdesk.py:46
+#: postix/core/models/cashdesk.py:45
 msgid "The name configured in CUPS"
 msgstr "Der Name, der im CUPS konfiguriert wurde"
 
-#: postix/core/models/cashdesk.py:51
+#: postix/core/models/cashdesk.py:50
 msgid "Printer handles drawer"
 msgstr "Drucker steuert Schublade"
 
-#: postix/core/models/cashdesk.py:52
+#: postix/core/models/cashdesk.py:51
 msgid "Unset if the printer or drawer are broken."
 msgstr "Ausschalten, wenn Drucker oder Schublade kaputt sind."
 
-#: postix/core/models/cashdesk.py:54
+#: postix/core/models/cashdesk.py:53
 msgid "Handles items"
 msgstr "Verteilt Produkte"
 
-#: postix/core/models/cashdesk.py:269
+#: postix/core/models/cashdesk.py:261
 msgid "Session has already been finalized and the record is locked."
 msgstr ""
 "Die Session wurde bereits beendet und kann nicht mehr bearbeitet werden."
@@ -982,52 +1113,52 @@ msgstr ""
 msgid "This ticket ({secret}…) has already been redeemed at {datetime}."
 msgstr "Dieses Ticket ({secret}…) wurde bereits eingelöst ({datetime})."
 
-#: postix/core/models/record.py:43
+#: postix/core/models/record.py:45
 msgid "Direction"
 msgstr "Richtung"
 
-#: postix/core/models/record.py:46
+#: postix/core/models/record.py:48
 msgid "Leave empty to use the current date and time."
 msgstr "Leerlassen, um die aktuelle Zeit zu nutzen."
 
-#: postix/core/models/record.py:67
+#: postix/core/models/record.py:69
 #: postix/troubleshooter/templates/troubleshooter/transaction_list.html:50
 msgid "Amount"
 msgstr "Betrag"
 
-#: postix/core/models/record.py:72
+#: postix/core/models/record.py:74
 msgid "Backoffice user"
 msgstr "Hinterzimmer-Engel"
 
-#: postix/core/models/record.py:76
+#: postix/core/models/record.py:78
 msgid "Is a balancing record"
 msgstr "Ist ein Abschluss-Beleg"
 
-#: postix/core/models/record.py:80
+#: postix/core/models/record.py:82
 msgid "Report closes session and contains additional pages"
 msgstr "Der Beleg schließt die Session ab und enthält zusätzliche Seiten"
 
-#: postix/core/models/record.py:122
+#: postix/core/models/record.py:113
 msgid "Balancing"
 msgstr "Kassenabschluss"
 
-#: postix/core/models/record.py:122
+#: postix/core/models/record.py:114
 msgid "Difference"
 msgstr "Differenz"
 
-#: postix/core/models/settings.py:13
+#: postix/core/models/settings.py:15
 msgid "Short name"
 msgstr "Kurzform"
 
-#: postix/core/models/settings.py:14
+#: postix/core/models/settings.py:16
 msgid "A short name for your event."
 msgstr "Eine Kurzform des Veranstaltungsnamens"
 
-#: postix/core/models/settings.py:18
+#: postix/core/models/settings.py:20
 msgid "Support contact"
 msgstr "Support-Kontaktinfos"
 
-#: postix/core/models/settings.py:20
+#: postix/core/models/settings.py:22
 msgid ""
 "Who is flying this thing? Enter your contact information as support contact "
 "info, please."
@@ -1035,32 +1166,32 @@ msgstr ""
 "Was macht eigentlich dieser Knopf hier? Bitte gib deine Kontaktinformationen "
 "für Notfälle ein."
 
-#: postix/core/models/settings.py:22
+#: postix/core/models/settings.py:24
 msgid "Your - yes YOUR - real-time contact info, e.g. phone number."
 msgstr ""
 "Deine – ja DEINE –Echtzeitnotfallkontaktmöglichkeit. Telefonnummer wäre toll."
 
-#: postix/core/models/settings.py:25
+#: postix/core/models/settings.py:27
 msgid "Invoice address"
 msgstr "Rechnungsadresse"
 
-#: postix/core/models/settings.py:28
+#: postix/core/models/settings.py:30
 msgid "Invoice footer"
 msgstr "Rechnungsfooter"
 
-#: postix/core/models/settings.py:31
+#: postix/core/models/settings.py:33
 msgid "Receipt address"
 msgstr "Bon-Adresse"
 
-#: postix/core/models/settings.py:34
+#: postix/core/models/settings.py:36
 msgid "Receipt footer"
 msgstr "Bon-Footer"
 
-#: postix/core/models/settings.py:36
+#: postix/core/models/settings.py:38
 msgid "Thank you!"
 msgstr "Dankeschön!"
 
-#: postix/core/models/settings.py:38
+#: postix/core/models/settings.py:40
 msgid ""
 "Use this to display additional disclaimers/data not in your address, such as "
 "VAT IDs."
@@ -1068,99 +1199,103 @@ msgstr ""
 "Nutz dieses Feld, um zusätzliche Informationen abzubilden, zB die "
 "Steuernummer o.ä."
 
-#: postix/core/models/settings.py:42
+#: postix/core/models/settings.py:44
 msgid "Report footer"
 msgstr "Berichtsfooter"
 
-#: postix/core/models/settings.py:45
+#: postix/core/models/settings.py:47
 msgid "This will show up on backoffice session reports."
 msgstr "Das wird in Belegen fürs Kassenbuch auftauchen."
 
-#: postix/core/models/settings.py:49
+#: postix/core/models/settings.py:51
 msgid "c3queue.de URL"
 msgstr "c3queue.de-URL"
 
-#: postix/core/models/settings.py:51
+#: postix/core/models/settings.py:53
 msgid "The URL of the c3queue.de instance"
 msgstr "Die URL der verwendeten c3queue.de-Instanz"
 
-#: postix/core/models/settings.py:58
+#: postix/core/models/settings.py:60
 msgid "c3queue authentication token"
 msgstr "c3queue-Authentifizierungstoken"
 
-#: postix/core/templates/core/base.html:58
+#: postix/core/templates/core/base.html:56
 msgid "Session dashboard"
 msgstr "Session-Dashboard"
 
-#: postix/core/templates/core/base.html:61
+#: postix/core/templates/core/base.html:59
 msgid "List of records"
 msgstr "Kassenbuch"
 
-#: postix/core/templates/core/base.html:64
+#: postix/core/templates/core/base.html:62
 msgid "Item supply packs"
 msgstr "Vorratspakete"
 
-#: postix/core/templates/core/base.html:72
+#: postix/core/templates/core/base.html:65
+msgid "Assets"
+msgstr "Inventarobjekte"
+
+#: postix/core/templates/core/base.html:73
 msgid "Users"
 msgstr "Benutzer"
 
-#: postix/core/templates/core/base.html:77
+#: postix/core/templates/core/base.html:78
 msgid "New user"
 msgstr "Benutzer anlegen"
 
-#: postix/core/templates/core/base.html:80
+#: postix/core/templates/core/base.html:81
 msgid "User list"
 msgstr "Nutzerliste"
 
-#: postix/core/templates/core/base.html:90
+#: postix/core/templates/core/base.html:91
 msgid "Troubleshooting"
 msgstr "Troubleshooter-Ecke"
 
-#: postix/core/templates/core/base.html:95
+#: postix/core/templates/core/base.html:96
 #: postix/troubleshooter/templates/troubleshooter/main.html:5
 msgid "Current sessions"
 msgstr "Laufende Schichten"
 
-#: postix/core/templates/core/base.html:98
+#: postix/core/templates/core/base.html:99
 #: postix/troubleshooter/templates/troubleshooter/transaction_list.html:6
 msgid "Transactions"
 msgstr "Transaktionen"
 
-#: postix/core/templates/core/base.html:101
+#: postix/core/templates/core/base.html:102
 #: postix/troubleshooter/templates/troubleshooter/constraints_list.html:5
 msgid "Lists"
 msgstr "Listen"
 
-#: postix/core/templates/core/base.html:104
+#: postix/core/templates/core/base.html:105
 #: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:6
 msgid "Preorder"
 msgstr "VVK"
 
-#: postix/core/templates/core/base.html:107
+#: postix/core/templates/core/base.html:108
 msgid "Preorder Specials"
 msgstr "Vorbestellungs-Listen"
 
-#: postix/core/templates/core/base.html:110
+#: postix/core/templates/core/base.html:111
 msgid "Ping"
 msgstr "Ping"
 
-#: postix/core/templates/core/base.html:123
+#: postix/core/templates/core/base.html:124
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: postix/core/templates/core/base.html:128
+#: postix/core/templates/core/base.html:129
 msgid "General Settings"
 msgstr "Allgemeine Einstellungen"
 
-#: postix/core/templates/core/base.html:131
+#: postix/core/templates/core/base.html:132
 msgid "User Permissions"
 msgstr "Berechtigungen"
 
-#: postix/core/templates/core/base.html:134
+#: postix/core/templates/core/base.html:135
 msgid "Cashdesk list"
 msgstr "Liste von Kassen"
 
-#: postix/core/templates/core/base.html:143
+#: postix/core/templates/core/base.html:144
 msgid "Record Entities"
 msgstr "Quellen/Ziele"
 
@@ -1268,54 +1403,98 @@ msgid "For safety, you cannot execute this on sessions that contain reversals."
 msgstr ""
 "Aus Sicherheitsgründen geht dies nicht mit Sessions, die Stornos enthalten."
 
-#: postix/core/utils/printing.py:94 postix/core/utils/printing.py:95
+#: postix/core/utils/printing.py:66
+msgid "Troubleshooter log"
+msgstr "Troubleshooter-Log"
+
+#: postix/core/utils/printing.py:73
+msgid "Date: {}"
+msgstr "Datum: {}"
+
+#: postix/core/utils/printing.py:74
+msgid "Transaction number: {}"
+msgstr "Transaktionsnummer: {}"
+
+#: postix/core/utils/printing.py:75
+msgid "Cashdesk: {}"
+msgstr "Kasse: {}"
+
+#: postix/core/utils/printing.py:76
+msgid "Cashdesk session: {}"
+msgstr "Kassensession: {}"
+
+#: postix/core/utils/printing.py:77
+msgid "Cashdesk user: {}"
+msgstr "Kassen-Engel: {}"
+
+#: postix/core/utils/printing.py:79 postix/core/utils/printing.py:206
+msgid "Receipt number: {}"
+msgstr "Bonnumber: {}"
+
+#: postix/core/utils/printing.py:86
+msgid "Position type: {}"
+msgstr "Positionsart: {}"
+
+#: postix/core/utils/printing.py:87
+msgid "Product: {}"
+msgstr "Produkt: {}"
+
+#: postix/core/utils/printing.py:88
+msgid "Price: {}"
+msgstr "Preis: {}"
+
+#: postix/core/utils/printing.py:89
+msgid "Authorized by: {}"
+msgstr "Authorisiert durch: {}"
+
+#: postix/core/utils/printing.py:90
+msgid "What happened?"
+msgstr "Was ist passiert?"
+
+#: postix/core/utils/printing.py:130 postix/core/utils/printing.py:131
 #: postix/desk/templates/desk/main.html:148
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: postix/core/utils/printing.py:129
+#: postix/core/utils/printing.py:165
 msgid "Cancellation"
 msgstr "Storno-Bon"
 
-#: postix/core/utils/printing.py:131
+#: postix/core/utils/printing.py:167
 msgid "for receipt {}"
 msgstr "für Bon {}"
 
-#: postix/core/utils/printing.py:135
+#: postix/core/utils/printing.py:171
 msgid "Receipt copy"
 msgstr "Bonkopie"
 
-#: postix/core/utils/printing.py:139
+#: postix/core/utils/printing.py:175
 msgid "Ticket"
 msgstr "Ticket"
 
-#: postix/core/utils/printing.py:148
+#: postix/core/utils/printing.py:184
 msgid "Net sum:  {}"
 msgstr "Nettosumme:  {}"
 
-#: postix/core/utils/printing.py:154
+#: postix/core/utils/printing.py:190
 #, python-brace-format
 msgid "Tax {tax_rate}% ({tax_identifier}):  {tax_amount}"
 msgstr "MwSt {tax_rate}% ({tax_identifier}):  {tax_amount}"
 
-#: postix/core/utils/printing.py:161
+#: postix/core/utils/printing.py:197
 msgid "Total:  {}"
 msgstr "Summe:  {}"
 
-#: postix/core/utils/printing.py:170
-msgid "Receipt number: {}"
-msgstr "Bonnumber: {}"
-
-#: postix/core/utils/printing.py:216
+#: postix/core/utils/printing.py:262
 msgid "Attendance"
 msgstr "Anwesenheit"
 
-#: postix/core/utils/printing.py:225 postix/core/utils/printing.py:230
+#: postix/core/utils/printing.py:271 postix/core/utils/printing.py:276
 #: postix/troubleshooter/templates/troubleshooter/preorder_information.html:28
 msgid "Arrived"
 msgstr "Angekommen"
 
-#: postix/core/utils/printing.py:246 postix/core/utils/printing.py:251
+#: postix/core/utils/printing.py:292 postix/core/utils/printing.py:297
 msgid "Not arrived"
 msgstr "Nicht angekommen"
 
@@ -1660,10 +1839,6 @@ msgstr "Storno"
 msgid "No matching transactions found."
 msgstr "Keine Transaktionen gefunden."
 
-#: postix/troubleshooter/templates/troubleshooter/transaction_list.html:49
-msgid "Type"
-msgstr "Typ"
-
 #: postix/troubleshooter/templates/troubleshooter/transaction_list.html:51
 msgid "Transaction amount"
 msgstr "Transaktionsbetrag"
@@ -1714,11 +1889,11 @@ msgstr "Bon-ID muss eine natürliche Zahl sein."
 msgid "Unknown transaction."
 msgstr "Transaktion nicht bekannt."
 
-#: postix/troubleshooter/views/transactions.py:91
+#: postix/troubleshooter/views/transactions.py:95
 msgid "Receipt has been reprinted at {}."
 msgstr "Der Bon wurde an {} nachgedruckt."
 
-#: postix/troubleshooter/views/transactions.py:110
+#: postix/troubleshooter/views/transactions.py:114
 msgid "Unknwon transaction."
 msgstr "Transation nicht bekannt."
 
@@ -1733,9 +1908,6 @@ msgstr "Transation nicht bekannt."
 #~ "sessions."
 #~ msgstr ""
 #~ "Gerade sind %(money)s € als Wechselgeld an Kassen-Sessions ausgegeben."
-
-#~ msgid "Cashdesk session"
-#~ msgstr "Kassensession"
 
 #~ msgid "Add products"
 #~ msgstr "Produkte hinzufügen"

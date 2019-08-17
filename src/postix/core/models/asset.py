@@ -4,10 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 class Asset(models.Model):
     ASSET_TYPE = (
-        ('box', _('box')),
-        ('inlay', _('inlay')),
-        ('bag', _('bag')),
-        ('counting_board', _('counting_board')),
+        ('box', _('Box')),
+        ('inlay', _('Inlay')),
+        ('bag', _('Bag')),
+        ('counting_board', _('Counting board')),
     )
     identifier = models.CharField(max_length=190, unique=True)
     asset_type = models.CharField(
