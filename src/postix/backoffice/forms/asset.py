@@ -1,4 +1,5 @@
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset
 from django import forms
 
 from postix.core.models import Asset, AssetPosition
@@ -9,6 +10,14 @@ class AssetForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Fieldset(
+                None,
+                'asset_type',
+                'description',
+                'identifier'
+            )
+        )
 
     class Meta:
         model = Asset
@@ -24,6 +33,14 @@ class AssetMoveForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Fieldset(
+                None,
+                'location',
+                'comment',
+                'identifier'
+            )
+        )
 
 
 class AssetHistoryForm(forms.ModelForm):
