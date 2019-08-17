@@ -22,7 +22,8 @@ from .utils import backoffice_user_required
 from .wizard import (
     WizardCashdeskCreateView, WizardCashdeskEditView, WizardCashdesksView,
     WizardItemCreateView, WizardItemEditView, WizardItemListView,
-    WizardPretixImportView, WizardSettingsView, WizardUsersView,
+    WizardPretixImportView, WizardSettingsExportView, WizardSettingsImportView,
+    WizardSettingsView, WizardUsersView,
 )
 
 __all__ = (
@@ -68,6 +69,8 @@ __all__ = (
     'WizardItemEditView',
     'WizardItemListView',
     'WizardPretixImportView',
+    'WizardSettingsExportView',
+    'WizardSettingsImportView',
     'WizardSettingsView',
     'WizardUsersView',
 )

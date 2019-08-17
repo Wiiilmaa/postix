@@ -1,6 +1,9 @@
+import json
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from postix.core.models import (
@@ -117,3 +120,47 @@ class ItemForm(forms.ModelForm):
         for product in new_products - old_products:
             ProductItem.objects.create(product=product, item=ret, amount=1)
         return ret
+
+
+class WizardSettingsExportForm(forms.Form):
+    include_cashdesks = forms.BooleanField(required=False, label=_('Include cashdesks'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', _('Export settings')))
+        self.helper.form_action = reverse('backoffice:wizard-settings-export')
+
+
+class WizardSettingsImportForm(forms.Form):
+    include_cashdesks = forms.BooleanField(required=False, label=_('Include cashdesks'))
+    settings_file = forms.FileField(label=_('Settings file'), help_text=_('A JSON file exported from another postix event.'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', _('Import settings')))
+        self.helper.form_action = reverse('backoffice:wizard-settings-import')
+
+    def clean_settings_file(self):
+        content = json.loads(self.cleaned_data['settings_file'].read().decode())
+        if 'settings' not in content:
+            raise forms.ValidationError('Malformed settings file')
+        return content
+
+    def save(self):
+        if not self.is_valid:
+            raise Exception('Can only save a validated form.')
+        from postix.core.models import Cashdesk, EventSettings
+        import_data = self.cleaned_data['settings_file']
+        settings = EventSettings.get_solo()
+        settings.loaddata(import_data.get('settings', {}))
+        if self.cleaned_data['include_cashdesks']:
+            for cashdesk_data in import_data.get('cashdesks', []):
+                cashdesk = Cashdesk.objects.filter(name__iexact=cashdesk_data['name']).first() or Cashdesk()
+                cashdesk.loaddata(cashdesk_data)
+
+    def widget_attrs(self, widget):
+        attrs = super().widget_attrs(widget)
+        attrs['accept'] = 'text/*'
+        return attrs

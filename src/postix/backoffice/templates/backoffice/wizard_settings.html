@@ -5,4 +5,16 @@
 
 {% block headline %} {% trans "General settings" %} {% endblock %}
 
-{% block content %}{% crispy form %}{% endblock %}
+{% block content %}
+
+{% crispy form %}
+
+<h3>{% trans "Settings Export" %}</h3>
+
+{% crispy export_form %}
+
+<h3>{% trans "Settings Import" %}</h3>
+
+{% crispy import_form %}
+
+{% endblock %}

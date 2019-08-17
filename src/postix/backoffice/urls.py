@@ -47,6 +47,8 @@ urlpatterns = [
     # These are called 'wizard' cause they're only for wizards (erm, superusers)
     url('^wizard/users/$', views.WizardUsersView.as_view(), name='wizard-users'),
     url('^wizard/settings/$', views.WizardSettingsView.as_view(), name='wizard-settings'),
+    url('^wizard/settings/export$', views.WizardSettingsExportView.as_view(), name='wizard-settings-export'),
+    url('^wizard/settings/import$', views.WizardSettingsImportView.as_view(), name='wizard-settings-import'),
     url('^wizard/cashdesks/$', views.WizardCashdesksView.as_view(), name='wizard-cashdesks'),
     url('^wizard/cashdesks/new$', views.WizardCashdeskCreateView.as_view(), name='wizard-cashdesk-create'),
     url('^wizard/cashdesks/(?P<pk>[0-9]+)/$', views.WizardCashdeskEditView.as_view(), name='wizard-cashdesk-edit'),

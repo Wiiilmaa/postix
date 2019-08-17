@@ -4,6 +4,7 @@ from solo.models import SingletonModel
 
 from postix.core.mixins import Exportable
 
+
 class EventSettings(Exportable, SingletonModel):
     name = models.CharField(
         max_length=100, default='Generic Event', verbose_name=_('Name')

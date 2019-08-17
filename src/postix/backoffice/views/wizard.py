@@ -1,11 +1,16 @@
+import json
+
 from django.contrib import messages
+from django.http import FileResponse
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView, ListView, TemplateView, UpdateView
 
 from postix.backoffice.forms import (
     CashdeskForm, EventSettingsForm, ImportForm, ItemForm,
+    WizardSettingsExportForm, WizardSettingsImportForm,
 )
 from postix.backoffice.views.utils import SuperuserRequiredMixin
 from postix.core.models import Cashdesk, EventSettings, Item, Product, User
@@ -27,6 +32,12 @@ class WizardSettingsView(SuperuserRequiredMixin, FormView):
         attrs = {attr: getattr(settings, attr) for attr in EventSettingsForm().fields}
         attrs.update({'initialized': True})
         return attrs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['import_form'] = WizardSettingsImportForm(prefix='import')
+        context['export_form'] = WizardSettingsExportForm(prefix='export')
+        return context
 
     def get_success_url(self):
         return reverse('backoffice:wizard-settings')
@@ -160,3 +171,53 @@ class WizardItemEditView(SuperuserRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('backoffice:wizard-items-list')
+
+
+class WizardSettingsExportView(SuperuserRequiredMixin, FormView):
+    form_class = WizardSettingsExportForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['prefix'] = 'export'
+        return kwargs
+
+    def form_valid(self, form):
+        settings = EventSettings.get_solo()
+        content = json.dumps({
+            'settings': settings.data,
+            'cashdesks': [
+                cashdesk.data for cashdesk in Cashdesk.objects.all()
+            ] if form.cleaned_data['include_cashdesks'] else [],
+        })
+        filename = settings.short_name + '_' + now().strftime('%Y-%m-%d-%H-%M') + '_postix.json'
+        response = FileResponse(content)
+        # Auto detection doesn't work with plain text content, so we set the headers ourselves
+        response['Content-Type'] = 'text/json'
+        response['Content-Length'] = len(content)
+        response['Content-Disposition'] = 'attachment; filename="' + filename + '"'
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return redirect('backoffice:wizard-settings')
+
+
+class WizardSettingsImportView(SuperuserRequiredMixin, FormView):
+    form_class = WizardSettingsImportForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['prefix'] = 'import'
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, _('The settings have been imported, please double-check them.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return redirect('backoffice:wizard-settings')
+
+    def get_success_url(self):
+        return reverse('backoffice:wizard-settings')

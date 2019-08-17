@@ -3,7 +3,10 @@ from .session import (
     get_form_and_formset,
 )
 from .user import CreateUserForm, ResetPasswordForm, get_normal_user_form
-from .wizard import CashdeskForm, EventSettingsForm, ImportForm, ItemForm
+from .wizard import (
+    CashdeskForm, EventSettingsForm, ImportForm, ItemForm,
+    WizardSettingsExportForm, WizardSettingsImportForm,
+)
 
 __all__ = [
     'CashdeskForm',
@@ -17,4 +20,6 @@ __all__ = [
     'ItemMovementFormSetHelper',
     'ResetPasswordForm',
     'SessionBaseForm',
+    'WizardSettingsExportForm',
+    'WizardSettingsImportForm',
 ]
