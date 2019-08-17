@@ -10,6 +10,7 @@ from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
+from ..mixins import Exportable
 from ..utils import devices
 from ..utils.printing import CashdeskPrinter, DummyPrinter
 from .base import Item, Product, TransactionPosition, TransactionPositionItem
@@ -19,7 +20,7 @@ def generate_key() -> str:
     return get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)
 
 
-class Cashdesk(models.Model):
+class Cashdesk(Exportable, models.Model):
     name = models.CharField(max_length=254)
     record_name = models.CharField(
         max_length=200,

@@ -2,8 +2,9 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from solo.models import SingletonModel
 
+from postix.core.mixins import Exportable
 
-class EventSettings(SingletonModel):
+class EventSettings(Exportable, SingletonModel):
     name = models.CharField(
         max_length=100, default='Generic Event', verbose_name=_('Name')
     )
