@@ -51,7 +51,7 @@
                             {% trans "Backoffice" %}
                         </a>
                     </span>
-                    <div class="{% if "backoffice" in url_namespace and "wizard" not in url_name %} show{% endif %}" aria-expand="true">
+                    <div class="{% if "backoffice" in url_namespace and "wizard" not in url_name and "user" not in url_name %} show{% endif %}" aria-expand="true">
                         <a class="nav-link nav-link-second-level" href="{% url "backoffice:session-list" %}">
                             {% trans "Session dashboard" %}
                         </a>
