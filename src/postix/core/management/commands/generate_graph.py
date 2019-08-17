@@ -38,6 +38,7 @@ class Command(BaseCommand):
         tz = get_current_timezone()
         sessions = (
             CashdeskSession.objects.exclude(cashdesk__name__icontains="handkasse")
+            .exclude(cashdesk__handles_items=False)
             .exclude(
                 id__in=[int(a) for a in kwargs.get('ignore_sessions', '').split(',')]
             )
@@ -96,6 +97,6 @@ class Command(BaseCommand):
         axs[1, 0].set_ylabel(u'Number of Transactions per 30 minutes')
         axs[2, 0].set_xlabel(u'Time of day')
         fig.tight_layout()
-        fig.suptitle('Cashdesk transactions 34c3')
+        fig.suptitle('Cashdesk transactions 35c3')
         plt.savefig('transactions.svg')
         plt.savefig('transactions.png')
