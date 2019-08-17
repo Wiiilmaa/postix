@@ -16,7 +16,7 @@ class Asset(models.Model):
     )
     description = models.CharField(max_length=190)
     created = models.DateTimeField(auto_now_add=True)
-    last_seen = models.DateTimeField()
+    last_seen = models.DateTimeField(auto_now=True)
 
     def get_current_position(self):
         return self.positions.filter(end__isnull=True).order_by('start').first()
