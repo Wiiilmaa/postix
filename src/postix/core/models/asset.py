@@ -9,12 +9,13 @@ class Asset(models.Model):
         ('bag', _('Bag')),
         ('counting_board', _('Counting board')),
     )
-    identifier = models.CharField(max_length=190, unique=True)
+    identifier = models.CharField(max_length=190, unique=True, verbose_name=_('QR code'))
     asset_type = models.CharField(
         max_length=190,
-        choices=ASSET_TYPE
+        choices=ASSET_TYPE,
+        verbose_name=_('Type')
     )
-    description = models.CharField(max_length=190)
+    description = models.CharField(max_length=190, verbose_name=_('Description'))
     created = models.DateTimeField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
 

@@ -1,6 +1,7 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Fieldset, Layout
+from crispy_forms.layout import Layout
 from django import forms
+from django.utils.translation import ugettext as _
 
 from postix.core.models import Asset, AssetPosition
 
@@ -11,12 +12,9 @@ class AssetForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.layout = Layout(
-            Fieldset(
-                None,
-                'asset_type',
-                'description',
-                'identifier'
-            )
+            'asset_type',
+            'description',
+            'identifier'
         )
 
     class Meta:
@@ -25,21 +23,18 @@ class AssetForm(forms.ModelForm):
 
 
 class AssetMoveForm(forms.Form):
-    identifier = forms.CharField(label='identifier', max_length=190, required=True)
-    location = forms.CharField(label='location', max_length=190, required=False)
-    comment = forms.CharField(label='comment', max_length=190, required=False)
+    identifier = forms.CharField(label=_('QR code'), max_length=190, required=True)
+    location = forms.CharField(label=_('Location'), max_length=190, required=False)
+    comment = forms.CharField(label=_('Comment'), max_length=190, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.layout = Layout(
-            Fieldset(
-                None,
-                'location',
-                'comment',
-                'identifier'
-            )
+            'location',
+            'comment',
+            'identifier'
         )
 
 

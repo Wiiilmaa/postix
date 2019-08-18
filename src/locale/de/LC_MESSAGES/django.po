@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-17 11:52+0200\n"
+"POT-Creation-Date: 2019-08-18 15:29+0200\n"
 "PO-Revision-Date: 2019-08-17 11:52+0200\n"
 "Last-Translator: Tobias Kunze <r@rixx.de>\n"
 "Language-Team: \n"
@@ -71,6 +71,21 @@ msgid ""
 msgstr ""
 "Du hast manche Produkte mit einem Steuersatz eingestellt, aber bei den "
 "folgenden Produkten beträgt der Steuersatz 0%: {products}"
+
+#: postix/backoffice/forms/asset.py:26 postix/core/models/asset.py:12
+msgid "QR code"
+msgstr "QR code"
+
+#: postix/backoffice/forms/asset.py:27
+#: postix/backoffice/templates/backoffice/asset_history.html:13
+#: postix/backoffice/templates/backoffice/asset_list.html:18
+msgid "Location"
+msgstr "Ort"
+
+#: postix/backoffice/forms/asset.py:28
+#: postix/backoffice/templates/backoffice/asset_history.html:14
+msgid "Comment"
+msgstr "Kommentar"
 
 #: postix/backoffice/forms/record.py:17 postix/backoffice/forms/record.py:56
 #: postix/backoffice/forms/session.py:39
@@ -238,6 +253,7 @@ msgstr "Zurück"
 
 #: postix/backoffice/templates/backoffice/asset_history.html:10
 #: postix/backoffice/templates/backoffice/asset_list.html:16
+#: postix/core/models/asset.py:18
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -255,15 +271,6 @@ msgstr "Beginn"
 #: postix/backoffice/templates/backoffice/session_list.html:58
 msgid "End"
 msgstr "Ende"
-
-#: postix/backoffice/templates/backoffice/asset_history.html:13
-#: postix/backoffice/templates/backoffice/asset_list.html:18
-msgid "Location"
-msgstr "Ort"
-
-#: postix/backoffice/templates/backoffice/asset_history.html:14
-msgid "Comment"
-msgstr "Kommentar"
 
 #: postix/backoffice/templates/backoffice/asset_history.html:39
 #: postix/backoffice/templates/backoffice/asset_list.html:46
@@ -285,6 +292,7 @@ msgid "Movement history"
 msgstr "Verlauf"
 
 #: postix/backoffice/templates/backoffice/asset_list.html:17
+#: postix/core/models/asset.py:16
 #: postix/troubleshooter/templates/troubleshooter/transaction_list.html:49
 msgid "Type"
 msgstr "Typ"
@@ -485,46 +493,52 @@ msgstr "Session verschieben"
 msgid "Create asset"
 msgstr "Inventarobjekt anlegen"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:18
+#: postix/backoffice/templates/backoffice/new_balance.html:19
 #: postix/backoffice/templates/backoffice/record_list.html:18
 #: postix/backoffice/templates/backoffice/session_list.html:13
 msgid "Balance records"
 msgstr "Kassenabschluss"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:23
-#: postix/backoffice/templates/backoffice/new_balance.html:97
+#: postix/backoffice/templates/backoffice/new_balance.html:24
+#: postix/backoffice/templates/backoffice/new_balance.html:99
 msgid "Bills (machine-counted)"
 msgstr "Scheine (maschinengezählt)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:32
-#: postix/backoffice/templates/backoffice/new_balance.html:117
+#: postix/backoffice/templates/backoffice/new_balance.html:33
+#: postix/backoffice/templates/backoffice/new_balance.html:119
 msgid "Bills (bundles)"
 msgstr "Scheine (Bündel)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:41
-#: postix/backoffice/templates/backoffice/new_balance.html:107
+#: postix/backoffice/templates/backoffice/new_balance.html:42
+#: postix/backoffice/templates/backoffice/new_balance.html:109
 msgid "Bills (manually)"
 msgstr "Scheine (manuell)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:50
-#: postix/backoffice/templates/backoffice/new_balance.html:87
+#: postix/backoffice/templates/backoffice/new_balance.html:51
+#: postix/backoffice/templates/backoffice/new_balance.html:89
 msgid "Coins (machine-counted)"
 msgstr "Münzen (maschinengezählt)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:60
-#: postix/backoffice/templates/backoffice/new_balance.html:77
+#: postix/backoffice/templates/backoffice/new_balance.html:61
+#: postix/backoffice/templates/backoffice/new_balance.html:79
 msgid "Coins (rolls)"
 msgstr "Münzen (gerollt)"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:69
+#: postix/backoffice/templates/backoffice/new_balance.html:70
 msgid "Expected:"
 msgstr "Erwartet:"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:70
+#: postix/backoffice/templates/backoffice/new_balance.html:71
 msgid "Actual:"
 msgstr "Tatsächlich:"
 
-#: postix/backoffice/templates/backoffice/new_balance.html:71
+#: postix/backoffice/templates/backoffice/new_balance.html:72
+#, fuzzy
+#| msgid "Difference"
+msgid "Difference:"
+msgstr "Differenz:"
+
+#: postix/backoffice/templates/backoffice/new_balance.html:73
 msgid "Irreversibly balance records"
 msgstr "Unwiderruflich Ausgleich buchen"
 
@@ -1108,7 +1122,7 @@ msgid "Session has already been finalized and the record is locked."
 msgstr ""
 "Die Session wurde bereits beendet und kann nicht mehr bearbeitet werden."
 
-#: postix/core/models/preorder.py:60 postix/core/utils/flow.py:90
+#: postix/core/models/preorder.py:66 postix/core/utils/flow.py:102
 #, python-brace-format
 msgid "This ticket ({secret}…) has already been redeemed at {datetime}."
 msgstr "Dieses Ticket ({secret}…) wurde bereits eingelöst ({datetime})."
@@ -1320,85 +1334,91 @@ msgid "No ticket could be found with the given secret."
 msgstr "Kein Ticket für diesen Code gefunden."
 
 #: postix/core/utils/flow.py:77
+#, fuzzy
+#| msgid "This ticket has not been paid for."
+msgid "This ticket has been canceled or is expired."
+msgstr "Dieses Ticket wurde storniert oder ist abgelaufen."
+
+#: postix/core/utils/flow.py:85
 msgid "This ticket has not been paid for."
 msgstr "Dieses Ticket wurde nicht bezahlt."
 
-#: postix/core/utils/flow.py:80
+#: postix/core/utils/flow.py:92
 msgid "This product is currently not available."
 msgstr "Dieses Produkt ist im Moment nicht verfügbar."
 
-#: postix/core/utils/flow.py:126
+#: postix/core/utils/flow.py:138
 msgid "Multiple upgrades with different tax rates are not supported."
 msgstr ""
 "Upgrades innerhalb einer Bestellung müssen den gleichen Steuersatz haben."
 
-#: postix/core/utils/flow.py:133 postix/core/utils/flow.py:229
+#: postix/core/utils/flow.py:145 postix/core/utils/flow.py:241
 msgid "This ticket can only redeemed by persons on the list \"{}\"."
 msgstr ""
 "Dieses Ticket kann nur von Personen auf der Liste \"{}\" eingelöst werden."
 
-#: postix/core/utils/flow.py:148 postix/core/utils/flow.py:244
+#: postix/core/utils/flow.py:160 postix/core/utils/flow.py:256
 msgid "This list entry has already been used."
 msgstr "Dieser Listeneintrag wurde bereits abgehakt."
 
-#: postix/core/utils/flow.py:157 postix/core/utils/flow.py:252
+#: postix/core/utils/flow.py:169 postix/core/utils/flow.py:264
 msgid "This entry could not be found in list \"{}\"."
 msgstr "Dieser Eintrag konnte auf der Liste \"{}\" nicht gefunden werden."
 
-#: postix/core/utils/flow.py:193
+#: postix/core/utils/flow.py:205
 msgid "No product given."
 msgstr "Kein Produkt übergeben."
 
-#: postix/core/utils/flow.py:198
+#: postix/core/utils/flow.py:210
 msgid "This product ID is not known."
 msgstr "Unbekannte Produkt-ID."
 
-#: postix/core/utils/flow.py:201
+#: postix/core/utils/flow.py:213
 msgid "This product is currently unavailable or sold out."
 msgstr "Dieses Produkt ist im Moment nicht verfügbar oder ausverkauft."
 
-#: postix/core/utils/flow.py:211
+#: postix/core/utils/flow.py:223
 msgid "This sale requires authorization by a troubleshooter."
 msgstr "Diese Transaktion erfordert Authorisierung durch einen Troubleshooter."
 
-#: postix/core/utils/flow.py:277
+#: postix/core/utils/flow.py:289
 msgid "Transaction ID not known."
 msgstr "Unbekannte Transaktions-ID."
 
-#: postix/core/utils/flow.py:280 postix/core/utils/flow.py:329
+#: postix/core/utils/flow.py:292 postix/core/utils/flow.py:341
 msgid "You need to provide an active session."
 msgstr "Du musst eine aktive Session angeben."
 
-#: postix/core/utils/flow.py:286 postix/core/utils/flow.py:335
+#: postix/core/utils/flow.py:298 postix/core/utils/flow.py:347
 msgid "Only troubleshooters can reverse sales from other sessions."
 msgstr ""
 "Nur Troubleshooter können Transaktionen aus anderen Sitzungen stornieren."
 
-#: postix/core/utils/flow.py:291
+#: postix/core/utils/flow.py:303
 msgid "At least one position of this transaction has already been reversed."
 msgstr "Mindestens ein Teil dieser Transaktion wurde bereits storniert."
 
-#: postix/core/utils/flow.py:294
+#: postix/core/utils/flow.py:306
 msgid "At least one position of this transaction is a reversal."
 msgstr "Mindestens ein Teil dieser Transaktion ist eine Stornierung."
 
-#: postix/core/utils/flow.py:326
+#: postix/core/utils/flow.py:338
 msgid "Transaction position ID not known."
 msgstr "Unbekannte Positions-ID."
 
-#: postix/core/utils/flow.py:339
+#: postix/core/utils/flow.py:351
 msgid "This position has already been reversed."
 msgstr "Diese Position wurde bereits storniert."
 
-#: postix/core/utils/flow.py:341
+#: postix/core/utils/flow.py:353
 msgid "This position is already a reversal."
 msgstr "Diese Position ist eine Stornierung."
 
-#: postix/core/utils/flow.py:370
+#: postix/core/utils/flow.py:382
 msgid "The session needs to be still active."
 msgstr "Die Session muss noch aktiv sein."
 
-#: postix/core/utils/flow.py:376
+#: postix/core/utils/flow.py:388
 msgid "For safety, you cannot execute this on sessions that contain reversals."
 msgstr ""
 "Aus Sicherheitsgründen geht dies nicht mit Sessions, die Stornos enthalten."
@@ -1682,7 +1702,7 @@ msgid "Filter"
 msgstr "Filter"
 
 #: postix/troubleshooter/templates/troubleshooter/constraint_detail.html:39
-#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:30
+#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:32
 msgid "redeemed"
 msgstr "eingelöst"
 
@@ -1753,19 +1773,26 @@ msgstr ""
 "früher oder später Schichten auftauchen."
 
 #: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:8
+#: postix/troubleshooter/templates/troubleshooter/preorders.html:39
+#, fuzzy
+#| msgid "canceled"
+msgid "Canceled"
+msgstr "Storniert"
+
+#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:10
 #: postix/troubleshooter/templates/troubleshooter/preorders.html:27
 msgid "Paid"
 msgstr "Bezahlt"
 
-#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:10
+#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:12
 msgid "Unpaid"
 msgstr "Ausstehend"
 
-#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:32
+#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:34
 msgid "not redeemed"
 msgstr "nicht eingelöst"
 
-#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:41
+#: postix/troubleshooter/templates/troubleshooter/preorder_detail.html:43
 msgid "Click on one of the secrets to get a QR code for it:"
 msgstr "Klick auf das Secret, um den zugehörigen QR-Code anzuzeigen:"
 
