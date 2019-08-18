@@ -48,13 +48,23 @@ var calculateTotal = function() {
     };
     return runningTotal.toFixed(2)
 };
+var calculateDifference = function() {
+    var difference = 0;
+    var expected = Number(document.querySelector("#balance-expected").getAttribute("data-value"));
+    var actual = calculateTotal();
+
+    difference = actual - expected;
+
+    return difference.toFixed(2);
+};
 for (var element of document.querySelectorAll("#balance-form input")) {
     element.addEventListener("input", function() {
-	document.querySelector("#calculator-result").textContent = calculateTotal()
-
+	document.querySelector("#calculator-result").textContent = calculateTotal();
+    document.querySelector("#calculator-difference-result").textContent = calculateDifference();
     }, false)
 };
 document.querySelector("#calculator-result").textContent = calculateTotal();
+document.querySelector("#calculator-difference-result").textContent = calculateDifference();
 
 document.querySelector('#id_coins_bulk-TOTAL_FORMS').value = 1;
 document.querySelector('#id_coins_automated-TOTAL_FORMS').value = 1;
@@ -74,6 +84,7 @@ for (var element of document.querySelectorAll("a.add-form")) {
 	for (var innerElement of document.querySelectorAll("#balance-form .balance-card." + title + " input")) {
 	    innerElement.addEventListener("input", function() {
 		document.querySelector("#calculator-result").textContent = calculateTotal();
+		document.querySelector("#calculator-difference-result").textContent = calculateDifference();
 	    }, false)
 	}
     })

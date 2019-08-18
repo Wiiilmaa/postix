@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
+{% load dotdecimal %}
 
 {% block page_override %} full-width{% endblock %}
 {% block stylesheets %}
@@ -66,8 +67,9 @@
 	</div>
     </div>
     <div class="submit-row">
-	<div id="balance-expected" class="btn" data-value="{{ balance }}">{% trans "Expected:" %} {{ balance }} €</div>
+	<div id="balance-expected" class="btn" data-value="{{ balance|dotdecimal }}">{% trans "Expected:" %} {{ balance }} €</div>
 	<div id="balance-current" class="btn">{% trans "Actual:" %} <span id="calculator-result"></span> €</div>
+    <div id="balance-difference" class="btn">{% trans "Difference:" %} <span id="calculator-difference-result"></span> €</div>
 	<button type="submit" class="btn btn-primary">{% trans "Irreversibly balance records" %}</button>
     </div>
 </form>
