@@ -125,7 +125,10 @@ class Record(models.Model):
                 )
             else:
                 entity = 'Kassensession'
-                entity_detail = '#' + str(self.cash_movement.session.pk)
+                entity_detail = (
+                     self.cash_movement.session.cashdesk.name
+                     + ' (#{})'.format(self.cash_movement.session.pk)
+                )
         elif self.entity:
             entity = self.entity.name
             entity_detail = self.entity.detail
