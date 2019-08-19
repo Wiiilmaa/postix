@@ -370,7 +370,7 @@ class EndSessionView(LoginRequiredMixin, BackofficeUserRequiredMixin, TemplateVi
         messages.error(
             request, _('Session could not be ended: Please review the data.')
         )
-        return super().post(request, pk)
+        return super().get(request, pk)
 
 
 @backoffice_user_required
