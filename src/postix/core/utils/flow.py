@@ -210,7 +210,17 @@ def sell_ticket(**kwargs) -> TransactionPosition:
         raise FlowError(_('This product ID is not known.'))
 
     if not product.is_available:
-        raise FlowError(_('This product is currently unavailable or sold out.'))
+        auth = kwargs.get('auth', '!invalid')
+        try:
+            pos.authorized_by = User.objects.get(
+                is_troubleshooter=True, auth_token=auth
+            )
+        except User.DoesNotExist:
+            raise FlowError(
+                _('This product is currently unavailable or sold out.'),
+                type='input',
+                missing_field='auth',
+            )
 
     if product.requires_authorization:
         auth = kwargs.get('auth', '!invalid')

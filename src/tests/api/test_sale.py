@@ -103,17 +103,23 @@ def test_sell_list_constraint_used(api_with_session):
 
 
 @pytest.mark.django_db
-def test_sell_quota_failed(api_with_session):
+def test_sell_quota_failed_allow_override(api_with_session):
     p = product_factory()
     q = quota_factory(size=0)
     q.products.add(p)
     assert help_test_for_error(api_with_session, p) == {
         'success': False,
         'message': 'This product is currently unavailable or sold out.',
-        'type': 'error',
-        'missing_field': None,
+        'type': 'input',
+        'missing_field': 'auth',
         'bypass_price': None,
     }
+    u = user_factory(troubleshooter=True)
+    req = {'positions': [{'type': 'sell', 'product': p.id, 'auth': u.auth_token}]}
+    response = api_with_session.post('/api/transactions/', req, format='json')
+    assert response.status_code == 201
+    j = json.loads(response.content.decode())
+    assert j['success']
 
 
 @pytest.mark.django_db
