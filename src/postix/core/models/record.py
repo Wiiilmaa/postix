@@ -141,6 +141,16 @@ class Record(models.Model):
             'amount': '{0:,.2f}'.format(self.amount).translate(
                 str.maketrans(',.', '.,')
             ),
+            'cashdesk_session': (
+                self.cash_movement.session.pk
+                if self.cash_movement and self.cash_movement.session
+                else None
+            ),
+            'cashdesk_session': (
+                self.cash_movement.session.pk
+                if self.cash_movement and self.cash_movement.session
+                else None
+            ),
             'entity': entity,
             'entity_detail': entity_detail,
             'supervisor': (

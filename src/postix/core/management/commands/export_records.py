@@ -17,6 +17,7 @@ class Command(BaseCommand):
             ('amount', 'Betrag'),
             ('entity', 'Quelle/Ziel'),
             ('entity_detail', 'Detail'),
+            ('cashdesk_session', 'Kassensession'),
             ('supervisor', 'Person'),
             ('user', 'Einlieferer/Empfänger'),
             ('checksum', 'Prüfsumme'),
