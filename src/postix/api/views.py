@@ -5,7 +5,7 @@ from django.db.models import Q, QuerySet
 from django.http import HttpRequest
 from django.utils.translation import ugettext as _
 from rest_framework import status
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -170,7 +170,7 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             # Break out of atomic transaction so everything gets rolled back!
             raise ProcessException(response)
 
-    @detail_route(methods=["POST"])
+    @action(methods=["POST"], detail=True)
     def reverse(self, *args, **kwargs) -> Response:
         session = self.request.user.get_current_session()
         if not session:  # noqa
@@ -237,7 +237,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
     serializer_class = ListConstraintEntrySerializer
     queryset = Cashdesk.objects.none()
 
-    @list_route(methods=["POST"], url_path='open-drawer')
+    @action(detail=False, methods=["POST"], url_path='open-drawer')
     def open_drawer(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
@@ -247,7 +247,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
         session.cashdesk.printer.open_drawer()
         return Response({'success': True})
 
-    @list_route(methods=["POST"], url_path='reprint-receipt')
+    @action(detail=False, methods=["POST"], url_path='reprint-receipt')
     def reprint_receipt(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
@@ -265,7 +265,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-    @list_route(methods=["POST"], url_path='request-resupply')
+    @action(detail=False, methods=["POST"], url_path='request-resupply')
     def request_resupply(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
@@ -276,7 +276,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
         session.request_resupply()
         return Response({'success': True})
 
-    @list_route(methods=["POST"], url_path='signal-next')
+    @action(detail=False, methods=["POST"], url_path='signal-next')
     def signal_next(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
@@ -287,7 +287,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
         session.cashdesk.signal_next()
         return Response({'success': True})
 
-    @list_route(methods=["POST"], url_path='print-ping')
+    @action(detail=False, methods=["POST"], url_path='print-ping')
     def print_ping(self, request: HttpRequest) -> Response:
         session = request.user.get_current_session()
         if not session:  # noqa
@@ -298,7 +298,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
         generate_ping(session.cashdesk)
         return Response({'success': True})
 
-    @list_route(methods=["POST"], url_path='pong')
+    @action(detail=False, methods=["POST"], url_path='pong')
     def pong(self, request: HttpRequest) -> Response:
         try:
             ping = Ping.objects.get(secret=request.data.get('pong'))
@@ -308,7 +308,7 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
 
         return Response({'success': True})
 
-    @list_route(methods=["POST"], url_path='supply')
+    @action(detail=False, methods=["POST"], url_path='supply')
     def supply(self, request: HttpRequest) -> Response:
         try:
             isp = ItemSupplyPack.objects.get(
@@ -375,7 +375,7 @@ class PingViewSet(ReadOnlyModelViewSet):
             queryset = queryset.filter(synced=(synced_param in ('True', 'true', '1')))
         return queryset
 
-    @detail_route(methods=["POST"])
+    @action(methods=["POST"], detail=True)
     def mark_synced(self, *args, **kwargs) -> Response:
         obj = self.get_object()
         obj.synced = True
