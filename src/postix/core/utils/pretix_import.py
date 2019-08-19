@@ -24,28 +24,38 @@ def _build_product_dict(data, log, style):
     for item in data['items']:
         if item['variations']:
             for var in item['variations']:
+                variation_name = '{}-{}'.format(item['id'], var['id'])
+                product_name = '{} - {}'.format(item['name'], var['name'])
                 try:
-                    product = Product.objects.get(import_source_id='{}-{}'.format(item['id'], var['id']))
+                    product = Product.objects.get(import_source_id=variation_name)
+                    if not product.name == product_name:
+                        product.name = product_name
+                        product.save()
                     loaded_items += 1
                 except Product.DoesNotExist:
-                    product = Product(import_source_id='{}-{}'.format(item['id'], var['id']))
-                    product.price = Decimal(var['price'])
-                    product.tax_rate = Decimal(item['tax_rate'])
+                    product = Product.objects.create(
+                        name=product_name,
+                        import_source_id=variation_name,
+                        price=Decimal(var['price']),
+                        tax_rate=Decimal(item['tax_rate']),
+                    )
                     created_items += 1
-                product.name = '{} - {}'.format(item['name'], var['name'])
-                product.save()
                 product_dict[item['id'], var['id']] = product
         else:
             try:
                 product = Product.objects.get(import_source_id=item['id'])
+                if not product.name == item['name']:
+                    product.name = item['name']
+                    product.save()
                 loaded_items += 1
             except Product.DoesNotExist:
-                product = Product(import_source_id=item['id'])
-                product.price = Decimal(item['price'])
-                product.tax_rate = Decimal(item['tax_rate'])
+                product = Product.objects.create(
+                    import_source_id=item['id'],
+                    name=item['name'],
+                    price=Decimal(item['price']),
+                    tax_rate=Decimal(item['tax_rate']),
+                )
                 created_items += 1
-            product.name = item['name']
-            product.save()
             product_dict[item['id'], None] = product
 
     log.write(
