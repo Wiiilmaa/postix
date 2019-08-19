@@ -57,14 +57,17 @@ var calculateDifference = function() {
 
     return difference.toFixed(2);
 };
+var decimal_separator = (
+  document.querySelector("#balance-expected").textContent.indexOf(",") > 0 ? "," : "."
+);
 for (var element of document.querySelectorAll("#balance-form input")) {
-    element.addEventListener("input", function() {
-	document.querySelector("#calculator-result").textContent = calculateTotal();
-    document.querySelector("#calculator-difference-result").textContent = calculateDifference();
-    }, false)
+  element.addEventListener("input", function() {
+    document.querySelector("#calculator-result").textContent = calculateTotal().replace(".", decimal_separator);
+    document.querySelector("#calculator-difference-result").textContent = calculateDifference().replace(".", decimal_separator);
+  }, false)
 };
-document.querySelector("#calculator-result").textContent = calculateTotal();
-document.querySelector("#calculator-difference-result").textContent = calculateDifference();
+document.querySelector("#calculator-result").textContent = calculateTotal().replace(".", decimal_separator);
+document.querySelector("#calculator-difference-result").textContent = calculateDifference().replace(".", decimal_separator);
 
 document.querySelector('#id_coins_bulk-TOTAL_FORMS').value = 1;
 document.querySelector('#id_coins_automated-TOTAL_FORMS').value = 1;

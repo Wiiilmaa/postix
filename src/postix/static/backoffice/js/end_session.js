@@ -2,29 +2,32 @@ var table_body = $('#session-items_table tbody');
 
 var get_difference = function(numberinput) {
 	var row = $(numberinput).closest("tr");
-    var after = parseFloat($(numberinput).val().replace(",", ".")) || 0;
-    var before = parseFloat(row.find(".before-value").text().replace(",", "."));
+  var after = parseFloat($(numberinput).val().replace(",", ".")) || 0;
+  var before = parseFloat(row.find(".before-value").text().replace(",", "."));
 	var transaction = parseFloat(row.find(".transaction-value").text().replace(",", "."));
-    var end = parseFloat(row.find(".end-column").text().replace(",", ".")) || 0;
-    var difference;
+  var end = parseFloat(row.find(".end-column").text().replace(",", ".")) || 0;
+  var difference;
+  var decimal_separator = (
+    row.find(".before-value").text().indexOf(",") > 0 ? "," : "."
+  );
 
-    if (row[0].id === 'cash') {
-        difference = before + transaction - after;
-        difference = difference.toFixed(2);
-    } else {
-        difference = before - transaction - after;
-        difference = difference.toFixed(0);
-    }
+  if (row[0].id === 'cash') {
+    difference = before + transaction - after;
+    difference = difference.toFixed(2).replace(".", decimal_separator);
+  } else {
+    difference = before - transaction - after;
+    difference = difference.toFixed(0);
+  }
 
 	result_cell = row.find(".after-value");
 	result_cell.html(difference);
 	if (difference != 0) {
 		result_cell.addClass("danger");
 		result_cell.removeClass("success");
-    } else {
+  } else {
 		result_cell.removeClass("danger");
 		result_cell.addClass("success");
-    }
+  }
 }
 
 $('.numberinput, .calculatorwidget').on('keyup', function() {
