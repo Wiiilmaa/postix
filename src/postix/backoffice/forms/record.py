@@ -146,3 +146,11 @@ class CoinBulkForm(forms.Form):
         for coin, amount in self.cleaned_data.items():
             total += int(coin.rsplit('_', maxsplit=1)[-1]) * (amount or 0)
         return total / 100
+
+
+class RecordSearchForm(forms.Form):
+    date_min = forms.DateTimeField(required=False, label=_('Start date'))
+    date_max = forms.DateTimeField(required=False, label=_('End date'))
+    source = forms.CharField(max_length=254, label=_('Source'), required=False)
+    user = forms.CharField(max_length=254, label=_('User'), required=False)
+    carrier = forms.CharField(max_length=254, label=_('Carrier'), required=False)

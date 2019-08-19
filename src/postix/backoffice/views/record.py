@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.files.storage import default_storage
 from django.db import transaction
+from django.db.models import Q
 from django.forms import formset_factory
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -19,7 +20,7 @@ from django.views.generic import (
 
 from postix.backoffice.forms.record import (
     BillBulkForm, BillForm, CoinBulkForm, CoinForm, RecordCreateForm,
-    RecordEntityForm, RecordUpdateForm,
+    RecordEntityForm, RecordSearchForm, RecordUpdateForm,
 )
 from postix.backoffice.report import generate_record
 from postix.core.models.record import Record, RecordEntity, record_balance
@@ -38,6 +39,11 @@ class RecordListView(BackofficeUserRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
+
+        ctx['filter_form'] = RecordSearchForm(
+            data=self.request.GET
+        )
+
         records = Record.objects.prefetch_related(
             # prefetch_related should save some RAM and bandwith over select_related since we expect a small set of
             # objects to show up a large number of times
@@ -45,6 +51,29 @@ class RecordListView(BackofficeUserRequiredMixin, TemplateView):
         ).select_related(
             'cash_movement', 'cash_movement__session', 'cash_movement__session__cashdesk', 'cash_movement__session__user'
         )
+        if ctx['filter_form'].is_valid():
+            filters = ctx['filter_form'].cleaned_data
+            if filters.get('date_min'):
+                records = records.filter(datetime__gte=filters.get('date_min'))
+            if filters.get('date_max'):
+                records = records.filter(datetime__lte=filters.get('date_max'))
+            if filters.get('backoffice_user'):
+                records = records.filter(backoffice_user__icontains=filters.get('backoffice_user'))
+            if filters.get('carrier'):
+                records = records.filter(
+                    Q(carrier__icontains=filters.get('carrier'))
+                    | Q(cash_movement__session__user__username=filters.get('carrier'))
+                    | Q(cash_movement__session__user__firstname=filters.get('carrier'))
+                    | Q(cash_movement__session__user__lastname=filters.get('carrier'))
+                )
+            if filters.get('source'):
+                records = records.filter(
+                    Q(cash_movement__session__cashdesk__name__icontains=filters.get('source'))
+                    | Q(cash_movement__session__cashdesk__record_name__icontains=filters.get('source'))
+                    | Q(entity__name__icontains=filters.get('source'))
+                    | Q(entity__detail__icontains=filters.get('source'))
+                )
+
         running_total = 0
         for obj in records:
             if obj.type == 'inflow':

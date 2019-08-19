@@ -1,12 +1,40 @@
 {% extends 'backoffice/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block scripts %}
     <script type="text/javascript" src="{% static "backoffice/js/record_list.js" %}"></script>
 {% endblock %}
 
 {% block page_override %} full-width{% endblock %}
 {% block content %}
+    <form method="GET">
+    <div class="row">
+        <div class="col-md-2">
+            {{ filter_form.date_min|as_crispy_field }}
+        </div>
+        <div class="col-md-2">
+            {{ filter_form.date_max|as_crispy_field }}
+        </div>
+        <div class="col-md-2">
+            {{ filter_form.source|as_crispy_field }}
+        </div>
+        <div class="col-md-2">
+            {{ filter_form.user|as_crispy_field }}
+        </div>
+        <div class="col-md-2">
+            {{ filter_form.carrier|as_crispy_field }}
+        </div>
+        <div class="col-md-2">
+            <label class="col-form-label">
+                &nbsp;
+            </label>
+            <button type="submit" class="btn btn-block btn-primary">
+                <span class="fa fa-search"></span>
+            </button>
+        </div>
+    </div>
+    </form>
 <div class="action-row">
     <a class="btn btn-lg btn-outline-info" href="{% url "backoffice:new-record" %}">
         {% trans "New record" %}

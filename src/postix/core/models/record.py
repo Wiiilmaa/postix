@@ -126,8 +126,8 @@ class Record(models.Model):
             else:
                 entity = 'Kassensession'
                 entity_detail = (
-                     self.cash_movement.session.cashdesk.name
-                     + ' (#{})'.format(self.cash_movement.session.pk)
+                    self.cash_movement.session.cashdesk.name
+                    + ' (#{})'.format(self.cash_movement.session.pk)
                 )
         elif self.entity:
             entity = self.entity.name
@@ -143,11 +143,6 @@ class Record(models.Model):
             else 'Ausgabe',
             'amount': '{0:,.2f}'.format(self.amount).translate(
                 str.maketrans(',.', '.,')
-            ),
-            'cashdesk_session': (
-                self.cash_movement.session.pk
-                if self.cash_movement and self.cash_movement.session
-                else None
             ),
             'cashdesk_session': (
                 self.cash_movement.session.pk
