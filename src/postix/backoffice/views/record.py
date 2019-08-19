@@ -38,7 +38,13 @@ class RecordListView(BackofficeUserRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        records = Record.objects.all()
+        records = Record.objects.prefetch_related(
+            # prefetch_related should save some RAM and bandwith over select_related since we expect a small set of
+            # objects to show up a large number of times
+            'backoffice_user',
+        ).select_related(
+            'cash_movement', 'cash_movement__session', 'cash_movement__session__cashdesk', 'cash_movement__session__user'
+        )
         running_total = 0
         for obj in records:
             if obj.type == 'inflow':
