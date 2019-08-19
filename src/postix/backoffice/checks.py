@@ -42,11 +42,11 @@ def check_tax_rates():
         Product.objects.exclude(price=0).values_list('tax_rate', flat=True).distinct()
     )
     constraint_rates = set(
-        ListConstraintProduct.objects.exclude(price=0)
+        ListConstraintProduct.objects.filter(price__gt=0)
         .values_list('tax_rate', flat=True)
         .distinct()
     ) | set(
-        WarningConstraintProduct.objects.exclude(price=0)
+        WarningConstraintProduct.objects.filter(price__gt=0)
         .values_list('tax_rate', flat=True)
         .distinct()
     )
