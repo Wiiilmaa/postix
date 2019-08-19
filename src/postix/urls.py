@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
@@ -17,3 +18,11 @@ urlpatterns = [
     url(r'^troubleshooter/', include('postix.troubleshooter.urls', namespace='troubleshooter')),
     url(r'', include('postix.desk.urls', namespace='desk')),
 ]
+
+if settings.DEBUG:
+    try:
+        import debug_toolbar
+
+        urlpatterns.append(url(r'^__debug__/', include(debug_toolbar.urls)))
+    except ImportError:
+        pass

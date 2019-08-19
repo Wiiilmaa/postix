@@ -24,7 +24,7 @@ DEBUG = os.getenv('POSTIX_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'postix.api',
     'postix.backoffice',
     'postix.troubleshooter',
-)
+]
 
 
 try:
@@ -52,14 +52,14 @@ except ImportError:
     pass
 
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
 ROOT_URLCONF = 'postix.urls'
 WSGI_APPLICATION = 'postix.wsgi.application'
@@ -162,3 +162,17 @@ LOGGING = {
     'handlers': {'console': {'class': 'logging.StreamHandler'}},
     'loggers': {'django': {'handlers': ['console'], 'level': 'INFO'}},
 }
+
+INTERNAL_IPS = ('127.0.0.1', '::1')
+
+try:
+    import debug_toolbar  # noqa
+    if DEBUG:
+        INSTALLED_APPS.append('debug_toolbar.apps.DebugToolbarConfig')
+        MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+        DEBUG_TOOLBAR_PATCH_SETTINGS = False
+        DEBUG_TOOLBAR_CONFIG = {
+            'JQUERY_URL': '',
+        }
+except ImportError:
+    pass
