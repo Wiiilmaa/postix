@@ -23,21 +23,30 @@ def _build_product_dict(data, log, style):
     product_dict = dict()
     for item in data['items']:
         if item['variations']:
-            log.write(
-                style.ERROR('Warning: Import script cannot deal with variations yet!')
-            )
-
-        try:
-            product = Product.objects.get(import_source_id=item['id'])
-            loaded_items += 1
-        except Product.DoesNotExist:
-            product = Product(import_source_id=item['id'])
-            product.price = Decimal(item['price'])
-            product.tax_rate = Decimal(item['tax_rate'])
-            created_items += 1
-        product.name = item['name']
-        product.save()
-        product_dict[item['id']] = product
+            for var in item['variations']:
+                try:
+                    product = Product.objects.get(import_source_id='{}-{}'.format(item['id'], var['id']))
+                    loaded_items += 1
+                except Product.DoesNotExist:
+                    product = Product(import_source_id='{}-{}'.format(item['id'], var['id']))
+                    product.price = Decimal(var['price'])
+                    product.tax_rate = Decimal(item['tax_rate'])
+                    created_items += 1
+                product.name = '{} - {}'.format(item['name'], var['name'])
+                product.save()
+                product_dict[item['id'], var['id']] = product
+        else:
+            try:
+                product = Product.objects.get(import_source_id=item['id'])
+                loaded_items += 1
+            except Product.DoesNotExist:
+                product = Product(import_source_id=item['id'])
+                product.price = Decimal(item['price'])
+                product.tax_rate = Decimal(item['tax_rate'])
+                created_items += 1
+            product.name = item['name']
+            product.save()
+            product_dict[item['id'], None] = product
 
     log.write(
         style.SUCCESS(
@@ -124,16 +133,16 @@ def import_pretix_data(
             if not pp.pk:
                 pp.information = information
                 pp.price = Decimal(position['price'])
-                pp.product = product_dict[position['item']]
+                pp.product = product_dict[position['item'], position['variation']]
                 to_insert.append(pp)
             elif (
                 pp.information != information
-                or pp.product_id != product_dict[position['item']].pk
+                or pp.product_id != product_dict[position['item'], position['variation']].pk
                 or str(pp.price) != position['price']
             ):
                 pp.price = Decimal(position['price'])
                 pp.information = information
-                pp.product = product_dict[position['item']]
+                pp.product = product_dict[position['item'], position['variation']]
                 pp.save()
 
         if preorder_positions:
