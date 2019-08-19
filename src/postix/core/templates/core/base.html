@@ -158,9 +158,15 @@
                 </div>
             {% endfor %}
         {% endif %}
-
-        {% block area_content %}
-        {% endblock %}
+        {% if settings.maintenance_mode and not request.user.is_superuser %}
+            <div class="alert alert-danger">
+                {% trans "This server is currently in maintenance mode. Please contact the administrators:" %}
+                {{ settings.support_contact }}
+            </div>
+        {% else %}
+            {% block area_content %}
+            {% endblock %}
+        {% endif %}
     </div>
     </div>
 

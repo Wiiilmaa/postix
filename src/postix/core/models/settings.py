@@ -61,6 +61,11 @@ class EventSettings(Exportable, SingletonModel):
         null=True,
         blank=True,
     )
+    maintenance_mode = models.BooleanField(
+        default=False,
+        verbose_name=_('Maintenance mode'),
+        help_text=_('Block everybody except for superuser users from using the server.'),
+    )
 
     class Meta:
         verbose_name = 'Event Settings'

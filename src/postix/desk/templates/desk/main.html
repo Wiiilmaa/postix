@@ -1,6 +1,8 @@
 {% load static %}
 {% load i18n %}
 {% load compress %}
+{% load solo_tags %}
+{% get_solo 'core.EventSettings' as settings %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +18,12 @@
 </head>
 <body class="">
 
+{% if settings.maintenance_mode and not request.user.is_superuser %}
+    <div class="alert alert-danger">
+        {% trans "This server is currently in maintenance mode. Please contact the administrators:" %}
+        {{ settings.support_contact }}
+    </div>
+{% else %}
 <div id="main-container">
     <div id="left-side">
         <div id="product-view">
@@ -174,5 +182,6 @@
 <script type="text/javascript" src="{% static "desk/js/commands.js" %}"></script>
 <script type="text/javascript" src="{% static "desk/js/postix.js" %}"></script>
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+{% endif %} {# End maintenance mode if #}
 </body>
 </html>
