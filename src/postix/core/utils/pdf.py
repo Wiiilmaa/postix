@@ -1,6 +1,7 @@
 from reportlab.lib import utils
+from reportlab.lib.enums import TA_RIGHT
 from reportlab.lib.pagesizes import A4, portrait
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.platypus import BaseDocTemplate, Frame, Image, PageTemplate
 
@@ -15,6 +16,9 @@ def get_paragraph_style():
     # style.fontName = 'OpenSans'
     style['Normal'].fontSize = FONTSIZE
     style['Normal'].leading = int(1.5 * FONTSIZE)
+    style.add(
+        ParagraphStyle(name='Right', parent=style['Normal'], alignment=TA_RIGHT)
+    )
     return style
 
 

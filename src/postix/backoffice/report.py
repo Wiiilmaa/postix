@@ -98,12 +98,12 @@ def generate_item_report(session: CashdeskSession, doc) -> str:
     sales_raw_data = session.get_product_sales()
     sales = [
         [
-            p['product'].name,
-            CURRENCY.format(p['value_single']),
-            p['presales'],
-            p['sales'],
-            p['reversals'],
-            CURRENCY.format(p['value_total']),
+            Paragraph(p['product'].name, style['Normal']),
+            Paragraph(CURRENCY.format(p['value_single']), style['Right']),
+            Paragraph(str(p['presales']), style['Right']),
+            Paragraph(str(p['sales']), style['Right']),
+            Paragraph(str(p['reversals']), style['Right']),
+            Paragraph(CURRENCY.format(p['value_total']), style['Right']),
         ]
         for p in sales_raw_data
     ]
