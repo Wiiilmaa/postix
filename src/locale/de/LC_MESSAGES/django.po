@@ -139,11 +139,11 @@ msgstr "Produkt"
 
 #: postix/backoffice/forms/supply.py:11
 msgid "Amount of items in pack"
-msgstr "Anzahl von Produkten pro Paket"
+msgstr "Anzahl von Gegenständen pro Paket"
 
 #: postix/backoffice/forms/supply.py:12
 msgid "Type of items in pack"
-msgstr "Art von Produkten im Paket"
+msgstr "Art von Gegenständen im Paket"
 
 #: postix/backoffice/forms/supply.py:13 postix/backoffice/forms/supply.py:33
 #: postix/backoffice/templates/backoffice/supply_list.html:34
