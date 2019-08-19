@@ -12,7 +12,7 @@ from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
 
 from postix.core.models import CashdeskSession, EventSettings, Record
 from postix.core.utils.pdf import (
-    CURRENCY, FONTSIZE, get_default_document, get_paragraph_style, scale_image,
+    FONTSIZE, get_default_document, get_paragraph_style, money, scale_image,
 )
 
 
@@ -99,11 +99,11 @@ def generate_item_report(session: CashdeskSession, doc) -> str:
     sales = [
         [
             Paragraph(p['product'].name, style['Normal']),
-            Paragraph(CURRENCY.format(p['value_single']), style['Right']),
+            Paragraph(money(p['value_single']), style['Right']),
             Paragraph(str(p['presales']), style['Right']),
             Paragraph(str(p['sales']), style['Right']),
             Paragraph(str(p['reversals']), style['Right']),
-            Paragraph(CURRENCY.format(p['value_total']), style['Right']),
+            Paragraph(money(p['value_total']), style['Right']),
         ]
         for p in sales_raw_data
     ]
@@ -115,7 +115,7 @@ def generate_item_report(session: CashdeskSession, doc) -> str:
             '',
             '',
             '',
-            CURRENCY.format(sum([p['value_total'] for p in sales_raw_data])),
+            money(sum([p['value_total'] for p in sales_raw_data])),
         ]
     ]
     last_row = len(data) - 1
@@ -143,10 +143,10 @@ def generate_item_report(session: CashdeskSession, doc) -> str:
     cash = [
         [
             'Bargeld',
-            CURRENCY.format(session.cash_before),
-            CURRENCY.format(cash_transactions),
-            CURRENCY.format(session.cash_after),
-            CURRENCY.format(
+            money(session.cash_before),
+            money(cash_transactions),
+            money(session.cash_after),
+            money(
                 session.cash_before + cash_transactions - session.cash_after
             ),
         ]
@@ -209,7 +209,7 @@ def generate_session_closing(record, doc):
         [
             session.start.astimezone(tz).strftime('%Y-%m-%d, %H:%M:%S'),
             'Anfangsbestand',
-            CURRENCY.format(0),
+            money(0),
         ],
     ]
     running_total = 0
@@ -219,13 +219,13 @@ def generate_session_closing(record, doc):
             [
                 movement.timestamp.astimezone(tz).strftime('%Y-%m-%d, %H:%M:%S'),
                 'Wechselgeld' if movement.cash > 0 else 'Abschöpfung',
-                CURRENCY.format(movement.cash),
+                money(movement.cash),
             ]
         )
     data.append(
-        [session.end.astimezone(tz).strftime('%Y-%m-%d, %H:%M:%S'), 'Endbestand', CURRENCY.format(0)]
+        [session.end.astimezone(tz).strftime('%Y-%m-%d, %H:%M:%S'), 'Endbestand', money(0)]
     )
-    data.append(['', 'Umsatz', CURRENCY.format(-running_total)])
+    data.append(['', 'Umsatz', money(-running_total)])
     last_row = len(data) - 1
     transactions = Table(
         data=data,
@@ -284,7 +284,7 @@ def generate_balance_statement(record, doc):
     for bill in bills:
         bills_data.append(
             [
-                CURRENCY.format(bill),
+                money(bill),
                 data['bills_manually'].get('bill_{}'.format(bill), 0),
                 data['bills_automated'].get('bill_{}'.format(bill), 0),
                 data['bills_bulk'].get('bill_{}00'.format(bill), 0) * 100,
@@ -293,9 +293,9 @@ def generate_balance_statement(record, doc):
     bills_data.append(
         [
             '',
-            CURRENCY.format(data['bills_manually']['total']),
-            CURRENCY.format(data['bills_automated']['total']),
-            CURRENCY.format(data['bills_bulk']['total']),
+            money(data['bills_manually']['total']),
+            money(data['bills_automated']['total']),
+            money(data['bills_bulk']['total']),
         ]
     )
 
@@ -313,7 +313,7 @@ def generate_balance_statement(record, doc):
     for coin in coins:
         coins_data.append(
             [
-                CURRENCY.format(coin[0]),
+                money(coin[0]),
                 data['coins_automated'].get('coin_{}'.format(int(coin[0] * 100)), 0),
                 int(
                     data['coins_bulk'].get('coin_{}'.format(coin[1]), 0)
@@ -324,8 +324,8 @@ def generate_balance_statement(record, doc):
     coins_data.append(
         [
             '',
-            CURRENCY.format(data['coins_automated']['total']),
-            CURRENCY.format(data['coins_bulk']['total']),
+            money(data['coins_automated']['total']),
+            money(data['coins_bulk']['total']),
         ]
     )
 
@@ -356,9 +356,9 @@ def generate_balance_statement(record, doc):
         ),
     )
     final_table_data = [
-        ['Erwartet:', CURRENCY.format(data['expected'])],
-        ['Ausgezählt:', CURRENCY.format(data['total'])],
-        ['Differenz:', CURRENCY.format(record.amount)],
+        ['Erwartet:', money(data['expected'])],
+        ['Ausgezählt:', money(data['total'])],
+        ['Differenz:', money(record.amount)],
     ]
     last_row = len(final_table_data) - 1
     final_table = Table(
@@ -426,7 +426,7 @@ def generate_record(record: Record) -> str:
     info = [
         ['Datum', datetime.strftime('%Y-%m-%d, %H:%M:%S') if record.pk else ''],
         [direction, name or ''],
-        ['Betrag', CURRENCY.format(record.amount) if record.pk else ''],
+        ['Betrag', money(record.amount) if record.pk else ''],
     ]
     info = [
         [

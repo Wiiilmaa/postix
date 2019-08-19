@@ -10,7 +10,7 @@ from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
 from postix.core.models import EventSettings, Transaction
 from postix.core.utils.pdf import (
-    CURRENCY, FONTSIZE, get_default_document, get_paragraph_style,
+    FONTSIZE, get_default_document, get_paragraph_style, money,
 )
 
 
@@ -57,12 +57,12 @@ def generate_invoice(transaction: Transaction, address: str) -> str:
             [
                 position.product.name,
                 '{} %'.format(position.tax_rate),
-                CURRENCY.format(position.value - position.tax_value),
-                CURRENCY.format(position.value),
+                money(position.value - position.tax_value),
+                money(position.value),
             ]
         )
-    data.append([_('Included taxes'), '', '', CURRENCY.format(total_tax)])
-    data.append([_('Invoice total'), '', '', CURRENCY.format(transaction.value)])
+    data.append([_('Included taxes'), '', '', money(total_tax)])
+    data.append([_('Invoice total'), '', '', money(transaction.value)])
     last_row = len(data) - 1
 
     transaction_table = Table(

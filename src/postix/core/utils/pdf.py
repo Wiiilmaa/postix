@@ -1,3 +1,4 @@
+from django.utils.formats import number_format
 from reportlab.lib import utils
 from reportlab.lib.enums import TA_RIGHT
 from reportlab.lib.pagesizes import A4, portrait
@@ -7,7 +8,10 @@ from reportlab.platypus import BaseDocTemplate, Frame, Image, PageTemplate
 
 FONTSIZE = 11
 PAGESIZE = portrait(A4)
-CURRENCY = '{:.2f} €'
+
+
+def money(val):
+    return '{} €'.format(number_format(val, decimal_pos=2, use_l10n=True, force_grouping=True))
 
 
 def get_paragraph_style():
