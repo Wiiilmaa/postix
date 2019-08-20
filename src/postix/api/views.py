@@ -1,8 +1,12 @@
 from typing import Any, Dict, List, Union
 
+import pytz
+from django.conf import settings
 from django.db import transaction
 from django.db.models import Q, QuerySet
 from django.http import HttpRequest
+from django.utils.formats import date_format
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
@@ -246,6 +250,12 @@ class CashdeskActionViewSet(ReadOnlyModelViewSet):
             )
         session.cashdesk.printer.open_drawer()
         return Response({'success': True})
+
+    @list_route(methods=["GET"], url_path='current-time')
+    def current_time(self, request: HttpRequest) -> Response:
+        return Response({
+            'string': date_format(now().astimezone(pytz.timezone(settings.TIME_ZONE)), "TIME_FORMAT")
+        })
 
     @list_route(methods=["POST"], url_path='reprint-receipt')
     def reprint_receipt(self, request: HttpRequest) -> Response:

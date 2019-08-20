@@ -1,18 +1,18 @@
 var clock = {
     _tick: function () {
-        var d = new Date();
-        var hr = d.getHours();
-        if (hr < 10) {
-            hr = "0" + hr;
-        }
-        var min = d.getMinutes();
-        if (min < 10) {
-            min = "0" + min;
-        }
-        $("#clock").text(hr + ":" + min);
+        $.ajax({
+            url: '/api/cashdesk/current-time/',
+            method: 'GET',
+            dataType: 'json',
+            data: '',
+            success: function (data, status, xhr) {
+                $("#clock").text(data.string);
+            }
+        });
     },
 
     init: function () {
-        window.setInterval(clock._tick, 250);
+        window.setInterval(clock._tick, 10000);
+        clock._tick();
     }
 };
