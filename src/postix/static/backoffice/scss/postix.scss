@@ -24,6 +24,12 @@ table ul {
 #active-sessions-table tr.coactive {
     background: rgba($black, .075);
 }
+#active-sessions-table > thead > tr {
+  position: sticky;
+  top: 50px;
+  background: white;
+}
+
 #end-sessions-table {
     label {display: none}
 }
