@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crispy_forms',
     'django_filters',
     'rest_framework',
     'solo',
@@ -41,6 +40,7 @@ INSTALLED_APPS = [
     'postix.api',
     'postix.backoffice',
     'postix.troubleshooter',
+    'crispy_forms',
 ]
 
 

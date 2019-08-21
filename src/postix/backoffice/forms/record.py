@@ -12,9 +12,9 @@ from .session import RelaxedDecimalField
 
 User = get_user_model()
 
-
 class RecordCreateForm(forms.ModelForm):
     backoffice_user = forms.CharField(max_length=254, label=_('Backoffice angel'))
+    type = forms.ChoiceField(choices=Record.TYPES, widget=forms.RadioSelect(attrs={'class': 'recordtype'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -49,11 +49,14 @@ class RecordCreateForm(forms.ModelForm):
     class Meta:
         model = Record
         fields = ('type', 'datetime', 'entity', 'carrier', 'amount', 'backoffice_user')
-        field_classes = {'amount': RelaxedDecimalField}
+        field_classes = {
+            'amount': RelaxedDecimalField,
+        }
 
 
 class RecordUpdateForm(RecordCreateForm):
     backoffice_user = forms.CharField(max_length=254, label=_('Backoffice angel'))
+    type = forms.ChoiceField(choices=Record.TYPES, widget=forms.RadioSelect(attrs={'class': 'recordtype'}))
 
     def __init__(self, *args, **kwargs):
         self.editable = kwargs.pop('editable', False)
@@ -69,6 +72,9 @@ class RecordUpdateForm(RecordCreateForm):
     class Meta:
         model = Record
         fields = ('type', 'datetime', 'entity', 'carrier', 'amount', 'backoffice_user')
+        field_classes = {
+            'amount': RelaxedDecimalField,
+        }
 
 
 class RecordEntityForm(forms.ModelForm):
