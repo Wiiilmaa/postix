@@ -163,7 +163,6 @@ class SessionDetailView(BackofficeUserRequiredMixin, DetailView):
 def resupply_session(
     request: HttpRequest, pk: int
 ) -> Union[HttpResponse, HttpResponseRedirect]:
-    """ TODO: show approximate current amounts of items? """
     session = get_object_or_404(CashdeskSession, pk=pk)
     initial_form = {
         'cashdesk': session.cashdesk,
@@ -171,20 +170,24 @@ def resupply_session(
         'backoffice_user': request.user,
         'cash_before': 0,
     }
-    form, formset = get_form_and_formset(initial_form=initial_form)
+    form, formset = get_form_and_formset(
+        request=request if request.method == 'POST' else None,
+        initial_form=initial_form,
+        show_direction=not session.cashdesk.handles_items,
+    )
     if not session.cashdesk.handles_items:
         formset = None
 
     if request.method == 'POST':
-        form, formset = get_form_and_formset(request=request)
-        if not session.cashdesk.handles_items:
-            formset = None
-
         if (not formset or formset.is_valid()) and form.is_valid():
             record = None
             if form.cleaned_data.get('cash_before'):
+                cash = form.cleaned_data.get('cash_before')
+                if 'type' in form.cleaned_data:
+                    if form.cleaned_data.get('type') == 'inflow':
+                        cash = -cash
                 movement = CashMovement.objects.create(
-                    cash=form.cleaned_data.get('cash_before'),
+                    cash=cash,
                     session=session,
                     backoffice_user=form.cleaned_data['backoffice_user'],
                 )

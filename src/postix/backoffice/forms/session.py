@@ -5,32 +5,12 @@ from django import forms
 from django.http import HttpRequest
 from django.utils.translation import ugettext as _
 
-from postix.core.models import Cashdesk, Item, User
-
-
-class CalculatorWidget(forms.NumberInput):
-    def __init__(self, *args, attrs=None, **kwargs):
-        attrs = attrs or dict()
-        attrs['type'] = 'text'
-        attrs['class'] = 'calculatable'
-        super().__init__(*args, attrs=attrs, **kwargs)
-
-
-class RelaxedDecimalField(forms.DecimalField):
-    widget = CalculatorWidget
-
-    def to_python(self, value):
-        return super().to_python(
-            value.replace(",", ".") if isinstance(value, str) else value
-        )
-
-    def validate(self, value):
-        return super().validate(
-            value.replace(",", ".") if isinstance(value, str) else value
-        )
+from postix.core.models import Cashdesk, Item, User, Record
+from postix.backoffice.forms.fields import RelaxedDecimalField
 
 
 class SessionBaseForm(forms.Form):
+    type = forms.ChoiceField(choices=Record.TYPES, widget=forms.RadioSelect(attrs={'class': 'recordtype'}))
     cashdesk = forms.ModelChoiceField(
         queryset=Cashdesk.objects.filter(is_active=True).order_by('name'),
         label=_('Cashdesk'),
@@ -39,12 +19,15 @@ class SessionBaseForm(forms.Form):
     backoffice_user = forms.CharField(max_length=254, label=_('Backoffice angel'))
     cash_before = RelaxedDecimalField(max_digits=10, decimal_places=2, label=_('Cash'))
 
-    def __init__(self, *args, must_be_positive=False, **kwargs):
+    def __init__(self, *args, must_be_positive=False, show_direction=False, **kwargs):
         initial = kwargs.get('initial', dict())
         super().__init__(*args, **kwargs)
         self.must_be_positive = must_be_positive
-        if must_be_positive:
+        self.show_direction = show_direction
+        if must_be_positive or show_direction:
             self.fields['cash_before'].widget.attrs['min'] = '0'
+        if not show_direction:
+            self.fields.pop('type', None)
         self.fields['user'].required = (
             initial.get('cashdesk') and initial['cashdesk'].ip_address
         )
@@ -108,17 +91,20 @@ def get_form_and_formset(
     initial_form: SessionBaseForm = None,
     initial_formset=None,
     must_be_positive=False,
+    show_direction=False,
 ) -> Tuple[SessionBaseForm, Any]:
     ItemMovementFormSet = forms.formset_factory(ItemMovementForm, extra=extra)
 
     if request:
         form = SessionBaseForm(
-            request.POST, prefix='session', must_be_positive=must_be_positive
+            request.POST, prefix='session', must_be_positive=must_be_positive,
+            show_direction=show_direction,
         )
         formset = ItemMovementFormSet(request.POST, prefix='items')
     else:
         form = SessionBaseForm(
-            initial=initial_form, prefix='session', must_be_positive=must_be_positive
+            initial=initial_form, prefix='session', must_be_positive=must_be_positive,
+            show_direction=show_direction,
         )
         formset = ItemMovementFormSet(initial=initial_formset, prefix='items')
     return form, formset

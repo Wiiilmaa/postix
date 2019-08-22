@@ -12,9 +12,11 @@
 {% block content %}
 
 <div class="ml-auto mr-auto col-md-8">
+    {% if formset or not form.type %}
     <div class="alert alert-warning">
         {% trans "Please enter a negative number when removing products from the cashdesk." %}
     </div>
+    {% endif %}
 	<form method="post" action="">
 		{% csrf_token %}
 
