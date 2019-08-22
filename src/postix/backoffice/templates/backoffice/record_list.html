@@ -52,9 +52,9 @@
         <th>{% trans "Entity" %}</th>
         <th>{% trans "User" %}</th>
         <th>{% trans "Carrier" %}</th>
-        <th>{% trans "Inflow" %}</th>
-        <th>{% trans "Outflow" %}</th>
-        <th>{% trans "Saldo" %}</th>
+        <th class="text-right">{% trans "Inflow" %}</th>
+        <th class="text-right">{% trans "Outflow" %}</th>
+        <th class="text-right">{% trans "Saldo" %}</th>
         <th></th>
     </thead>
     <tbody>
@@ -86,17 +86,17 @@
                         -
                     {% endif %}
                 </td>
-                <td>
+                <td class="text-right">
                     {% if record.type == 'inflow' %}
                         {{ record.amount|floatformat:2 }}
                     {% endif %}
                 </td>
-                <td>
+                <td class="text-right">
                     {% if record.type == 'outflow' %}
                         {{ record.amount|floatformat:2 }}
                     {% endif %}
                 </td>
-                <td>
+                <td class="text-right">
                     {{ record.running_total|floatformat:2 }}
                 </td>
                 <td class="d-flex justify-content-end">
