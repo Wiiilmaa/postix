@@ -58,7 +58,7 @@ class RecordListView(BackofficeUserRequiredMixin, TemplateView):
             if filters.get('date_max'):
                 records = records.filter(datetime__lte=filters.get('date_max'))
             if filters.get('backoffice_user'):
-                records = records.filter(backoffice_user__icontains=filters.get('backoffice_user'))
+                records = records.filter(backoffice_user__username__icontains=filters.get('backoffice_user'))
             if filters.get('carrier'):
                 records = records.filter(
                     Q(carrier__icontains=filters.get('carrier'))
