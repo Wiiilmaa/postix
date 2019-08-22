@@ -11,6 +11,7 @@ from postix.core.models import Record, RecordEntity
 
 User = get_user_model()
 
+
 class RecordCreateForm(forms.ModelForm):
     backoffice_user = forms.CharField(max_length=254, label=_('Backoffice angel'))
     type = forms.ChoiceField(choices=Record.TYPES, widget=forms.RadioSelect(attrs={'class': 'recordtype'}))

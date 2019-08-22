@@ -5,8 +5,8 @@ from django import forms
 from django.http import HttpRequest
 from django.utils.translation import ugettext as _
 
-from postix.core.models import Cashdesk, Item, User, Record
 from postix.backoffice.forms.fields import RelaxedDecimalField
+from postix.core.models import Cashdesk, Item, Record, User
 
 
 class SessionBaseForm(forms.Form):
