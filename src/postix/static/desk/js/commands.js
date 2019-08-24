@@ -101,6 +101,46 @@ var commands = {
             + "</p>");
     },
 
+    '/arcade': function (args) {
+        commands._info_view("<p><strong>" + gettext("Supported games:") + "</strong></p>"
+            + "<dl class='dl-horizontal'>"
+            + "<dt>/snake</dt>"
+            + "<dt>/tetris</dt>"
+            + "<dt>/frogger</dt>"
+            + "<dt>/lightcycles</dt>"
+            + "</dl>");
+    },
+    '/snake': function (args) {
+        commands._info_view("<div style='background-color:#FFFFFF;width:500px; height:450px; margin:auto;'>"
+            + "    <canvas id='the-game' width='500' height='450'>" +
+            + "</div>"
+            + "<script src='/static/postix/desk/js/games/snake.js' type='text/javascript'></script>");
+    },
+
+    '/tetris': function (args) {
+        commands._info_view("<script src='/static/postix/desk/js/games/blockrain.js'></script>"
+            + "<link rel='stylesheet' href=/static/postix/desk/css/games/blockrain.css>"
+            + "<div class='game' style='width:250px; height:500px; margin:auto;'></div>"
+            + "<script>"
+            + "    $('.game').blockrain({theme: 'candy'});"
+            + "    $('.game').blockrain('start');"
+            + "</script>");
+    },
+
+    '/frogger': function (args) {
+        commands._info_view("<script src='/static/postix/desk/js/games/frogger.js'></script>"
+            + "<div id='game-div'>"
+            + "    <canvas id='game' height='565' width='399'></canvas>"
+            + "</div>");
+    },
+
+    '/lightcycles': function (args) {
+        commands._info_view("<div style='background-color:#FFFFFF;width:500px; height:450px; margin:auto;'>"
+            + "    <canvas id='the-game' width='500' height='450'>" +
+            + "</div>"
+            + "<script src='/static/postix/desk/js/games/lightcycles.js' type='text/javascript'></script>");
+    },
+
     process: function (command) {
         if (command.slice(0, 1) !== "/") {
             command = "/" + command;
