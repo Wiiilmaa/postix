@@ -19,7 +19,7 @@ class Command(BaseCommand):
         failed_exports = []
 
         for record in Record.objects.all():
-            report_path = record.get_report_path()
+            report_path = record.record_path
             if report_path:
                 shutil.copy2(report_path, export_dir)
                 successful_exports += 1
