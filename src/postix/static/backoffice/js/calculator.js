@@ -20,7 +20,7 @@ const priceMap = {
 var calculateTotal = function() {
     var runningTotal = 0;
     for (key in priceMap) {
-	const value = document.querySelector('#' + key).value || 0;
+	const value = document.querySelector('#' + key).value.replace(",", ".") || 0;
 	runningTotal += value * priceMap[key];
     }
     return runningTotal.toFixed(2)
