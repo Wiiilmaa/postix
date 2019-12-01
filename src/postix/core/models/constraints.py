@@ -125,3 +125,15 @@ class WarningConstraint(AbstractConstraint):
         through="WarningConstraintProduct",
     )
     message = models.TextField()
+
+
+class CashdeskConstraint(AbstractConstraint):
+    products = models.ManyToManyField(
+        "Product",
+        verbose_name="Affected products",
+        related_name="cashdesk_constraints",
+        blank=True,
+    )
+    allowed_cashdesks = models.ManyToManyField(
+        "Cashdesk", verbose_name="Allowed Cashdesks", blank=True,
+    )

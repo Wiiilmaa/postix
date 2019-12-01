@@ -40,7 +40,7 @@ def test_backoffice_can_reset_regular_password(backoffice_client):
 
 @pytest.mark.django_db
 def test_backoffice_cannot_reset_regular_password_incorrect_repetition(
-    backoffice_client
+    backoffice_client,
 ):
     user = user_factory()
     assert not authenticate(username=user.username, password="testpassword12")

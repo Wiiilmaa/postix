@@ -18,6 +18,7 @@ from .cashdesk import (
 )
 from .constraints import (
     AbstractConstraint,
+    CashdeskConstraint,
     ListConstraint,
     ListConstraintEntry,
     ListConstraintProduct,

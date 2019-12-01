@@ -7,6 +7,7 @@ from solo.admin import SingletonModelAdmin
 from .models import (
     Asset,
     Cashdesk,
+    CashdeskConstraint,
     CashdeskSession,
     EventSettings,
     Item,
@@ -144,10 +145,15 @@ class ListConstraintProductInline(admin.TabularInline):
 
 
 @admin.register(ListConstraint)
-class ListConstriantAdmin(admin.ModelAdmin):
+class ListConstraintAdmin(admin.ModelAdmin):
     list_display = ("name",)
     exclude = ("products",)
     inlines = (ListConstraintProductInline,)
+
+
+@admin.register(CashdeskConstraint)
+class CashdeskConstraintAdmin(admin.ModelAdmin):
+    list_display = ("name",)
 
 
 @admin.register(ListConstraintEntry)

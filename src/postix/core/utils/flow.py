@@ -35,7 +35,7 @@ class FlowError(Exception):
         return self.message
 
 
-def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
+def redeem_preorder_ticket(session, **kwargs) -> TransactionPosition:
     """
     Creates a TransactionPosition object that validates a given preorder position.
     This checks the various constraints placed on the given position and item and
@@ -78,6 +78,10 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
         pp.save()
     except PreorderPosition.DoesNotExist:
         raise FlowError(_("No ticket could be found with the given secret."))
+
+    for c in pp.product.cashdesk_constraints.prefetch_related("allowed_cashdesks"):
+        if session.cashdesk not in c.allowed_cashdesks.all():
+            raise FlowError(_("This ticket can not be redeemed at this cashdesk."))
 
     if pp.preorder.is_canceled:
         raise FlowError(_("This ticket has been canceled or is expired."))
@@ -194,7 +198,7 @@ def redeem_preorder_ticket(**kwargs) -> TransactionPosition:
     return pos
 
 
-def sell_ticket(**kwargs) -> TransactionPosition:
+def sell_ticket(session, **kwargs) -> TransactionPosition:
     """
     Creates a TransactionPosition object that sells a given product.
     This checks the various constraints placed on the given product and item and
@@ -214,6 +218,10 @@ def sell_ticket(**kwargs) -> TransactionPosition:
         product = Product.objects.get(id=kwargs.get("product"))
     except Product.DoesNotExist:
         raise FlowError(_("This product ID is not known."))
+
+    for c in product.cashdesk_constraints.prefetch_related("allowed_cashdesks"):
+        if session.cashdesk not in c.allowed_cashdesks.all():
+            raise FlowError(_("This product can not be sold at this cashdesk."))
 
     if not product.is_available:
         auth = kwargs.get("auth", "!invalid")

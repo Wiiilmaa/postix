@@ -151,9 +151,13 @@ class TransactionViewSet(ReadOnlyModelViewSet):
             postype = inppos.get("type", "")
             try:
                 if postype == "redeem":
-                    pos = redeem_preorder_ticket(**inppos, transaction_id=trans.pk)
+                    pos = redeem_preorder_ticket(
+                        **inppos, session=session, transaction_id=trans.pk
+                    )
                 elif postype == "sell":
-                    pos = sell_ticket(**inppos, transaction_id=trans.pk)
+                    pos = sell_ticket(
+                        **inppos, session=session, transaction_id=trans.pk
+                    )
                 else:  # noqa
                     raise FlowError(_("Type {} is not yet implemented").format(postype))
             except FlowError as e:

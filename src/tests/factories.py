@@ -31,6 +31,7 @@ from postix.core.models import (
     TroubleshooterNotification,
     User,
     WarningConstraint,
+    CashdeskConstraint,
 )
 from postix.core.models.base import ItemSupplyPack
 from postix.core.utils import times
@@ -191,6 +192,13 @@ def warning_constraint_factory():
         name="U18 warning",
         message="Please check that the person is younger than 18 years old.",
     )
+
+
+def cashdesk_constraint_factory(product, cashdesk):
+    c = CashdeskConstraint.objects.create(name="Not here",)
+    c.allowed_cashdesks.add(cashdesk)
+    c.products.add(product)
+    return c
 
 
 def list_constraint_factory(product=None, price=None, confidential=False):
