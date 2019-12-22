@@ -229,7 +229,7 @@ msgstr "Gegenstand speichern"
 
 #: postix/backoffice/forms/wizard.py:126 postix/backoffice/forms/wizard.py:136
 msgid "Include cashdesks"
-msgstr "Importiere Kassen"
+msgstr "Einschließlich Kassen"
 
 #: postix/backoffice/forms/wizard.py:131
 msgid "Export settings"
