@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -21,6 +22,10 @@ class Asset(models.Model):
 
     def get_current_position(self):
         return self.positions.filter(end__isnull=True).order_by("start").first()
+
+    @cached_property
+    def current_position(self):
+        return self.get_current_position()
 
 
 class AssetPosition(models.Model):

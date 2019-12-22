@@ -75,6 +75,8 @@ urlpatterns = [
     ),
     url("^assets/move/$", views.AssetMoveView.as_view(), name="move-asset"),
     url("^assets/history/$", views.AssetHistoryView.as_view(), name="history-asset"),
+    url("^assets/export/$", views.AssetExportView.as_view(), name="asset-export"),
+    url("^assets/import/$", views.AssetImportView.as_view(), name="asset-import"),
     url("^supplies/$", views.SupplyListView.as_view(), name="supply-list"),
     url("^supplies/create/$", views.SupplyCreateView.as_view(), name="supply-create"),
     url("^supplies/out/$", views.SupplyMoveOutView.as_view(), name="supply-out"),

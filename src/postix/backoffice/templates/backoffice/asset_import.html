@@ -1,0 +1,12 @@
+{% extends 'backoffice/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="ml-auto mr-auto col-md-8">
+    {% crispy form  %}
+    </form>
+</div>
+{% endblock %}

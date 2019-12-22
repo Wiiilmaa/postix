@@ -1,6 +1,8 @@
 from .asset import (
     AssetCreateView,
+    AssetExportView,
     AssetHistoryView,
+    AssetImportView,
     AssetListView,
     AssetMoveView,
     AssetUpdateView,
@@ -53,7 +55,9 @@ from .wizard import (
 
 __all__ = (
     "AssetCreateView",
+    "AssetExportView",
     "AssetHistoryView",
+    "AssetImportView",
     "AssetListView",
     "AssetMoveView",
     "AssetUpdateView",
