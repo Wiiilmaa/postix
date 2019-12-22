@@ -2,19 +2,6 @@ from decimal import Decimal
 
 import pytest
 from django.db.models import Sum
-from tests.factories import (
-    cashdesk_session_after_factory,
-    cashdesk_session_before_factory,
-    list_constraint_entry_factory,
-    list_constraint_factory,
-    preorder_position_factory,
-    product_factory,
-    time_constraint_factory,
-    transaction_factory,
-    transaction_position_factory,
-    user_factory,
-    warning_constraint_factory,
-)
 
 from postix.core.models import (
     ListConstraintProduct,
@@ -31,6 +18,19 @@ from postix.core.utils.flow import (
     reverse_transaction,
     reverse_transaction_position,
     sell_ticket,
+)
+from tests.factories import (
+    cashdesk_session_after_factory,
+    cashdesk_session_before_factory,
+    list_constraint_entry_factory,
+    list_constraint_factory,
+    preorder_position_factory,
+    product_factory,
+    time_constraint_factory,
+    transaction_factory,
+    transaction_position_factory,
+    user_factory,
+    warning_constraint_factory,
 )
 
 

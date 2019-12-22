@@ -1,4 +1,5 @@
 import pytest
+
 from tests.factories import cashdesk_session_before_factory
 
 

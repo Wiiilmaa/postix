@@ -1,11 +1,11 @@
 import math
 from datetime import datetime, time, timedelta
 
-import numpy as np
-import pylab as plt
 from django.core.management.base import BaseCommand
 from django.utils.timezone import get_current_timezone
 
+import numpy as np
+import pylab as plt
 from postix.core.models import CashdeskSession, TransactionPosition
 
 

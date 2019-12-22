@@ -2,7 +2,6 @@ import json
 
 import pytest
 from django.utils.crypto import get_random_string
-from tests.factories import cashdesk_session_before_factory, user_factory
 
 from postix.core.models import (
     Cashdesk,
@@ -15,6 +14,7 @@ from postix.core.models import (
 )
 from postix.core.utils import round_decimal
 from postix.core.utils.printing import DummyPrinter
+from tests.factories import cashdesk_session_before_factory, user_factory
 
 DUMMY_PRINTER_COUNT = 0
 

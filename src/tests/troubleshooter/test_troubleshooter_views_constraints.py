@@ -44,7 +44,7 @@ def test_troubleshooter_can_filter_all_entries(troubleshooter_client):
 
 @pytest.mark.django_db
 def test_troubleshooter_cannot_filter_entries_if_confidential_and_too_short(
-    troubleshooter_client
+    troubleshooter_client,
 ):
     constraint = list_constraint_factory(confidential=True)
     entries = [list_constraint_entry_factory(constraint) for _ in range(3)]
@@ -59,7 +59,7 @@ def test_troubleshooter_cannot_filter_entries_if_confidential_and_too_short(
 
 @pytest.mark.django_db
 def test_troubleshooter_can_filter_entries_if_confidential_and_long_enough(
-    troubleshooter_client
+    troubleshooter_client,
 ):
     constraint = list_constraint_factory(confidential=True)
     entries = [list_constraint_entry_factory(constraint) for _ in range(3)]
