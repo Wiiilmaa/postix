@@ -223,8 +223,8 @@ def list_constraint_entry_factory(list_constraint, redeemed=False):
     return e
 
 
-def ping_factory(ponged=False):
-    ping = Ping.objects.create(secret="verysecret")
+def ping_factory(ponged=False, synced=True):
+    ping = Ping.objects.create(secret="verysecret", synced=synced)
     if ponged:
         ping.pong()
     return ping

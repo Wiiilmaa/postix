@@ -13,6 +13,14 @@ def test_open_drawer(api_with_session):
 
 
 @pytest.mark.django_db
+def test_current_time(api_with_session):
+    response = api_with_session.get("/api/cashdesk/current-time/")
+    content = json.loads(response.content.decode())
+    assert "string" in content
+    assert content["string"]
+
+
+@pytest.mark.django_db
 def test_reprint_receipt(api_with_session):
     transaction = transaction_factory()
     response = api_with_session.post(

@@ -5,6 +5,7 @@ import pytest
 from ..factories import (
     list_constraint_entry_factory,
     list_constraint_factory,
+    ping_factory,
     preorder_position_factory,
 )
 
@@ -66,3 +67,47 @@ def test_listentries_with_search(api_with_session, chars):
     )
     content = json.loads(response.content.decode())
     assert content["count"] == int(chars >= 3)
+
+
+@pytest.mark.django_db
+def test_pings_empty(api_with_session):
+    response = api_with_session.get("/api/pings/")
+    content = json.loads(response.content.decode())
+    assert content["count"] == 0
+
+
+@pytest.mark.django_db
+def test_pings(api_with_session):
+    ping_factory(ponged=None)
+    ping_factory(ponged=1)
+    response = api_with_session.get("/api/pings/")
+    content = json.loads(response.content.decode())
+    assert content["count"] == 2
+
+
+@pytest.mark.django_db
+def test_pings_filter_synced(api_with_session):
+    ping_factory(ponged=None, synced=True)
+    ping_factory(ponged=1, synced=False)
+    response = api_with_session.get("/api/pings/?synced=1")
+    content = json.loads(response.content.decode())
+    assert content["count"] == 1
+
+
+@pytest.mark.django_db
+def test_pings_filter_ponged(api_with_session):
+    ping_factory(ponged=None)
+    ping_factory(ponged=1)
+    response = api_with_session.get("/api/pings/?ponged=1")
+    content = json.loads(response.content.decode())
+    assert content["count"] == 1
+
+
+@pytest.mark.django_db
+def test_pings_mark_synced(api_with_session):
+    p = ping_factory(ponged=None, synced=False)
+    assert not p.synced
+    response = api_with_session.post("/api/pings/{}/mark_synced/".format(p.pk))
+    assert response.status_code == 200
+    p.refresh_from_db()
+    assert p.synced

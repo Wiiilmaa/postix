@@ -16,6 +16,22 @@ def test_cashdesk_login_with_session(client):
 
 
 @pytest.mark.django_db
+def test_cashdesk_login_with_session_without_start(client):
+    user = user_factory(password="trololol123")
+    session = cashdesk_session_before_factory(ip="127.0.0.1", user=user)
+    session.start = None
+    session.save()
+    response = client.post(
+        "/login/", {"username": user.username, "password": "trololol123"}, follow=True
+    )
+    assert response.status_code == 200
+    assert response.redirect_chain[-1][0] == "/"
+    assert "CHECKOUT" in response.content.decode()
+    session.refresh_from_db()
+    assert session.start
+
+
+@pytest.mark.django_db
 def test_cashdesk_login_with_session_already_logged_in(client):
     user = user_factory(password="trololol123")
     cashdesk_session_before_factory(ip="127.0.0.1", user=user)

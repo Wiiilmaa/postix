@@ -56,3 +56,8 @@ def test_troubleshooter_can_generate_invoice(troubleshooter_client, event_settin
         follow=True,
     )
     assert response.status_code == 200
+    response = troubleshooter_client.get(
+        "/troubleshooter/transactions/{}/invoice/".format(tr.transaction.pk),
+        follow=True,
+    )
+    assert response.status_code == 200

@@ -1,3 +1,5 @@
+from contextlib import suppress
+
 from django.http import Http404
 from django.urls import resolve
 
@@ -8,14 +10,14 @@ def processor(request):
     """
     Adds data to all template contexts
     """
-    ctx = {}
-    try:
+    ctx = {
+        "url_name": "",
+        "url_namespace": "",
+    }
+    with suppress(Http404):
         url = resolve(request.path_info)
         ctx["url_name"] = url.url_name
         ctx["url_namespace"] = url.namespace
-    except Http404:
-        ctx["url_name"] = ""
-        ctx["url_namespace"] = ""
 
     if not request.path.startswith("/troubleshooter"):
         return ctx
