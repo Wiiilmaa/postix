@@ -14,8 +14,8 @@ class PingView(TroubleshooterUserRequiredMixin, FormView):
     template_name = "troubleshooter/ping.html"
     form_class = CashdeskForm
 
-    def get_context_data(self):
-        ctx = super().get_context_data()
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
         if Ping.objects.exists():
             pings = Ping.objects.order_by("pinged")
             ping_count = pings.count()
@@ -49,6 +49,7 @@ class PingView(TroubleshooterUserRequiredMixin, FormView):
             cashdesk = form.cleaned_data.get("cashdesk")
             generate_ping(cashdesk)
             return self.form_valid(form)
+        return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse("troubleshooter:ping")

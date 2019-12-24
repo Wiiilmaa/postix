@@ -17,3 +17,22 @@ def test_troubleshooter_ping_view(troubleshooter_client):
     )
     assert response.status_code == 200
     assert Ping.objects.count() == 11
+
+
+@pytest.mark.django_db
+def test_troubleshooter_ping_view_no_responses(troubleshooter_client):
+    ping_factory(ponged=None)
+    cashdesk_factory()
+    assert Ping.objects.count() == 1
+    response = troubleshooter_client.get("/troubleshooter/ping/")
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_troubleshooter_ping_view_wrong_pong(troubleshooter_client):
+    desk = cashdesk_factory()
+    response = troubleshooter_client.post(
+        "/troubleshooter/ping/", {"cashdesk": desk.pk + 5}, follow=True
+    )
+    assert response.status_code == 200
+    assert Ping.objects.count() == 0
