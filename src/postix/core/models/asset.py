@@ -20,6 +20,9 @@ class Asset(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return "{}: {}".format(self.get_asset_type_display(), self.description)
+
     def get_current_position(self):
         return self.positions.filter(end__isnull=True).order_by("start").first()
 
