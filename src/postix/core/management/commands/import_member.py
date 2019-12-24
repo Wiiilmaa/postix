@@ -29,9 +29,6 @@ class Command(BaseCommand):
                 reader = csv.DictReader(member_list, delimiter=";")
             with transaction.atomic():
                 for row in reader:
-                    if not any(row.values()):
-                        continue  # empty line
-
                     if local_prefix:
                         identifier = "{}-{}".format(local_prefix, row["CHAOSNR"])
                         name = row["NAME"].strip()

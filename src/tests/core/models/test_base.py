@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from postix.core.models import Item, ProductItem, TransactionPosition
+from postix.core.models import Asset, Item, ProductItem, TransactionPosition
 
 from ...factories import (
     product_factory,
@@ -154,3 +154,8 @@ def test_transaction_receipt_id():
     trans2 = transaction_factory()
     trans2.set_receipt_id(retry=3)
     assert trans2.receipt_id == trans.receipt_id + 1
+
+
+@pytest.mark.django_db
+def test_asset_fields():
+    assert not Asset().current_position

@@ -1,6 +1,11 @@
 import pytest
 
-from postix.backoffice.checks import CheckError, check_quotas, check_tax_rates
+from postix.backoffice.checks import (
+    CheckError,
+    all_errors,
+    check_quotas,
+    check_tax_rates,
+)
 from postix.core.models import ListConstraintProduct
 
 from ..factories import list_constraint_factory, product_factory, quota_factory
@@ -31,3 +36,17 @@ def test_backoffice_tax_rate_check():
         check_tax_rates()
 
     assert "7" in str(error_info.value)
+    assert len(all_errors())
+
+
+@pytest.mark.django_db
+def test_backoffice_tax_rate_check_zero():
+    p1 = product_factory()
+    p2 = product_factory()
+    p2.tax_rate = "0.00"
+    p2.save()
+
+    with pytest.raises(CheckError) as error_info:
+        check_tax_rates()
+
+    assert "non-zero" in str(error_info.value)

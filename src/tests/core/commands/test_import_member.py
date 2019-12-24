@@ -19,6 +19,7 @@ def sample_member_file_ccc():
 11	G	H	ruhend
 14	I	J	ruhend
 23	K	L	bezahlt
+
 """
         )
         t.seek(0)

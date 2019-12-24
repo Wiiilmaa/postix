@@ -54,3 +54,9 @@ def test_quota_used_multiple_products():
     [transaction_position_factory(product=product1) for _ in times(2)]
     [transaction_position_factory(product=product2) for _ in times(2)]
     assert not quota.is_available
+
+
+@pytest.mark.django_db
+def test_preorder_position_fields():
+    pp = preorder_position_factory(paid=True, redeemed=True)
+    assert not pp.is_canceled

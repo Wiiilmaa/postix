@@ -14,6 +14,7 @@ from postix.core.models import (
 from postix.core.utils import times
 from postix.core.utils.flow import reverse_transaction
 from tests.factories import (
+    cashdesk_session_after_factory,
     cashdesk_session_before_factory,
     transaction_factory,
     transaction_position_factory,
@@ -185,3 +186,36 @@ def test_product_sales():
         ],
         key=keyfunc,
     )
+
+
+@pytest.mark.django_db
+def test_cashdesk_exportable():
+    desk = cashdesk_session_before_factory(create_items=False).cashdesk
+    assert desk.data == {
+        "id": desk.id,
+        "name": desk.name,
+        "handles_items": desk.handles_items,
+        "ip_address": desk.ip_address,
+        "is_active": desk.is_active,
+        "printer_handles_drawer": desk.printer_handles_drawer,
+        "printer_queue_name": desk.printer_queue_name,
+        "record_detail": desk.record_detail,
+        "record_name": desk.record_name,
+    }
+    data = desk.data
+    data["name"] = "NEW DESK"
+    desk.loaddata(data)
+    assert desk.name == "NEW DESK"
+
+
+@pytest.mark.django_db
+def test_user_hours_empty():
+    session = cashdesk_session_before_factory()
+    assert not session.user.hours
+
+
+@pytest.mark.django_db
+def test_user_hours():
+    session = cashdesk_session_after_factory()
+    time, hours = session.user.hours
+    assert hours == "2:00"
